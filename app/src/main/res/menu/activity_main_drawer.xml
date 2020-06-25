@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/nav_group_main">
+
+        <item
+            android:id="@+id/nav_manuals"
+            android:icon="@drawable/ic_picture_as_pdf_black_24dp"
+            android:title="@string/manuals" />
+
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/show_map" />
+
+        <item
+            android:id="@+id/nav_company_custom_fields"
+            android:icon="@drawable/ic_custom_fields_24dp"
+            android:title="@string/company_custom_fields" />
+
+    </group>
+
+    <group
+        android:id="@+id/nav_group_assignments">
+
+        <item
+            android:id="@+id/nav_new_assignment"
+            android:icon="@drawable/ic_note_add_black_24dp"
+            android:title="@string/new_assignment" />
+
+        <item
+            android:id="@+id/nav_show_assignments"
+            android:icon="@drawable/ic_assignment_orange_24dp"
+            android:title="@string/show_assignments" />
+
+    </group>
+
+    <group
+        android:id="@+id/nav_group_customers">
+
+        <item
+            android:id="@+id/nav_new_customer"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="@string/new_customer" />
+
+        <item
+            android:id="@+id/nav_search_customers"
+            android:icon="@drawable/ic_account_search_black_24dp"
+            android:title="@string/search_customers" />
+
+    </group>
+
+    <group
+        android:id="@+id/nav_group_communicate">
+
+        <item
+            android:id="@+id/nav_synchronize"
+            android:icon="@android:drawable/stat_notify_sync"
+            android:title="@string/synchronize" />
+
+        <item
+            android:id="@+id/nav_send_email"
+            android:icon="@android:drawable/sym_action_email"
+            android:title="@string/send_email" />
+
+    </group>
+
+    <group
+        android:id="@+id/nav_group_settings">
+
+        <item
+            android:id="@+id/nav_photo_settings"
+            android:icon="@drawable/ic_camera_black_24dp"
+            android:title="@string/photo_settings" />
+
+        <item
+            android:id="@+id/nav_api_url_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/host_server_settings" />
+
+    </group>
+
+    <group
+        android:id="@+id/nav_group_logout">
+
+        <item
+            android:id="@+id/nav_clearCache"
+            android:icon="@drawable/ic_clearcache_black_24dp"
+            android:title="@string/clear_cache" />
+
+        <item
+            android:id="@+id/nav_exportSharedPref"
+            android:icon="@drawable/previous_icon"
+            android:title="@string/export_shared_prefs" />
+
+        <item
+            android:id="@+id/nav_website"
+            android:icon="@drawable/ic_language_black_24dp"
+            android:title="@string/company_website" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="@string/log_out" />
+
+    </group>
+
+</menu>

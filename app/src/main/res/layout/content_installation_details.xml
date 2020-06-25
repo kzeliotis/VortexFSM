@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/grey_100"
+    tools:context=".activities.NewCustomerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_16"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants">
+
+        <TextView
+            android:id="@+id/tvInstallationDetailsDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/installation"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/grey_900"/>
+
+        <TextView
+            android:id="@+id/tvInstallationType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/installation_type"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/grey_900"/>
+
+        <TextView
+            android:id="@+id/tvInstallationDetailNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/notes"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/grey_900"/>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnInstallationProducts"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/products"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+        <Button
+            android:id="@+id/btnInstallationHistory"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/history"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+        <Button
+            android:id="@+id/btnInstallationZones"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/installation_zones"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+        <Button
+            android:id="@+id/btnInstallationCustomFields"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/custom_fields"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+    </LinearLayout>
+
+</ScrollView>

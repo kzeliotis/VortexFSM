@@ -1,0 +1,17 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/itemSynchronize"
+        android:title="@string/synchronize"
+        android:icon="@android:drawable/stat_notify_sync"
+        app:showAsAction="ifRoom" />
+
+</menu>

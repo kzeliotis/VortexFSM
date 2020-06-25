@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_layout_blue"
+    android:layout_marginTop="@dimen/dp_8"
+    android:layout_marginBottom="@dimen/dp_2"
+    android:layout_marginLeft="@dimen/dp_10"
+    android:layout_marginRight="@dimen/dp_10"
+    android:padding="@dimen/dp_12"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvConsumableName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_2"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/grey_900"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tvConsumableNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_2"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/grey_900"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSuggested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_4"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/grey_900"/>
+
+    <TextView
+        android:id="@+id/tvUsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_4"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/grey_900"/>
+
+</LinearLayout>

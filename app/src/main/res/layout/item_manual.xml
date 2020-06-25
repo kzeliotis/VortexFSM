@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_16"
+    android:paddingBottom="@dimen/dp_2"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/tvManualName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_layout_blue"
+        android:drawableRight="@drawable/ic_chevron_right_blue_24dp"
+        android:drawableEnd="@drawable/ic_chevron_right_blue_24dp"
+        android:drawablePadding="@dimen/dp_6"/>
+
+</LinearLayout>

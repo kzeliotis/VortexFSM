@@ -1,0 +1,182 @@
+package am.gtest.vortex.api;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import am.gtest.vortex.R;
+import am.gtest.vortex.activities.CompaniesActivity;
+import am.gtest.vortex.activities.CompanyDetailsActivity;
+import am.gtest.vortex.activities.SearchProductsActivity;
+import am.gtest.vortex.data.CompaniesData;
+import am.gtest.vortex.data.ProjectsData;
+import am.gtest.vortex.support.MyLogs;
+import am.gtest.vortex.support.MyPrefs;
+
+import static am.gtest.vortex.api.MyApi.API_SEARCH_CUSTOMERS;
+import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
+import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
+import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static am.gtest.vortex.support.MyGlobals.COMPANIES_LIST;
+import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_COMPANY;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_PROJECT;
+import static am.gtest.vortex.support.MyLocalization.localized_no_company_is_available;
+import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+
+public class GetCustomers extends AsyncTask<String, Void, String > {
+
+    @SuppressLint("StaticFieldLeak")
+    private final Context ctx;
+
+    @SuppressLint("StaticFieldLeak")
+    private ProgressBar mProgressBar;
+
+    private final boolean isForNewAssignment;
+    private String CustomerId;
+    private String ProjectId;
+
+
+    private String apiUrl;
+    private String postBody;
+    private int responseCode;
+    private String responseMessage;
+    private String responseBody;
+
+    public GetCustomers(Context ctx, boolean isForNewAssignment, String CustomerId, String ProjectId) {
+
+        this.ctx = ctx;
+
+
+        this.isForNewAssignment = isForNewAssignment;
+        this.CustomerId = CustomerId;
+        this.ProjectId = ProjectId;
+
+    }
+
+    @Override
+    protected void onPreExecute() {
+        if (ctx != null) {
+            mProgressBar = ((Activity) ctx).findViewById(R.id.progressBar);
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected String doInBackground(String... params) {
+
+        String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
+        apiUrl = baseHostUrl + API_SEARCH_CUSTOMERS;
+
+        postBody =
+                "{\n" +
+                "  \"Company\": \"" + params[0] + "\",\n" +
+                "  \"Phone\": \"" + params[1] + "\",\n" +
+                "  \"Address\": \"" + params[2] + "\",\n" +
+                "  \"ProjectDescription\": \"" + params[3] + "\",\n" +
+                "  \"CustomerId\": \"" + CustomerId + "\",\n" +
+                "  \"ProjectId\": \"" + ProjectId + "\"\n" +
+                "}";
+
+        try {
+            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+
+            responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
+            responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
+            responseBody = bundle.getString(MY_API_RESPONSE_BODY);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (responseCode == 200 && responseBody != null) {
+            CompaniesData.generate(responseBody, CustomerId);
+            if (ProjectId.length()> 0){
+                ProjectsData.generate(ProjectId);
+            }
+        }
+
+        return responseBody;
+
+    }
+
+    @Override
+    protected void onPostExecute(String responseBody) {
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+
+
+        if (CustomerId == ""){
+            if (COMPANIES_LIST.size() > 0) {
+                Intent intent = new Intent(ctx, CompaniesActivity.class);
+                intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ctx.startActivity(intent);
+
+                if (isForNewAssignment) {
+                    ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
+                }
+            } else {
+                Toast toast = Toast.makeText(ctx, localized_no_company_is_available, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        } else {
+            if (SELECTED_COMPANY.getCompanyName() != ""){
+                if (ProjectId == "") {
+                    Intent intent = new Intent(ctx, CompanyDetailsActivity.class);
+                    intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    ctx.startActivity(intent);
+
+                    if (isForNewAssignment) {
+                        NEW_ASSIGNMENT.setCustomerId(SELECTED_COMPANY.getCompanyId());
+                        NEW_ASSIGNMENT.setCustomerName(SELECTED_COMPANY.getCompanyName());
+                        NEW_ASSIGNMENT.setProjectId(""); // clear selected project when selecting customer
+                        NEW_ASSIGNMENT.setProjectDescription("");
+                        NEW_ASSIGNMENT.setProductId("");  // clear selected product when selecting customer
+                        NEW_ASSIGNMENT.setProjectProductId("");
+                        NEW_ASSIGNMENT.setProductDescription("");
+                        String ctxName = ctx.toString();
+                        if(!ctxName.contains("NewAssignmentActivity")){
+                            ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
+                        }
+                    }
+                } else {
+                    if (SELECTED_PROJECT.getProjectDescription() != ""){
+                        Intent intent = new Intent(ctx, SearchProductsActivity.class);
+                        intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        ctx.startActivity(intent);
+
+                        if (isForNewAssignment) {
+                            NEW_ASSIGNMENT.setProjectId(SELECTED_PROJECT.getProjectId());
+                            NEW_ASSIGNMENT.setProjectDescription(SELECTED_PROJECT.getProjectDescription());
+                            NEW_ASSIGNMENT.setProductId("");        // clear selected product when selecting project
+                            NEW_ASSIGNMENT.setProjectProductId("");
+                            NEW_ASSIGNMENT.setProductDescription("");
+                            ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+    }
+}

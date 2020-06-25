@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/grey_100"
+    tools:context=".activities.NewCustomerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_16"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants">
+
+        <TextView
+            android:id="@+id/tvNewCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/name"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textCapWords"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerBusinessTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/business_title"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerBusinessTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textCapWords"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerBusiness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/business"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerBusiness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textCapSentences"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/mobile"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="phone"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/phone"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="phone"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/email"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerZip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/zip"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerZip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/city"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textCapWords"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/address"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textPostalAddress"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/contact"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text|textPersonName|textCapWords"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerRevenueService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/revenue_service"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerRevenueService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/tvNewCustomerVatNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:text="@string/vat_number"/>
+
+        <EditText
+            android:id="@+id/etNewCustomerVatNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"
+            tools:ignore="LabelFor,TextFields"/>
+
+        <Button
+            android:id="@+id/btnNewCustomer"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/add_new_customer_caps"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+    </LinearLayout>
+
+</ScrollView>

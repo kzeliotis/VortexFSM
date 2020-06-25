@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="am.gtest.vortex">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".application.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
+            android:name=".activities.AssignmentsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/assignments"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.AssignmentDetailActivity"
+            android:label="@string/assignment_details"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.MapActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.HistoryActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/history"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AssignmentActionsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/assignment_actions"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ProductsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/products"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AllProductsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/add_new_product"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AllAttributesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/select_attribute"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AttributesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/attributes"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".items.MeasurementsListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/measurements"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AddedConsumablesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/select_consumable"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AllConsumablesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/consumables"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".items.ServicesListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/services"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".items.ServicesToSelectActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/services"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".items.MeasurementsToSelectActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/select_measurement"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ManualsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/manuals"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.PhotoSettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/photo_settings"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ApiUrlSettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/host_server_settings"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.MapsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/map"/>
+
+        <activity
+            android:name=".support.CaptureSignature"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="Signature"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" />
+
+        <activity
+            android:name=".activities.FullScreenImageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.NewAssignmentActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/new_assignment"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.NewCustomerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/new_customer"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.SearchCustomersActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/search_customers"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.SearchProductsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/products"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.SearchAttributesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/attributes"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.CompaniesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/companies"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ServicesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/services"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.UserPartnerResourcesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/resources"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.CompanyDetailsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/company_details"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ZonesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/zones"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ZoneProductsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/zone_products"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <activity
+            android:name=".activities.ChangeResourceActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/change_resource"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.AssignmentTypesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/assignment_types"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.ProjectInstallationActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/installations"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.InstallationDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/installations"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.InstallationZonesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/installation_zones"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.InstallationZoneEditActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/installation_zones"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.CustomFieldsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/custom_fields"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.CustomFieldDetailsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/custom_field_details"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="android:screenOrientation"
+            android:stateNotNeeded="true"/>
+        <!--Old key from Thomas's separate google project. Used in old versions till 2.34 included-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="AIzaSyCKefpVDRXSuBV_roWLaihycfXCiQIIOL0" />-->
+
+        <!--Current key from Thomas's Vortex Firebase project must be used in all next versions-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBEftz7pxZ1mbFAAE96BX2-AK-IY4ENSK8" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="am.gtest.vortex"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+    </application>
+
+</manifest>

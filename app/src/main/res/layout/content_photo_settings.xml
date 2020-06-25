@@ -1,0 +1,133 @@
+<!-- Copyright (c) 2016. Developed by GTest Development -->
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_100"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.PhotoSettingsActivity">
+
+    <LinearLayout
+        android:id="@+id/email_login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvImageSizeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:text="@string/photo_image_size"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold"
+            android:background="@color/grey_300"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10">
+
+            <RadioButton
+                android:id="@+id/rbSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/small"
+                android:checked="true"
+                android:onClick="onPhotoImageSize"/>
+
+            <RadioButton
+                android:id="@+id/rbMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/medium"
+                android:checked="false"
+                android:onClick="onPhotoImageSize"/>
+
+            <RadioButton
+                android:id="@+id/rbLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/large"
+                android:checked="false"
+                android:onClick="onPhotoImageSize"/>
+
+            <RadioButton
+                android:id="@+id/rbActual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/actual"
+                android:checked="false"
+                android:onClick="onPhotoImageSize"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
+
+        <TextView
+            android:id="@+id/tvImageSendingNetworkTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:text="@string/image_sending_network_type"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold"
+            android:background="@color/grey_300"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10">
+
+            <RadioButton
+                android:id="@+id/rbWiFiAndMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/wifi_and_mobile"
+                android:checked="true"
+                android:onClick="onNetworkType"/>
+
+            <RadioButton
+                android:id="@+id/rbOnlyWiFi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="@string/only_wifi"
+                android:checked="false"
+                android:onClick="onNetworkType"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
+
+    </LinearLayout>
+
+</ScrollView>

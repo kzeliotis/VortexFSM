@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvConsumableValueTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_16"
+        android:text="@string/consumable_value"
+        android:textSize="@dimen/sp_18"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:background="@color/light_blue_50"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tvSuggestedConsumableTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_6"
+            android:text="@string/suggested_value_with_colon"/>
+
+        <EditText
+            android:id="@+id/etSuggestedConsumablesValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_6"
+            android:gravity="top"
+            android:inputType="numberDecimal"
+            android:minLines="3"/>
+
+        <TextView
+            android:id="@+id/tvUsedConsumableTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_6"
+            android:padding="@dimen/dp_6"
+            android:text="@string/used_value_with_colon"/>
+
+        <EditText
+            android:id="@+id/etUsedConsumablesValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_6"
+            android:gravity="top"
+            android:inputType="numberDecimal"
+            android:minLines="3"/>
+
+        <TextView
+            android:id="@+id/tvConsumableNotesTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_6"
+            android:padding="@dimen/dp_6"
+            android:text="@string/notes_with_colon"/>
+
+        <EditText
+            android:id="@+id/etConsumableNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_6"
+            android:gravity="top"
+            android:inputType="text|textCapSentences"
+            android:minLines="3"/>
+
+    </LinearLayout>
+
+</LinearLayout>

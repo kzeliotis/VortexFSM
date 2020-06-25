@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--// TODO improve view when keymoard is openned -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/tvObjectDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp_10"/>
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCustomFields"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnSendChanges"
+        android:layout_below="@id/tvObjectDescription"
+        android:layout_marginBottom="@dimen/dp_16"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_custom_field_edit" />
+
+    <Button
+        android:id="@+id/btnSendChanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_data_caps"
+        android:padding="@dimen/dp_10"
+        android:background="@drawable/rounded_button_indigo"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

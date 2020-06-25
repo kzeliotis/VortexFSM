@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llCustomFieldContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_layout_blue"
+    android:layout_marginTop="@dimen/dp_8"
+    android:layout_marginBottom="@dimen/dp_2"
+    android:layout_marginLeft="@dimen/dp_10"
+    android:layout_marginRight="@dimen/dp_10"
+    android:padding="@dimen/dp_10"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="@dimen/dp_6">
+
+        <TextView
+            android:id="@+id/tvCustomFieldDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_6"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            android:layout_gravity="center" />
+
+        <android.support.v7.widget.SwitchCompat
+
+            android:id="@+id/swCustomFieldBool"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_6"
+            app:showText="false"
+            android:theme="@style/ColorAccentSwitchStyle"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tvToCustomFieldDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_chevron_right_blue_24dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/llCustomFieldEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="@dimen/dp_6">
+
+        <EditText
+            android:id="@+id/etCustomFieldValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="0dp"
+            android:textSize="@dimen/sp_14"
+            android:hint="@string/input_value"
+            android:textColorHint="@color/grey_400"
+            android:inputType="text|textMultiLine"/>
+
+        <Spinner
+            android:id="@+id/spCustomFieldDV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_14"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvDialogEditTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:background="@color/colorPrimary"/>
+
+    <EditText
+        android:id="@+id/etNewAttributeValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:padding="@dimen/dp_10"
+        android:minLines="7"
+        tools:ignore="Autofill,LabelFor" />
+
+</LinearLayout>

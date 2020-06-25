@@ -1,0 +1,203 @@
+package am.gtest.vortex.support;
+
+import android.Manifest;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import am.gtest.vortex.models.AddedConsumableModel;
+import am.gtest.vortex.models.AllAttributeModel;
+import am.gtest.vortex.models.AllConsumableModel;
+import am.gtest.vortex.models.AllProductModel;
+import am.gtest.vortex.models.AssignmentModel;
+import am.gtest.vortex.models.AssignmentTypeModel;
+import am.gtest.vortex.models.AttributeModel;
+import am.gtest.vortex.models.CheckInCheckOutModel;
+import am.gtest.vortex.models.CompanyModel;
+import am.gtest.vortex.models.CustomFieldDetailModel;
+import am.gtest.vortex.models.CustomFieldModel;
+import am.gtest.vortex.models.HAssignmentModel;
+import am.gtest.vortex.models.InstallationModel;
+import am.gtest.vortex.models.MandatoryTaskModel;
+import am.gtest.vortex.models.ManualModel;
+import am.gtest.vortex.models.NewAssignmentModel;
+import am.gtest.vortex.models.ProductMeasurementModel;
+import am.gtest.vortex.models.ProductModel;
+import am.gtest.vortex.models.ProductTypeModel;
+import am.gtest.vortex.models.ProjectModel;
+import am.gtest.vortex.models.ProjectZoneModel;
+import am.gtest.vortex.models.ServiceModel;
+import am.gtest.vortex.models.StatusModel;
+import am.gtest.vortex.models.UserPartnerResourceModel;
+import am.gtest.vortex.models.ZoneModel;
+import am.gtest.vortex.models.ZoneProductModel;
+import am.gtest.vortex.models.MeasurementModel;
+
+public class MyGlobals {
+    // Data lists
+    public static NewAssignmentModel NEW_ASSIGNMENT = new NewAssignmentModel();
+
+    public static AssignmentModel SELECTED_ASSIGNMENT = new AssignmentModel();
+    public static List<AssignmentModel> ASSIGNMENTS_LIST = new ArrayList<>();
+
+    public static InstallationModel SELECTED_INSTALLATION = new InstallationModel();
+    public static ProjectZoneModel SELECTED_INSTALLATION_ZONE = new ProjectZoneModel();
+    public static ProjectZoneModel NEW_INSTALLATION_ZONE = new ProjectZoneModel();
+    public static CustomFieldModel SELECTED_CUSTOM_FIELD = new CustomFieldModel();
+
+
+    public static HashSet<Date> CALENDAR_EVENTS  = new HashSet<>();
+
+    public static ProductModel SELECTED_PRODUCT = new ProductModel();
+    public static List<ProductModel> PRODUCTS_LIST = new ArrayList<>();
+
+    public static List<AllProductModel> ALL_PRODUCTS_LIST = new ArrayList<>();
+    public static List<AllProductModel> ALL_PRODUCTS_LIST_FILTERED = new ArrayList<>();
+
+    public static List<AllProductModel> ALL_WAREHOUSE_PRODUCTS_LIST = new ArrayList<>();
+    public static List<AllProductModel> ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED = new ArrayList<>();
+
+    public static List<AttributeModel> NEW_ATTRIBUTES_LIST = new ArrayList<>();
+    public static List<AttributeModel> ATTRIBUTES_LIST = new ArrayList<>();
+    public static List<AllAttributeModel> ALL_ATTRIBUTES_LIST = new ArrayList<>();
+    public static List<AllAttributeModel> ALL_ATTRIBUTES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<CustomFieldDetailModel> CUSTOM_FIELD_DETAILS_LIST = new ArrayList<>();
+    public static List<CustomFieldDetailModel> CUSTOM_FIELD_DETAILS_LIST_FILTERED = new ArrayList<>();
+
+//    public static Map<String, CheckInCheckOutModel> CHECKINOUTMODEL_LIST = new HashMap<>();
+
+    public static List<AllConsumableModel> ALL_CONSUMABLES_LIST = new ArrayList<>();
+    public static List<AllConsumableModel> ALL_CONSUMABLES_LIST_FILTERED = new ArrayList<>();
+
+    public static ProjectModel SELECTED_PROJECT = new ProjectModel();
+    public static List<ProjectModel> PROJECTS_LIST = new ArrayList<>();
+    public static List<ProjectModel> PROJECTS_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ProductMeasurementModel> PRODUCT_MEASUREMENTS_LIST = new ArrayList<>();
+    public static List<MeasurementModel> MANDATORY_MEASUREMENTS_LIST = new ArrayList<>();
+    public static Map<String, List<ProductMeasurementModel>> ZONE_MEASUREMENTS_MAP = new HashMap<>();
+    //public static Map<String, Map<String, List<ProductMeasurementModel>>> ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC = new HashMap<>();
+
+
+    public static CompanyModel SELECTED_COMPANY = new CompanyModel();
+    public static List<CompanyModel> COMPANIES_LIST = new ArrayList<>();
+    public static List<CompanyModel> COMPANIES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ZoneProductModel> ZONE_PRODUCTS_LIST = new ArrayList<>();
+    public static List<ZoneProductModel> ZONE_PRODUCTS_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ZoneModel> ZONES_LIST = new ArrayList<>();
+    public static List<ZoneModel> ZONES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ProjectZoneModel> INSTALLATION_ZONES_LIST = new ArrayList<>();
+    public static List<ProjectZoneModel> INSTALLATION_ZONES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<CustomFieldModel> CUSTOM_FIELDS_LIST = new ArrayList<>();
+
+
+    public static List<InstallationModel> INSTALLATION_LIST = new ArrayList<>();
+    public static List<InstallationModel> INSTALLATION_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ProductTypeModel> PRODUCT_TYPES_LIST = new ArrayList<>();
+
+    public static List<StatusModel> STATUSES_LIST = new ArrayList<>();
+
+    public static List<ServiceModel> SERVICES_LIST = new ArrayList<>();
+    public static List<ServiceModel> SERVICES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<ServiceModel> RELATED_SERVICES_LIST = new ArrayList<>();
+    public static List<ServiceModel> RELATED_SERVICES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<UserPartnerResourceModel> USER_PARTNER_RESOURCE_LIST = new ArrayList<>();
+
+    public static List<AssignmentTypeModel> ASSIGNMENT_TYPES_LIST = new ArrayList<>();
+
+    public static List<MandatoryTaskModel> MANDATORY_TASKS_LIST = new ArrayList<>();
+
+    public static List<AddedConsumableModel> ADDED_CONSUMABLES_LIST = new ArrayList<>();
+    public static List<AddedConsumableModel> CONSUMABLES_TOADD_LIST = new ArrayList<>();
+    public static List<AddedConsumableModel> ADDED_CONSUMABLES_LIST_FILTERED = new ArrayList<>();
+
+    public static List<HAssignmentModel> HISTORY_LIST = new ArrayList<>();
+
+    public static List<ManualModel> MANUALS_LIST = new ArrayList<>();
+
+    // this app startActivityForResult from 1001
+    public static final int RESULT_SIGNATURE = 1001;
+
+    // other apps startActivityForResult from 2001
+    public static final int OTHER_APP_RESULT_TAKE_ASSIGNMENT_PHOTO = 2001;
+    public static final int OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO = 2002;
+    public static final int OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS = 2003;
+    public static final int OTHER_APP_RESULT_PICK_ASSIGNMENT_PHOTO = 2004;
+    public static final int OTHER_APP_RESULT_PICK_MANDATORY_TASK_PHOTO = 2005;
+    public static final int REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO = 2006;
+    public static final int REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO = 2007;
+    public static final int REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO = 2008;
+    public static final int REQUEST_CAMERA_FOR_MANDATORY_PHOTO = 2009;
+
+    // requests for permissions from 3001
+    public static final int PERMISSIONS_FINE_LOCATION = 3001;
+
+    //
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    // global variables
+    public static String globalSelectedProductId;
+    public static String globalCurrentPhotoPath;
+    public static String globalGetHistoryParameter = "";
+    public static String globalExternalFileDir = "";
+
+    public static int globalMandatoryTaskPosition = -1;
+    public static boolean ValueSelected;
+    public static boolean mandatoryStepPhoto = false;
+    public static boolean resendZoneMeasurements;
+
+    // static constants, texts, numbers, etc.
+    public static final String CONST_EN = "en";
+    public static final String CONST_GR = "gr";
+    public static final String CONST_SORTED_BY_DATE = "sorted_by_date";
+    public static final String CONST_SORTED_BY_DISTANCE = "sorted_by_distance";
+    public static final String CONST_PARENT_ALL_PRODUCTS_ACTIVITY = "const_parent_all_products_activity";
+    public static final String CONST_PARENT_ATTRIBUTES_ACTIVITY = "const_parent_attributes_activity";
+    public static final String CONST_ASSIGNMENT_PHOTOS_FOLDER = "_Assignment_Photos";
+    public static final String CONST_MANDATORY_TASKS_PHOTOS_FOLDER = "_Mandatory_Tasks";
+    public static final String CONST_IS_FOR_NEW_ASSIGNMENT = "const_is_for_new_assignment";
+    public static final String CONST_SINGLE_SELECTION = "const_single_selection";
+    public static final String CONST_WAREHOUSE_PRODUCTS = "const_warehouse_products";
+
+
+    public static final boolean CONST_FINISH_ACTIVITY = true;
+    public static final boolean CONST_DO_NOT_FINISH_ACTIVITY = false;
+
+
+
+    public static final boolean CONST_SHOW_PROGRESS_AND_TOAST = true;
+    public static final boolean CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST = false;
+
+    // keys
+    public static final String KEY_DOWNLOAD_ALL_DATA = "key_download_all_data";
+    public static final String KEY_PRODUCT_DESCRIPTION = "key_product_description";
+    public static final String KEY_PRODUCT_ATTRIBUTES = "key_product_attributes";
+    public static final String KEY_PARENT_ACTIVITY = "key_parent_activity";
+    public static final String KEY_PROJECT_PRODUCT_ID = "key_project_product_id";
+    public static final String KEY_WAREHOUSE_ID = "key_warehouse_id";
+    public static final String KEY_PRODUCT_ID = "key_product_id";
+    public static final String KEY_PROJECT_INSTALLATION_ID = "key_project_installation_id";
+    public static final String KEY_REFRESH_ZONES = "key_refresh_zones";
+    public static final String KEY_REFRESH_INSTALLATIONS = "key_refresh_installations";
+    public static final String KEY_AFTER_LOGIN = "key_after_login";
+    public static final String KEY_PRODUCTID = "key_productId";
+    public static final String KEY_REFRESH_CUSTOM_FIELDS = "key_refresh_custom_fields";
+    public static final String KEY_VORTEX_TABLE = "key_vortex_table";
+
+
+}

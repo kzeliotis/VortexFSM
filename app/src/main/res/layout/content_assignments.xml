@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llSortingButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--<View-->
+            <!--android:layout_width="@dimen/dp_1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/grey_300"/>-->
+
+        <TextView
+            android:id="@+id/tvSelectedDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"/>
+
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="match_parent"
+            android:background="@color/grey_300"/>
+
+        <ImageView
+            android:id="@+id/ivSortByTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_timer_blue_24dp"
+            android:contentDescription="@string/image"/>
+
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="match_parent"
+            android:background="@color/grey_300"/>
+
+        <ImageView
+            android:id="@+id/ivSortByDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_swap_horizontal_blue_24dp"
+            android:contentDescription="@string/image"/>
+
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="match_parent"
+            android:background="@color/grey_300"/>
+
+        <ImageView
+            android:id="@+id/ivClearFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_close_red_24dp"
+            android:contentDescription="@string/image"/>
+
+        <!--<View-->
+            <!--android:layout_width="@dimen/dp_2"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/grey_300"/>-->
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/grey_300"/>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/llDateAndClearFilters"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:paddingBottom="@dimen/dp_16">-->
+    <!--</LinearLayout>-->
+
+    <am.gtest.vortex.support.CalendarView
+        android:visibility="gone"
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvAssignments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:context=".activities.AssignmentsActivity"
+        tools:listitem="@layout/item_assignment"/>
+
+</LinearLayout>

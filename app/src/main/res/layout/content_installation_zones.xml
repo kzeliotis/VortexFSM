@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--// TODO improve view when keymoard is openned -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/tvInstallationDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp_10"/>
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvInstallationZones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnAddNewInstallationZone"
+        android:layout_below="@id/tvInstallationDescription"
+        android:layout_marginBottom="@dimen/dp_16"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_installation_zone" />
+
+    <Button
+        android:id="@+id/btnAddNewInstallationZone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_new_zone"
+        android:padding="@dimen/dp_10"
+        android:background="@drawable/rounded_button_indigo"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

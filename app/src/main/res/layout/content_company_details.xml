@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp_16"
+    android:fillViewport="true"
+    tools:context=".activities.CompanyDetailsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dp_4">
+
+            <TextView
+                android:id="@+id/tvCompanyName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvCompanyId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCompanyBusinessTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/business_title"/>
+
+        <TextView
+            android:id="@+id/tvCompanyBusiness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/business"/>
+
+        <TextView
+            android:id="@+id/tvCompanyVatNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vat_number"/>
+
+        <TextView
+            android:id="@+id/tvCompanyRevenue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/revenue_with_colon"/>
+
+        <TextView
+            android:id="@+id/tvCompanyDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_8"
+            android:text="@string/discount_with_colon"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_300"/>
+
+        <TextView
+            android:id="@+id/tvCompanyContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_4"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_person_blue_24dp"
+            android:drawableStart="@drawable/ic_person_blue_24dp"
+            android:drawablePadding="@dimen/dp_6"/>
+
+        <TextView
+            android:id="@+id/tvCompanyAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_place_blue_24dp"
+            android:drawableStart="@drawable/ic_place_blue_24dp"
+            android:drawablePadding="@dimen/dp_6"/>
+
+        <TextView
+            android:id="@+id/tvCompanyMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_phone_android_blue_24dp"
+            android:drawableStart="@drawable/ic_phone_android_blue_24dp"
+            android:drawablePadding="@dimen/dp_6"/>
+
+        <TextView
+            android:id="@+id/tvCompanyPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_phone_blue_24dp"
+            android:drawableStart="@drawable/ic_phone_blue_24dp"
+            android:drawablePadding="@dimen/dp_6"/>
+
+        <TextView
+            android:id="@+id/tvCompanyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_6"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_email_blue_24dp"
+            android:drawableStart="@drawable/ic_email_blue_24dp"
+            android:drawablePadding="@dimen/dp_6"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_300"/>
+
+        <TextView
+            android:id="@+id/tvCompanyProjectsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_2"
+            android:text="@string/company_projects_with_colon"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvProjects"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:context=".activities.ProductsActivity"
+            tools:listitem="@layout/item_name_chevron"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
+
+</ScrollView>

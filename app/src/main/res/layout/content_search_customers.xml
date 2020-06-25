@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".activities.SearchCustomersActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_16"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
+
+        <TextView
+            android:id="@+id/tvSearchCustomersName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:text="@string/name"/>
+
+        <EditText
+            android:id="@+id/etSearchCustomersName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvSearchCustomersPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:padding="@dimen/dp_10"
+            android:text="@string/phone"/>
+
+        <EditText
+            android:id="@+id/etSearchCustomersPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="phone"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvSearchCustomersAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:padding="@dimen/dp_10"
+            android:text="@string/address"/>
+
+        <EditText
+            android:id="@+id/etSearchCustomersAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvSearchCustomersProject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:padding="@dimen/dp_10"
+            android:text="@string/project_description"/>
+
+        <EditText
+            android:id="@+id/etSearchCustomersProject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnSearchCustomers"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_customers"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+    </LinearLayout>
+
+</ScrollView>

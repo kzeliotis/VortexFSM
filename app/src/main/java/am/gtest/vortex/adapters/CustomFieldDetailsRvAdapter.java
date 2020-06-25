@@ -1,0 +1,110 @@
+package am.gtest.vortex.adapters;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.TextView;
+
+import java.util.List;
+import am.gtest.vortex.R;
+import am.gtest.vortex.models.CustomFieldDetailModel;
+
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST_FILTERED;
+
+
+public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFieldDetailsRvAdapter.ViewHolder> implements Filterable {
+
+    private final Context ctx;
+    private final List<CustomFieldDetailModel> mValues;
+    private final CustomFilter mFilter;
+    private String vortexTable;
+
+
+    public CustomFieldDetailsRvAdapter(List<CustomFieldDetailModel> items, Context ctx, String vortexTable) {
+        this.ctx = ctx;
+        this.vortexTable = vortexTable;
+        mValues = items;
+        mFilter = new CustomFilter(CustomFieldDetailsRvAdapter.this);
+    }
+
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_field_detail, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        holder.mItem = mValues.get(position);
+        holder.tvCustomFieldDetailsString.setText(holder.mItem.getCustomFieldDetailsString());
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return mValues.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return mFilter;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+        final TextView tvCustomFieldDetailsString;
+        public CustomFieldDetailModel mItem;
+
+        public ViewHolder(View view) {
+            super(view);
+            mView = view;
+            tvCustomFieldDetailsString = view.findViewById(R.id.tvCustomFieldDetailsString);
+        }
+    }
+
+    public class CustomFilter extends Filter {
+        private final CustomFieldDetailsRvAdapter mAdapter;
+
+        private CustomFilter(CustomFieldDetailsRvAdapter mAdapter) {
+            super();
+            this.mAdapter = mAdapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            final FilterResults results = new FilterResults();
+
+            CUSTOM_FIELD_DETAILS_LIST_FILTERED.clear();
+
+                if (constraint.length() == 0) {
+                    CUSTOM_FIELD_DETAILS_LIST_FILTERED.addAll(CUSTOM_FIELD_DETAILS_LIST);
+                } else {
+                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (final CustomFieldDetailModel mWords : CUSTOM_FIELD_DETAILS_LIST) {
+                        if (mWords.toString().toLowerCase().contains(filterPattern)) {
+                            CUSTOM_FIELD_DETAILS_LIST_FILTERED.add(mWords);
+                        }
+                    }
+                }
+
+                results.values = CUSTOM_FIELD_DETAILS_LIST_FILTERED;
+                results.count = CUSTOM_FIELD_DETAILS_LIST_FILTERED.size();
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            this.mAdapter.notifyDataSetChanged();
+        }
+    }
+}

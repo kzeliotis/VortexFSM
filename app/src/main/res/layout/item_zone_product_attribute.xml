@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/dp_16"
+    android:layout_marginStart="@dimen/dp_16"
+    android:baselineAligned="false">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/grey_300"/>
+
+    <TextView
+        android:id="@+id/tvZoneAttributeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingLeft="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_4"
+        android:textSize="@dimen/sp_14"
+        android:layout_gravity="center_vertical" />
+
+    <EditText
+        android:id="@+id/etZoneProductAttribute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:hint="@string/input_value"
+        android:textColorHint="@color/grey_400"
+        android:inputType="text|textMultiLine" />
+
+    <Spinner
+        android:id="@+id/spZoneProductAttributes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14" />
+
+</LinearLayout>

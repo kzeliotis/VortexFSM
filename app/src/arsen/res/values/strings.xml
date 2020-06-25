@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!--<string name="default_server">http://80.106.240.223:9876</string>-->
+    <!--<string name="default_server">http://support.dataconsulting.gr:9876</string>-->
+    <!--<string name="default_server">http://support.dataconsulting.gr:9877</string>-->
+    <!--<string name="default_server">http://84.254.2.206:9876</string>-->
+
+    <!--<string name="default_login">vortex</string>-->
+    <!--<string name="default_login">1</string>-->
+    <!--<string name="default_login">thomas</string>-->
+    <!--<string name="default_login">dionisis</string>-->
+
+    <!--<string name="default_pass">vortex</string>-->
+    <!--<string name="default_pass">1</string>-->
+    <!--<string name="default_pass">samoth</string>-->
+    <!--<string name="default_pass">dionisis</string>-->
+
+    <!-- <string name="default_device_id">arsen123</string>-->
+
+ </resources>

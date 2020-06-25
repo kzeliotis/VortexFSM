@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_16"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
+
+        <TextView
+            android:id="@+id/tvProjectZoneCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_6"
+            android:text="@string/code"/>
+
+        <EditText
+            android:id="@+id/etProjectZoneCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvZoneDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:padding="@dimen/dp_1"
+            android:text="@string/zone_description"/>
+
+        <EditText
+            android:id="@+id/etZoneDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvZoneNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:padding="@dimen/dp_1"
+            android:text="@string/notes"/>
+
+        <EditText
+            android:id="@+id/etZoneNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minLines="1"
+            android:background="@drawable/rounded_edittext_white"/>
+
+        <TextView
+            android:id="@+id/tvCustomFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/custom_fields"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvZoneCustomFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:background="@drawable/rounded_edittext_white"
+            android:padding="@dimen/dp_6"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_custom_field_edit" />
+
+        <Button
+            android:id="@+id/btnSendZone"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="@string/send_data_caps"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_blue" />
+
+    </LinearLayout>
+
+
+
+</ScrollView>
