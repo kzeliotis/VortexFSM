@@ -81,7 +81,7 @@ public class CustomFieldsData {
                             JSONObject dvObject = cFieldsDV.getJSONObject(dv);
                             defaultValueModel = new CustomFieldDefaultValuesModel();
 
-                            defaultValueModel.setCustomFieldId(MyJsonParser.getStringValue(dvObject, "CustomFieldId", ""));
+                            defaultValueModel.setBelongsToCustomFieldId(MyJsonParser.getStringValue(dvObject, "BelongsToCustomFieldId", ""));
                             defaultValueModel.setDefaultValue(MyJsonParser.getStringValue(dvObject, "Value", ""));
                             defaultValueModel.setInitial(MyJsonParser.getBooleanValue(dvObject, "IsDefault", false));
                             defaultValueModel.setIsEdited(false);

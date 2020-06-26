@@ -249,7 +249,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
                 List<String> dValues = new ArrayList<>();
                 for (int i = 0; i < jArrayDefaultValues.length(); i++) {
                     JSONObject oneObject = jArrayDefaultValues.getJSONObject(i);
-                    if(MyJsonParser.getStringValue(oneObject, "CustomFieldId", "").equals(customFieldId)){
+                    if(MyJsonParser.getStringValue(oneObject, "BelongsToCustomFieldId", "").equals(customFieldId)){
                         dValues.add(MyJsonParser.getStringValue(oneObject, "DefaultValue", ""));
                         if (MyJsonParser.getBooleanValue(oneObject, "Initial", false)){
                             InitialValue = MyJsonParser.getStringValue(oneObject, "DefaultValue", "");

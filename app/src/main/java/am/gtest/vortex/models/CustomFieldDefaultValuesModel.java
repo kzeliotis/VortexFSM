@@ -40,11 +40,11 @@ public class CustomFieldDefaultValuesModel {
         this.isEdited = isEdited;
     }
 
-    public String getCustomFieldId() {
+    public String getBelongsToCustomFieldId() {
         return customFieldId;
     }
 
-    public void setCustomFieldId(String CustomFieldId) {
+    public void setBelongsToCustomFieldId(String CustomFieldId) {
         this.customFieldId = CustomFieldId;
     }
 
@@ -53,7 +53,7 @@ public class CustomFieldDefaultValuesModel {
         String cfdvModel =
                 "\n        {\n" +
                         "          \"CustomFieldsDefaultValueId\": \"" + getDefaultValueId() + "\",\n" +
-                        "          \"CustomFieldId\": \"" + getCustomFieldId() + "\",\n" +
+                        "          \"BelongsToCustomFieldId\": \"" + getBelongsToCustomFieldId() + "\",\n" +
                         "          \"DefaultValue\": \"" + getDefaultValue() + "\",\n" +
                         "          \"IsEdited\": \"" + getIsEdited() + "\",\n" +
                         "          \"Initial\": " + getInitial() + "\n" +
