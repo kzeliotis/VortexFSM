@@ -221,6 +221,8 @@ public class MyLocalization {
     public static String localized_custom_fields_caps = "";
     public static String localized_to_send_data = "";
     public static String localized_company_custom_fields = "";
+    public static String localized_add_record = "";
+    public static String localized_new_record = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -436,6 +438,8 @@ public class MyLocalization {
                 localized_custom_fields_caps = ctx.getString(R.string.custom_fields_gr_caps);
                 localized_to_send_data = ctx.getString(R.string.to_send_data_gr);
                 localized_company_custom_fields = ctx.getString(R.string.company_custom_fields_gr);
+                localized_add_record = ctx.getString(R.string.add_record_gr);
+                localized_new_record = ctx.getString(R.string.new_record_gr);
                 break;
 
             default:
@@ -648,6 +652,8 @@ public class MyLocalization {
                 localized_custom_fields_caps = ctx.getString(R.string.custom_fields);
                 localized_to_send_data = ctx.getString(R.string.to_send_data);
                 localized_company_custom_fields = ctx.getString(R.string.company_custom_fields);
+                localized_add_record =  ctx.getString(R.string.add_record);
+                localized_new_record = ctx.getString(R.string.new_record);
                 break;
         }
     }

@@ -1,6 +1,7 @@
 package am.gtest.vortex.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +13,15 @@ import android.widget.TextView;
 
 import java.util.List;
 import am.gtest.vortex.R;
+import am.gtest.vortex.activities.CustomFieldDetailsEditActivity;
+import am.gtest.vortex.activities.CustomFieldsActivity;
 import am.gtest.vortex.models.CustomFieldDetailModel;
 
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST;
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 
 
 public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFieldDetailsRvAdapter.ViewHolder> implements Filterable {
@@ -46,7 +52,21 @@ public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFiel
         holder.mItem = mValues.get(position);
         holder.tvCustomFieldDetailsString.setText(holder.mItem.getCustomFieldDetailsString());
 
+
+        if(SELECTED_CUSTOM_FIELD.getEditable()){
+            holder.mView.setOnClickListener(v -> {
+                SELECTED_CUSTOM_FIELD_DETAIL = holder.mItem;
+                Intent intent = new Intent(ctx, CustomFieldDetailsEditActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_VORTEX_TABLE, vortexTable);
+                ctx.startActivity(intent);
+            });
+        }
+
+
+
     }
+
 
     @Override
     public int getItemCount() {

@@ -899,6 +899,12 @@
     <string name="company_custom_fields">Company Custom Fields</string>
     <string name="company_custom_fields_gr">Παραμετρικά πεδία Εταιρείας</string>
 
+    <string name="add_record">Add Record</string>
+    <string name="add_record_gr">ΠΡΟΣΘΗΚΗ ΕΓΓΡΑΦΗΣ</string>
+
+    <string name="new_record">New Record</string>
+    <string name="new_record_gr">ΝΕΑ ΕΓΓΡΑΦΗ</string>
+
      <!--to be translated-->
 
     <item type="id" name="TAG_ID" />

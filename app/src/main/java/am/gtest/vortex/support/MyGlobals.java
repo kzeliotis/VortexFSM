@@ -18,6 +18,7 @@ import am.gtest.vortex.models.AssignmentTypeModel;
 import am.gtest.vortex.models.AttributeModel;
 import am.gtest.vortex.models.CheckInCheckOutModel;
 import am.gtest.vortex.models.CompanyModel;
+import am.gtest.vortex.models.CustomFieldDetailColumnModel;
 import am.gtest.vortex.models.CustomFieldDetailModel;
 import am.gtest.vortex.models.CustomFieldModel;
 import am.gtest.vortex.models.HAssignmentModel;
@@ -48,6 +49,7 @@ public class MyGlobals {
     public static ProjectZoneModel SELECTED_INSTALLATION_ZONE = new ProjectZoneModel();
     public static ProjectZoneModel NEW_INSTALLATION_ZONE = new ProjectZoneModel();
     public static CustomFieldModel SELECTED_CUSTOM_FIELD = new CustomFieldModel();
+    public static CustomFieldDetailModel SELECTED_CUSTOM_FIELD_DETAIL = new CustomFieldDetailModel();
 
 
     public static HashSet<Date> CALENDAR_EVENTS  = new HashSet<>();
@@ -82,6 +84,7 @@ public class MyGlobals {
     public static List<MeasurementModel> MANDATORY_MEASUREMENTS_LIST = new ArrayList<>();
     public static Map<String, List<ProductMeasurementModel>> ZONE_MEASUREMENTS_MAP = new HashMap<>();
     //public static Map<String, Map<String, List<ProductMeasurementModel>>> ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC = new HashMap<>();
+    public static Map<String, List<CustomFieldDetailColumnModel>> CUSTOM_FIELD_EMPTY_COLUMNS_MAP = new HashMap<>();
 
 
     public static CompanyModel SELECTED_COMPANY = new CompanyModel();

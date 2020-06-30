@@ -1,12 +1,9 @@
 package am.gtest.vortex.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -18,10 +15,12 @@ import java.util.List;
 import java.util.UUID;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.adapters.CustomFieldDetailsEditRvAdapter;
 import am.gtest.vortex.adapters.CustomFieldsRvAdapter;
 import am.gtest.vortex.api.GetCustomFields;
 import am.gtest.vortex.api.SendCustomFields;
 import am.gtest.vortex.data.CustomFieldsData;
+import am.gtest.vortex.models.CustomFieldDetailColumnModel;
 import am.gtest.vortex.models.CustomFieldDetailModel;
 import am.gtest.vortex.models.CustomFieldModel;
 import am.gtest.vortex.support.MyLocalization;
@@ -29,11 +28,16 @@ import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_CUSTOM_FIELDS;
 import static am.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 import static am.gtest.vortex.support.MyLocalization.localized_company_custom_fields;
 import static am.gtest.vortex.support.MyLocalization.localized_custom_fields;
+import static am.gtest.vortex.support.MyLocalization.localized_edit;
+import static am.gtest.vortex.support.MyLocalization.localized_new_record;
 import static am.gtest.vortex.support.MyLocalization.localized_no;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
@@ -44,21 +48,19 @@ import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_yes;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
-import static am.gtest.vortex.support.MyPrefs.PREF_PROJECT_ID;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
-import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
 
-public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnClickListener {
+public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implements View.OnClickListener {
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
-    private CustomFieldsRvAdapter customFieldsRvAdapter;
+    private CustomFieldDetailsEditRvAdapter customFieldDetailsEditRvAdapter;
     private SearchView searchView;
-    private TextView tvObjectDescription;
+    private TextView tvActionDescription;
     private Button btnSendChanges;
     private String vortexTable;
     private String vortexTableId;
-    private Boolean refresh;
+    //private Boolean refresh;
 
 
     @Override
@@ -66,19 +68,19 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
         super.onCreate(savedInstanceState);
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
-        getLayoutInflater().inflate(R.layout.content_custom_fields, flBaseContainer, true);
+        getLayoutInflater().inflate(R.layout.content_custom_field_details_edit, flBaseContainer, true);
 
-        RecyclerView rvCustomFields = findViewById(R.id.rvCustomFields);
+        RecyclerView rvCustomFieldDetails = findViewById(R.id.rvCustomFieldDetails);
 
-        tvObjectDescription = findViewById(R.id.tvObjectDescription);
+        tvActionDescription = findViewById(R.id.tvActionDescription);
         btnSendChanges = findViewById(R.id.btnSendChanges);
         vortexTable = getIntent().getStringExtra(KEY_VORTEX_TABLE);
-        CUSTOM_FIELDS_LIST.clear();
+        List<CustomFieldDetailColumnModel> cf_Columns = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns();
 
-        refresh = getIntent().getBooleanExtra(KEY_REFRESH_CUSTOM_FIELDS, false);
+        //refresh = getIntent().getBooleanExtra(KEY_REFRESH_CUSTOM_FIELDS, false);
 
-        customFieldsRvAdapter = new CustomFieldsRvAdapter(CUSTOM_FIELDS_LIST, CustomFieldsActivity.this, localized_select_value, vortexTable);
-        rvCustomFields.setAdapter(customFieldsRvAdapter);
+        customFieldDetailsEditRvAdapter = new CustomFieldDetailsEditRvAdapter(cf_Columns, CustomFieldDetailsEditActivity.this, localized_select_value, vortexTable);
+        rvCustomFieldDetails.setAdapter(customFieldDetailsEditRvAdapter);
 
         btnSendChanges.setOnClickListener(this);
 
@@ -92,8 +94,8 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
                 break;
         }
 
-
     }
+
 
     @Override
     protected void onResume() {
@@ -106,30 +108,7 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
 
         updateUiTexts();
 
-        String customFields = "";
 
-        switch(vortexTable){
-            case "ProjectInstallations":
-                customFields = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW, SELECTED_INSTALLATION.getProjectInstallationId(), "");
-                break;
-            case "Company":
-                customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW, "1", "");
-                break;
-        }
-
-
-        if (!customFields.isEmpty() && !refresh) {
-            CustomFieldsData.generate(false, vortexTable, vortexTableId);
-            customFieldsRvAdapter.notifyDataSetChanged();
-        } else {
-            if (MyUtils.isNetworkAvailable()) {
-                    GetCustomFields getCustomFields = new GetCustomFields(this,  refresh, vortexTable);
-                    getCustomFields.execute(vortexTableId);
-            } else {
-                Toast.makeText(this, localized_no_internet_try_later_2_lines, Toast.LENGTH_LONG).show();
-            }
-            refresh = false;
-        }
     }
 
     @Override
@@ -156,18 +135,23 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
                             for (int i = 0; i < cfList.size(); i++){
                                 List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
                                 cfList.get(i).setCustomFieldDetails(emptyDetails);
-//                                for (int d = 0; d < cfList.get(i).getCustomFieldDetails().size(); d++){
-//                                    cfList.get(i).getCustomFieldDetails().get(d).setCustomFieldDetailsString("");
-//                                }
+
+                                if(cfList.get(i).getCustomFieldId().equals(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldId())){
+                                    List<CustomFieldDetailModel> editedDetails = new ArrayList<>();
+                                    SELECTED_CUSTOM_FIELD_DETAIL.setIsEdited(true);
+                                    editedDetails.add(SELECTED_CUSTOM_FIELD_DETAIL);
+                                    cfList.get(i).setCustomFieldDetails(editedDetails);
+                                }
                             }
+
 
                             MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
 
                             if (MyUtils.isNetworkAvailable()) {
-                                SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldsActivity.this, prefKey, true, vortexTable);
+                                SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldDetailsEditActivity.this, prefKey, true, vortexTable);
                                 sendCustomFields.execute(prefKey);
                             } else {
-                                Toast.makeText(CustomFieldsActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                                Toast.makeText(CustomFieldDetailsEditActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
                                 finish();
                             }
 
@@ -179,28 +163,6 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_search, menu);
-//
-//        MenuItem itemSearch = menu.findItem(R.id.action_search);
-//        searchView = (SearchView) itemSearch.getActionView();
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                installationZonesRvAdapter.getFilter().filter(newText);
-//                return true;
-//            }
-//        });
-//
-//        return true;
-//    }
 
     public void onRadioButtonClicked(View view) {
         MyLocalization.saveNewLanguage(this, view);
@@ -210,17 +172,14 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
 
     private void updateUiTexts() {
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(localized_custom_fields);
+            getSupportActionBar().setTitle(SELECTED_CUSTOM_FIELD.getCustomFieldDescription());
             getSupportActionBar().setSubtitle(localized_user + ": " + MyPrefs.getString(PREF_USER_NAME, ""));
         }
 
-        switch(vortexTable){
-            case "ProjectInstallations":
-                tvObjectDescription.setText(SELECTED_INSTALLATION.getProjectInstallationFullDescription());
-                break;
-            case "Company":
-                tvObjectDescription.setText(localized_company_custom_fields);
-                break;
+        if(SELECTED_CUSTOM_FIELD_DETAIL.getDetailTableId().equals("0")){
+            tvActionDescription.setText(localized_new_record);
+        }else{
+            tvActionDescription.setText(localized_edit);
         }
 
         btnSendChanges.setText(localized_send_data_caps);

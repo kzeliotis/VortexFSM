@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,25 +32,28 @@ import java.util.List;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.activities.CustomFieldDetailsActivity;
+import am.gtest.vortex.models.CustomFieldDetailColumnModel;
 import am.gtest.vortex.models.CustomFieldModel;
 import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MyUtils;
+
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 
-public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAdapter.ViewHolder> {
+public class CustomFieldDetailsEditRvAdapter extends RecyclerView.Adapter<CustomFieldDetailsEditRvAdapter.ViewHolder> {
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
-    private final List<CustomFieldModel> mValues;
-      private final Context ctx;
+    private final List<CustomFieldDetailColumnModel> mValues;
+    private final Context ctx;
 
     private final String selectMeasurement;
     private String vortexTable;
     //private boolean IsNewZone = false;
 
-    private ViewHolder mHolder;
+    private CustomFieldDetailsEditRvAdapter.ViewHolder mHolder;
     private int mYear = 0;
     private int mMonth = 0;
     private int mDay = 0;
@@ -60,7 +62,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
     private Calendar c;
 
 
-    public CustomFieldsRvAdapter(List<CustomFieldModel> items, Context ctx, String selectMeasurement, String vortexTable) {
+    public CustomFieldDetailsEditRvAdapter(List<CustomFieldDetailColumnModel> items, Context ctx, String selectMeasurement, String vortexTable) {
         mValues = items;
         this.ctx = ctx;
         this.selectMeasurement = selectMeasurement;
@@ -70,21 +72,17 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomFieldDetailsEditRvAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_field_edit, parent, false);
-        return new ViewHolder(view);
+        return new CustomFieldDetailsEditRvAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CustomFieldDetailsEditRvAdapter.ViewHolder holder, final int position) {
 
         holder.mItem = mValues.get(position);
 
-//        if(NEW_INSTALLATION_ZONE.getZoneId().equals("-1")) {
-//            IsNewZone = true;
-//        }
-
-        String DataType = holder.mItem.getCustomFieldDataType();
+        String DataType = holder.mItem.getColumnDataType();
         boolean IsDateTime = false;
         boolean IsBoolean = false;
         boolean IsString = false;
@@ -116,7 +114,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
         }
 
         //holder.tvCustomFieldDescription.setText(mValues.get(position).getCustomFieldDescription());
-        holder.tvCustomFieldDescription.setText(holder.mItem.getCustomFieldDescription() + ": ");
+        holder.tvCustomFieldDescription.setText(holder.mItem.getColumnDescription() + ": ");
 
         if (holder.mItem.getHasValues()) {
             holder.swCustomFieldBool.setVisibility(View.GONE);
@@ -148,31 +146,22 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
             }
         }
 
-        if(IsMasterDetail){
-            holder.tvToCustomFieldDetails.setVisibility(View.VISIBLE);
-            if(holder.mItem.getCustomFieldDetails().size() > 0){
-                holder.tvToCustomFieldDetails.setBackgroundResource(R.drawable.ic_chevron_right_blue_24dp);
-            }else{
-                holder.tvToCustomFieldDetails.setBackgroundResource(R.drawable.ic_chevron_right_gray_24dp);
-            }
-        } else {
-            holder.tvToCustomFieldDetails.setVisibility(View.GONE);
-        }
+        holder.tvToCustomFieldDetails.setVisibility(View.GONE);
 
         // setup switch
         holder.swCustomFieldBool.setOnCheckedChangeListener(null);
-        holder.swCustomFieldBool.setChecked(holder.mItem.getCustomFieldValue().equalsIgnoreCase("true"));
+        holder.swCustomFieldBool.setChecked(holder.mItem.getColumnValue().equalsIgnoreCase("true"));
         holder.swCustomFieldBool.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                holder.mItem.setCustomFieldValue("True");
+                holder.mItem.setColumnValue("True");
             } else {
-                holder.mItem.setCustomFieldValue("False");
+                holder.mItem.setColumnValue("False");
             }
 
-            String customFieldId = holder.mItem.getCustomFieldId();
-            String value = holder.mItem.getCustomFieldValue();
+            String customFieldDetailsColumnId = holder.mItem.getCustomFieldsDetailColumnId();
+            String value = holder.mItem.getColumnValue();
             if(value.length() == 0){value = "false";}
-            setValueInCustomFieldModel(customFieldId, value);
+            setValueInCustomFieldDetailModel(customFieldDetailsColumnId, value);
 
         });
 
@@ -181,7 +170,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
             holder.etCustomFieldValue.setOnClickListener(v -> {
 
                 //globalMandatoryTaskPosition = holder.getAdapterPosition();
-                String DateTimeString = holder.mItem.getCustomFieldValue();
+                String DateTimeString = holder.mItem.getColumnValue();
 
                 if(DateTimeString.length() > 0) {
                     String DateString = DateTimeString.split(" ")[0];
@@ -200,27 +189,19 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
             });
         }
 
-        if(IsMasterDetail){
-            holder.tvToCustomFieldDetails.setOnClickListener(v -> {
-                SELECTED_CUSTOM_FIELD = holder.mItem;
-                Intent intent = new Intent(ctx, CustomFieldDetailsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                ctx.startActivity(intent);
-            });
-        }
 
-        holder.etCustomFieldValue.setText(holder.mItem.getCustomFieldValue());
+        holder.etCustomFieldValue.setText(holder.mItem.getColumnValue());
         holder.etCustomFieldValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                holder.mItem.setCustomFieldValue(s.toString());
+                holder.mItem.setColumnValue(s.toString());
 
-                String customFieldId = holder.mItem.getCustomFieldId();
-                String value = holder.mItem.getCustomFieldValue();
-                setValueInCustomFieldModel(customFieldId, value);
+                String customFieldsDetailColumnId = holder.mItem.getCustomFieldsDetailColumnId();
+                String value = holder.mItem.getColumnValue();
+                setValueInCustomFieldDetailModel(customFieldsDetailColumnId, value);
 
             }
             @Override
@@ -234,14 +215,14 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
             try {
 
                 String InitialValue = "";
-                String customFieldId = holder.mItem.getCustomFieldId();
+                String customFieldsDetailColumnId = holder.mItem.getCustomFieldsDetailColumnId();
                 String cfdvValues = "";
                 switch(vortexTable){
                     case "ProjectInstallations":
-                        cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_INSTALLATIONS_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
+                        cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
                         break;
                     case "Company":
-                        cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
+                        cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
                         break;
                 }
 
@@ -249,7 +230,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
                 List<String> dValues = new ArrayList<>();
                 for (int i = 0; i < jArrayDefaultValues.length(); i++) {
                     JSONObject oneObject = jArrayDefaultValues.getJSONObject(i);
-                    if(MyJsonParser.getStringValue(oneObject, "BelongsToCustomFieldId", "").equals(customFieldId)){
+                    if(MyJsonParser.getStringValue(oneObject, "CustomFieldsDetailColumnId", "").equals(customFieldsDetailColumnId)){
                         dValues.add(MyJsonParser.getStringValue(oneObject, "DefaultValue", ""));
                         if (MyJsonParser.getBooleanValue(oneObject, "Initial", false)){
                             InitialValue = MyJsonParser.getStringValue(oneObject, "DefaultValue", "");
@@ -271,12 +252,12 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 
                 for (int j = 1; j < newValuesArray.length; j++) {
 
-                    if(holder.mItem.getCustomFieldValue().isEmpty()){ //////
-//                        if (newValuesArray[j].equals(InitialValue) && IsNewZone) { /////
-//                            holder.spCustomFieldDV.setSelection(j); //////
-//                        }
+                    if(holder.mItem.getColumnValue().isEmpty()){ //////
+                        if (newValuesArray[j].equals(InitialValue) && SELECTED_CUSTOM_FIELD_DETAIL.getDetailTableId().equals("0")) { /////
+                            holder.spCustomFieldDV.setSelection(j); //////
+                        }
                     } else {
-                        if (newValuesArray[j].equals(holder.mItem.getCustomFieldValue())) {
+                        if (newValuesArray[j].equals(holder.mItem.getColumnValue())) {
                             holder.spCustomFieldDV.setSelection(j);
                         }
                     }
@@ -303,14 +284,14 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position != 0) {
-                        holder.mItem.setCustomFieldValue(holder.spCustomFieldDV.getSelectedItem().toString());
+                        holder.mItem.setColumnValue(holder.spCustomFieldDV.getSelectedItem().toString());
                     } else {
-                        holder.mItem.setCustomFieldValue("");
+                        holder.mItem.setColumnValue("");
                     }
 
-                    String customFieldId = holder.mItem.getCustomFieldId();
-                    String value = holder.mItem.getCustomFieldValue();
-                    setValueInCustomFieldModel(customFieldId, value);
+                    String customFieldsDetailColumnId = holder.mItem.getCustomFieldsDetailColumnId();
+                    String value = holder.mItem.getColumnValue();
+                    setValueInCustomFieldDetailModel(customFieldsDetailColumnId, value);
 
                 }
 
@@ -322,18 +303,18 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 
 
         // setup enabled / disabled
-        if (holder.mItem.getEditable()) {
-            holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.light_blue_50));
-            holder.swCustomFieldBool.setEnabled(true);
-            holder.etCustomFieldValue.setEnabled(true);
-            holder.spCustomFieldDV.setEnabled(true);
-
-        } else {
-            holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.grey_300));
-            holder.swCustomFieldBool.setEnabled(false);
-            holder.etCustomFieldValue.setEnabled(false);
-            holder.spCustomFieldDV.setEnabled(false);
-        }
+//        if (holder.mItem.getEditable()) {
+//            holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.light_blue_50));
+//            holder.swCustomFieldBool.setEnabled(true);
+//            holder.etCustomFieldValue.setEnabled(true);
+//            holder.spCustomFieldDV.setEnabled(true);
+//
+//        } else {
+//            holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.grey_300));
+//            holder.swCustomFieldBool.setEnabled(false);
+//            holder.etCustomFieldValue.setEnabled(false);
+//            holder.spCustomFieldDV.setEnabled(false);
+//        }
     }
 
     @Override
@@ -422,11 +403,11 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
     }
 
 
-    private void setValueInCustomFieldModel(String customFieldId, String value){
+    private void setValueInCustomFieldDetailModel(String customFieldDetailsColumnId, String value){
 
-        for (int i = 0; i < CUSTOM_FIELDS_LIST.size(); i++){
-            if(CUSTOM_FIELDS_LIST.get(i).getCustomFieldId().equals(customFieldId)){
-                CUSTOM_FIELDS_LIST.get(i).setCustomFieldValue(value);
+        for (int i = 0; i < SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().size(); i++){
+            if(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().get(i).getCustomFieldsDetailColumnId().equals(customFieldDetailsColumnId)){
+                SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().get(i).setColumnValue(value);
             }
         }
 
@@ -442,7 +423,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
         final TextView tvToCustomFieldDetails;
         final LinearLayout llCustomFieldContent;
         final LinearLayout llCustomFieldEdit;
-        CustomFieldModel mItem;
+        CustomFieldDetailColumnModel mItem;
 
         public ViewHolder(View view) {
             super(view);

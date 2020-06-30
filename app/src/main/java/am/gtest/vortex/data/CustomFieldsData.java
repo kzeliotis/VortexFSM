@@ -1,26 +1,39 @@
 package am.gtest.vortex.data;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+import am.gtest.vortex.models.CustomFieldColumnDefaultValueModel;
 import am.gtest.vortex.models.CustomFieldDefaultValuesModel;
+import am.gtest.vortex.models.CustomFieldDetailColumnModel;
 import am.gtest.vortex.models.CustomFieldDetailModel;
 import am.gtest.vortex.models.CustomFieldModel;
+import am.gtest.vortex.models.ProductMeasurementModel;
 import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_COLUMNS_MAP;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
+import static am.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_MAP;
 
 public class CustomFieldsData {
 
@@ -101,25 +114,6 @@ public class CustomFieldsData {
                         continue;
                     }
 
-//                            cfModel = new CustomFieldModel();
-//                            cfModel.setCustomFieldId(MyJsonParser.getStringValue(initCustomField, "CustomFieldId", "0"));
-//                            cfModel.setCustomFieldDescription(MyJsonParser.getStringValue(initCustomField, "CustomFieldDescription", ""));
-//                            cfModel.setCustomFieldValue(MyJsonParser.getStringValue(initCustomField, "CustomFieldValue", ""));
-//                            cfModel.setHasValues(MyJsonParser.getBooleanValue(initCustomField, "HasValues", false));
-//                            cfModel.setCustomFieldDataType(MyJsonParser.getStringValue(initCustomField, "CustomFieldDataType", ""));
-//                            cfModel.setCustomFieldValueId(MyJsonParser.getStringValue(initCustomField, "VortexTableCustomFieldId", "0"));
-//                            cfModel.setEditable(MyJsonParser.getBooleanValue(initCustomField, "Editable", true));
-//                            cfModel.setObjectTable(MyJsonParser.getStringValue(initCustomField, "VortexTable", ""));
-//                            cfModel.setObjectTableIdField(MyJsonParser.getStringValue(initCustomField, "VortexTableIdField", ""));
-//                            cfModel.setObjectTableId(MyJsonParser.getStringValue(initCustomField, "VortexTableId", "0"));
-//
-//                            customFieldsForNewZone.add(cfModel);
-//                        }
-//
-//                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_ZONE_CUSTOM_FIELDS_DATA_FOR_SHOW, "0", customFieldsForNewZone.toString());
-//                        continue;
-//                        }
-//                    }
 
                     customFieldModel.setCustomFieldId(MyJsonParser.getStringValue(oneObject, "CustomFieldId", "0"));
                     customFieldModel.setCustomFieldDescription(MyJsonParser.getStringValue(oneObject, "CustomFieldDescription", ""));
@@ -140,6 +134,79 @@ public class CustomFieldsData {
                         for (int d = 0; d < cfDetails.length(); d++) {
 
                             JSONObject dObject = cfDetails.getJSONObject(d);
+
+                            if(MyJsonParser.getStringValue(dObject, "CustomFieldId", "0").equals("-1")){
+
+                                List<CustomFieldColumnDefaultValueModel> columnDefaultValues = new ArrayList<>();
+                                CustomFieldColumnDefaultValueModel cfCDV = new CustomFieldColumnDefaultValueModel();
+                                List<CustomFieldDetailColumnModel> emptyDetailColumnsList = new ArrayList<>();
+                                CustomFieldDetailColumnModel emptyDetailColumn = new CustomFieldDetailColumnModel();
+                                String Cf_det_col = MyJsonParser.getStringValue(dObject,"CustomFieldsDetailColumns", "");
+                                JSONArray ColumnsDV = new JSONArray(Cf_det_col);
+
+                                for (int n = 0; n < ColumnsDV.length(); n++){
+                                    JSONObject columnsdvObj = ColumnsDV.getJSONObject(n);
+
+                                    if(MyJsonParser.getStringValue(columnsdvObj, "CustomFieldId", "0").equals("-1")){
+                                        String c_dv = MyJsonParser.getStringValue(columnsdvObj, "CustomFieldColumnDefaultValues", "");
+                                        JSONArray columnDefaultValuesArray = new JSONArray(c_dv);
+                                        for (int vl = 0; vl < columnDefaultValuesArray.length(); vl++){
+
+                                            JSONObject col_DV = columnDefaultValuesArray.getJSONObject(vl);
+
+                                            cfCDV = new CustomFieldColumnDefaultValueModel();
+
+                                            cfCDV.setBelongsToCustomFieldId(MyJsonParser.getStringValue(col_DV,"BelongsToCustomFieldId", "0"));
+                                            cfCDV.setCustomFieldsDetailColumnId(MyJsonParser.getStringValue(col_DV, "CustomFieldsDetailColumnId", "0"));
+                                            cfCDV.setInitial(MyJsonParser.getBooleanValue(col_DV, "Initial", false));
+                                            cfCDV.setDefaultValue(MyJsonParser.getStringValue(col_DV, "Value", ""));
+
+                                            columnDefaultValues.add(cfCDV);
+                                        }
+
+                                        switch(vortexTable){
+                                            case "ProjectInstallations":
+                                                MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", columnDefaultValues.toString());
+                                                break;
+                                            case "Company":
+                                                MyPrefs.setStringWithFileName(PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", columnDefaultValues.toString());
+                                                break;
+                                        }
+
+                                    }else{
+
+                                        emptyDetailColumn = new CustomFieldDetailColumnModel();
+
+                                        emptyDetailColumn.setColumnDataType(MyJsonParser.getStringValue(columnsdvObj, "ColumnDataType", ""));
+                                        emptyDetailColumn.setColumnDescription(MyJsonParser.getStringValue(columnsdvObj, "ColumnDescription", ""));
+                                        emptyDetailColumn.setColumnName(MyJsonParser.getStringValue(columnsdvObj, "ColumnName", ""));
+                                        emptyDetailColumn.setColumnValue(MyJsonParser.getStringValue(columnsdvObj, "ColumnValue", ""));
+                                        emptyDetailColumn.setCustomFieldId(MyJsonParser.getStringValue(columnsdvObj, "CustomFieldId", "0"));
+                                        emptyDetailColumn.setCustomFieldsDetailColumnId(MyJsonParser.getStringValue(columnsdvObj, "CustomFieldsDetailColumnId", "0"));
+                                        emptyDetailColumn.setHasValues(MyJsonParser.getBooleanValue(columnsdvObj, "HasValues", false));
+
+                                        emptyDetailColumnsList.add(emptyDetailColumn);
+                                    }
+                                }
+
+                                CUSTOM_FIELD_EMPTY_COLUMNS_MAP.clear();
+
+                                for (int u = 0; u < emptyDetailColumnsList.size(); ++u){
+                                    if(CUSTOM_FIELD_EMPTY_COLUMNS_MAP.containsKey(emptyDetailColumnsList.get(u).getCustomFieldId())){
+                                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.get(emptyDetailColumnsList.get(u).getCustomFieldId()).add(emptyDetailColumnsList.get(u));
+                                    }else{
+                                        List<CustomFieldDetailColumnModel> columns_by_customfieldId = new ArrayList<>();
+                                        columns_by_customfieldId.add(emptyDetailColumnsList.get(u));
+                                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.put(emptyDetailColumnsList.get(u).getCustomFieldId(), columns_by_customfieldId);
+                                    }
+                                }
+
+                                MyPrefs.setStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS, vortexTable, new Gson().toJson(CUSTOM_FIELD_EMPTY_COLUMNS_MAP));
+
+                                continue;
+                            }
+
+
                             cfDetail = new CustomFieldDetailModel();
 
                             cfDetail.setCustomFieldId(MyJsonParser.getStringValue(dObject, "CustomFieldId", "0"));
@@ -151,6 +218,31 @@ public class CustomFieldsData {
                             cfDetail.setVortexTableId(MyJsonParser.getStringValue(dObject, "VortexTableId", "0"));
                             cfDetail.setCustomFieldDescription(MyJsonParser.getStringValue(dObject, "CustomFieldDescription", ""));
                             cfDetail.setCustomFieldDetailsString(MyJsonParser.getStringValue(dObject, "CustomFieldDetailsString", ""));
+                            cfDetail.setIsEdited(false);
+
+                            String dt_columns_string = MyJsonParser.getStringValue(dObject, "CustomFieldsDetailColumns", "");
+                            JSONArray dt_columns_array = new JSONArray(dt_columns_string);
+                            List<CustomFieldDetailColumnModel> dt_column_list = new ArrayList<>();
+                            CustomFieldDetailColumnModel dt_column = new CustomFieldDetailColumnModel();
+                            for(int cl = 0; cl < dt_columns_array.length(); cl++){
+
+                                JSONObject dt_column_object = dt_columns_array.getJSONObject(cl);
+
+                                dt_column = new CustomFieldDetailColumnModel();
+
+                                dt_column.setColumnDataType(MyJsonParser.getStringValue(dt_column_object, "ColumnDataType", ""));
+                                dt_column.setColumnDescription(MyJsonParser.getStringValue(dt_column_object, "ColumnDescription", ""));
+                                dt_column.setColumnName(MyJsonParser.getStringValue(dt_column_object, "ColumnName", ""));
+                                dt_column.setColumnValue(MyJsonParser.getStringValue(dt_column_object, "ColumnValue", ""));
+                                dt_column.setCustomFieldId(MyJsonParser.getStringValue(dt_column_object, "CustomFieldId", "0"));
+                                dt_column.setCustomFieldsDetailColumnId(MyJsonParser.getStringValue(dt_column_object, "CustomFieldsDetailColumnId", "0"));
+                                dt_column.setHasValues(MyJsonParser.getBooleanValue(dt_column_object, "HasValues", false));
+
+                                dt_column_list.add(dt_column);
+
+                            }
+
+                            cfDetail.setCustomFieldsDetailColumns(dt_column_list);
 
                             cfDetailList.add(cfDetail);
                         }

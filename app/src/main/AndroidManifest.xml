@@ -287,6 +287,12 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
+            android:name=".activities.CustomFieldDetailsEditActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/custom_field_details"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             tools:replace="android:screenOrientation"

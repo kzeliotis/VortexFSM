@@ -14,6 +14,8 @@ public class CustomFieldDetailModel {
     private String customFieldDetailsString = "";
     private String detailTable;
     private String detailTableId_Field;
+    private boolean isEdited;
+    private List<CustomFieldDetailColumnModel> customFieldsDetailColumns;
 
 
     public String getCustomFieldId() {
@@ -70,8 +72,18 @@ public class CustomFieldDetailModel {
         return detailTableId_Field;
     }
 
-    public void setDetailTableId_Field(String detailTableId_Field) {
-        this.detailTableId_Field = detailTableId_Field;
+    public void setDetailTableId_Field(String detailTableId_Field) {this.detailTableId_Field = detailTableId_Field;}
+
+    public List<CustomFieldDetailColumnModel> getCustomFieldsDetailColumns() {return customFieldsDetailColumns;}
+
+    public void setCustomFieldsDetailColumns(List<CustomFieldDetailColumnModel> CustomFieldsDetailColumns) {this.customFieldsDetailColumns = CustomFieldsDetailColumns;}
+
+    public boolean getIsEdited() {
+        return isEdited;
+    }
+
+    public void setIsEdited(boolean IsEdited) {
+        this.isEdited = IsEdited;
     }
 
     @Override
@@ -86,7 +98,9 @@ public class CustomFieldDetailModel {
                         "  \"DetailTable\": \"" + getDetailTable() + "\",\n" +
                         "  \"DetailTableId_Field\": \"" + getDetailTableId_Field() + "\",\n" +
                         "  \"DetailTableId\": \"" + getDetailTableId() + "\",\n" +
-                        "  \"VortexTableId\": \"" + getVortexTableId() + "\"\n" +
+                        "  \"VortexTableId\": \"" + getVortexTableId() + "\",\n" +
+                        "  \"IsEdited\": \"" + getIsEdited() + "\",\n" +
+                        "  \"CustomFieldsDetailColumns\": " + getCustomFieldsDetailColumns() + "\n" +
                         "}";
 
         modelToString = modelToString.replace("}]", "}\n  ]");
