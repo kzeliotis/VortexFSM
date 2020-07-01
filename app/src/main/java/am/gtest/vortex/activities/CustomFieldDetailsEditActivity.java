@@ -31,6 +31,7 @@ import am.gtest.vortex.support.MyUtils;
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_CUSTOM_FIELDS;
 import static am.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
@@ -133,6 +134,8 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
                             cfList = CUSTOM_FIELDS_LIST;
 
                             for (int i = 0; i < cfList.size(); i++){
+
+                                cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
                                 List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
                                 cfList.get(i).setCustomFieldDetails(emptyDetails);
 

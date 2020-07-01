@@ -31,6 +31,7 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_CUSTOM_FIELDS;
 import static am.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 import static am.gtest.vortex.support.MyLocalization.localized_company_custom_fields;
 import static am.gtest.vortex.support.MyLocalization.localized_custom_fields;
@@ -154,6 +155,7 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
                             cfList = CUSTOM_FIELDS_LIST;
 
                             for (int i = 0; i < cfList.size(); i++){
+                                cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
                                 List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
                                 cfList.get(i).setCustomFieldDetails(emptyDetails);
 //                                for (int d = 0; d < cfList.get(i).getCustomFieldDetails().size(); d++){

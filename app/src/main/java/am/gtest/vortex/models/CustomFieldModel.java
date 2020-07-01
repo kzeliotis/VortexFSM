@@ -13,6 +13,7 @@ public class CustomFieldModel {
     private String customFieldValue = "";
     private String customFieldValueId = "0";
     private String customFieldDataType = "";
+    private String assignmentId = "0";
     private boolean hasValues;
     private boolean editable;
     private List<CustomFieldDetailModel> customFieldDetails;
@@ -90,6 +91,13 @@ public class CustomFieldModel {
 
     public void setCustomFieldDetails(List<CustomFieldDetailModel> CustomFieldDetails) {this.customFieldDetails = CustomFieldDetails;}
 
+    public String getAssignmentId() {
+        return assignmentId;
+    }
+
+    public void setAssignmentId(String AssignmentId) {this.assignmentId = AssignmentId;}
+
+
     @Override
     public String toString() {
         String modelToString =
@@ -97,6 +105,7 @@ public class CustomFieldModel {
                         "  \"CustomFieldId\": \"" + getCustomFieldId() + "\",\n" +
                         "  \"VortexTableIdField\": \"" + getObjectTableIdField() + "\",\n" +
                         "  \"VortexTable\": \"" + getObjectTable() + "\",\n" +
+                        "  \"AssignmentId\": \"" + getAssignmentId() + "\",\n" +
                         "  \"CustomFieldDescription\": \"" + getCustomFieldDescription() + "\",\n" +
                         "  \"CustomFieldValue\": \"" + getCustomFieldValue() + "\",\n" +
                         "  \"VortexTableCustomFieldId\": \"" + getCustomFieldValueId() + "\",\n" +
