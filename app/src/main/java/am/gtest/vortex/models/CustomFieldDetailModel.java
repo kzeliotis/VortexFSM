@@ -66,7 +66,7 @@ public class CustomFieldDetailModel {
         return VortexTableId;
     }
 
-    public void setVortexTableId(String VortexableId) { this.VortexTableId = VortexTableId;}
+    public void setVortexTableId(String VortexTableId) { this.VortexTableId = VortexTableId;}
 
     public String getDetailTableId_Field() {
         return detailTableId_Field;

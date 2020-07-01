@@ -41,7 +41,7 @@ public class MyPrefs {
     public static final String PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_installations_cf_details_default_values_data_for_show";
     public static final String PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_company_cf_default_values_data_for_show";
     public static final String PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_company_cf_details_default_values_data_for_show";
-    public static final String PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS = "pref_file_custom_field_empty_columns";
+    public static final String PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS = "pref_file_custom_field_empty_details";
     public static final String PREF_FILE_NEW_ZONE_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_new_zone_custom_fields_data_for_show";
     public static final String PREF_FILE_INSTALLATION_PRODUCTS_DATA_FOR_SHOW = "pref_file_installation_products_data_for_show";
     public static final String PREF_FILE_ZONE_PRODUCT_MEASUREMENTS = "pref_file_zone_product_measurements";
@@ -78,7 +78,7 @@ public class MyPrefs {
     public static final String PREF_DATA_STATUSES = "pref_data_statuses";
     public static final String PREF_DATA_ZONES_LIST = "pref_data_zones_list";
     public static final String PREF_DATA_INSTALLATION_ZONES_LIST = "pref_data_installation_zones_list";
-    public static final String PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST = "pref_data_installation_custom_fields_list";
+    //public static final String PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST = "pref_data_installation_custom_fields_list";
     public static final String PREF_DATA_INSTALLATIONS_LIST = "pref_data_installations_list";
     public static final String PREF_DATA_SERVICES = "pref_data_services";
     public static final String PREF_DATA_USER_PARTNER_RESOURCES = "pref_data_user_partner_resources";

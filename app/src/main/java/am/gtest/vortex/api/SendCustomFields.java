@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.application.MyApplication;
+import am.gtest.vortex.data.HistoryData;
 import am.gtest.vortex.support.MyDialogs;
 import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
@@ -24,8 +26,11 @@ import static am.gtest.vortex.api.MyApi.API_SEND_CUSTOM_FIELDS;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static am.gtest.vortex.support.MyGlobals.HISTORY_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static am.gtest.vortex.support.MyLocalization.localized_failed_to_send_data_saved_for_sync;
+import static am.gtest.vortex.support.MyLocalization.localized_no_history;
+import static am.gtest.vortex.support.MyLocalization.localized_no_subassignments;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC;
 

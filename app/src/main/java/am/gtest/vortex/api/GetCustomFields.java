@@ -21,7 +21,6 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST;
-import static am.gtest.vortex.support.MyPrefs.PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
 
@@ -95,12 +94,12 @@ public class GetCustomFields extends AsyncTask<String, Void, String > {
 
             switch(vortexTable){
                 case "ProjectInstallations":
-                    MyPrefs.setString(PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST, responseBody);
+                    //MyPrefs.setString(PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST, responseBody);
                     MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW, vortexTableId, responseBody);
                     break;
 
                 case "Company":
-                    MyPrefs.setString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, responseBody);
+                    //MyPrefs.setString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, responseBody);
                     MyPrefs.setStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW, vortexTableId, responseBody);
                     break;
             }
@@ -114,6 +113,11 @@ public class GetCustomFields extends AsyncTask<String, Void, String > {
                 rvCustomFields.getAdapter().notifyDataSetChanged();
             }
 
+            RecyclerView rvCustomFieldDetails = ((Activity) ctx).findViewById(R.id.rvCustomFieldDetails);
+            if (rvCustomFieldDetails != null && rvCustomFieldDetails.getAdapter() != null) {
+
+                rvCustomFieldDetails.getAdapter().notifyDataSetChanged();
+            }
 
         }
     }

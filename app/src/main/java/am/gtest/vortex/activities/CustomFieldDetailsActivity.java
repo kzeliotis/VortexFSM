@@ -30,7 +30,7 @@ import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
-import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_COLUMNS_MAP;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_DETAILS_MAP;
 import static am.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
@@ -40,9 +40,8 @@ import static am.gtest.vortex.support.MyLocalization.localized_no_internet_try_l
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST;
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST_FILTERED;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS;
+
 
 public class CustomFieldDetailsActivity extends BaseDrawerActivity implements View.OnClickListener {
 
@@ -90,13 +89,13 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
                 String vortexTable = SELECTED_CUSTOM_FIELD.getObjectTable();
                 String customFieldId = SELECTED_CUSTOM_FIELD.getCustomFieldId();
 
-                SELECTED_CUSTOM_FIELD_DETAIL.setDetailTableId("0");
 
-                if (MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS, vortexTable, "").length() > 0) {
-                    CUSTOM_FIELD_EMPTY_COLUMNS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS, vortexTable, ""), new TypeToken<HashMap<String, List<CustomFieldDetailColumnModel>>>(){}.getType());
+                if (MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, "").length() > 0) {
+                    CUSTOM_FIELD_EMPTY_DETAILS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, ""), new TypeToken<HashMap<String, CustomFieldDetailModel>>(){}.getType());
                 }
 
-                SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldsDetailColumns(CUSTOM_FIELD_EMPTY_COLUMNS_MAP.get(customFieldId));
+                SELECTED_CUSTOM_FIELD_DETAIL = CUSTOM_FIELD_EMPTY_DETAILS_MAP.get(customFieldId);
+                SELECTED_CUSTOM_FIELD_DETAIL.setVortexTableId(SELECTED_CUSTOM_FIELD.getObjectTableId());
 
                 Intent intent = new Intent(CustomFieldDetailsActivity.this, CustomFieldDetailsEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -119,7 +118,6 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
 
         updateUiTexts();
 
-        CUSTOM_FIELD_DETAILS_LIST_FILTERED = CUSTOM_FIELD_DETAILS_LIST;
 
     }
 

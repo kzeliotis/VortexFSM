@@ -152,7 +152,7 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
 
                             List<CustomFieldModel> cfList = new ArrayList<>();
 
-                            cfList = CUSTOM_FIELDS_LIST;
+                            cfList.addAll(CUSTOM_FIELDS_LIST);
 
                             for (int i = 0; i < cfList.size(); i++){
                                 cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());

@@ -47,8 +47,6 @@ import static am.gtest.vortex.support.MyLocalization.localized_send_data_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_to_send_data;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_yes;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implements View.OnClickListener {
@@ -61,7 +59,7 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
     private Button btnSendChanges;
     private String vortexTable;
     private String vortexTableId;
-    //private Boolean refresh;
+    private Boolean closeForm;
 
 
     @Override
@@ -109,6 +107,7 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
 
         updateUiTexts();
 
+        customFieldDetailsEditRvAdapter.notifyDataSetChanged();
 
     }
 
@@ -131,7 +130,9 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
 
                             List<CustomFieldModel> cfList = new ArrayList<>();
 
-                            cfList = CUSTOM_FIELDS_LIST;
+                            cfList.addAll(CUSTOM_FIELDS_LIST);
+
+                            String gamo_details = "";
 
                             for (int i = 0; i < cfList.size(); i++){
 
@@ -142,6 +143,8 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
                                 if(cfList.get(i).getCustomFieldId().equals(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldId())){
                                     List<CustomFieldDetailModel> editedDetails = new ArrayList<>();
                                     SELECTED_CUSTOM_FIELD_DETAIL.setIsEdited(true);
+                                    gamo_details = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldDetailsString();
+                                    SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString("");
                                     editedDetails.add(SELECTED_CUSTOM_FIELD_DETAIL);
                                     cfList.get(i).setCustomFieldDetails(editedDetails);
                                 }
@@ -149,6 +152,8 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
 
 
                             MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
+
+                            SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString(gamo_details);
 
                             if (MyUtils.isNetworkAvailable()) {
                                 SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldDetailsEditActivity.this, prefKey, true, vortexTable);

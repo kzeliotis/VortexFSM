@@ -21,15 +21,15 @@ import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
-import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_COLUMNS_MAP;
-import static am.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
-import static am.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
-import static am.gtest.vortex.support.MyPrefs.PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST;
-import static am.gtest.vortex.support.MyPrefs.PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_DETAILS_MAP;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
@@ -46,19 +46,19 @@ public class CustomFieldsData {
 
         switch (vortexTable){
             case "ProjectInstallations":
-                customFields = MyPrefs.getString(PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST, "");
+                customFields = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, ""); //MyPrefs.getString(PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST, "");
 
-                if (customFields.isEmpty()||refresh) {
-                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
-                }
+//                if (customFields.isEmpty()||refresh) {
+//                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
+//                }
                 break;
 
             case "Company":
-                customFields = MyPrefs.getString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, "");
+                customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, ""); //MyPrefs.getString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, "");
 
-                if (customFields.isEmpty()||refresh) {
-                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
-                }
+//                if (customFields.isEmpty()||refresh) {
+//                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
+//                }
                 break;
         }
 
@@ -68,6 +68,8 @@ public class CustomFieldsData {
                 JSONArray jArrayDataFromApi = new JSONArray(customFields);
 
                 CustomFieldModel customFieldModel;
+                List<CustomFieldDetailModel> empty_detail_list = new ArrayList<>();
+                List<CustomFieldDetailColumnModel> emptyDetailColumnsList = new ArrayList<>();
 
                 for (int i = 0; i < jArrayDataFromApi.length(); i++) {
                     JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
@@ -135,14 +137,29 @@ public class CustomFieldsData {
 
                             JSONObject dObject = cfDetails.getJSONObject(d);
 
-                            if(MyJsonParser.getStringValue(dObject, "CustomFieldId", "0").equals("-1")){
+                            if(MyJsonParser.getStringValue(dObject, "CustomFieldId", "0").contains("-")){
+
 
                                 List<CustomFieldColumnDefaultValueModel> columnDefaultValues = new ArrayList<>();
-                                CustomFieldColumnDefaultValueModel cfCDV = new CustomFieldColumnDefaultValueModel();
-                                List<CustomFieldDetailColumnModel> emptyDetailColumnsList = new ArrayList<>();
-                                CustomFieldDetailColumnModel emptyDetailColumn = new CustomFieldDetailColumnModel();
+                                CustomFieldColumnDefaultValueModel cfCDV; // = new CustomFieldColumnDefaultValueModel();
+                                CustomFieldDetailColumnModel emptyDetailColumn; //= new CustomFieldDetailColumnModel();
                                 String Cf_det_col = MyJsonParser.getStringValue(dObject,"CustomFieldsDetailColumns", "");
                                 JSONArray ColumnsDV = new JSONArray(Cf_det_col);
+
+                                CustomFieldDetailModel cfEmpty_detail = new CustomFieldDetailModel();
+
+                                cfEmpty_detail.setCustomFieldId(MyJsonParser.getStringValue(dObject, "CustomFieldId", "0").replace("-", ""));
+                                cfEmpty_detail.setDetailTable(MyJsonParser.getStringValue(dObject, "DetailTable", "")) ;
+                                cfEmpty_detail.setDetailTableId("0");
+                                cfEmpty_detail.setDetailTableId_Field(MyJsonParser.getStringValue(dObject, "DetailTableId_Field", ""));
+                                cfEmpty_detail.setVortexTable(MyJsonParser.getStringValue(dObject, "VortexTable", ""));
+                                cfEmpty_detail.setVortexTableIdField(MyJsonParser.getStringValue(dObject, "VortexTableIdField", ""));
+                                cfEmpty_detail.setVortexTableId("0");
+                                cfEmpty_detail.setCustomFieldDescription(MyJsonParser.getStringValue(dObject, "CustomFieldDescription", ""));
+                                cfEmpty_detail.setCustomFieldDetailsString("");
+                                cfEmpty_detail.setIsEdited(false);
+
+                                empty_detail_list.add(cfEmpty_detail);
 
                                 for (int n = 0; n < ColumnsDV.length(); n++){
                                     JSONObject columnsdvObj = ColumnsDV.getJSONObject(n);
@@ -188,20 +205,6 @@ public class CustomFieldsData {
                                         emptyDetailColumnsList.add(emptyDetailColumn);
                                     }
                                 }
-
-                                CUSTOM_FIELD_EMPTY_COLUMNS_MAP.clear();
-
-                                for (int u = 0; u < emptyDetailColumnsList.size(); ++u){
-                                    if(CUSTOM_FIELD_EMPTY_COLUMNS_MAP.containsKey(emptyDetailColumnsList.get(u).getCustomFieldId())){
-                                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.get(emptyDetailColumnsList.get(u).getCustomFieldId()).add(emptyDetailColumnsList.get(u));
-                                    }else{
-                                        List<CustomFieldDetailColumnModel> columns_by_customfieldId = new ArrayList<>();
-                                        columns_by_customfieldId.add(emptyDetailColumnsList.get(u));
-                                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.put(emptyDetailColumnsList.get(u).getCustomFieldId(), columns_by_customfieldId);
-                                    }
-                                }
-
-                                MyPrefs.setStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_COLUMNS, vortexTable, new Gson().toJson(CUSTOM_FIELD_EMPTY_COLUMNS_MAP));
 
                                 continue;
                             }
@@ -253,6 +256,51 @@ public class CustomFieldsData {
 
                     CUSTOM_FIELDS_LIST.add(customFieldModel);
 
+                }
+
+
+                CUSTOM_FIELD_EMPTY_DETAILS_MAP.clear();
+
+                for(CustomFieldDetailModel cfdm : empty_detail_list){
+                    String CustomFieldId = cfdm.getCustomFieldId();
+
+                    for(CustomFieldDetailColumnModel cfdcm : emptyDetailColumnsList){
+                        if(cfdcm.getCustomFieldId().equals(CustomFieldId)){
+                            List<CustomFieldDetailColumnModel> col = cfdm.getCustomFieldsDetailColumns();
+                            if(col == null){col = new ArrayList<>();}
+                            col.add(cfdcm);
+                            cfdm.setCustomFieldsDetailColumns(col);
+                        }
+                    }
+
+                    CUSTOM_FIELD_EMPTY_DETAILS_MAP.put(CustomFieldId, cfdm);
+                }
+
+                MyPrefs.setStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, new Gson().toJson(CUSTOM_FIELD_EMPTY_DETAILS_MAP));
+
+//                for (int u = 0; u < emptyDetailColumnsList.size(); ++u){
+//                    if(CUSTOM_FIELD_EMPTY_COLUMNS_MAP.containsKey(emptyDetailColumnsList.get(u).getCustomFieldId())){
+//                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.get(emptyDetailColumnsList.get(u).getCustomFieldId()).add(emptyDetailColumnsList.get(u));
+//                    }else{
+//                        List<CustomFieldDetailColumnModel> columns_by_customfieldId = new ArrayList<>();
+//                        columns_by_customfieldId.add(emptyDetailColumnsList.get(u));
+//                        CUSTOM_FIELD_EMPTY_COLUMNS_MAP.put(emptyDetailColumnsList.get(u).getCustomFieldId(), columns_by_customfieldId);
+//                    }
+//                }
+
+
+                for (CustomFieldModel cfm : CUSTOM_FIELDS_LIST){
+                    if(cfm.getCustomFieldId().equals(SELECTED_CUSTOM_FIELD.getCustomFieldId())){
+                        SELECTED_CUSTOM_FIELD = cfm;
+                        CUSTOM_FIELD_DETAILS_LIST = SELECTED_CUSTOM_FIELD.getCustomFieldDetails();
+                        CUSTOM_FIELD_DETAILS_LIST_FILTERED.clear();
+                        CUSTOM_FIELD_DETAILS_LIST_FILTERED.addAll(CUSTOM_FIELD_DETAILS_LIST);
+                        for(CustomFieldDetailModel cfdm : SELECTED_CUSTOM_FIELD.getCustomFieldDetails()){
+                            if(cfdm.getDetailTableId().equals(SELECTED_CUSTOM_FIELD_DETAIL.getDetailTableId())){
+                                SELECTED_CUSTOM_FIELD_DETAIL = cfdm;
+                            }
+                        }
+                    }
                 }
 
 

@@ -84,7 +84,7 @@ public class MyGlobals {
     public static List<MeasurementModel> MANDATORY_MEASUREMENTS_LIST = new ArrayList<>();
     public static Map<String, List<ProductMeasurementModel>> ZONE_MEASUREMENTS_MAP = new HashMap<>();
     //public static Map<String, Map<String, List<ProductMeasurementModel>>> ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC = new HashMap<>();
-    public static Map<String, List<CustomFieldDetailColumnModel>> CUSTOM_FIELD_EMPTY_COLUMNS_MAP = new HashMap<>();
+    public static Map<String, CustomFieldDetailModel> CUSTOM_FIELD_EMPTY_DETAILS_MAP = new HashMap<>();
 
 
     public static CompanyModel SELECTED_COMPANY = new CompanyModel();
