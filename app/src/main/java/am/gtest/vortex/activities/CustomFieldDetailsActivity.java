@@ -118,6 +118,7 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
 
         updateUiTexts();
 
+        customFieldDetailsRvAdapter.notifyDataSetChanged();
 
     }
 
