@@ -1134,7 +1134,21 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case OTHER_APP_RESULT_PICK_ASSIGNMENT_PHOTO:
                 if(resultCode == RESULT_OK){
-                    if(data != null){
+
+                    if(data.getClipData() != null){
+                        int count = data.getClipData().getItemCount();
+                        for (int i = 0; i < count; i++){
+                            Uri selectedImage = data.getClipData().getItemAt(i).getUri();
+                            File pickedFile = new File(getRealPathFromURI(selectedImage));
+                            File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
+                            File movedPhoto = new File(newFileLocation, pickedFile.getName());
+                            copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                            globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
+                            PHOTO_ITEMS.add(globalCurrentPhotoPath);
+                            photosRecyclerViewAdapter.notifyDataSetChanged();
+                            prepareImageForSending();
+                        }
+                    } else if (data != null){
                        Uri selectedImage = data.getData();
                        File pickedFile = new File(getRealPathFromURI(selectedImage));
                        File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
@@ -1373,6 +1387,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         globalCurrentPhotoPath = null;
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickPhoto.setType("image/*");
+        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         activity.startActivityForResult(pickPhoto, OTHER_APP_RESULT_PICK_ASSIGNMENT_PHOTO);
     }
 
