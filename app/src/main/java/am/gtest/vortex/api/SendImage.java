@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.support.MyDialogs;
+import am.gtest.vortex.support.MyLogs;
 import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.api.MyApi.API_SET_ASSIGNMENT_PHOTO;
@@ -74,7 +75,7 @@ public class SendImage extends AsyncTask<String, Void, String > {
 
     @Override
     protected void onPostExecute(String dataFromApi) {
-//        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "", responseCode, responseMessage, responseBody);
 
 //        if (mProgressBar != null) {
 //            mProgressBar.setVisibility(View.GONE);
