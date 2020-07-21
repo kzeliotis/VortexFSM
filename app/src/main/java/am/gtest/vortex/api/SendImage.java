@@ -70,12 +70,14 @@ public class SendImage extends AsyncTask<String, Void, String > {
             e.printStackTrace();
         }
 
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "", responseCode, responseMessage, responseBody);
+
         return null;
     }
 
     @Override
     protected void onPostExecute(String dataFromApi) {
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "", responseCode, responseMessage, responseBody);
+        //MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
 
 //        if (mProgressBar != null) {
 //            mProgressBar.setVisibility(View.GONE);

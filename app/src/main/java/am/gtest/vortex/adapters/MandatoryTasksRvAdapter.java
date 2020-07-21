@@ -183,7 +183,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                holder.mItem.setMeasurementValue(s.toString());
+                holder.mItem.setMeasurementValue(s.toString().replace("\n", " ").replace("\r", " "));
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -200,7 +200,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                holder.mItem.setStepComments(s.toString()) ;
+                holder.mItem.setStepComments(s.toString().replace("\n", " ").replace("\r", " ")) ;
             }
             @Override
             public void afterTextChanged(Editable s) {
