@@ -83,7 +83,7 @@ public class SendImage extends AsyncTask<String, Void, String > {
 //            mProgressBar.setVisibility(View.GONE);
 //        }
 
-        if (responseCode == 200) {
+        if (responseCode == 200 && responseBody.equals("1")) {
             MyPrefs.removeStringWithFileName(PREF_FILE_IMAGE_FOR_SYNC, prefKey);
 
             Toast toast = Toast.makeText(ctx, localized_image_uploaded, Toast.LENGTH_LONG);
