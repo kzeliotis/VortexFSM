@@ -783,8 +783,8 @@
 
     <string name="scan_code">Scan Code</string>
 
-    <string name="choose_from_warehouse">Do you want to choose an item from the warehouse?</string>
-    <string name="choose_from_warehouse_gr">Θέλετε να επιλέξετε είδος από την αποθήκη?</string>
+    <string name="choose_from_warehouse">Do you want to choose an item from the technician\'s warehouse?</string>
+    <string name="choose_from_warehouse_gr">Θέλετε να επιλέξετε είδος από την αποθήκη τεχνικού?</string>
 
     <string name="ask_to_install_product">Do you want to install the selected product to Project</string>
     <string name="ask_to_install_product_gr">Θέλετε να εγκαταστήσετε το επιλεγμένο προϊόν στο σημείο</string>
