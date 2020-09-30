@@ -193,8 +193,6 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
                 GetAssignments getAssignments = new GetAssignments(AssignmentsActivity.this, downloadAllData);
                 getAssignments.execute();
             }
-
-
         }
     }
 
@@ -352,7 +350,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         }
 
         @Override
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String permissions[],
+        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
         @NonNull int[] grantResults){
             switch (requestCode) {
                 case PERMISSIONS_FINE_LOCATION:

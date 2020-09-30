@@ -1146,7 +1146,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
                             PHOTO_ITEMS.add(globalCurrentPhotoPath);
                             photosRecyclerViewAdapter.notifyDataSetChanged();
-                            prepareImageForSending();
+                            prepareImageForSending(true);
                         }
                     } else if (data != null){
                        Uri selectedImage = data.getData();
@@ -1157,7 +1157,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                        globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
                        PHOTO_ITEMS.add(globalCurrentPhotoPath);
                        photosRecyclerViewAdapter.notifyDataSetChanged();
-                       prepareImageForSending();
+                       prepareImageForSending(true);
                     }
                 }
                 break;
@@ -1167,7 +1167,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     if (globalCurrentPhotoPath != null) {
                         PHOTO_ITEMS.add(globalCurrentPhotoPath);
                         photosRecyclerViewAdapter.notifyDataSetChanged();
-                        prepareImageForSending();
+                        prepareImageForSending(false);
                     }
                 }
                 break;
@@ -1177,7 +1177,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     if (globalMandatoryTaskPosition != -1) {
                         try {
                             MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhotoPath(globalCurrentPhotoPath);
-                            MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhoto(MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath));
+                            MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhoto(MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath, true));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1202,7 +1202,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                             try {
                                 MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhotoPath(globalCurrentPhotoPath);
-                                MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhoto(MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath));
+                                MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setStepPhoto(MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath, false));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1236,8 +1236,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         return path;
     }
 
-    private void prepareImageForSending() {
-        String photoBase64String = MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath);
+    private void prepareImageForSending(boolean fromGallery) {
+        String photoBase64String = MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath, fromGallery);
 
         int lastIndex = globalCurrentPhotoPath.lastIndexOf("/");
         String photoFileName = globalCurrentPhotoPath.substring(lastIndex + 1);
@@ -1306,7 +1306,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         }
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (requestCode == REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO) {
@@ -1341,7 +1341,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             if (src.isDirectory()) {
 
-                String files[] = src.list();
+                String[] files = src.list();
                 int filesLength = files.length;
                 for (int i = 0; i < filesLength; i++) {
                     String src1 = (new File(src, files[i]).getPath());

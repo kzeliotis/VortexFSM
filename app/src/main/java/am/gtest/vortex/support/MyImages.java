@@ -145,7 +145,7 @@ public class MyImages {
         // Decode image in background.
         @Override
         protected Bitmap doInBackground(String... params) {
-            return getBitmapFromBase64String(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]));
+            return getBitmapFromBase64String(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]),0);
 //        return decodeSampledBitmapFromResource(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]));
         }
 
@@ -177,7 +177,7 @@ public class MyImages {
         // Decode image in background.
         @Override
         protected Bitmap doInBackground(String... params) {
-            return getNormalOrientedBitmap(params[0], getBitmapFromPath(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+            return getNormalOrientedBitmap(params[0], getBitmapFromPath(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]), 0));
 //        return decodeSampledBitmapFromResource(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]));
         }
 
@@ -203,14 +203,14 @@ public class MyImages {
         BitmapFactory.decodeResource(res, resId, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight,0);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static Bitmap getBitmapFromPath(String path, int reqWidth, int reqHeight) {
+    public static Bitmap getBitmapFromPath(String path, int reqWidth, int reqHeight, int smallSide) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -218,14 +218,14 @@ public class MyImages {
         BitmapFactory.decodeFile(path, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight, smallSide);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(path, options);
     }
 
-    public static Bitmap getBitmapFromBase64String(String base64String, int reqWidth, int reqHeight) {
+    public static Bitmap getBitmapFromBase64String(String base64String, int reqWidth, int reqHeight, int smallSide) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -235,23 +235,33 @@ public class MyImages {
         BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight, smallSide);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, int smallSide) {
         // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
+        final float height = options.outHeight;
+        final float width = options.outWidth;
         int inSampleSize = 1;
+
+        if (smallSide != 0){
+            if (width > height) {
+                reqWidth = Math.round((width / height) * (float)smallSide);
+                reqHeight = smallSide;
+            } else {
+                reqWidth = smallSide;
+                reqHeight = Math.round((height / width) * (float)smallSide);
+            }
+        }
 
         if (height > reqHeight || width > reqWidth) {
 
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
+            final float halfHeight = height / 2;
+            final float halfWidth = width / 2;
 
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
@@ -264,24 +274,30 @@ public class MyImages {
         return inSampleSize;
     }
 
-    public static String getImageBase64String(Context ctx, String imagePath) {
+    public static String getImageBase64String(Context ctx, String imagePath, boolean fromGallery) {
         String encodedImage = "";
 
         if (!imagePath.isEmpty()) {
 
             int smallSideLength = MyPrefs.getInt(PREF_IMAGE_SIZE, 360);
-            Bitmap bitmap = getNormalOrientedBitmap(imagePath);
+            Bitmap bitmap;
+
+            if(fromGallery){
+                bitmap = getBitmapFromPath(imagePath, 0,0, smallSideLength);
+            }else{
+                bitmap = getNormalOrientedBitmap(imagePath);
+            }
 
             if (bitmap != null) {
 
-                int bitmapWidth = bitmap.getWidth();
-                int bitmapHeight = bitmap.getHeight();
+                float bitmapWidth = (float)bitmap.getWidth();
+                float bitmapHeight =(float)bitmap.getHeight();
 
-                if (smallSideLength != 0) {
+                if (smallSideLength != 0 && !fromGallery) {
                     if (bitmapWidth > bitmapHeight) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (bitmapWidth / bitmapHeight) * smallSideLength, smallSideLength, false);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, Math.round((bitmapWidth / bitmapHeight) * (float)smallSideLength), smallSideLength, false);
                     } else {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, smallSideLength, (bitmapHeight / bitmapWidth) * smallSideLength, false);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, smallSideLength, Math.round((bitmapHeight / bitmapWidth) * (float)smallSideLength), false);
                     }
                 }
 
