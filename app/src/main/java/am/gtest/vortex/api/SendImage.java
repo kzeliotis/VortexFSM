@@ -19,6 +19,7 @@ import static am.gtest.vortex.api.MyApi.API_SET_ASSIGNMENT_PHOTO;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static am.gtest.vortex.api.MyApi.post;
 import static am.gtest.vortex.support.MyLocalization.localized_image_uploaded;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_image_will_be_sent;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
@@ -70,7 +71,8 @@ public class SendImage extends AsyncTask<String, Void, String > {
             e.printStackTrace();
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "", responseCode, responseMessage, responseBody);
+        String PostBodyLog = postBody.substring(0, 60) + " " + prefKey;
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, PostBodyLog, responseCode, responseMessage, responseBody);
 
         return null;
     }
@@ -85,6 +87,7 @@ public class SendImage extends AsyncTask<String, Void, String > {
 
         if (responseCode == 200 && responseBody.equals("1")) {
             MyPrefs.removeStringWithFileName(PREF_FILE_IMAGE_FOR_SYNC, prefKey);
+            MyLogs.writeFile_FullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "Removestring from PREF_FILE_IMAGE", responseCode, prefKey, responseBody);
 
             Toast toast = Toast.makeText(ctx, localized_image_uploaded, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);

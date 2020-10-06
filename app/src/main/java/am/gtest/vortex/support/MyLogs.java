@@ -71,7 +71,7 @@ public class MyLogs {
 
     public static void writeFile_FullLog(String LOG_TAG, String apiUrl, String postBody, int responseCode, String responseMessage, String responseBody) {
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.ENGLISH).format(new Date());
 
         String LogText = "";
         LogText += "apiUrl: " + apiUrl +"\n";
