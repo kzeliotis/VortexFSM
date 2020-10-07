@@ -78,6 +78,7 @@ import am.gtest.vortex.support.MyDateTime;
 import am.gtest.vortex.support.MyDialogs;
 import am.gtest.vortex.support.MyImages;
 import am.gtest.vortex.support.MyLocalization;
+import am.gtest.vortex.support.MyLogs;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MySynchronize;
@@ -1249,6 +1250,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 "}";
 
         MyPrefs.setStringWithFileName(PREF_FILE_IMAGE_FOR_SYNC, prefKey, postBody);
+        String PostBodyLog = postBody.substring(0, 60) + " " + prefKey;
+        MyLogs.writeFile_FullLog("myLogs: PrepareImage", "", PostBodyLog, 0, prefKey, globalCurrentPhotoPath);
     }
 
     private void setupStatusesSpinner() {

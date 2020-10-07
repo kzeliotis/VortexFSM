@@ -87,7 +87,7 @@ public class SendImage extends AsyncTask<String, Void, String > {
 
         if (responseCode == 200 && responseBody.equals("1")) {
             MyPrefs.removeStringWithFileName(PREF_FILE_IMAGE_FOR_SYNC, prefKey);
-            MyLogs.writeFile_FullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "Removestring from PREF_FILE_IMAGE", responseCode, prefKey, responseBody);
+            MyLogs.writeFile_FullLog("myLogs: PrepareImage", apiUrl, "Removestring from PREF_FILE_IMAGE", responseCode, prefKey, responseBody);
 
             Toast toast = Toast.makeText(ctx, localized_image_uploaded, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
