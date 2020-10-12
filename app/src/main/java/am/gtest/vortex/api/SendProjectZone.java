@@ -94,6 +94,9 @@ public class SendProjectZone extends AsyncTask<String, Void, String > {
     @Override
     protected void onPostExecute(String responseBody) {
 
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+
+
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);
         }

@@ -2,6 +2,10 @@ package am.gtest.vortex.models;
 
 import java.util.List;
 
+import am.gtest.vortex.support.MyPrefs;
+
+import static am.gtest.vortex.support.MyPrefs.PREF_USERID;
+
 public class CustomFieldModel {
 
 
@@ -113,6 +117,7 @@ public class CustomFieldModel {
                         "  \"Editable\": \"" + getEditable() + "\",\n" +
                         "  \"CustomFieldDataType\": \"" + getCustomFieldDataType() + "\",\n" +
                         "  \"VortexTableId\": \"" + getObjectTableId() + "\",\n" +
+                        "  \"UserCreated\": \"" + MyPrefs.getString(PREF_USERID, "0") + "\",\n" +
                         "  \"CustomFieldDetails\": " + getCustomFieldDetails() + "\n" +
                         "}";
 
