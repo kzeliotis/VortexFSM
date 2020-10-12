@@ -85,11 +85,11 @@ public class AssignmentsData {
 
                         Long diff = dateEndMillis - currentUtcMillis;
 
-                        timeTo = String.valueOf(diff / 1000 / 60) + " min";
+                        timeTo = diff / 1000 / 60 + " min";
 
-                        dateStart = dateStart.substring(dateStart.length() - 5, dateStart.length());
+                        dateStart = dateStart.substring(dateStart.length() - 5);
 
-                        dateEnd = dateEnd.substring(dateEnd.length() - 5, dateEnd.length());
+                        dateEnd = dateEnd.substring(dateEnd.length() - 5);
                         assignmentTime = day + "/" + month + " " + dateStart + " - " + dateEnd;
 
                     } catch (Exception e) {
@@ -156,6 +156,7 @@ public class AssignmentsData {
                     assignmentModel.setMandatoryTasks(MyJsonParser.getJsonArrayValue(oneObject, "ServiceSteps"));
                     assignmentModel.setSignatureName(MyJsonParser.getStringValue(oneObject, "SignatureName", "")) ;
                     assignmentModel.setProposedCheckOutStatus(MyJsonParser.getStringValue(oneObject, "ProposedCheckOutStatus", "0"));
+                    assignmentModel.setInstallationWarning(MyJsonParser.getStringValue(oneObject, "InstallationWarning", ""));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

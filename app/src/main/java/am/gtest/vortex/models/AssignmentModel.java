@@ -42,6 +42,7 @@ public class AssignmentModel {
     private String StatusColor = "";
     private String SignatureName = "";
     private String ProposedCheckOutStatus = "0";
+    private String installationWarning = "";
     private JSONArray mandatoryTasks = new JSONArray();
 
     @NonNull
@@ -79,6 +80,7 @@ public class AssignmentModel {
                         "\"CustomFields\": \"" + customFields + "\",\n" +
                         "\"pickingList\": \"" + pickingList + "\",\n" +
                         "\"ProposedCheckOutStatus\": \"" + ProposedCheckOutStatus + "\",\n" +
+                        "\"InstallationWarning\": \"" + installationWarning + "\",\n" +
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\"\n"
                 ;
@@ -90,6 +92,14 @@ public class AssignmentModel {
 
     public void setProjectDescription(String projectDescription) {
         this.projectDescription = projectDescription;
+    }
+
+    public String getInstallationWarning() {
+        return installationWarning;
+    }
+
+    public void setInstallationWarning(String InstallationWarning) {
+        this.installationWarning = InstallationWarning;
     }
 
     public String getProductDescription() {

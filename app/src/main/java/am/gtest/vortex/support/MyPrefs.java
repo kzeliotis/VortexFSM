@@ -47,6 +47,7 @@ public class MyPrefs {
     public static final String PREF_FILE_ZONE_PRODUCT_MEASUREMENTS = "pref_file_zone_product_measurements";
     public static final String PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW = "pref_file_added_consumables_for_show";
     public static final String PREF_FILE_COMMENTS_FOR_SHOW = "pref_file_comments_for_show";
+    public static final String PREF_FILE_INSTALLATION_WARNING_FOR_SHOW = "pref_file_installation_warning_for_show";
     public static final String PREF_FILE_SIGNATURENAME = "pref_file_signature";
     public static final String PREF_FILE_SIGNATUREEMAIL = "pref_file_signatureEmail";
     public static final String PREF_FILE_SELECTED_STATUS = "pref_file_select_status";

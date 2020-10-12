@@ -130,6 +130,28 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tvWarning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_2"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/black"
+                android:background="@color/red_700"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:layout_weight="10"
+                android:drawableStart="@drawable/ic_alert_octagram_black"
+                android:drawableLeft="@drawable/ic_alert_octagram_black"
+                android:drawablePadding="@dimen/dp_6" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

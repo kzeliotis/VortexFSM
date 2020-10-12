@@ -76,6 +76,13 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
             holder.cvAssignment.setCardBackgroundColor(ContextCompat.getColor(ctx, R.color.light_blue_50));
         }
 
+        if (holder.mItem.getInstallationWarning().length() > 0){
+            holder.tvWarning.setVisibility(View.VISIBLE);
+            holder.tvWarning.setText(holder.mItem.getInstallationWarning());
+        } else {
+            holder.tvWarning.setVisibility(View.GONE);
+        }
+
         if (holder.mItem.getStatusColor().length()> 0) {
             holder.tvAssignmentsStatus.setBackgroundColor(Integer.valueOf(holder.mItem.getStatusColor()));
         }
@@ -147,6 +154,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
         final TextView tvAddress;
         final TextView tvDistance;
         final TextView tvAssignmentsStatus;
+        final TextView tvWarning;
         public AssignmentModel mItem;
 
         public ViewHolder(View view) {
@@ -161,6 +169,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
             tvAddress = view.findViewById(R.id.tvAddress);
             tvDistance = view.findViewById(R.id.tvDistance);
             tvAssignmentsStatus = view.findViewById(R.id.tvAssignmentsStatus);
+            tvWarning = view.findViewById(R.id.tvWarning);
         }
     }
 

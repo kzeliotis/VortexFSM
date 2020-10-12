@@ -149,6 +149,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHARGED_AMOUNT_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATUREEMAIL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATURENAME;
@@ -199,6 +200,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private EditText etNotes;
     private EditText etChargedAmount;
     private EditText etPaidAmount;
+    private EditText etWarning;
     private Spinner spStatus;
     private Button btnCheckIn;
     private Button btnCheckOut;
@@ -259,6 +261,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         etNotes = findViewById(R.id.etNotes);
         etChargedAmount = findViewById(R.id.etChargedAmount);
         etPaidAmount = findViewById(R.id.etPaidAmount);
+        etWarning = findViewById(R.id.etWarning);
         flSignatureImage = findViewById(R.id.flSignatureImage);
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         tvProblem = findViewById(R.id.tvProblem);
@@ -332,6 +335,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             rvMandatoryTasks.setVisibility(View.GONE);
         }
         // End: Hide Mandatory Tasks view if there is no Mandatory task
+
+        if (SELECTED_ASSIGNMENT.getInstallationWarning().length() > 0) {
+            etWarning.setVisibility(View.VISIBLE);
+        } else {
+            etWarning.setVisibility(View.GONE);
+        }
 
         MandatoryTasksData.generate();
 
@@ -477,6 +486,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         etCommentsSolution.setText(MyPrefs.getStringWithFileName(PREF_FILE_COMMENTS_FOR_SHOW, assignmentId, SELECTED_ASSIGNMENT.getCommentsSolution()));
 
+        etWarning.setText(MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_WARNING_FOR_SHOW, assignmentId, SELECTED_ASSIGNMENT.getInstallationWarning()));
+
         etNotes.setText(MyPrefs.getStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, SELECTED_ASSIGNMENT.getNotes()));
         //etNotes.setText(SELECTED_ASSIGNMENT.getNotes());
         etNotes.setMovementMethod(LinkMovementMethod.getInstance());
@@ -519,6 +530,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             MyPrefs.setStringWithFileName(PREF_FILE_SELECTED_STATUS, assignmentId, String.valueOf(spStatus.getSelectedItemPosition()));
         }
 
+        MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_WARNING_FOR_SHOW, assignmentId, etWarning.getText().toString().trim());
 
 //        Log.e(LOG_TAG, "----------------onPause MANDATORY_TASKS_LIST: \n" + MANDATORY_TASKS_LIST);
     }

@@ -37,6 +37,20 @@
             android:textStyle="bold"
             android:textColor="@color/grey_600" />
 
+        <EditText
+            android:enabled="false"
+            android:id="@+id/etWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:inputType="textCapSentences|textMultiLine"
+            android:background="@drawable/background_red_rounded"
+            android:hint="Alert"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:minLines="3" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
