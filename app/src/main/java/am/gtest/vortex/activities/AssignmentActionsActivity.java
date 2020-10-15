@@ -325,6 +325,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         setupStatusesSpinner();
 
+        tvInternalNotesTitle.setEnabled(true);
 
         // Start: Hide Mandatory Tasks view if there is no Mandatory task
         if (SELECTED_ASSIGNMENT.getMandatoryTasks().length() > 0) {
@@ -630,11 +631,22 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     etNotes.setTextColor(Color.BLACK);
 //                    etNotes.setFocusable(true);
                     etNotes.setInputType(InputType.TYPE_CLASS_TEXT);
-                    etNotes.setText(MyPrefs.getStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, ""));
+                    String int_notes = MyPrefs.getStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, "");
+                    if(etNotes.isEnabled()){
+                        etNotes.setText(int_notes);
+                    }else{
+                        etNotes.setEnabled(true);
+                        etNotes.setText(int_notes);
+                        etCommentsSolution.requestFocus();
+                        //etNotes.setEnabled(false);
+                    }
+                    etNotes.setTextColor(Color.BLACK);
                 }else{
                     MyPrefs.setBoolean(PREF_HIDE_INTERNAL_NOTES, true);
                     hideInternalNotes = true;
-                    MyPrefs.setStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, internalNotes);
+                    if(!MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false)){
+                        MyPrefs.setStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, internalNotes);
+                    }
                     etNotes.setText("");
                     etNotes.setMinLines(0);
                     //etNotes.setTextColor(Color.TRANSPARENT);
@@ -963,7 +975,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     etCommentsSolution.setEnabled(false);
                     etNotes.setEnabled(false);
                     tvSolutionTitle.setEnabled(false);
-                    tvInternalNotesTitle.setEnabled(false);
+                    tvInternalNotesTitle.setEnabled(true);
                     btnTakePhoto.setEnabled(false);
                     etChargedAmount.setEnabled(false);
                     etPaidAmount.setEnabled(false);
