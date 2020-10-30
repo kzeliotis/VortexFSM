@@ -119,6 +119,7 @@ public class MyPrefs {
     public static final String PREF_HIDE_INTERNAL_NOTES = "pref_hide_internal_notes";
     public static final String PREF_CURRENT_APK_VERSION = "pref_current_apk_version";
     public static final String PREF_LOCATION_REFRESH_INTERVAL = "pref_location_refresh_interval";
+    public static final String PREF_API_CONNECTION_TIMEOUT = "pref_api_connection_timeout";
     public static final String PREF_GPS_PRIORITY = "pref_GPS_priority";
 
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";

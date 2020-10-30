@@ -11,11 +11,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import am.gtest.vortex.BuildConfig;
 import am.gtest.vortex.support.MyPrefs;
 
+import static am.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
+import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 
 class MyApi {
 
@@ -79,10 +82,14 @@ class MyApi {
         Bundle bundle = new Bundle();
 
         try {
+
+            int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
+            conn_timeout *= 1000;
+
             URL url = new URL(apiUrl);
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setReadTimeout(60000);
-            httpURLConnection.setConnectTimeout(60000);
+            httpURLConnection.setConnectTimeout(conn_timeout);
             httpURLConnection.setRequestMethod("POST");
 
             //Version = Version.replace(".","");
@@ -97,7 +104,7 @@ class MyApi {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
 
             bufferedWriter.write(postBody);
             bufferedWriter.flush();
@@ -114,7 +121,7 @@ class MyApi {
                 inputStream = httpURLConnection.getInputStream();
             }
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length;
@@ -164,7 +171,7 @@ class MyApi {
                 inputStream = httpURLConnection.getInputStream();
             }
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length;

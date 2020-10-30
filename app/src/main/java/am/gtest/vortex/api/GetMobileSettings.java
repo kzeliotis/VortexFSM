@@ -26,6 +26,7 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static am.gtest.vortex.support.MyLocalization.localized_new_update_available;
+import static am.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
@@ -137,6 +138,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     Integer MobileGPSPriority = MyJsonParser.getIntValue(oneObject,  "MobileGPSPriority", 3);
                     MyPrefs.setInt(PREF_GPS_PRIORITY, MobileGPSPriority);
 
+                    Integer MobileApiConnectionTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiConnectionTimeout", 15);
+                    MyPrefs.setInt(PREF_API_CONNECTION_TIMEOUT, MobileApiConnectionTimeout);
+
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");
                     if (!CurrentApkVersion.isEmpty() && !CurrentApkVersionURL.isEmpty()){
@@ -151,7 +155,7 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                                         dialog.dismiss();
                                         Uri uri = Uri.parse(CurrentApkVersionURL + "vortex_" + CurrentApkVersion + ".apk");
                                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                        intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         Bundle b = new Bundle();
                                         b.putBoolean("new_window", true); //sets new window
                                         intent.putExtras(b);
