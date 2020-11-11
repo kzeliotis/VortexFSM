@@ -3,11 +3,9 @@ package am.gtest.vortex.adapters;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -31,15 +29,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import am.gtest.vortex.R;
-import am.gtest.vortex.activities.CustomFieldDetailsActivity;
 import am.gtest.vortex.models.CustomFieldDetailColumnModel;
-import am.gtest.vortex.models.CustomFieldModel;
 import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MyUtils;
 
-import static am.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
-import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
 
 public class CustomFieldDetailsEditRvAdapter extends RecyclerView.Adapter<CustomFieldDetailsEditRvAdapter.ViewHolder> {

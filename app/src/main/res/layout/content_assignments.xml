@@ -96,12 +96,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAssignments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context=".activities.AssignmentsActivity"
         tools:listitem="@layout/item_assignment"/>
 

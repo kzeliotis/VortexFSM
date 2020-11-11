@@ -1,8 +1,8 @@
 package am.gtest.vortex.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import am.gtest.vortex.R;
 import am.gtest.vortex.models.ZoneProductModel;
 import am.gtest.vortex.support.MyPrefs;
 
-import static am.gtest.vortex.support.MyGlobals.ValueSelected;
 import static am.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST_FILTERED;
 import static am.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;

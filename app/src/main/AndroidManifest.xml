@@ -310,7 +310,7 @@
             android:value="AIzaSyBEftz7pxZ1mbFAAE96BX2-AK-IY4ENSK8" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="am.gtest.vortex"
             android:exported="false"
             android:grantUriPermissions="true">

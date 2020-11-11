@@ -9,11 +9,11 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -165,9 +165,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String phone = "Phone: " + oneObject.getString("ProjectTel");
 
                         String dateStart = oneObject.getString("DateStart");
-                        dateStart = dateStart.substring(dateStart.length()-5, dateStart.length() );
+                        dateStart = dateStart.substring(dateStart.length()-5);
                         String dateEnd = oneObject.getString("DateEnd");
-                        dateEnd = dateEnd.substring(dateEnd.length()-5, dateEnd.length() );
+                        dateEnd = dateEnd.substring(dateEnd.length()-5);
                         String assignmentTime = "Time: " + dateStart + " - " + dateEnd;
 
                         String assignmentType = "Type: " + oneObject.getString("AssignmentType");
@@ -318,7 +318,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

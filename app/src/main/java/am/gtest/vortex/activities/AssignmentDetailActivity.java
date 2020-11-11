@@ -3,12 +3,11 @@ package am.gtest.vortex.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -28,16 +27,12 @@ import am.gtest.vortex.R;
 import am.gtest.vortex.api.SendCheckOut;
 import am.gtest.vortex.api.SendStartTravel;
 import am.gtest.vortex.models.CheckInCheckOutModel;
-import am.gtest.vortex.services.GetCurrentLocation;
-import am.gtest.vortex.services.SendLocationService;
 import am.gtest.vortex.support.MyDateTime;
 import am.gtest.vortex.support.MyDialogs;
 import am.gtest.vortex.support.MyLocalization;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
-import am.gtest.vortex.support.PermGetLocation;
-import android.location.LocationListener;
 
 
 import static am.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
@@ -61,13 +56,9 @@ import static am.gtest.vortex.support.MyLocalization.localized_revenue_service;
 import static am.gtest.vortex.support.MyLocalization.localized_service_description;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_vat_number;
-import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LAT;
-import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LNG;
-import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_TIME;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_HAS_RETURNED_TO_BASE;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
@@ -77,7 +68,6 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYN
 import static am.gtest.vortex.support.MyPrefs.PREF_START_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_TRAVEL_TIME;
-import static am.gtest.vortex.support.MyPrefs.PREF_START_WORK_TIME;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMapReadyCallback, View.OnClickListener, View.OnLongClickListener {

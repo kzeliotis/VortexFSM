@@ -2,14 +2,14 @@ package am.gtest.vortex.items;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -148,7 +148,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
 
                     if (!newMeasurementsJsonString.equals("")) {
                         String firstPart = newMeasurementsJsonString.substring(0, newMeasurementsJsonString.length()-3);
-                        String lastPart = newMeasurementsJsonString.substring(newMeasurementsJsonString.length()-2, newMeasurementsJsonString.length());
+                        String lastPart = newMeasurementsJsonString.substring(newMeasurementsJsonString.length()-2);
                         withoutLastComma = firstPart + lastPart;
                     }
 

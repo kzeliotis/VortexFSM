@@ -141,7 +141,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp_16">
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:enabled="false"
                 android:id="@+id/swUsePt"
                 android:layout_width="0dp"
@@ -320,14 +320,14 @@
             android:gravity="center"/>
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMandatoryTasks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:background="@drawable/rounded_layout_grey"
             android:padding="@dimen/dp_6"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_mandatory_task" />
 
         <TextView
@@ -377,11 +377,11 @@
             android:gravity="center"
             android:minLines="5"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProjectPhotos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
        <!-- <LinearLayout
             android:layout_width="match_parent"

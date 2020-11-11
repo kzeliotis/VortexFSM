@@ -1,7 +1,7 @@
 package am.gtest.vortex.support;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import am.gtest.vortex.R;
 

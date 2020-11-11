@@ -9,11 +9,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.support.media.ExifInterface;
+//import androidx.exifinterface.media.ExifInterface;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;

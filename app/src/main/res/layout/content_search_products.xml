@@ -31,11 +31,11 @@
         android:background="@drawable/rounded_button_indigo"
         android:layout_alignParentBottom="true"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context=".activities.ProductsActivity"
         tools:listitem="@layout/item_name_chevron"
         android:scrollbars="vertical"/>

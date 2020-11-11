@@ -1,13 +1,13 @@
 package am.gtest.vortex.services;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+//import androidx.annotation.Nullable;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -16,12 +16,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import am.gtest.vortex.api.SendCoords;
 import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
-import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_SENDING_INTERVAL;
 
 public class SendLocationService extends Service {
 

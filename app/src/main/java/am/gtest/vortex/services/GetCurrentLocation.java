@@ -9,13 +9,10 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.widget.TextView;
 
 import android.util.Log;
-
-import am.gtest.vortex.R;
-import am.gtest.vortex.activities.AssignmentsActivity;
 
 public class GetCurrentLocation extends Activity implements LocationListener{
     protected LocationManager locationManager;

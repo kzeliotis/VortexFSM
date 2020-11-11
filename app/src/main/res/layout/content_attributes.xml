@@ -60,14 +60,14 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAttributes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnAddNewAttributes"
         android:layout_below="@id/llAttrProdInstallationDate"
         android:layout_marginBottom="@dimen/dp_16"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="2"
         tools:listitem="@layout/item_attribute" />
 

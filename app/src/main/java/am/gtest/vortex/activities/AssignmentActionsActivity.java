@@ -17,19 +17,19 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+//import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.SwitchCompat;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -71,7 +71,6 @@ import am.gtest.vortex.api.SendUsePTOvernight;
 import am.gtest.vortex.data.MandatoryTasksData;
 import am.gtest.vortex.items.ServicesListActivity;
 import am.gtest.vortex.models.CheckInCheckOutModel;
-import am.gtest.vortex.models.ProductMeasurementModel;
 import am.gtest.vortex.models.UsePTOvernightModel;
 import am.gtest.vortex.support.CaptureSignature;
 import am.gtest.vortex.support.MyDateTime;
@@ -105,7 +104,6 @@ import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.STATUSES_LIST;
 import static am.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
 import static am.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
-import static am.gtest.vortex.support.MyGlobals.mandatoryStepPhoto;
 import static am.gtest.vortex.support.MyLocalization.localized_assignmentActions;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static am.gtest.vortex.support.MyLocalization.localized_calculate_cost;
@@ -119,7 +117,6 @@ import static am.gtest.vortex.support.MyLocalization.localized_default_actions;
 import static am.gtest.vortex.support.MyLocalization.localized_fillComments;
 import static am.gtest.vortex.support.MyLocalization.localized_fillMandatoryTasks;
 import static am.gtest.vortex.support.MyLocalization.localized_fillSignature;
-import static am.gtest.vortex.support.MyLocalization.localized_installations;
 import static am.gtest.vortex.support.MyLocalization.localized_installations_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_internal_communication;
 import static am.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
@@ -151,7 +148,6 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATUREEMAIL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATURENAME;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
@@ -689,7 +685,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         spTechActions.setAdapter(new MySpinnerAdapter(AssignmentActionsActivity.this, techActionsArray));
                     }
 
-                    new android.support.v7.app.AlertDialog.Builder(AssignmentActionsActivity.this)
+                    new androidx.appcompat.app.AlertDialog.Builder(AssignmentActionsActivity.this)
                             .setView(llNewAttributeValue)
                             .setNegativeButton(localized_cancel, null)
                             .setPositiveButton(localized_select, (dialog, which) -> {
@@ -1370,8 +1366,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 String[] files = src.list();
                 int filesLength = files.length;
-                for (int i = 0; i < filesLength; i++) {
-                    String src1 = (new File(src, files[i]).getPath());
+                for (String file : files) {
+                    String src1 = (new File(src, file).getPath());
                     String dst1 = dst.getPath();
                     copyFileOrDirectory(src1, dst1);
 

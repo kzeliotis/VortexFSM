@@ -1,6 +1,5 @@
 package am.gtest.vortex.support;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -39,7 +38,7 @@ public class TakeUploadPhoto {
                     ctx, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    new android.support.v7.app.AlertDialog.Builder(ctx)
+                    new androidx.appcompat.app.AlertDialog.Builder(ctx)
                             .setMessage(ctx.getString(R.string.provide_permission_to_upload_image))
                             .setPositiveButton(R.string.ok, (dialog, which) -> {
                                 dialog.dismiss();

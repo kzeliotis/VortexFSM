@@ -73,14 +73,14 @@
             android:gravity="center"/>
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvZoneCustomFields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:background="@drawable/rounded_edittext_white"
             android:padding="@dimen/dp_6"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_custom_field_edit" />
 
         <Button

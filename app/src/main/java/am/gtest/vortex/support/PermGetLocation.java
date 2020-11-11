@@ -8,12 +8,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -111,7 +111,7 @@ public class PermGetLocation {
         }
     }
 
-    public void myPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void myPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         Log.e(LOG_TAG, "PermGetLocation ---------------------------- onRequestPermissionsResult requestCode: " + requestCode);
 

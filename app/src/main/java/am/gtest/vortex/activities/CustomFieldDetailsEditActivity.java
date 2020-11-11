@@ -1,9 +1,9 @@
 package am.gtest.vortex.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_margin="@dimen/dp_10">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/assignment_detail_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -23,7 +23,7 @@
 
             <include layout="@layout/sub_content_assignment_detail" />
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <FrameLayout
             android:id="@+id/flMap"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
 
                 android:id="@+id/fabStartTravel"
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:src="@drawable/ic_time_to_leave_white_24dp"
                 app:backgroundTint="@color/colorPrimary"/>
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
 
                 android:id="@+id/fabReturnToBase"
                 android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabAssignmentDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabGoToMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabChangeResource"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabSubAssignments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -153,4 +153,4 @@
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
