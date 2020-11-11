@@ -23,15 +23,19 @@ public class GetUserPartnersResources extends AsyncTask<String, Void, String > {
     private int responseCode;
     private String responseMessage;
     private String responseBody;
+    private String AssignmentId;
+    private String CustomerId;
 
-    public GetUserPartnersResources() {
+    public GetUserPartnersResources(String assignmentId, String customerId) {
+        this.AssignmentId = assignmentId;
+        this.CustomerId = customerId;
     }
 
     @Override
     protected String doInBackground(String... params) {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl+ API_GET_USER_PARTNER_RESOURCES + MyPrefs.getString(PREF_USER_NAME, "");
+        apiUrl = baseHostUrl+ API_GET_USER_PARTNER_RESOURCES + MyPrefs.getString(PREF_USER_NAME, "") + "&CustomerId=" + CustomerId + "&AssignmentId=" + AssignmentId ;
 
         try {
             Bundle bundle = MyApi.get(apiUrl);

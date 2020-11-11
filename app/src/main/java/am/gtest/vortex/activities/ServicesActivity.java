@@ -17,6 +17,7 @@ import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PRODUCTID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
 import static am.gtest.vortex.support.MyGlobals.SERVICES_LIST_FILTERED;
@@ -36,9 +37,10 @@ public class ServicesActivity extends BaseDrawerActivity {
 
         String ProjectProductId = getIntent().getStringExtra(KEY_PROJECT_PRODUCT_ID);
         String ProductId = getIntent().getStringExtra(KEY_PRODUCTID);
+        String CustomerId = getIntent().getStringExtra(KEY_CUSTOMERID);
         if (SERVICES_LIST_FILTERED.size() == 0){
             if (MyUtils.isNetworkAvailable()) {
-                GetServices getServices = new GetServices("0", ProjectProductId, ProductId);
+                GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId);
                 getServices.execute();
             }
         }

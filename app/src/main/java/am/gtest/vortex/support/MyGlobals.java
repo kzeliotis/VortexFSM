@@ -199,6 +199,7 @@ public class MyGlobals {
     public static final String KEY_REFRESH_INSTALLATIONS = "key_refresh_installations";
     public static final String KEY_AFTER_LOGIN = "key_after_login";
     public static final String KEY_PRODUCTID = "key_productId";
+    public static final String KEY_CUSTOMERID = "key_customerId";
     public static final String KEY_REFRESH_CUSTOM_FIELDS = "key_refresh_custom_fields";
     public static final String KEY_VORTEX_TABLE = "key_vortex_table";
 

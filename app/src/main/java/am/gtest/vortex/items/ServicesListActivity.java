@@ -103,7 +103,7 @@ public class ServicesListActivity extends AppCompatActivity {
         String RelatedServices = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_SERVICES_FOR_SHOW, assignmentId, "");
 
         if (RelatedServices.isEmpty() ||  MyUtils.isNetworkAvailable()){
-            GetServices getServices = new GetServices(assignmentId, "0","0");
+            GetServices getServices = new GetServices(assignmentId, "0","0", "0");
             getServices.execute();
         }
 

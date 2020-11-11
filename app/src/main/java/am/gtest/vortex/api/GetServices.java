@@ -26,18 +26,20 @@ public class GetServices extends AsyncTask<String, Void, String > {
     private String AssignmentId;
     private String ProjectProductId;
     private String ProductId;
+    private String CustomerId;
 
-    public GetServices(String AssignmentId, String ProjectProductId, String ProductId) {
+    public GetServices(String AssignmentId, String ProjectProductId, String ProductId, String CustomerId) {
         this.AssignmentId = AssignmentId;
         this.ProjectProductId = ProjectProductId;
         this.ProductId = ProductId;
+        this.CustomerId = CustomerId;
     }
 
     @Override
     protected String doInBackground(String... params) {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl+ API_GET_SERVICES + AssignmentId + "&ProjectProductId=" + ProjectProductId + "&ProductId=" + ProductId;
+        apiUrl = baseHostUrl+ API_GET_SERVICES + AssignmentId + "&ProjectProductId=" + ProjectProductId + "&ProductId=" + ProductId + "&CustomerId=" + CustomerId;
 
         try {
             Bundle bundle = MyApi.get(apiUrl);

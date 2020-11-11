@@ -57,8 +57,12 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
                 NEW_ASSIGNMENT.setProductDescription(holder.mItem.getProductDescription());
                 NEW_ASSIGNMENT.setProjectProductId(holder.mItem.getProjectProductId());  // ProjectProductId is ID of project product
                 NEW_ASSIGNMENT.setProductId("");
+                String customerid = "0";
+                if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
+                    customerid = NEW_ASSIGNMENT.getCustomerId();
+                }
                 if (MyUtils.isNetworkAvailable()) {
-                    GetServices getServices = new GetServices("0", holder.mItem.getProjectProductId(), "0");
+                    GetServices getServices = new GetServices("0", holder.mItem.getProjectProductId(), "0", customerid);
                     getServices.execute();
                 }
                 ((AppCompatActivity) ctx).finish();                                      // finish activity to go back to new assignment

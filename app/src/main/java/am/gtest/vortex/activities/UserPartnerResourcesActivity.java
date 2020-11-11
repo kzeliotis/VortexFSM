@@ -17,6 +17,8 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.CONST_SINGLE_SELECTION;
+import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_resources;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
@@ -30,16 +32,26 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (MyUtils.isNetworkAvailable()) {
-//            GetUserPartnersResources getUserPartnersResources = new GetUserPartnersResources();
-//            getUserPartnersResources.execute();
-//        }
+        String CustomerId = getIntent().getStringExtra(KEY_CUSTOMERID);
+        if(CustomerId == null){CustomerId = "0";}
+        String AssignmentId = "0";
+
+        if(!SELECTED_ASSIGNMENT.getAssignmentId().isEmpty() && CustomerId.equals("0")){
+            AssignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+        }
+
+        if (MyUtils.isNetworkAvailable()) {
+            GetUserPartnersResources getUserPartnersResources = new GetUserPartnersResources(AssignmentId, CustomerId);
+            getUserPartnersResources.execute();
+        }
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.content_user_partner_resources, flBaseContainer, true);
 
         RecyclerView rvUserPartnerResources = findViewById(R.id.rvUserPartnerResources);
         boolean singleSelection = getIntent().getBooleanExtra(CONST_SINGLE_SELECTION, false);
+
+
 
         if (singleSelection) {
             for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {

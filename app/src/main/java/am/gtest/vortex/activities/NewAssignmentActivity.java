@@ -32,6 +32,7 @@ import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PRODUCTID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
 import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
@@ -251,6 +252,8 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
         intent = null;
 
+        String customerid = "0";
+
         switch (v.getId()) {
             case R.id.tvNewAssignmentCustomer:
                 showDialogToSelectCustomer();
@@ -298,22 +301,30 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
                 String projectproductId = "0";
                 String productId = "0";
+
                 if(!NEW_ASSIGNMENT.getProjectProductId().isEmpty()){
                     projectproductId = NEW_ASSIGNMENT.getProjectProductId();
                 }
-
                 if(!NEW_ASSIGNMENT.getProductId().isEmpty()){
                     productId = NEW_ASSIGNMENT.getProductId();
                 }
-
+                if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
+                    customerid = NEW_ASSIGNMENT.getCustomerId();
+                }
 
                 intent = new Intent(NewAssignmentActivity.this, ServicesActivity.class);
                 intent.putExtra(KEY_PROJECT_PRODUCT_ID, projectproductId);
                 intent.putExtra(KEY_PRODUCTID, productId);
+                intent.putExtra(KEY_CUSTOMERID, customerid);
                 break;
 
             case R.id.tvNewAssignmentResources:
+
+                if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
+                    customerid = NEW_ASSIGNMENT.getCustomerId();
+                }
                 intent = new Intent(NewAssignmentActivity.this, UserPartnerResourcesActivity.class);
+                intent.putExtra(KEY_CUSTOMERID, customerid);
                 break;
 
             case R.id.tvNewAssignmentType:
