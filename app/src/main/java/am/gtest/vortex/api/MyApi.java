@@ -1,5 +1,6 @@
 package am.gtest.vortex.api;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import java.io.BufferedReader;
@@ -9,9 +10,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+//import java.net.HttpURLConnection;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.CertificateException;
+
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.security.cert.X509Certificate;
 
 import am.gtest.vortex.BuildConfig;
 import am.gtest.vortex.support.MyPrefs;
@@ -77,6 +90,52 @@ class MyApi {
     static final String API_GET_VORTEX_TABLE_CUSTOM_FIELDS = "/Vortex.svc/GetVortexTableCustomFields?VortexTable=";
     static final String API_SEND_CUSTOM_FIELDS = "/Vortex.svc/SetCustomFields";
 
+    private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
+        HttpsURLConnection connection=null;
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
+            }
+
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @SuppressLint("TrustAllX509TrustManager")
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+
+            @SuppressLint("TrustAllX509TrustManager")
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }
+        };
+        SSLContext sc = SSLContext.getInstance("SSL"); // Add in try catch block if you get error.
+        sc.init(null, trustAllCerts, new java.security.SecureRandom()); // Add in try catch block if you get error.
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        HostnameVerifier usnoHostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        SSLSocketFactory sslSocketFactory = sc.getSocketFactory();
+
+        connection = (HttpsURLConnection) urlDownload.openConnection();
+        connection.setHostnameVerifier(usnoHostnameVerifier);
+        connection.setSSLSocketFactory(sslSocketFactory);
+
+        return connection;
+    }
+
     public static Bundle post(String apiUrl, String postBody, boolean isTextHtml) {
 
         Bundle bundle = new Bundle();
@@ -87,59 +146,117 @@ class MyApi {
             conn_timeout *= 1000;
 
             URL url = new URL(apiUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-            httpURLConnection.setReadTimeout(60000);
-            httpURLConnection.setConnectTimeout(conn_timeout);
-            httpURLConnection.setRequestMethod("POST");
+
+            if (apiUrl.toUpperCase().contains("HTTPS")){
+                HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection)url.openConnection();
+                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setConnectTimeout(conn_timeout);
+                httpURLConnection.setRequestMethod("POST");
 
             //Version = Version.replace(".","");
-            httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
 
-            if (isTextHtml) {
-                httpURLConnection.setRequestProperty("Content-type","text/plain; charset=UTF-8");
+                if (isTextHtml) {
+                    httpURLConnection.setRequestProperty("Content-type","text/plain; charset=UTF-8");
+                } else {
+                    httpURLConnection.setRequestProperty("Content-type","application/json; charset=UTF-8");
+                }
+
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+                bufferedWriter.write(postBody);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+
+                int responseCode = httpURLConnection.getResponseCode();
+
+                InputStream inputStream;
+
+                if (responseCode >= 400) {
+                    inputStream = httpURLConnection.getErrorStream();
+                } else {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, length);
+                }
+
+                String response = byteArrayOutputStream.toString("UTF-8");
+
+                bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
+                bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
+                bundle.putString(MY_API_RESPONSE_BODY, response);
+
+                byteArrayOutputStream.close();
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
             } else {
-                httpURLConnection.setRequestProperty("Content-type","application/json; charset=UTF-8");
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setConnectTimeout(conn_timeout);
+                httpURLConnection.setRequestMethod("POST");
+
+                //Version = Version.replace(".","");
+                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+
+                if (isTextHtml) {
+                    httpURLConnection.setRequestProperty("Content-type","text/plain; charset=UTF-8");
+                } else {
+                    httpURLConnection.setRequestProperty("Content-type","application/json; charset=UTF-8");
+                }
+
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+                bufferedWriter.write(postBody);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+
+                int responseCode = httpURLConnection.getResponseCode();
+
+                InputStream inputStream;
+
+                if (responseCode >= 400) {
+                    inputStream = httpURLConnection.getErrorStream();
+                } else {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, length);
+                }
+
+                String response = byteArrayOutputStream.toString("UTF-8");
+
+                bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
+                bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
+                bundle.putString(MY_API_RESPONSE_BODY, response);
+
+                byteArrayOutputStream.close();
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
             }
 
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-
-            bufferedWriter.write(postBody);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStream.close();
-
-            int responseCode = httpURLConnection.getResponseCode();
-
-            InputStream inputStream;
-
-            if (responseCode >= 400) {
-                inputStream = httpURLConnection.getErrorStream();
-            } else {
-                inputStream = httpURLConnection.getInputStream();
-            }
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
-
-            while ((length = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, length);
-            }
-
-            String response = byteArrayOutputStream.toString("UTF-8");
-
-            bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
-            bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
-            bundle.putString(MY_API_RESPONSE_BODY, response);
-
-            byteArrayOutputStream.close();
-            bufferedReader.close();
-            inputStream.close();
-            httpURLConnection.disconnect();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,43 +270,87 @@ class MyApi {
         Bundle bundle = new Bundle();
 
         try {
+
+            int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
+            conn_timeout *= 1000;
+
             URL url = new URL(apiUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setReadTimeout(60000);
-            httpURLConnection.setConnectTimeout(60000);
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
-            httpURLConnection.setDoInput(true);
+            if(apiUrl.toUpperCase().contains("HTTPS")){
+                HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection) url.openConnection();
+                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setConnectTimeout(conn_timeout);
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                httpURLConnection.setDoInput(true);
 
-            int responseCode = httpURLConnection.getResponseCode();
+                int responseCode = httpURLConnection.getResponseCode();
 
-            InputStream inputStream;
+                InputStream inputStream;
 
-            if (responseCode >= 400) {
-                inputStream = httpURLConnection.getErrorStream();
+                if (responseCode >= 400) {
+                    inputStream = httpURLConnection.getErrorStream();
+                } else {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, length);
+                }
+
+                String response = byteArrayOutputStream.toString("UTF-8");
+
+                bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
+                bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
+                bundle.putString(MY_API_RESPONSE_BODY, response);
+
+                byteArrayOutputStream.close();
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
             } else {
-                inputStream = httpURLConnection.getInputStream();
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setConnectTimeout(conn_timeout);
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                httpURLConnection.setDoInput(true);
+
+                int responseCode = httpURLConnection.getResponseCode();
+
+                InputStream inputStream;
+
+                if (responseCode >= 400) {
+                    inputStream = httpURLConnection.getErrorStream();
+                } else {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, length);
+                }
+
+                String response = byteArrayOutputStream.toString("UTF-8");
+
+                bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
+                bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
+                bundle.putString(MY_API_RESPONSE_BODY, response);
+
+                byteArrayOutputStream.close();
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
             }
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
-
-            while ((length = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, length);
-            }
-
-            String response = byteArrayOutputStream.toString("UTF-8");
-
-            bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
-            bundle.putString(MY_API_RESPONSE_MESSAGE, httpURLConnection.getResponseMessage());
-            bundle.putString(MY_API_RESPONSE_BODY, response);
-
-            byteArrayOutputStream.close();
-            bufferedReader.close();
-            inputStream.close();
-            httpURLConnection.disconnect();
 
         } catch (Exception e) {
             e.printStackTrace();
