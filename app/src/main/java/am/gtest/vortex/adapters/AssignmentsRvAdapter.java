@@ -43,7 +43,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
 
     private final Context ctx;
 
-    private List<AssignmentModel> allItems;
+    private final List<AssignmentModel> allItems;
     private List<AssignmentModel> filteredItems;
 
     public AssignmentsRvAdapter(List<AssignmentModel> allItems, Context ctx) {
@@ -65,7 +65,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
 
         holder.tvProjectDescription.setText(holder.mItem.getProjectDescription());
         holder.tvCustomerName.setText(holder.mItem.getCustomerName());
-        holder.tvServiceDescription.setText(holder.mItem.getServiceDescription());
+        holder.tvServiceDescription.setText(holder.mItem.getServiceDescription() + "\r\n" + holder.mItem.getProductDescription());
         holder.tvAssignmentTime.setText(holder.mItem.getAssignmentTime());
         holder.tvTimeTo.setText(holder.mItem.getTimeTo());
         holder.tvAddress.setText(holder.mItem.getAddress());
