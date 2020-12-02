@@ -36,6 +36,7 @@ import java.util.List;
 import am.gtest.vortex.R;
 import am.gtest.vortex.api.ToSendServices;
 import am.gtest.vortex.support.MyDialogs;
+import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MySwitchLanguage;
@@ -45,6 +46,7 @@ import static am.gtest.vortex.support.MyGlobals.CONST_EN;
 import static am.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyLocalization.localized_select_service;
 import static am.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SYNC;
@@ -77,7 +79,8 @@ public class ServicesToSelectActivity extends AppCompatActivity {
     private String suggestedDone;
 
     private JSONArray jArrayCheckboxes = new JSONArray();
-    private JSONObject jObjectServices = new JSONObject();
+    private final JSONObject jObjectServices = new JSONObject();
+    private JSONObject jObjectServicesToShow = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +138,25 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    String ServicesForShow = MyPrefs.getStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SHOW, assignmentId, "");
+                    if (ServicesForShow.length() > 0){
+                        try {
+                            jObjectServicesToShow = new JSONObject(ServicesForShow);
+                            JSONArray jArrayToShow = MyJsonParser.getJsonArrayValue(jObjectServicesToShow, "Services");
+                            for (int i = 0; i < jArrayCheckboxes.length(); i++){
+                                JSONObject srv = jArrayCheckboxes.getJSONObject(i);
+                                jArrayToShow.put(srv);
+                            }
+
+                            jObjectServicesToShow.put("Services", jArrayToShow);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
                     MyPrefs.setStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SYNC, assignmentId, jObjectServices.toString());
-                    MyPrefs.setStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SHOW, assignmentId, jObjectServices.toString());
+                    MyPrefs.setStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SHOW, assignmentId, jObjectServicesToShow.toString());
 
                     if (MyUtils.isNetworkAvailable()) {
                         ToSendServices toSendServices = new ToSendServices(ServicesToSelectActivity.this, CONST_FINISH_ACTIVITY);

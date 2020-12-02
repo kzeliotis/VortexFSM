@@ -321,7 +321,14 @@ public class MeasurementsListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        View recyclerView = findViewById(R.id.rvItemsList);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
+    }
 
 
 

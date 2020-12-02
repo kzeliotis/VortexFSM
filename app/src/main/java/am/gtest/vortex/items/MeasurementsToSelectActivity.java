@@ -83,7 +83,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
     private String ProjectProductId;
 
     private String savedMeasurements = "";
-    private List<MeasurementModel> MeasurementsToSend = new ArrayList<>();
+    private final List<MeasurementModel> MeasurementsToSend = new ArrayList<>();
     private String oldProductId;
 
     private String selectMeasurement;
@@ -146,6 +146,12 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
 
                     String withoutLastComma = "";
 
+                    String MeasurmementsForShow = MyPrefs.getStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW, oldProductId, "");
+                    if (MeasurmementsForShow.length() > 0){
+                        MeasurmementsForShow = MeasurmementsForShow.substring(0, MeasurmementsForShow.length()-2);
+                        MeasurmementsForShow = MeasurmementsForShow + ", " + savedMeasurements.substring(0, savedMeasurements.length()-1) + "}}";
+                    }
+
                     if (!newMeasurementsJsonString.equals("")) {
                         String firstPart = newMeasurementsJsonString.substring(0, newMeasurementsJsonString.length()-3);
                         String lastPart = newMeasurementsJsonString.substring(newMeasurementsJsonString.length()-2);
@@ -153,7 +159,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
                     }
 
                     MyPrefs.setStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC, oldProductId, withoutLastComma);
-                    MyPrefs.setStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW, oldProductId, withoutLastComma);
+                    MyPrefs.setStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW, oldProductId, MeasurmementsForShow);
 
 
                     for(int i = MANDATORY_MEASUREMENTS_LIST.size()-1; i >= 0; i--){
