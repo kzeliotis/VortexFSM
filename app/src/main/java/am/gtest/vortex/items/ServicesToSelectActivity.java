@@ -152,6 +152,8 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        jObjectServicesToShow = jObjectServices;
                     }
 
 

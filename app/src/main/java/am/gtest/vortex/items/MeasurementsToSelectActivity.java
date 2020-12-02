@@ -146,16 +146,18 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
 
                     String withoutLastComma = "";
 
-                    String MeasurmementsForShow = MyPrefs.getStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW, oldProductId, "");
-                    if (MeasurmementsForShow.length() > 0){
-                        MeasurmementsForShow = MeasurmementsForShow.substring(0, MeasurmementsForShow.length()-2);
-                        MeasurmementsForShow = MeasurmementsForShow + ", " + savedMeasurements.substring(0, savedMeasurements.length()-1) + "}}";
-                    }
-
                     if (!newMeasurementsJsonString.equals("")) {
                         String firstPart = newMeasurementsJsonString.substring(0, newMeasurementsJsonString.length()-3);
                         String lastPart = newMeasurementsJsonString.substring(newMeasurementsJsonString.length()-2);
                         withoutLastComma = firstPart + lastPart;
+                    }
+
+                    String MeasurmementsForShow = MyPrefs.getStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW, oldProductId, "");
+                    if (MeasurmementsForShow.length() > 0){
+                        MeasurmementsForShow = MeasurmementsForShow.substring(0, MeasurmementsForShow.length()-2);
+                        MeasurmementsForShow = MeasurmementsForShow + ", " + savedMeasurements.substring(0, savedMeasurements.length()-1) + "}}";
+                    } else {
+                        MeasurmementsForShow = withoutLastComma;
                     }
 
                     MyPrefs.setStringWithFileName(PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC, oldProductId, withoutLastComma);
