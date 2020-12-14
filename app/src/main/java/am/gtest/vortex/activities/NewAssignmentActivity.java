@@ -511,6 +511,11 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             return;
         }
 
+        if (NEW_ASSIGNMENT.getAssignmentType().isEmpty()) {
+            Toast.makeText(this, localized_select_assignment_type, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (NEW_ASSIGNMENT.getProblem().isEmpty()) {
             Toast.makeText(this, localized_describe_problem, Toast.LENGTH_SHORT).show();
             return;

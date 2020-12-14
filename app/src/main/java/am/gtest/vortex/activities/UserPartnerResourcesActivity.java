@@ -42,7 +42,12 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 
         if (MyUtils.isNetworkAvailable()) {
             GetUserPartnersResources getUserPartnersResources = new GetUserPartnersResources(AssignmentId, CustomerId);
-            getUserPartnersResources.execute();
+            try {
+              String result_ = getUserPartnersResources.execute().get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
