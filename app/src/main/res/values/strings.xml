@@ -905,6 +905,12 @@
     <string name="new_record">New Record</string>
     <string name="new_record_gr">ΝΕΑ ΕΓΓΡΑΦΗ</string>
 
+    <string name="no_measurements">No Measurements</string>
+    <string name="no_measurements_gr">Χωρίς Μετρήσεις</string>
+
+    <string name="complete_zone_measurements">Please fill/send measurements for all zones</string>
+    <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για όλες τις ζώνες</string>
+
      <!--to be translated-->
 
     <item type="id" name="TAG_ID" />

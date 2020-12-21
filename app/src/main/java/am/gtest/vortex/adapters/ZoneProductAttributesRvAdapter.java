@@ -30,15 +30,19 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.PRODUCT_MEASUREMENTS_LIST;
 import static am.gtest.vortex.support.MyGlobals.ValueSelected;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST;
 import static am.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 
 public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZoneProductAttributesRvAdapter.ViewHolder> {
 
@@ -123,12 +127,28 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                     ZONE_MEASUREMENTS_MAP.remove(prefKey);
                     ZONE_MEASUREMENTS_MAP.put(prefKey, PRODUCT_MEASUREMENTS_LIST);
 
-                    //ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.put(assignmentId, ZONE_MEASUREMENTS_MAP);
+                    boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
+                    if (sendZoneMeasurements){
+                        List<String> zoneIds = new ArrayList<>();
+                        if (ZONES_WITH_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                            zoneIds = ZONES_WITH_MEASUREMENTS_MAP.get(assignmentId);
+                        }
+                        String zone_id = prefKey.split("_")[1];
+                        if(!zoneIds.contains(zone_id)){
+                            zoneIds.add(zone_id);
+                        }
+                        ZONES_WITH_MEASUREMENTS_MAP.put(assignmentId, zoneIds); //keeping record of all zones that have measurements for mandatorymeasurementsservice
+
+                        MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, new Gson().toJson(ZONES_WITH_MEASUREMENTS_MAP));
+                    }
 
                     MyPrefs.setStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_MAP, prefKey, new Gson().toJson(ZONE_MEASUREMENTS_MAP));
                     MyPrefs.setStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC, prefKey, PRODUCT_MEASUREMENTS_LIST.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_ZONE_PRODUCT_MEASUREMENTS, prefKey, PRODUCT_MEASUREMENTS_LIST.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_ZONE_PRODUCTS_FOR_SHOW, prefKey, ZONE_PRODUCTS_LIST.toString());
+
+
+
                 }
 
                 @Override
@@ -215,6 +235,21 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
 
                         ZONE_MEASUREMENTS_MAP.remove(prefKey);
                         ZONE_MEASUREMENTS_MAP.put(prefKey, productMeasurementList);
+
+                        boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
+                        if (sendZoneMeasurements){
+                            List<String> zoneIds = new ArrayList<>();
+                            if (ZONES_WITH_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                                zoneIds = ZONES_WITH_MEASUREMENTS_MAP.get(assignmentId);
+                            }
+                            String zone_id = prefKey.split("_")[1];
+                            if(!zoneIds.contains(zone_id)){
+                                zoneIds.add(zone_id);
+                            }
+                            ZONES_WITH_MEASUREMENTS_MAP.put(assignmentId, zoneIds); //keeping record of all zones that have measurements for mandatorymeasurementsservice
+
+                            MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, new Gson().toJson(ZONES_WITH_MEASUREMENTS_MAP));
+                        }
 
 
                         MyPrefs.setStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_MAP, prefKey, new Gson().toJson(ZONE_MEASUREMENTS_MAP));

@@ -85,7 +85,8 @@ public class MyGlobals {
     public static Map<String, List<ProductMeasurementModel>> ZONE_MEASUREMENTS_MAP = new HashMap<>();
     //public static Map<String, Map<String, List<ProductMeasurementModel>>> ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC = new HashMap<>();
     public static Map<String, CustomFieldDetailModel> CUSTOM_FIELD_EMPTY_DETAILS_MAP = new HashMap<>();
-
+    public static Map<String, List<String>> ZONES_WITH_NO_MEASUREMENTS_MAP = new HashMap<>();
+    public static Map<String, List<String>> ZONES_WITH_MEASUREMENTS_MAP = new HashMap<>();
 
     public static CompanyModel SELECTED_COMPANY = new CompanyModel();
     public static List<CompanyModel> COMPANIES_LIST = new ArrayList<>();

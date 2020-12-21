@@ -22,6 +22,8 @@ public class MyPrefs {
     public static final String PREF_FILE_ZONE_MEASUREMENTS_MAP = "pref_file_zone_measurements_map";
     public static final String PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC = "pref_file_zone_measurement_for_checkout_sync";
     public static final String PREF_FILE_ZONE_PRODUCTS_FOR_SYNC = "pref_file_zone_products_for_sync";
+    public static final String PREF_FILE_ZONES_WITH_NO_MEASUREMENTS = "pref_file_zones_with_no_measurements";
+    public static final String PREF_FILE_ZONES_WITH_MEASUREMENTS = "pref_file_zones_with_measurements";
     public static final String PREF_FILE_MANDATORY_TASKS_FOR_SYNC = "pref_file_mandatory_tasks_for_sync";
     public static final String PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC = "pref_file_use_pt_overnight_for_sync";
     public static final String PREF_FILE_IMAGE_FOR_SYNC = "pref_file_image_to_be_sync";

@@ -1,23 +1,38 @@
 package am.gtest.vortex.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.activities.ZoneProductsActivity;
 import am.gtest.vortex.models.ZoneModel;
+import am.gtest.vortex.support.MyPrefs;
 
+import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyLocalization.localized_add_new_zone;
+import static am.gtest.vortex.support.MyLocalization.localized_no_measurements;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
 
 public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHolder> implements Filterable {
 
@@ -50,6 +65,49 @@ public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHold
             holder.tvZoneNotes.setText(holder.mItem.getZoneNotes());
         }
 
+        holder.tvNoMeasurements.setText(localized_no_measurements);
+
+        holder.chkNoMeasurements.setOnCheckedChangeListener(null);
+        holder.chkNoMeasurements.setChecked(false);
+
+        String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+
+        if (ZONES_WITH_NO_MEASUREMENTS_MAP.containsKey(assignmentId)){
+            List<String> zoneIds = ZONES_WITH_NO_MEASUREMENTS_MAP.get(assignmentId);
+            if (zoneIds != null) {
+               if(zoneIds.contains(holder.mItem.getZoneId())){holder.chkNoMeasurements.setChecked(true);}
+            }
+        }
+
+        holder.chkNoMeasurements.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            holder.chkNoMeasurements.setChecked(isChecked);
+
+            List<String> zoneIds = new ArrayList<>();
+
+            if (ZONES_WITH_NO_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                zoneIds = ZONES_WITH_NO_MEASUREMENTS_MAP.get(assignmentId);
+            }
+
+            if (zoneIds != null) {
+                if(!isChecked){
+                    for (int i=0; i < zoneIds.size(); i++){
+                        if(zoneIds.get(i).equals(holder.mItem.getZoneId())){
+                            zoneIds.remove(i);
+                        }
+                    }
+                } else {
+                    if(!zoneIds.contains(holder.mItem.getZoneId())){
+                        zoneIds.add(holder.mItem.getZoneId());
+                    }
+                }
+            }
+
+            ZONES_WITH_NO_MEASUREMENTS_MAP.put(assignmentId, zoneIds);
+            MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, assignmentId, new Gson().toJson(ZONES_WITH_NO_MEASUREMENTS_MAP));
+
+        });
+
         holder.mView.setOnClickListener(v -> {
             Intent intent = new Intent(ctx, ZoneProductsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -73,6 +131,8 @@ public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHold
         public final View mView;
         final TextView tvZoneDescription;
         final TextView tvZoneNotes;
+        final TextView tvNoMeasurements;
+        final CheckBox chkNoMeasurements;
         public ZoneModel mItem;
 
         public ViewHolder(View view) {
@@ -80,6 +140,8 @@ public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHold
             mView = view;
             tvZoneDescription = view.findViewById(R.id.tvZoneDescription);
             tvZoneNotes = view.findViewById(R.id.tvZoneNotes);
+            tvNoMeasurements = view.findViewById(R.id.tvNoMeasurements);
+            chkNoMeasurements = view.findViewById(R.id.chkNoMeasurements);
         }
     }
 

@@ -223,7 +223,8 @@ public class MyLocalization {
     public static String localized_company_custom_fields = "";
     public static String localized_add_record = "";
     public static String localized_new_record = "";
-
+    public static String localized_no_measurements = "";
+    public static String localized_complete_measurements = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -440,6 +441,8 @@ public class MyLocalization {
                 localized_company_custom_fields = ctx.getString(R.string.company_custom_fields_gr);
                 localized_add_record = ctx.getString(R.string.add_record_gr);
                 localized_new_record = ctx.getString(R.string.new_record_gr);
+                localized_no_measurements = ctx.getString(R.string.no_measurements_gr);
+                localized_complete_measurements = ctx.getString(R.string.complete_zone_measurements_gr);
                 break;
 
             default:
@@ -654,6 +657,8 @@ public class MyLocalization {
                 localized_company_custom_fields = ctx.getString(R.string.company_custom_fields);
                 localized_add_record =  ctx.getString(R.string.add_record);
                 localized_new_record = ctx.getString(R.string.new_record);
+                localized_no_measurements = ctx.getString(R.string.no_measurements);
+                localized_complete_measurements = ctx.getString(R.string.complete_zone_measurements);
                 break;
         }
     }

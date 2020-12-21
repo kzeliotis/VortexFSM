@@ -43,6 +43,7 @@ public class AssignmentModel {
     private String SignatureName = "";
     private String ProposedCheckOutStatus = "0";
     private String installationWarning = "";
+    private String mandatoryZoneMeasurementsService = "0";
     private JSONArray mandatoryTasks = new JSONArray();
 
     @NonNull
@@ -80,6 +81,7 @@ public class AssignmentModel {
                         "\"CustomFields\": \"" + customFields + "\",\n" +
                         "\"pickingList\": \"" + pickingList + "\",\n" +
                         "\"ProposedCheckOutStatus\": \"" + ProposedCheckOutStatus + "\",\n" +
+                        "\"MandatoryZoneMeasurementsService\": \"" + mandatoryZoneMeasurementsService + "\",\n" +
                         "\"InstallationWarning\": \"" + installationWarning + "\",\n" +
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\"\n"
@@ -384,4 +386,11 @@ public class AssignmentModel {
     }
 
     public void setProposedCheckOutStatus(String ProposedCheckOutStatus) {this.ProposedCheckOutStatus = ProposedCheckOutStatus;}
+
+
+    public String getMandatoryZoneMeasurementsService() {
+        return mandatoryZoneMeasurementsService;
+    }
+
+    public void setMandatoryZoneMeasurementsService(String MandatoryZoneMeasurementsService) {this.mandatoryZoneMeasurementsService = MandatoryZoneMeasurementsService;}
 }

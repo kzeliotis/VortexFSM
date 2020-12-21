@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -36,6 +37,34 @@
             android:textSize="@dimen/sp_16"
             android:layout_gravity="center_vertical" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_1" >
+
+            <TextView
+                android:id="@+id/tvNoMeasurements"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_1"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="italic"
+                android:textAlignment="textEnd"
+                android:text = "@string/no_measurements"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                tools:ignore="RtlCompat" />
+
+            <CheckBox
+                android:id="@+id/chkNoMeasurements"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <TextView
@@ -44,5 +73,8 @@
         android:gravity="end"
         android:layout_gravity="center_vertical"
         android:background="@drawable/ic_chevron_right_blue_24dp"/>
+
+
+
 
 </LinearLayout>

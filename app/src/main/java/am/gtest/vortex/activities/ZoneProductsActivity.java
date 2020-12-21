@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +44,7 @@ import static am.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyGlobals.PRODUCT_MEASUREMENTS_LIST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.ValueSelected;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST_FILTERED;
@@ -55,6 +57,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_send_data_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_zone_products;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_DATA_FOR_SHOW;
@@ -106,6 +109,10 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
             ZONE_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_MAP, prefKey, ""), new TypeToken<HashMap<String, List<ProductMeasurementModel>>>(){}.getType());
         }
 
+        if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, "").length() > 0) {
+            ZONES_WITH_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, ""), new TypeToken<HashMap<String, List<String>>>(){}.getType());
+        }
+
         zoneProductsRvAdapter = new ZoneProductsRvAdapter(ZONE_PRODUCTS_LIST_FILTERED, ZoneProductsActivity.this, prefKey, AssignmentId);
         rvZoneProducts.setAdapter(zoneProductsRvAdapter);
 
@@ -124,18 +131,15 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
 
             if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId()) || resendZoneMeasurements) {
 
-//                if(ZONE_MEASUREMENTS_MAP.containsKey(prefKey)){
-//                    PRODUCT_MEASUREMENTS_LIST = ZONE_MEASUREMENTS_MAP.get(prefKey);
-//                }
-
-//                if (ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.containsKey(SELECTED_ASSIGNMENT.getAssignmentId())){
-//                    if (ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.get(SELECTED_ASSIGNMENT.getAssignmentId()).containsKey(prefKey)){
-//                        ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.get(SELECTED_ASSIGNMENT.getAssignmentId()).remove(prefKey);
-//                    }
-//                    if (ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.get(SELECTED_ASSIGNMENT.getAssignmentId()).isEmpty()){
-//                        ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.remove(SELECTED_ASSIGNMENT.getAssignmentId());
-//                    }
-//                }
+                List<String> zoneIds = new ArrayList<>();
+                if (ZONES_WITH_MEASUREMENTS_MAP.containsKey(AssignmentId)) {
+                    zoneIds = ZONES_WITH_MEASUREMENTS_MAP.get(AssignmentId);
+                }
+                if(!zoneIds.contains(zoneId)){
+                    zoneIds.add(zoneId);
+                }
+                ZONES_WITH_MEASUREMENTS_MAP.put(AssignmentId, zoneIds); //keeping record of all zones that have measurements for mandatorymeasurementsservice
+                MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, new Gson().toJson(ZONES_WITH_MEASUREMENTS_MAP));
 
                 MyPrefs.removeStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC, prefKey);
 
@@ -284,7 +288,8 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
 
 
     @Override
-    public void onActivityResult ( int requestCode, int resultCode, Intent data){
+    public void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 49374:
 
@@ -299,9 +304,9 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
 //                    }
 //                }, 1000);
 
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode,  resultCode, data);
-                if (result != null){
-                    if (result.getContents() != null){
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
                         String ScannedCode = result.getContents();
                         //ScannedCode = ScannedCode + "|";
                         //searchView = (SearchView) mSearchMenu.getActionView();
@@ -310,7 +315,7 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
                             @Override
                             public void run() {
                                 searchView.onActionViewExpanded();
-                                 searchView.setIconified(false);
+                                searchView.setIconified(false);
                                 searchView.setQuery(ScannedCode, false);
                                 searchView.clearFocus();
                             }

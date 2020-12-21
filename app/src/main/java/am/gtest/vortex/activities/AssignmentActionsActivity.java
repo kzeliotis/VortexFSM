@@ -37,6 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,6 +54,7 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,15 +67,18 @@ import am.gtest.vortex.adapters.PhotosRecyclerViewAdapter;
 import am.gtest.vortex.api.GetAssignmentCost;
 import am.gtest.vortex.api.GetDefaultTechActions;
 import am.gtest.vortex.api.GetStatuses;
+import am.gtest.vortex.api.GetZones;
 import am.gtest.vortex.api.SendCheckIn;
 import am.gtest.vortex.api.SendCheckOut;
 import am.gtest.vortex.api.SendMandatoryTasks;
 import am.gtest.vortex.api.SendProductMeasurements;
 import am.gtest.vortex.api.SendUsePTOvernight;
 import am.gtest.vortex.data.MandatoryTasksData;
+import am.gtest.vortex.data.ZonesData;
 import am.gtest.vortex.items.ServicesListActivity;
 import am.gtest.vortex.models.CheckInCheckOutModel;
 import am.gtest.vortex.models.UsePTOvernightModel;
+import am.gtest.vortex.models.ZoneModel;
 import am.gtest.vortex.support.CaptureSignature;
 import am.gtest.vortex.support.MyDateTime;
 import am.gtest.vortex.support.MyDialogs;
@@ -102,6 +109,9 @@ import static am.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MAN
 import static am.gtest.vortex.support.MyGlobals.RESULT_SIGNATURE;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.STATUSES_LIST;
+import static am.gtest.vortex.support.MyGlobals.ZONES_LIST;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
 import static am.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
 import static am.gtest.vortex.support.MyLocalization.localized_assignmentActions;
@@ -112,6 +122,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_changeStatus;
 import static am.gtest.vortex.support.MyLocalization.localized_charged;
 import static am.gtest.vortex.support.MyLocalization.localized_clickToSign;
 import static am.gtest.vortex.support.MyLocalization.localized_commentsSolution;
+import static am.gtest.vortex.support.MyLocalization.localized_complete_measurements;
 import static am.gtest.vortex.support.MyLocalization.localized_consumables_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_default_actions;
 import static am.gtest.vortex.support.MyLocalization.localized_fillComments;
@@ -161,7 +172,11 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SYNC
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_NOTES_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_PAID_AMOUNT_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static am.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
@@ -221,11 +236,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private String signatureName = "";
     private String signatureEmail = "";
 
-    private List<String> PHOTO_ITEMS = new ArrayList<>();
+    private final List<String> PHOTO_ITEMS = new ArrayList<>();
 
     private boolean isSigned = false;
     private boolean resetStatus = false;
     private boolean hideInternalNotes = false;
+
 
 
     @Override
@@ -875,7 +891,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 if (!isSigned && MandatorySignature ){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
-            }
+                }
 
                 int MandatorySteps = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatorySteps();
                 if (MandatorySteps != 0){
@@ -892,7 +908,57 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             break;
                         }
                     }
-            }
+                }
+
+                if(SELECTED_ASSIGNMENT.getMandatoryZoneMeasurementsService().equals("1")){
+
+                    if (MyPrefs.getBoolean(PREF_SHOW_ZONE_PRODUCTS_BUTTON, false)) {
+                        String Zones = MyPrefs.getStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, assignmentId, "");
+                        if (!Zones.isEmpty()) {
+                            if (MyUtils.isNetworkAvailable()) {
+                                if (!SELECTED_ASSIGNMENT.getProjectId().isEmpty()) {
+                                    GetZones getZones = new GetZones(this, null, true, "0");
+                                    try{
+                                        String result_ = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
+                                        result_= "";
+                                        ZonesData.generate(true);
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, assignmentId, "").length() > 0) {
+                            ZONES_WITH_NO_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, assignmentId, ""), new TypeToken<HashMap<String, List<String>>>(){}.getType());
+                        }
+                        List<String> zoneIds_without = new ArrayList<>();
+                        if (ZONES_WITH_NO_MEASUREMENTS_MAP != null && ZONES_WITH_NO_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                            zoneIds_without = ZONES_WITH_NO_MEASUREMENTS_MAP.get(assignmentId);
+                        }
+
+                        for (ZoneModel zm : ZONES_LIST){
+                            String zone_id = zm.getZoneId();
+                            String pref_key = SELECTED_ASSIGNMENT.getProjectId() + "_" + zone_id + "_" + assignmentId;
+                            if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, pref_key, "").length() > 0) {
+                                ZONES_WITH_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, pref_key, ""), new TypeToken<HashMap<String, List<String>>>(){}.getType());
+                            }
+                            List<String> zoneIds = new ArrayList<>();
+                            if (ZONES_WITH_MEASUREMENTS_MAP != null && ZONES_WITH_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                                zoneIds = ZONES_WITH_MEASUREMENTS_MAP.get(assignmentId);
+                            }
+
+                            if(!zoneIds.contains(zone_id) && !zoneIds_without.contains(zone_id)){
+                                areAllRequiredFieldsFilled = false;
+                                MyDialogs.showOK(AssignmentActionsActivity.this, localized_complete_measurements);
+                                break;
+                            }
+                        }
+                    }
+
+
+                }
 
 
 
@@ -1028,7 +1094,6 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                         sendMandatoryTasks.execute(assignmentId, "");
 
-
                         boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
 
                         Map<String, ?> Zone_Measurements = this.getSharedPreferences(PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC, MODE_PRIVATE).getAll();
@@ -1044,20 +1109,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             }
                         }
 
-//                            if (ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.containsKey(assignmentId)){
-//                                Map<String, ?> Zone_Measurements = ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.get(assignmentId);
-//                                for (Map.Entry<String, ?> entry : Zone_Measurements.entrySet()) {
-//                                    String prefKey = entry.getKey();
-//
-//                                    SendProductMeasurements sendProductMeasurements = new SendProductMeasurements(AssignmentActionsActivity.this, prefKey, CONST_DO_NOT_FINISH_ACTIVITY, assignmentId);
-//                                    sendProductMeasurements.execute();
-//                                }
-//                            }
-//                        } else {
-//                            if (ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.containsKey(assignmentId)){
-//                                ZONE_MEASUREMENTES_FOR_CHECKOUT_SYNC.remove(assignmentId);
-//                            }
-//                        }
+                        MyPrefs.removeStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, assignmentId);
+
 
 
                     } else {
@@ -1112,15 +1165,19 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 //        return true;
 //    }
 
+    @SuppressLint("MissingSuperCall") //Suggested
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data); //Suggested
         Log.e(LOG_TAG, "-------------------------------------- onActivityResult.");
 
         switch (requestCode) {
 
             case RESULT_SIGNATURE:
-                if(!hideInternalNotes) {etNotes.setVisibility(View.VISIBLE);}
+                if (!hideInternalNotes) {
+                    etNotes.setVisibility(View.VISIBLE);
+                }
                 if (resultCode == RESULT_OK) {
                     if (data != null && data.hasExtra("status") && data.getStringExtra("status").equals("done")) {
 
@@ -1140,8 +1197,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                         if (tvSignatureImage != null) {
                             tvSignatureImage.setBackground(new BitmapDrawable(getResources(), bitmap));
-                            if (signatureEmail.length() > 0){
-                                MyPrefs.setStringWithFileName(PREF_FILE_SIGNATURENAME, assignmentId,signatureName + " (" + signatureEmail + ")");
+                            if (signatureEmail.length() > 0) {
+                                MyPrefs.setStringWithFileName(PREF_FILE_SIGNATURENAME, assignmentId, signatureName + " (" + signatureEmail + ")");
                             } else {
                                 MyPrefs.setStringWithFileName(PREF_FILE_SIGNATURENAME, assignmentId, signatureName);
                             }
@@ -1154,11 +1211,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
             case OTHER_APP_RESULT_PICK_ASSIGNMENT_PHOTO:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
 
-                    if(data.getClipData() != null){
+                    if (data.getClipData() != null) {
                         int count = data.getClipData().getItemCount();
-                        for (int i = 0; i < count; i++){
+                        for (int i = 0; i < count; i++) {
                             Uri selectedImage = data.getClipData().getItemAt(i).getUri();
                             File pickedFile = new File(getRealPathFromURI(selectedImage));
                             File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
@@ -1169,16 +1226,16 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             photosRecyclerViewAdapter.notifyDataSetChanged();
                             prepareImageForSending(true);
                         }
-                    } else if (data != null){
-                       Uri selectedImage = data.getData();
-                       File pickedFile = new File(getRealPathFromURI(selectedImage));
-                       File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
-                       File movedPhoto = new File(newFileLocation, pickedFile.getName());
-                       copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
-                       globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
-                       PHOTO_ITEMS.add(globalCurrentPhotoPath);
-                       photosRecyclerViewAdapter.notifyDataSetChanged();
-                       prepareImageForSending(true);
+                    } else if (data != null) {
+                        Uri selectedImage = data.getData();
+                        File pickedFile = new File(getRealPathFromURI(selectedImage));
+                        File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
+                        File movedPhoto = new File(newFileLocation, pickedFile.getName());
+                        copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                        globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
+                        PHOTO_ITEMS.add(globalCurrentPhotoPath);
+                        photosRecyclerViewAdapter.notifyDataSetChanged();
+                        prepareImageForSending(true);
                     }
                 }
                 break;
@@ -1212,7 +1269,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case OTHER_APP_RESULT_PICK_MANDATORY_TASK_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    if (data != null){
+                    if (data != null) {
                         if (globalMandatoryTaskPosition != -1) {
                             Uri selectedImage = data.getData();
                             File pickedFile = new File(getRealPathFromURI(selectedImage));

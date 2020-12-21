@@ -9,6 +9,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.HashMap;
+import java.util.List;
+
 import am.gtest.vortex.R;
 import am.gtest.vortex.adapters.ZonesRvAdapter;
 import am.gtest.vortex.api.GetZones;
@@ -22,10 +28,14 @@ import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_ZONES;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.ZONES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_zones;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_DATA_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_PROJECT_ID;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ZONES_LIST;
@@ -45,6 +55,10 @@ public class ZonesActivity extends BaseDrawerActivity {
         getLayoutInflater().inflate(R.layout.content_zones, flBaseContainer, true);
 
         RecyclerView rvZones = findViewById(R.id.rvZones);
+
+        if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, SELECTED_ASSIGNMENT.getAssignmentId(), "").length() > 0) {
+            ZONES_WITH_NO_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, SELECTED_ASSIGNMENT.getAssignmentId(), ""), new TypeToken<HashMap<String, List<String>>>(){}.getType());
+        }
 
         ZONES_LIST.clear();
         ZONES_LIST_FILTERED.clear();
