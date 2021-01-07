@@ -66,6 +66,7 @@ import am.gtest.vortex.adapters.MySpinnerAdapter;
 import am.gtest.vortex.adapters.PhotosRecyclerViewAdapter;
 import am.gtest.vortex.api.GetAssignmentCost;
 import am.gtest.vortex.api.GetDefaultTechActions;
+import am.gtest.vortex.api.GetReportPreview;
 import am.gtest.vortex.api.GetStatuses;
 import am.gtest.vortex.api.GetZones;
 import am.gtest.vortex.api.SendCheckIn;
@@ -134,6 +135,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static am.gtest.vortex.support.MyLocalization.localized_overnight;
 import static am.gtest.vortex.support.MyLocalization.localized_paid;
+import static am.gtest.vortex.support.MyLocalization.localized_preview_report;
 import static am.gtest.vortex.support.MyLocalization.localized_problem;
 import static am.gtest.vortex.support.MyLocalization.localized_products;
 import static am.gtest.vortex.support.MyLocalization.localized_select;
@@ -224,6 +226,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnToServices;
     private Button btnZones;
     private Button btnTakePhoto;
+    private Button btnPreviewReport;
     private LinearLayout llPayment;
     private FrameLayout flSignatureImage;
     private Button btnInstallations;
@@ -300,6 +303,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         tvSolutionTitle = findViewById(R.id.tvSolutionTitle);
         tvInternalNotesTitle = findViewById(R.id.tvInternalNotesTitle);
         btnInstallations = findViewById(R.id.btnInstallations);
+        btnPreviewReport = findViewById(R.id.btnPreviewReport);
 
         rvProjectPhotos.setLayoutManager(new GridLayoutManager(AssignmentActionsActivity.this, 3, GridLayoutManager.VERTICAL, false));
         photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter(PHOTO_ITEMS, AssignmentActionsActivity.this);
@@ -482,6 +486,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnGetCost.setOnClickListener(this);
         btnInstallations.setOnClickListener(this);
         btnInstallations.setOnLongClickListener(this);
+        btnPreviewReport.setOnClickListener(this);
 
         tvMandatoryTasksTitle.setOnLongClickListener(this);
         //etCommentsSolution.setOnLongClickListener(this);
@@ -593,6 +598,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnZones.setText(localized_zones);
         btnGetCost.setText(localized_calculate_cost);
         btnInstallations.setText(localized_installations_caps);
+        btnPreviewReport.setText(localized_preview_report);
 
     }
 
@@ -737,6 +743,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         CheckInCheckOutModel checkInCheckOutModel;
 
         switch (v.getId()) {
+
+            case R.id.btnPreviewReport:
+                GetReportPreview getReportPreview = new GetReportPreview(AssignmentActionsActivity.this, assignmentId);
+                getReportPreview.execute();
+                break;
 
             case R.id.btnToProducts:
                 intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);

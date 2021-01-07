@@ -911,6 +911,8 @@
     <string name="complete_zone_measurements">Please fill/send measurements for all zones</string>
     <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για όλες τις ζώνες</string>
 
+    <string name="preview_report">PREVIEW REPORT</string>
+    <string name="preview_report_gr">ΠΡΟΕΠΙΣΚΟΠΙΣΗ ΔΕΛΤΙΟΥ</string>
      <!--to be translated-->
 
     <item type="id" name="TAG_ID" />

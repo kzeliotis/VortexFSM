@@ -89,6 +89,7 @@ class MyApi {
     static final String API_DELETE_ZONE = "/Vortex.svc/DeleteProjectZone?ProjectZoneId=";
     static final String API_GET_VORTEX_TABLE_CUSTOM_FIELDS = "/Vortex.svc/GetVortexTableCustomFields?VortexTable=";
     static final String API_SEND_CUSTOM_FIELDS = "/Vortex.svc/SetCustomFields";
+    static final String API_GET_REPORT_PREVIEW = "/Vortex.svc/GetReportFile?AssignmentId=";
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;
