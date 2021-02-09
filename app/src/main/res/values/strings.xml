@@ -908,8 +908,8 @@
     <string name="no_measurements">No Measurements</string>
     <string name="no_measurements_gr">Χωρίς Μετρήσεις</string>
 
-    <string name="complete_zone_measurements">Please fill/send measurements for all zones</string>
-    <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για όλες τις ζώνες</string>
+    <string name="complete_zone_measurements">Please fill/send measurements for the following zones:</string>
+    <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για τις παρακάτω ζώνες:</string>
 
     <string name="preview_report">PREVIEW REPORT</string>
     <string name="preview_report_gr">ΠΡΟΕΠΙΣΚΟΠΙΣΗ ΔΕΛΤΙΟΥ</string>

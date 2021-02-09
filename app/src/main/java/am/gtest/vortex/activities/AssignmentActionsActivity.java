@@ -949,8 +949,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             zoneIds_without = ZONES_WITH_NO_MEASUREMENTS_MAP.get(assignmentId);
                         }
 
+                        String zones_that_need_measurement = "";
                         for (ZoneModel zm : ZONES_LIST){
                             String zone_id = zm.getZoneId();
+                            String zone_desc = zm.getZoneName();
                             String pref_key = SELECTED_ASSIGNMENT.getProjectId() + "_" + zone_id + "_" + assignmentId;
                             if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, pref_key, "").length() > 0) {
                                 ZONES_WITH_MEASUREMENTS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, pref_key, ""), new TypeToken<HashMap<String, List<String>>>(){}.getType());
@@ -961,10 +963,18 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             }
 
                             if(!zoneIds.contains(zone_id) && !zoneIds_without.contains(zone_id)){
-                                areAllRequiredFieldsFilled = false;
-                                MyDialogs.showOK(AssignmentActionsActivity.this, localized_complete_measurements);
-                                break;
+                                if(zones_that_need_measurement.length() == 0){
+                                    zones_that_need_measurement = zone_desc;
+                                }else{
+                                    zones_that_need_measurement += "\r\n" + zone_desc;
+                                }
                             }
+                        }
+
+                        if(zones_that_need_measurement.length() > 0){
+                            areAllRequiredFieldsFilled = false;
+                            MyDialogs.showOK(AssignmentActionsActivity.this, localized_complete_measurements + "\r\n" + zones_that_need_measurement);
+                            break;
                         }
                     }
 
