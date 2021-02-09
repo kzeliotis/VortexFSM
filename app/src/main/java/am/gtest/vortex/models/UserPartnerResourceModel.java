@@ -1,10 +1,13 @@
 package am.gtest.vortex.models;
 
+import java.util.List;
+
 public class UserPartnerResourceModel {
 
     private String resourceId = "";
     private String resourceName = "";
     private boolean isChecked = false;
+    private List<ResourceLeaveModel> resourceLeaves;
 
     @Override
     public String toString() {
@@ -12,7 +15,8 @@ public class UserPartnerResourceModel {
                 "{\n" +
                 "  \"resourceId\": \"" + resourceId + "\",\n" +
                 "  \"resourceName\": \"" + resourceName + "\",\n" +
-                "  \"isChecked\": " + isChecked + "\n" +
+                "  \"isChecked\": " + isChecked + "\",\n" +
+                "  \"Leaves\": " + resourceLeaves + "\n" +
                 "}";
 
         modelToString = modelToString.replace("}]", "}\n  ]");
@@ -43,4 +47,13 @@ public class UserPartnerResourceModel {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+
+    public List<ResourceLeaveModel> getLeaves() {
+        return resourceLeaves;
+    }
+
+    public void setLeaves(List<ResourceLeaveModel> ResourceLeaves) {
+        resourceLeaves = ResourceLeaves;
+    }
+
 }

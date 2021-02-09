@@ -16,6 +16,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import am.gtest.vortex.R;
@@ -25,6 +30,8 @@ import am.gtest.vortex.api.GetServices;
 import am.gtest.vortex.api.SendNewAssignment;
 import am.gtest.vortex.data.UserPartnerResourcesData;
 import am.gtest.vortex.models.NewAssignmentModel;
+import am.gtest.vortex.models.ResourceLeaveModel;
+import am.gtest.vortex.models.UserPartnerResourceModel;
 import am.gtest.vortex.support.MyDateTime;
 import am.gtest.vortex.support.MyLocalization;
 import am.gtest.vortex.support.MyPrefs;
@@ -32,10 +39,12 @@ import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
 import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PRODUCTID;
 import static am.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
 import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_add_new_assignment_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_type;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
@@ -52,8 +61,10 @@ import static am.gtest.vortex.support.MyLocalization.localized_problem;
 import static am.gtest.vortex.support.MyLocalization.localized_product;
 import static am.gtest.vortex.support.MyLocalization.localized_project;
 import static am.gtest.vortex.support.MyLocalization.localized_resources;
+import static am.gtest.vortex.support.MyLocalization.localized_resources_not_available;
 import static am.gtest.vortex.support.MyLocalization.localized_save;
 import static am.gtest.vortex.support.MyLocalization.localized_select_assignment_type;
+import static am.gtest.vortex.support.MyLocalization.localized_select_date_for_availability;
 import static am.gtest.vortex.support.MyLocalization.localized_select_product;
 import static am.gtest.vortex.support.MyLocalization.localized_select_product_from_project;
 import static am.gtest.vortex.support.MyLocalization.localized_select_project;
@@ -320,11 +331,19 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
             case R.id.tvNewAssignmentResources:
 
-                if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
-                    customerid = NEW_ASSIGNMENT.getCustomerId();
+                String startDateTime = MyDateTime.getServerFormatFormAppDateTime(
+                        etNewAssignmentStartDate.getText().toString().trim() + " 00:00");
+                if(startDateTime.isEmpty()) {
+                    Toast.makeText(this, localized_select_date_for_availability, Toast.LENGTH_SHORT).show();
+                }else{
+                    if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
+                        customerid = NEW_ASSIGNMENT.getCustomerId();
+                    }
+                    intent = new Intent(NewAssignmentActivity.this, UserPartnerResourcesActivity.class);
+                    intent.putExtra(KEY_CUSTOMERID, customerid);
+                    intent.putExtra(KEY_ASSIGNMENT_DATE, startDateTime);
                 }
-                intent = new Intent(NewAssignmentActivity.this, UserPartnerResourcesActivity.class);
-                intent.putExtra(KEY_CUSTOMERID, customerid);
+
                 break;
 
             case R.id.tvNewAssignmentType:
@@ -531,6 +550,15 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             return;
         }
 
+        try{
+            if(!checkResourcesAvailability()){
+                return;
+            }
+        } catch (Exception ex) {
+                ex.printStackTrace();
+        }
+
+
         NEW_ASSIGNMENT.setAssignmentSourceProcedure("Assignment Creation");
 
         Log.e(LOG_TAG, "==================== NEW_ASSIGNMENT: \n" + NEW_ASSIGNMENT.toString());
@@ -568,4 +596,50 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
                 })
                 .show();
     }
+
+    private boolean checkResourcesAvailability() throws ParseException {
+
+        String resourceIds = NEW_ASSIGNMENT.getResourceIds();
+        resourceIds = resourceIds.substring(0, resourceIds.length() - 2);
+        String[] ResourceList = resourceIds.split(", ");
+
+        String ResourcesNotAvailable = "";
+
+        String startDateTime = MyDateTime.getServerFormatFormAppDateTime(
+                etNewAssignmentStartDate.getText().toString().trim() + " 00:00");
+        Date ass_date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(startDateTime);
+
+        for(String resourceId : ResourceList){
+            for(UserPartnerResourceModel upm : USER_PARTNER_RESOURCE_LIST){
+
+                if (upm.getResourceId().equals(resourceId)){
+                    List<ResourceLeaveModel> leaves = upm.getLeaves();
+
+                    for(ResourceLeaveModel rlm : leaves){
+                        String startDateStr = rlm.getLeaveStart();
+                        String endDateStr = rlm.getLeaveEnd();
+                        Date DateStart = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+                        Date DateEnd = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+                        if(!ass_date.before(DateStart) && !ass_date.after(DateEnd)){
+                            if(ResourcesNotAvailable.length() == 0){
+                                ResourcesNotAvailable = upm.getResourceName();
+                            }else{
+                                ResourcesNotAvailable += "\r\n" + upm.getResourceName();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        if(ResourcesNotAvailable.length() > 0){
+            Toast.makeText(this, localized_resources_not_available + "\r\n" + ResourcesNotAvailable, Toast.LENGTH_LONG).show();
+            return false;
+        }else {
+            return true;
+        }
+
+    }
+
 }

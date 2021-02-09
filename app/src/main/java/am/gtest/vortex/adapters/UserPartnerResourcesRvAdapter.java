@@ -10,9 +10,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.models.ResourceLeaveModel;
 import am.gtest.vortex.models.UserPartnerResourceModel;
 
 import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
@@ -24,11 +29,13 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
     private final List<UserPartnerResourceModel> mValues;
     private final boolean isForNewAssignment;
     private final boolean singleSelection;
+    private final String assignmentDate;
 
-    public UserPartnerResourcesRvAdapter(List<UserPartnerResourceModel> items, Context ctx, boolean isForNewAssignment, boolean singleSelection) {
+    public UserPartnerResourcesRvAdapter(List<UserPartnerResourceModel> items, Context ctx, boolean isForNewAssignment, boolean singleSelection, String AssignmentDate) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         this.singleSelection = singleSelection;
+        this.assignmentDate =AssignmentDate;
         mValues = items;
     }
 
@@ -47,6 +54,17 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.tvItemName.setText(holder.mItem.getResourceName());
+
+        try{
+            if(!filterResourceLeaves(holder.mItem.getResourceId(), assignmentDate)){
+                holder.chkBox.setChecked(false);
+                holder.chkBox.setEnabled(false);
+                holder.tvItemName.setEnabled(false);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
 
         holder.chkBox.setOnCheckedChangeListener(null);
 
@@ -86,6 +104,29 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
         });
     }
 
+    private boolean filterResourceLeaves(String resourceId, String assDate) throws ParseException {
+        Date ass_date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(assDate);
+
+        for(UserPartnerResourceModel upm : USER_PARTNER_RESOURCE_LIST){
+
+            if (upm.getResourceId().equals(resourceId)){
+                List<ResourceLeaveModel> leaves = upm.getLeaves();
+
+                for(ResourceLeaveModel rlm : leaves){
+                    String startDateStr = rlm.getLeaveStart();
+                    String endDateStr = rlm.getLeaveEnd();
+                    Date DateStart = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+                    Date DateEnd = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+                    if(!ass_date.before(DateStart) && !ass_date.after(DateEnd)){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();
@@ -104,4 +145,5 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
             chkBox = view.findViewById(R.id.chkBox);
         }
     }
+
 }

@@ -18,10 +18,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -29,6 +32,8 @@ import am.gtest.vortex.R;
 import am.gtest.vortex.api.SendNewAssignment;
 import am.gtest.vortex.data.UserPartnerResourcesData;
 import am.gtest.vortex.models.NewAssignmentModel;
+import am.gtest.vortex.models.ResourceLeaveModel;
+import am.gtest.vortex.models.UserPartnerResourceModel;
 import am.gtest.vortex.support.MyDateTime;
 import am.gtest.vortex.support.MyLocalization;
 import am.gtest.vortex.support.MyPrefs;
@@ -36,15 +41,20 @@ import am.gtest.vortex.support.MySliderMenu;
 import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_SINGLE_SELECTION;
+import static am.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
+import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_change_resource;
 import static am.gtest.vortex.support.MyLocalization.localized_end_date;
 import static am.gtest.vortex.support.MyLocalization.localized_end_time;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_connection;
 import static am.gtest.vortex.support.MyLocalization.localized_resource;
+import static am.gtest.vortex.support.MyLocalization.localized_resources_not_available;
 import static am.gtest.vortex.support.MyLocalization.localized_save;
+import static am.gtest.vortex.support.MyLocalization.localized_select_date_for_availability;
 import static am.gtest.vortex.support.MyLocalization.localized_select_resource;
 import static am.gtest.vortex.support.MyLocalization.localized_send_changes;
 import static am.gtest.vortex.support.MyLocalization.localized_set_end_date;
@@ -186,10 +196,18 @@ public class ChangeResourceActivity extends BaseDrawerActivity  implements View.
         switch (v.getId()) {
 
             case R.id.tvNewAssignmentResources:
-                intent = new Intent(ChangeResourceActivity.this, UserPartnerResourcesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(CONST_SINGLE_SELECTION, true);
-                startActivity(intent);
+                String startDateTime = MyDateTime.getServerFormatFormAppDateTime(
+                        etNewAssignmentStartDate.getText().toString().trim() + " 00:00");
+                if(startDateTime.isEmpty()) {
+                    Toast.makeText(this, localized_select_date_for_availability, Toast.LENGTH_SHORT).show();
+                }else{
+                    intent = new Intent(ChangeResourceActivity.this, UserPartnerResourcesActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(CONST_SINGLE_SELECTION, true);
+                    intent.putExtra(KEY_ASSIGNMENT_DATE, startDateTime);
+                    startActivity(intent);
+                }
+
                 break;
 
             case R.id.etNewAssignmentStartDate:
@@ -362,6 +380,14 @@ public class ChangeResourceActivity extends BaseDrawerActivity  implements View.
             return;
         }
 
+        try{
+            if(!checkResourcesAvailability()){
+                return;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         Log.e(LOG_TAG, "==================== CHANGE_RESOURCE_DATE: \n" + NEW_ASSIGNMENT.toString());
 
         //String prefKey = UUID.randomUUID().toString();
@@ -374,5 +400,55 @@ public class ChangeResourceActivity extends BaseDrawerActivity  implements View.
             Toast.makeText(ChangeResourceActivity.this, localized_no_internet_connection, Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    private boolean checkResourcesAvailability() throws ParseException {
+
+        String resourceIds = NEW_ASSIGNMENT.getResourceIds();
+        if (resourceIds.length()==0){
+            resourceIds = SELECTED_ASSIGNMENT.getResourceId();
+        }else{
+            resourceIds = resourceIds.substring(0, resourceIds.length() - 2);
+        }
+
+        String[] ResourceList = resourceIds.split(", ");
+
+        String ResourcesNotAvailable = "";
+
+        String startDateTime = MyDateTime.getServerFormatFormAppDateTime(
+                etNewAssignmentStartDate.getText().toString().trim() + " 00:00");
+        Date ass_date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(startDateTime);
+
+        for(String resourceId : ResourceList){
+            for(UserPartnerResourceModel upm : USER_PARTNER_RESOURCE_LIST){
+
+                if (upm.getResourceId().equals(resourceId)){
+                    List<ResourceLeaveModel> leaves = upm.getLeaves();
+
+                    for(ResourceLeaveModel rlm : leaves){
+                        String startDateStr = rlm.getLeaveStart();
+                        String endDateStr = rlm.getLeaveEnd();
+                        Date DateStart = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+                        Date DateEnd = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+                        if(!ass_date.before(DateStart) && !ass_date.after(DateEnd)){
+                            if(ResourcesNotAvailable.length() == 0){
+                                ResourcesNotAvailable = upm.getResourceName();
+                            }else{
+                                ResourcesNotAvailable += "\r\n" + upm.getResourceName();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        if(ResourcesNotAvailable.length() > 0){
+            Toast.makeText(this, localized_resources_not_available + "\r\n" + ResourcesNotAvailable, Toast.LENGTH_LONG).show();
+            return false;
+        }else {
+            return true;
+        }
+
     }
 }

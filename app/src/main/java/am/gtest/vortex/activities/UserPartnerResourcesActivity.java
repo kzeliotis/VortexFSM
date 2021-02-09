@@ -7,9 +7,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import am.gtest.vortex.R;
 import am.gtest.vortex.adapters.UserPartnerResourcesRvAdapter;
 import am.gtest.vortex.api.GetUserPartnersResources;
+import am.gtest.vortex.models.ResourceLeaveModel;
+import am.gtest.vortex.models.UserPartnerResourceModel;
 import am.gtest.vortex.support.MyLocalization;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MySliderMenu;
@@ -17,6 +25,7 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.CONST_SINGLE_SELECTION;
+import static am.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
 import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
@@ -40,6 +49,8 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
             AssignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
         }
 
+        String assignmentDate = getIntent().getStringExtra(KEY_ASSIGNMENT_DATE);
+
         if (MyUtils.isNetworkAvailable()) {
             GetUserPartnersResources getUserPartnersResources = new GetUserPartnersResources(AssignmentId, CustomerId);
             try {
@@ -57,7 +68,6 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
         boolean singleSelection = getIntent().getBooleanExtra(CONST_SINGLE_SELECTION, false);
 
 
-
         if (singleSelection) {
             for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {
                USER_PARTNER_RESOURCE_LIST.get(i).setChecked(false);
@@ -65,7 +75,8 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
         }
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection);
+        String assDate = getIntent().getStringExtra(KEY_ASSIGNMENT_DATE);
+        UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate);
         rvUserPartnerResources.setAdapter(userPartnerResourcesRvAdapter);
     }
 
@@ -103,4 +114,6 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
             getSupportActionBar().setSubtitle(localized_user + ": " + MyPrefs.getString(PREF_USER_NAME, ""));
         }
     }
+
+
 }

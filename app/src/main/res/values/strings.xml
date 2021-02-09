@@ -479,7 +479,7 @@
     <string name="product_description_gr">Προϊόν</string>
 
     <string name="photo_settings">Photo Settings</string>
-    <string name="photo_settings_gr">Ρυμίσεις Φωτογραφιών</string>
+    <string name="photo_settings_gr">Ρυθμίσεις Φωτογραφιών</string>
 
     <string name="photo_image_size">Photo Image Size</string>
     <string name="photo_image_size_gr">Μέγεθος Φωτογραφιών</string>
@@ -913,6 +913,13 @@
 
     <string name="preview_report">PREVIEW REPORT</string>
     <string name="preview_report_gr">ΠΡΟΕΠΙΣΚΟΠΙΣΗ ΔΕΛΤΙΟΥ</string>
+
+    <string name="select_date_to_check_availability">Please select assignment date to check resources\' availability</string>
+    <string name="select_date_to_check_availability_gr">Παρακαλώ επιλέξτε ημερομηνία ανάθεσης για να ελεγχθεί η διαθεσιμότητα των τεχνικών</string>
+
+    <string name="resources_not_available">The following resources are not available during the selected date:</string>
+    <string name="resources_not_available_gr">Οι παρακάτω τεχνικοί δεν είναι διαθέσιμοι για την επιλεγμένη ημερομηνία:</string>
+
      <!--to be translated-->
 
     <item type="id" name="TAG_ID" />

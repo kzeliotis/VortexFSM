@@ -44,6 +44,7 @@ public class AssignmentModel {
     private String ProposedCheckOutStatus = "0";
     private String installationWarning = "";
     private String mandatoryZoneMeasurementsService = "0";
+    private String resourceId = "";
     private JSONArray mandatoryTasks = new JSONArray();
 
     @NonNull
@@ -84,6 +85,7 @@ public class AssignmentModel {
                         "\"MandatoryZoneMeasurementsService\": \"" + mandatoryZoneMeasurementsService + "\",\n" +
                         "\"InstallationWarning\": \"" + installationWarning + "\",\n" +
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
+                        "\"ResourceId\": \"" + resourceId + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\"\n"
                 ;
     }
@@ -393,4 +395,13 @@ public class AssignmentModel {
     }
 
     public void setMandatoryZoneMeasurementsService(String MandatoryZoneMeasurementsService) {this.mandatoryZoneMeasurementsService = MandatoryZoneMeasurementsService;}
+
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String ResourceId) {
+        this.resourceId = ResourceId;
+    }
 }
