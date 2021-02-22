@@ -925,7 +925,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                     if (MyPrefs.getBoolean(PREF_SHOW_ZONE_PRODUCTS_BUTTON, false)) {
                         String Zones = MyPrefs.getStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, assignmentId, "");
-                        if (!Zones.isEmpty()) {
+                        if (Zones.isEmpty()) {
                             if (MyUtils.isNetworkAvailable()) {
                                 if (!SELECTED_ASSIGNMENT.getProjectId().isEmpty()) {
                                     GetZones getZones = new GetZones(this, null, true, "0");
