@@ -37,6 +37,7 @@ import am.gtest.vortex.support.MyLocalization;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MyUtils;
 
+import static am.gtest.vortex.support.MyGlobals.CONST_AR;
 import static am.gtest.vortex.support.MyGlobals.CONST_EN;
 import static am.gtest.vortex.support.MyGlobals.CONST_GR;
 import static am.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
@@ -167,6 +168,12 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.action_lang_gr:
                 MyPrefs.setString(PREF_KEY_SELECTED_LANGUAGE, CONST_GR);
                 languageMenu.setIcon(R.drawable.gr);
+                MyLocalization.setupLanguage(this);
+                return true;
+
+            case R.id.action_lang_ar:
+                MyPrefs.setString(PREF_KEY_SELECTED_LANGUAGE, CONST_AR);
+                languageMenu.setIcon(R.drawable.ar);
                 MyLocalization.setupLanguage(this);
                 return true;
 

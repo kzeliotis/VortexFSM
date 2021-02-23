@@ -119,6 +119,20 @@
             android:drawableStart="@drawable/gr"
             android:drawablePadding="@dimen/dp_16"
             android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/rbArabic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/arabic"
+            android:drawableLeft="@drawable/ar"
+            android:drawableStart="@drawable/ar"
+            android:drawablePadding="@dimen/dp_16"
+            android:onClick="onRadioButtonClicked"/>
     </RadioGroup>
 
     <TextView

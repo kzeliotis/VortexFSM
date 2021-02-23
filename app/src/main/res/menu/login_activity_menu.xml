@@ -32,6 +32,12 @@
                 android:orderInCategory="2"
                 android:title="@string/greek"
                 app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_lang_ar"
+                android:icon="@drawable/ar"
+                android:orderInCategory="3"
+                android:title="@string/arabic"
+                app:showAsAction="ifRoom" />
         </menu>
     </item>
 </menu>

@@ -168,6 +168,7 @@ public class MyGlobals {
     // static constants, texts, numbers, etc.
     public static final String CONST_EN = "en";
     public static final String CONST_GR = "gr";
+    public static final String CONST_AR = "ar";
     public static final String CONST_SORTED_BY_DATE = "sorted_by_date";
     public static final String CONST_SORTED_BY_DISTANCE = "sorted_by_distance";
     public static final String CONST_PARENT_ALL_PRODUCTS_ACTIVITY = "const_parent_all_products_activity";

@@ -26,893 +26,1195 @@
 
     <!-- translatable strings-->
 
+
     <string name="company_website">"http://www.vortexsuite.com/en/"</string>
     <string name="company_website_gr">http://www.vortexsuite.com</string>
+    <string name="company_website_ar">http://www.vortexsuite.com</string>
 
     <string name="host_server_url">Host Server URL</string>
     <string name="host_server_url_gr">Διακομιστής Βάσης</string>
+    <string name="host_server_url_ar">الخادم المضيف</string>
 
     <string name="language">Language</string>
     <string name="language_gr">Γλώσσα</string>
+    <string name="language_ar">لغة</string>
 
     <string name="english">English</string>
     <string name="english_gr">Αγγλικά</string>
+    <string name="english_ar">انجليزي</string>
 
     <string name="greek">Greek</string>
     <string name="greek_gr">Ελληνικά</string>
+    <string name="greek_ar">يوناني</string>
+
+    <string name="arabic">Arabic</string>
+    <string name="arabic_gr">Αραβικά</string>
 
     <string name="login">Login</string>
     <string name="login_gr">Σύνδεση Χειριστή</string>
+    <string name="login_ar">الدخول</string>
 
     <string name="password">Password</string>
     <string name="password_gr">Κωδικός Πρόσβασης</string>
+    <string name="password_ar">كلمة المرور</string>
 
     <string name="sign_in">Sign in</string>
     <string name="sign_in_gr">Σύνδεση</string>
+    <string name="sign_in_ar">تسجيل الدخول</string>
 
     <string name="click_to_sign">click to sign</string>
     <string name="click_to_sign_gr">πατήστε για υπογραφή</string>
+    <string name="click_to_sign_ar">اضغط لتسجيل الدخول</string>
 
     <string name="log_out">Log Out</string>
     <string name="log_out_gr">Αποσύνδεση</string>
+    <string name="log_out_ar">تسجيل الخروج</string>
 
     <string name="please_sign_below">Please sign below …</string>
     <string name="please_sign_below_gr">Παρακαλώ υπογράψτε\nπαρακάτω…</string>
+    <string name="please_sign_below_ar">الرجاء تسجيل الدخول أدناه</string>
 
     <string name="login_failed">Login Failed…\n\nPlease check username and password and try again.</string>
     <string name="login_failed_gr">Η σύνδεση απέτυχε…\n\nΠαρακαλώ ελέγξτε το όνομα χρήστη και τον κωδικό πρόσβασης και ξαναπροσπαθείστε.</string>
+    <string name="login_failed_ar">فشل تسجيل الدخول.</string>
 
     <string name="assignments">Assignments</string>
     <string name="assignments_gr">Αναθέσεις</string>
+    <string name="assignments_ar">مهمات</string>
 
     <string name="assignment_details">Assignment Details</string>
     <string name="assignment_details_gr">Λεπτομέρειες Ανάθεσης</string>
+    <string name="assignment_details_ar">تفاصيل المهمة</string>
 
     <string name="assignment_actions">Assignment Actions</string>
     <string name="assignment_actions_gr">Ενέργειες Ανάθεσης</string>
+    <string name="assignment_actions_ar">اجراءات المهمة</string>
 
     <string name="show_assignments">Show Assignments</string>
     <string name="show_assignments_gr">Προβολή Αναθέσεων</string>
+    <string name="show_assignments_ar">اظهار المهمات</string>
 
     <string name="assignment_id">Assignment ID</string>
     <string name="assignment_id_gr">ID Ανάθεσης</string>
+    <string name="assignment_id_ar">تعريف المهمة</string>
 
     <string name="assignment_type">"Assignment Type: "</string>
     <string name="assignment_type_gr">"Τύπος Ανάθεσης: "</string>
+    <string name="assignment_type_ar">"نوع المهمة: "</string>
 
     <string name="change_status">Please change the assignment status.</string>
     <string name="change_status_gr">Παρακαλώ αλλάξτε την κατάσταση της ανάθεσης.</string>
+    <string name="change_status_ar">تغيير الحالة.</string>
 
     <string name="loading_data">Loading data…</string>
     <string name="loading_data_gr">Φόρτωση δεδομένων…</string>
+    <string name="loading_data_ar">تحميل البيانات…</string>
 
     <string name="products">Products</string>
     <string name="products_gr">Προϊόντα</string>
+    <string name="products_ar">المنتجات</string>
 
     <string name="installation_date">Installation date:</string>
     <string name="installation_date_gr">Ημερομηνία εγκατάστασης:</string>
+    <string name="installation_date_ar">تنزيل البيانات:</string>
 
     <string name="send_new_product_data">Send new product data</string>
     <string name="send_new_product_data_gr">Αποστολή δεδομένων</string>
     <string name="send_new_product_data_gr_caps">ΑΠΟΣΤΟΛΗ ΔΕΔΟΜΕΝΩΝ</string>
+    <string name="send_new_product_data_ar_caps">ارسال بيانات المنتج الجديد</string>
 
     <string name="add_new_product">Add new product</string>
     <string name="add_new_product_gr">Προσθήκη νέου προϊόντος</string>
     <string name="add_new_product_gr_caps">ΠΡΟΣΘΗΚΗ ΝΕΟΥ ΠΡΟΪΟΝΤΟΣ</string>
+    <string name="add_new_product_ar_caps">اضافة منتج جديد</string>
 
     <string name="please_select_product">Please select product.</string>
     <string name="please_select_product_gr">Παρακαλώ επιλέξτε προϊόν.</string>
+    <string name="please_select_product_ar">الرجاء اختيار المنتج.</string>
 
     <string name="product_deleted">Success…\n\nProduct successfully deleted.</string>
     <string name="product_deleted_gr">Ολοκλήρωση…\n\nΤο προϊόν διεγράφη επιτυχώς.</string>
+    <string name="product_deleted_ar">تم حذف المنتج.</string>
 
     <string name="no_product">There is no product.</string>
     <string name="no_product_gr">Δεν βρέθηκε προϊόν.</string>
+    <string name="no_product_ar">لايوجد منتج.</string>
 
     <string name="to_delete_product">Delete…\n\nAre you sure you want to delete the product ?</string>
     <string name="to_delete_product_gr">Διαγραφή\n\nΕίστε σίγουρος οτι θέλετε να διαγράψετε το προϊόν?</string>
+    <string name="to_delete_product_ar">هل انت متأكد من حذف المنتج?</string>
 
     <string name="attributes">Attributes</string>
     <string name="attributes_gr">Χαρακτηριστικά</string>
+    <string name="attributes_ar">الصفات</string>
 
     <!--<string name="add_new_attributes">Add new attributes</string>-->
     <!--<string name="add_new_attributes_gr">Προσθήκη νέων χαρακτηριστικών</string>-->
+    <!--<string name="add_new_attributes_ar">إضافة صفات جديدة</string>-->
 
     <string name="add_new_attributes_caps">ADD NEW ATTRIBUTES</string>
     <string name="add_new_attributes_caps_gr">ΠΡΟΣΘΗΚΗ ΝΕΩΝ ΧΑΡΑΚΤΗΡΙΣΤΙΚΩΝ</string>
+    <string name="add_new_attributes_caps_ar">إضافة صفات جديدة</string>
 
     <string name="attribute_value">attribute value</string>
     <string name="attribute_value_gr">τιμή χαρακτηριστικού</string>
+    <string name="attribute_value_ar">قيمة الصفات</string>
 
     <string name="save_new_attribute">Save new attribute</string>
     <string name="save_new_attribute_gr">Αποθήκευση νέου χαρακτηριστικού</string>
     <string name="save_new_attribute_gr_caps">ΑΠΟΘΗΚΕΥΣΗ ΧΑΡΑΚΤΗΡΙΣΤΙΚΩΝ</string>
+    <string name="save_new_attribute_ar_caps">حفظ الصفات الجديدة</string>
 
     <string name="send_new_attributes_data">Send new attributes data</string>
     <string name="send_new_attributes_data_gr">Αποστολή δεδομένων</string>
     <string name="send_new_attributes_data_gr_caps">ΑΠΟΣΤΟΛΗ ΔΕΔΟΜΕΝΩΝ</string>
+    <string name="send_new_attributes_data_ar_caps">إرسال بيانات الصفات الجديدة</string>
 
     <string name="attribute_saved">New attribute is successfully saved.</string>
     <string name="attribute_saved_gr">Επιτυχημένη αποθήκευση νέου χαρακτηριστικού.</string>
+    <string name="attribute_saved_ar">تم حفظ الصفات الجديدة بنجاح.</string>
 
     <string name="type_attribute_value">Please type attribute value.</string>
     <string name="type_attribute_value_gr">Παρακαλώ συμπληρώστε την τιμή χαρακτηριστικού.</string>
+    <string name="type_attribute_value_ar">الرجاء إدخال قيمة الصفة.</string>
 
     <string name="select_attribute_name">Please select attribute name.</string>
     <string name="select_attribute_name_gr">Παρακαλώ επιλέξτε το όνομα χαρακτηριστικού.</string>
+    <string name="select_attribute_name_ar">الرجاء اختيار اسم الصفة.</string>
 
     <string name="error_new_attribute">Something went wrong while adding new attribute.\n\nPlease try again.</string>
     <string name="error_new_attribute_gr">Αποτυχία προσθήκης νέου χαρακτηριστικού.\n\nΠαρακαλώ προσπαθήστε ξανά.</string>
+    <string name="error_new_attribute_ar">حدث خطأ ما خلال اضافة صفة جديدة				.</string>
 
     <string name="select_set_save_attribute">Please select attribute, set value and save.</string>
     <string name="select_set_save_attribute_gr">Παρακαλώ επιλέξτε χαρακτηριστικό, δηλώστε τιμή και αποθηκεύστε.</string>
+    <string name="select_set_save_attribute_ar">الرجاء اختيار الصفة, اختيار القيمة والحفظ.</string>
 
     <string name="attribute_deleted">Success…\n\nAttribute successfully deleted.</string>
     <string name="attribute_deleted_gr">Ολοκλήρωση…\n\nΕπιτυχημένη διαγραφή χαρακτηριστικού.</string>
+    <string name="attribute_deleted_ar">تم حذف الصفة بنجاح.</string>
 
     <string name="no_attribute">There is no attribute.</string>
     <string name="no_attribute_gr">Δεν βρέθηκε χαρακτηριστικό.</string>
+    <string name="no_attribute_ar">لا يوجد صفة.</string>
 
     <string name="clear_cache_warning">Are you sure you want to clear application cache memory and data ?</string>
     <string name="clear_cache_warning_gr">Είστε σίγουροί ότι θέλετε να διαγράψετε τη μνήμη cache και τα δεδομένα της εφαρμογής;</string>
+    <string name="clear_cache_warning_ar">هل أنت متأكد من مسح ذاكرة التخزين المؤقت للتطبيق والبيانات;</string>
 
     <string name="to_delete_attribute">Delete…\n\nAre you sure you want to delete the attribute ?</string>
     <string name="to_delete_attribute_gr">Διαγραφή\n\nΕίστε σίγουρος οτι θέλετε να διαγράψετε το χαρακτηριστικό ?</string>
+    <string name="to_delete_attribute_ar">هل أنت متأكد من مسح الصفة ?</string>
 
     <string name="update_attribute_value">Update attribute value</string>
     <string name="update_attribute_value_gr">Ανανέωση τιμής χαρακτηριστικού</string>
+    <string name="update_attribute_value_ar">تحديث قيمة الصفة</string>
 
     <string name="check_in_first">Please Check In first.</string>
     <string name="check_in_first_gr">Παρακαλώ κάντε πρώτα Check In.</string>
+    <string name="check_in_first_ar">الرجاء تسجيل الوصول أولاً.</string>
 
     <string name="no_changes_allowed">No changes allowed after Check Out.</string>
     <string name="no_changes_allowed_gr">Δεν επιτρέπονται αλλαγές μετά το Check Out.</string>
+    <string name="no_changes_allowed_ar">غير مسموح بالتعديل بعد تسجيل الخروج.</string>
 
     <string name="successfully_checked_in">Success…\n\nYou have successfully checked in.</string>
     <string name="successfully_checked_in_gr">Ολοκλήρωση…\n\nΈχετε κάνει επιτυχώς Check In.</string>
+    <string name="successfully_checked_in_ar">تم تسجيل الوصول بنجاح.</string>
 
     <string name="successfully_checked_out">Success…\n\nYou have successfully checked out.</string>
     <string name="successfully_checked_out_gr">Ολοκλήρωση…\n\n.Έχετε κάνει επιτυχώς Check Out</string>
+    <string name="successfully_checked_out_ar">تم تسجيل الخروج بنجاح</string>
 
     <string name="map">Map</string>
     <string name="map_gr">Χάρτης</string>
+    <string name="map_ar">الخريطة</string>
 
     <string name="show_map">Show Map</string>
     <string name="show_map_gr">Εμφάνιση χάρτη</string>
+    <string name="show_map_ar">اظهار الخريطة</string>
 
     <string name="enable_gps">Enable GPS\n\nYour GPS seems to be disabled.\n\nPlease turn ON GPS to use all features of the app.</string>
     <string name="enable_gps_gr">Ενεργοποίηση GPS\n\nΤο GPS σας δείχνει απενεργοποιημένο.\n\nΠαρακαλώ ενεργοποιήστε το GPS προκειμένου να χρησιμοποιήσετε όλες τις λειτουργίες της εφαρμογής.</string>
+    <string name="enable_gps_ar">تمكين نظام الخرائط معطلا الرجاء تفعيل نظام الخرائط لاستخدام جميع مميزات التطبيق .</string>
 
     <string name="access_to_location_for_features">You need to provide access to location to use all features of the app.</string>
     <string name="access_to_location_for_features_gr">Η παροχή πρόσβασης στην τοποθεσία σας είναι απαραίτητη προκειμένου να χρησιμοποιήσετε όλες τις λειτουργίες της εφαρμογής.</string>
+    <string name="access_to_location_for_features_ar">تحتاج إلى توفير الوصول إلى الموقع لاستخدام جميع ميزات التطبيق.</string>
 
     <string name="access_to_location_for_center">You need to provide access to location to be able to set center of the map at your location</string>
     <string name="access_to_location_for_center_gr">Η παροχή πρόσβασης στην τοποθεσία σας είναι απαραίτητη προκειμένου να ορίστεί η τοποθεσία σας στο κέντρο του χάρτη</string>
+    <string name="access_to_location_for_center_ar">تحتاج إلى توفير الوصول إلى الموقع لتتمكن من تعيين مركز الخريطة في موقعك</string>
 
     <string name="some_features">Some features of the app will not work.</string>
     <string name="some_features_gr">Κάποια χαρακτηριστικά της εφαρμογής δεν λειτουργούν.</string>
+    <string name="some_features_ar">هناك بعض مميزات التطبيق التي لن تعمل بالشكل الصحيح.</string>
 
     <string name="synchronize">Synchronize</string>
     <string name="synchronize_gr">Συγχρονισμός</string>
+    <string name="synchronize_ar">تزامن</string>
 
     <string name="synchronizing_with_server">Synchronizing data with the server…</string>
     <string name="synchronizing_with_server_gr">Συγχρονισμός δεδομένων με τον server…</string>
+    <string name="synchronizing_with_server_ar">مزامنة البيانات مع الخادم…</string>
 
     <string name="data_synchronized">Success…\n\nData has been successfully synchronized.</string>
     <string name="data_synchronized_gr">Ολοκλήρωση…\n\nΤα δεδομένα έχουν συγχρονιστεί επιτυχώς.</string>
+    <string name="data_synchronized_ar">تمت مزامنة البيانات بنجاح.</string>
 
     <string name="error_synchronizing">Failure. Try again.\n\nSomething went wrong while synchronizing with server.</string>
     <string name="error_synchronizing_gr">Αποτυχία. Δοκιμάστε ξανά.\n\nΑνεπιτυχής επικοινωνία με τον server.</string>
+    <string name="error_synchronizing_ar">حاول مرة أخرى. حدث خطأ ما أثناء المزامنة مع الخادم.</string>
 
     <string name="status">Status:</string>
     <string name="status_gr">Κατάσταση:</string>
+    <string name="status_ar">الحالة:</string>
 
     <string name="comments">Action taken - Comments</string>
     <string name="comments_gr">Ενέργειες - Σχόλια</string>
+    <string name="comments_ar">تم اتخاذ الفعل - ملاحظات</string>
+
 
     <string name="StepComments">Comments:</string>
     <string name="StepComments_gr">Σχόλια:</string>
+    <string name="StepComments_ar">ملاحظات متقدمة:</string>
 
     <string name="search">Search</string>
     <string name="search_gr">Αναζήτηση</string>
+    <string name="search_ar">بحث</string>
 
     <string name="cancel">Cancel</string>
     <string name="cancel_gr">Ακύρωση</string>
+    <string name="cancel_ar">الغاء</string>
 
     <string name="clear">Clear</string>
     <string name="clear_gr">Καθαρισμός</string>
+    <string name="clear_ar">مسح</string>
 
     <string name="save">Save</string>
     <string name="save_gr">Αποθήκευση</string>
+    <string name="save_ar">حفظ</string>
 
     <string name="your_name">Your Name:</string>
     <string name="your_name_gr">Το όνομά σας:</string>
+    <string name="your_name_ar">اسمك:</string>
 
     <string name="settings">Settings</string>
     <string name="settings_gr">Ρυθμίσεις</string>
+    <string name="settings_ar">الاعدادات</string>
 
     <string name="communicate">Communicate</string>
     <string name="communicate_gr">Επικοινωνία</string>
+    <string name="communicate_ar">تواصل</string>
 
     <string name="send_email">Send Email</string>
     <string name="send_email_gr">Αποστολή Email</string>
+    <string name="send_email_ar">إرسال بريد الكتروني</string>
 
     <string name="user">User</string>
     <string name="user_gr">Χρήστης</string>
+    <string name="user_ar">المستخدم</string>
 
     <string name="no_internet_data_saved">No Internet connection.\n\nCurrent data is saved and will be sent on the next successful synchronization.</string>
     <string name="no_internet_data_saved_gr">Ανυπαρξία σύνδεσης στο Internet.\n\nΤα δεδομένα έχουν αποθηκευτεί και θα σταλούν στον επόμενο επιτυχημένο συγχρονισμό.</string>
+    <string name="no_internet_data_saved_ar"> لايوجد اتصال بالانترنت.</string>
 
     <string name="fill_comments">Please fill comments.</string>
     <string name="fill_comments_gr">Παρακαλώ συμπληρώστε σχόλια.</string>
+    <string name="fill_comments_ar">الرجاء تسجيل الملاحظات.</string>
 
     <string name="please_wait">Please wait</string>
     <string name="please_wait_gr">Παρακαλώ περιμένετε</string>
+    <string name="please_wait_ar">الرجاء الانتظار</string>
 
     <string name="connecting_to_server">Connecting to server…</string>
     <string name="connecting_to_server_gr">Σύνδεση με τον server…</string>
+    <string name="connecting_to_server_ar">جاري الاتصال بالخادم…</string>
 
     <string name="delete_failed">Delete Failed…\n\nPlease try again.</string>
     <string name="delete_failed_gr">Αποτυχία διαγραφής…\n\nΠαρακαλώ δοκιμάστε ξανά.</string>
+    <string name="delete_failed_ar">تم فشل الحذف, الرجاء المحاولة مرة اخرى.</string>
 
     <string name="data_sent_2_rows">Success…\n\nData successfully sent.</string>
     <string name="data_sent_2_rows_gr">Ολοκλήρωση…\n\nΕπιτυχημένη αποστολή δεδομένων.</string>
+    <string name="data_sent_2_rows_ar">تمت العملية بنجاح, تم ارسال البيانات بنجاح.</string>
 
     <string name="error_data_send_saved_for_sync">Failure. Try again.\n\nSomething went wrong while sending data to the server.\n\nCurrent data is saved and will be sent on the next successful synchronization.</string>
     <string name="error_data_send_saved_for_sync_gr">Αποτυχία. Δοκιμάστε ξανά.\n\nΑποτυχημένη αποστολή δεδομένων στον server.\n\nΤα δεδομένα έχουν αποθηκευτεί και θα σταλούν όταν ξανακάνετε συγχρονισμό.</string>
+    <string name="error_data_send_saved_for_sync_ar">حدث خطأ ما أثناء إرسال البيانات إلى الملقم سوف يتم حفظ البيانات الحالية و إرسالها في المزامنة الناجحة التالية.</string>
 
     <string name="error_data_send">Failure. Try again.\n\nSomething went wrong while sending data to the server.</string>
     <string name="error_data_send_gr">Αποτυχία. Δοκιμάστε ξανά.\n\nΑποτυχημένη αποστολή δεδομένων στον server.</string>
+    <string name="error_data_send_ar"> حدث خطأ ما أثناء إرسال البيانات إلى الخادم الرجاء المحاولة مرة اخرى.</string>
 
     <string name="problem">Problem</string>
     <string name="problem_gr">Πρόβλημα</string>
+    <string name="problem_ar">مشكلة</string>
 
     <string name="customer">Customer</string>
     <string name="customer_gr">Πελάτης</string>
+    <string name="customer_ar">عميل</string>
 
     <string name="new_customer">New Customer</string>
     <string name="new_customer_gr">Νέος Πελάτης</string>
+    <string name="new_customer_ar">عميل جديد</string>
 
     <string name="address">Address</string>
     <string name="address_gr">Διεύθυνση</string>
+    <string name="address_ar">Διεύθυνση</string>
 
     <string name="phone">Phone</string>
     <string name="phone_gr">Τηλέφωνο</string>
+    <string name="phone_ar">هاتف</string>
 
     <string name="enter_name">Please enter your Name\n</string>
     <string name="enter_name_gr">Παρακαλώ συμπληρώστε το όνομά σας\n</string>
+    <string name="enter_name_ar">الرجاء ادخال الاسم</string>
 
     <string name="fill_host_server">Please fill host server URL</string>
     <string name="fill_host_server_gr">Παρακαλώ συμπληρώστε την διεύθυνση διακομιστή βάσης</string>
+    <string name="fill_host_server_ar">الرجاء تسجيل الخادم المضيف</string>
 
     <string name="no_internet_try_later_2_lines">\nNo Internet connection…\nPlease try later.\n</string>
     <string name="no_internet_try_later_2_lines_gr">\nΑποτυχημένη σύνδεση στο Internet…\nΠαρακαλώ δοκιμάστε ξανά.\n</string>
+    <string name="no_internet_try_later_2_lines_ar">لايوجد اتصال بالانترنت .الرجاء المحاولة مرة اخرى</string>
 
     <string name="connect_to_internet">No Internet connection…\n\nNot logged in and/or no saved data.\nPlease connect to the Internet and press OK or EXIT.</string>
     <string name="connect_to_internet_gr">Ανυπαρξία σύνδεσης στο Internet…\n\nΑποτυχημένη σύνδεση χειριστή.\nΠαρακαλώ συνδεθείτε στο Internet και πατήστε OK ή ΕΞΟΔΟΣ.</string>
+    <string name="connect_to_internet_ar">لايوجد اتصال بالانترنت…\n\nلم يتم تسجيل الدخول/ لم يتم حفظ البيانات.\الرجاء الاتصال بالانترنت والضغط على زر الموافق او الخروج.</string>
 
     <string name="no_internet_connection">No Internet connection. Please connect to the Internet.</string>
     <string name="no_internet_connection_gr">Ανυπαρξία σύνδεσης στο Internet. Παρακαλώ συνδεθείτε στο Internet.</string>
+    <string name="no_internet_connection_ar">لايوجد اتصال بالانترنت. الرجاء الاتصال بالانترنت.</string>
 
     <string name="fill_all_fields">Error…\n\nPlease fill all fields.</string>
     <string name="fill_all_fields_gr">Σφάλμα…\n\nΠαρακαλώ συμπληρώστε όλα τα πεδία.</string>
+    <string name="fill_all_fields_ar">خطأ. الرجاء تعبئة جميع الحقول.</string>
 
     <string name="select_status">Select status</string>
     <string name="select_status_gr">Επιλέξτε κατάσταση</string>
+    <string name="select_status_ar">اختيار الحالة</string>
 
     <string name="select_product">Select product</string>
     <string name="select_product_gr">Επιλέξτε προϊόν</string>
+    <string name="select_product_ar">اختيار المنتج</string>
 
     <string name="select_attribute">Select attribute</string>
     <string name="select_attribute_gr">Επιλέξτε χαρακτηριστικό</string>
+    <string name="select_attribute_ar">اختيار الصفة</string>
 
     <string name="to_exit">Are you sure you want to exit ?</string>
     <string name="to_exit_gr">Θέλετε να κλείσετε την εφαρμογή?</string>
+    <string name="to_exit_ar">هل أنت متأكد من تسجيل الخروج?</string>
 
     <string name="consumables">Consumables</string>
     <string name="consumables_gr">Αναλώσιμα</string>
+    <string name="consumables_ar">المواد المستهلكة</string>
 
     <string name="consumables_caps">CONSUMABLES</string>
     <string name="consumables_caps_gr">ΑΝΑΛΩΣΙΜΑ</string>
+    <string name="consumables_caps_ar">المواد المستهلكة</string>
 
     <string name="save_consumable">Save Consumable</string>
     <string name="save_consumable_gr">Αποθήκευση</string>
     <string name="save_consumable_gr_caps">ΑΠΟΘΗΚΕΥΣΗ ΑΝΑΛΩΣΙΜΟΥ</string>
+    <string name="save_consumable_ar_caps">حفظ المادة المستهلكة</string>
 
     <string name="send_consumable">Send Consumable</string>
     <string name="send_consumable_gr">Αποστολή Δεδομένων</string>
+    <string name="send_consumable_ar">إرسال المادة المستهلكة</string>
 
     <string name="send_consumable_caps">SEND CONSUMABLE</string>
     <string name="send_consumable_caps_gr">ΑΠΟΣΤΟΛΗ ΑΝΑΛΩΣΙΜΟΥ</string>
+    <string name="send_consumable_caps_ar">إرسال المادة المستهلكة</string>
 
     <string name="select_consumable">Select consumable</string>
     <string name="select_consumable_gr">Επιλέξτε Αναλώσιμο</string>
     <string name="select_consumable_gr_caps">ΕΠΙΛΕΞΤΕ ΑΝΑΛΩΣΙΜΟ</string>
+    <string name="select_consumable_ar_caps">إختيار المادة المستهلكة</string>
 
     <string name="consumable_saved">Consumable is successfully saved</string>
     <string name="consumable_saved_gr">Επιτυχής καταχώρηση αναλωσίμου</string>
+    <string name="consumable_saved_ar">تم حفظ المادة المستهلكة بنجاح</string>
 
     <string name="type_consumable_value">Please type consumable value.</string>
     <string name="type_consumable_value_gr">Παρακαλώ δηλώστε τιμή αναλωσίμου.</string>
+    <string name="type_consumable_value_ar">الرجاء ادخال قيمة المادة المستهلكة.</string>
 
     <string name="select_consumable_name">Please select consumable name.</string>
     <string name="select_consumable_name_gr">Παρακαλώ επιλέξτε όνομα αναλωσίμου.</string>
+    <string name="select_consumable_name_ar">الرجاء اختيار اسم المادة المستهلكة.</string>
 
     <string name="select_set_save_consumable">Please select consumable, set value and save.</string>
     <string name="select_set_save_consumable_gr">Παρακαλώ επιλέξτε αναλώσιμο, δηλώστε τιμή και αποθηκεύστε.</string>
+    <string name="select_set_save_consumable_ar">الرجاء اختيار المادة المستهلكة ووضع القيمة وحفظها .</string>
 
     <string name="manuals">Manuals</string>
     <string name="manuals_gr">Εγχειρίδια</string>
+    <string name="manuals_ar">كتيبات</string>
 
     <string name="history">History</string>
     <string name="history_gr">Ιστορικό</string>
+    <string name="history_ar">التاريخي</string>
 
     <string name="date">Date</string>
     <string name="date_gr">Ημερομηνία</string>
+    <string name="date_ar">التاريخ</string>
 
     <string name="measurements">Measurements</string>
     <string name="measurements_gr">Μετρήσεις</string>
+    <string name="measurements_ar">وحدة القياسات</string>
 
     <string name="solution">Solution</string>
     <string name="solution_gr">Ενέργειες</string>
+    <string name="solution_ar">الحل</string>
 
     <string name="product">Product</string>
     <string name="product_gr">Προϊόν</string>
+    <string name="product_ar">المنتج</string>
 
     <string name="no_history">There is no history.</string>
     <string name="no_history_gr">Δεν υπαρχει ιστορικό.</string>
+    <string name="no_history_ar">لايوجد سجل تاريخي.</string>
 
     <string name="no_manual">No manual available at the moment</string>
     <string name="no_manual_gr">Δεν υπάρχει διαθέσιμο εγχειρίδιο</string>
+    <string name="no_manual_ar">لا يوجد دليل متاح في الوقت الحالي</string>
 
     <string name="service">Service</string>
     <string name="service_gr">Υπηρεσία</string>
+    <string name="service_ar">خدمة</string>
 
     <string name="start_travel">START\nTRAVEL</string>
     <string name="start_travel_gr">START\nTRAVEL</string>
+    <string name="start_travel_ar">إبدأ\nالسفر</string>
 
     <string name="mandatory_tasks">Mandatory Tasks</string>
     <string name="mandatory_tasks_gr">Απαιτούμενα βήματα</string>
+    <string name="mandatory_tasks_ar">المهام الالزامية</string>
 
     <string name="input_value">input value</string>
     <string name="input_value_gr">Καταχωρήστε τιμή</string>
+    <string name="input_value_ar">إدخال القيمة</string>
 
     <string name="fill_mandatory_tasks">Please fill all mandatory tasks.</string>
     <string name="fill_mandatory_tasks_gr">Παρακαλώ συμπληρώστε όλα τα απαιτούμενα βήματα.</string>
+    <string name="fill_mandatory_tasks_ar">الرجاء تعبئة جميع المهام الإلزامية.</string>
 
     <string name="add_measurement_caps">ADD MEASUREMENT</string>
     <string name="add_measurement_caps_gr">ΠΡΟΣΘΗΚΗ ΜΕΤΡΗΣΗΣ</string>
+    <string name="add_measurement_caps_ar">إضافة وحدة القياس</string>
 
     <string name="add_measurement">Add Measurement</string>
     <string name="add_measurement_gr">Προσθήκη Μέτρησης</string>
+    <string name="add_measurement_ar">إضافة وحدة القياس</string>
 
     <string name="save_measurement_caps">SAVE MEASUREMENT</string>
     <string name="save_measurement_caps_gr">ΑΠΟΘΗΚΕΥΣΗ ΜΕΤΡΗΣΗΣ</string>
+    <string name="save_measurement_caps_ar">حفظ وحدة القياس</string>
 
     <string name="send_measurement_data_caps">SEND MEASUREMENT DATA</string>
     <string name="send_measurement_data_caps_gr">ΑΠΟΣΤΟΛΗ ΜΕΤΡΗΣΗΣ</string>
+    <string name="send_measurement_data_caps_ar">إرسال بيانات وحدة القياسΣ</string>
 
     <string name="measurement_value">measurement value</string>
     <string name="measurement_value_gr">Τιμή Μέτρησης</string>
+    <string name="measurement_value_ar">قيمة وحدة القياس</string>
 
     <string name="select_measurement">Select measurement:</string>
     <string name="select_measurement_gr">Επιλογή Μέτρησης</string>
+    <string name="select_measurement_ar">اختيار وحدة القياس</string>
 
     <string name="select_set_save_measurement">Please select measurement, set value and save.</string>
     <string name="select_set_save_measurement_gr">Επιλέξτε μέτρηση, ορίστε τιμή και αποθηκεύστε.</string>
+    <string name="select_set_save_measurement_ar">يرجى تحديد وحدة القياس وتعيين القيمة وحفظها.</string>
 
     <string name="error_new_measurement">Something went wrong while adding new measurement.\n\nPlease try again.</string>
     <string name="error_new_measurement_gr">Παρουσιάστηκε πρόβλημα κατά την προσθήκη μέτρησης.\n\nΠροσπαθήστε ξανά.</string>
+    <string name="error_new_measurement_ar">حدث خطأ ما أثناء إضافة وحدة قياس جديدة.الرجاء المحاولة مرة أخرى.</string>
 
     <string name="type_measurement_value">Please type measurement value.</string>
     <string name="type_measurement_value_gr">Πληκτρολογήστε τιμή μέτρησης.</string>
+    <string name="type_measurement_value_ar">يرجى ادخال قيمة وحدة القياس.</string>
 
     <string name="select_measurement_name">Please select measurement name.</string>
     <string name="select_measurement_name_gr">Επιλέξτε μέτρηση.</string>
+    <string name="select_measurement_name_ar">الرجاء تحديد اسم وحدة القياس.</string>
 
     <string name="measurement_saved">New measurement is successfully saved.</string>
     <string name="measurement_saved_gr">Η μέτρηση αποθηκεύτηκε επιτυχώς.</string>
+    <string name="measurement_saved_ar">تم حفظ وحدة القياس الجديد بنجاح.</string>
 
     <string name="start_travel_first">Start travel first</string>
     <string name="start_travel_first_gr">Start travel first</string>
+    <string name="start_travel_first_ar">إبدأ السفر أولا</string>
 
     <string name="add_new_consumable_caps">ADD NEW CONSUMABLE</string>
     <string name="add_new_consumable_caps_gr">ΠΡΟΣΘΗΚΗ ΝΕΟΥ ΑΝΑΛΩΣΙΜΟΥ</string>
+    <string name="add_new_consumable_caps_ar">إضافة مادة مستهلكة جديدة</string>
 
     <string name="no_consumable">There is no consumable.</string>
     <string name="no_consumable_gr">Δεν υπάρχουν αναλώσιμα.</string>
+    <string name="no_consumable_ar">لايوجد مادة مستهلكة.</string>
 
     <string name="consumable_value">Consumable value</string>
     <string name="consumable_value_gr">Ποσότητα Αναλωσίμου</string>
+    <string name="consumable_value_ar">قيمة المادة المستهلكة</string>
 
     <string name="no_measurement">There is no measurement.</string>
     <string name="no_measurement_gr">Δεν υπάρχει μέτρηση</string>
+    <string name="no_measurement_ar">لايوجد وحدة قياس</string>
 
     <string name="send_data_caps">SEND DATA</string>
     <string name="send_data_caps_gr">ΑΠΟΣΤΟΛΗ ΔΕΔΟΜΕΝΩΝ</string>
+    <string name="send_data_caps_ar">Y=ارسال البيانات</string>
 
     <string name="sure_to_leave">Are you sure you want to leave this page ?</string>
     <string name="sure_to_leave_gr">Θέλετε να φύγετε απο αυτή τη σελίδα?</string>
+    <string name="sure_to_leave_ar">هل أنت متأكد من مغادرة الصفحة?</string>
 
     <string name="services_caps">SERVICES</string>
     <string name="services_caps_gr">ΥΠΗΡΕΣΙΕΣ</string>
+    <string name="services_caps_ar">خدمات</string>
 
     <string name="services">Services</string>
     <string name="services_gr">Υπηρεσίες</string>
+    <string name="services_ar">خدمات</string>
 
     <string name="add_new_service_caps">ADD NEW SERVICE</string>
     <string name="add_new_service_caps_gr">ΠΡΟΣΘΗΚΗ ΥΠΗΡΕΣΙΑΣ</string>
+    <string name="add_new_service_caps_ar">إضافة خدمة جديدة</string>
 
     <string name="no_service">There is no service.</string>
     <string name="no_service_gr">Δεν υπάρχει υπηρεσία.</string>
+    <string name="no_service_ar">لا يوجد هناك خدمة .</string>
 
     <string name="send_services_caps">SEND SERVICES</string>
     <string name="send_services_caps_gr">ΑΠΟΣΤΟΛΗ ΥΠΗΡΕΣΙΩΝ</string>
+    <string name="send_services_caps_ar">إرسال الخدمات</string>
 
     <string name="select_service">Select service</string>
     <string name="select_service_gr">Επέλεξε υπηρεσία</string>
+    <string name="select_service_ar">اختار خدمة</string>
 
     <string name="suggested_used">suggested used</string>
     <string name="suggested_used_gr">διάγνωση χρήση</string>
+    <string name="suggested_used_ar">اقتراح المستخدم</string>
 
     <string name="suggested_done">suggested done</string>
     <string name="suggested_done_gr">διάγνωση έγινε</string>
+    <string name="suggested_done_ar">تم الاقتراح</string>
 
     <string name="check_services">Please check services before trying send.</string>
     <string name="check_services_gr">Παρακαλώ επιλέξτε τουλάχιστον μία υπηρεσία.</string>
+    <string name="check_services_ar">يرجى مراجعة الخدمات قبل محاولة الارسال.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="yes_gr">Ναι</string>
     <string name="no_gr">Οχι</string>
+    <string name="no_ar">لا</string>
 
     <string name="cancel_start_travel">Are you sure you want to cancel started travel ?</string>
     <string name="cancel_start_travel_gr">Θέλετε να ακυρώσετε το Start Travel?</string>
+    <string name="cancel_start_travel_ar">هل أنت متأكد من إالغاء بدء السفر?</string>
 
     <string name="service_description">Service Description</string>
     <string name="service_description_gr">Υπηρεσία</string>
+    <string name="service_description_ar">وصف الخدمة</string>
 
     <string name="project_description">Project Description</string>
     <string name="project_description_gr">Σημείο</string>
+    <string name="project_description_ar">وصف المشروع</string>
 
     <string name="product_description">Product Description</string>
     <string name="product_description_gr">Προϊόν</string>
+    <string name="product_description_ar">وصف المنتج</string>
 
     <string name="photo_settings">Photo Settings</string>
-    <string name="photo_settings_gr">Ρυθμίσεις Φωτογραφιών</string>
+    <string name="photo_settings_gr">Ρυμίσεις Φωτογραφιών</string>
+    <string name="photo_settings_ar">إعدادات الصورة</string>
 
     <string name="photo_image_size">Photo Image Size</string>
     <string name="photo_image_size_gr">Μέγεθος Φωτογραφιών</string>
+    <string name="photo_image_size_ar">قياس الصورة</string>
 
     <string name="image_sending_network_type">Image Sending Network Type</string>
     <string name="image_sending_network_type_gr">Αποστολή φωτογραφιών μέσω</string>
+    <string name="image_sending_network_type_ar">نوع شبكة ارسال الصورة</string>
 
     <string name="internal_communication">Internal communication</string>
     <string name="internal_communication_gr">Εσωτερική επικοινωνία</string>
+    <string name="internal_communication_ar">الاتصال الداخلي</string>
 
     <string name="notes">Notes</string>
     <string name="notes_gr">Σημειώσεις</string>
+    <string name="notes_ar">ملاحظات</string>
 
     <string name="notes_with_colon">Notes:</string>
     <string name="notes_with_colon_gr">Σημειώσεις:</string>
+    <string name="notes_with_colon_ar">ملاحظات:</string>
 
     <string name="small">Small</string>
     <string name="small_gr">Μικρό</string>
+    <string name="small_ar">صغير</string>
 
     <string name="medium">Medium</string>
     <string name="medium_gr">Μεσαίο</string>
+    <string name="medium_ar">وسط</string>
 
     <string name="large">Large</string>
     <string name="large_gr">Μεγάλο</string>
+    <string name="large_ar">كبير</string>
 
     <string name="actual">Actual</string>
     <string name="actual_gr">Πραγματικό</string>
+    <string name="actual_ar">فعلي</string>
 
     <string name="wifi_and_mobile">WiFi and Mobile</string>
     <string name="wifi_and_mobile_gr">WiFi και Δίκτυο κινητής</string>
+    <string name="wifi_and_mobile_ar">شبكة الاتصال اللاسلكية والجوال</string>
 
     <string name="only_wifi">Only WiFi</string>
     <string name="only_wifi_gr">Μόνο WiFi</string>
+    <string name="only_wifi_ar">فقط شبكة الاتصال اللاسلكية</string>
 
     <string name="mobile">Mobile</string>
     <string name="mobile_gr">Κινητό τηλέφωνο</string>
+    <string name="mobile_ar">Κινητό τηλέφωνο</string>
 
     <string name="contact">Contact</string>
     <string name="contact_gr">Υπέυθυνος</string>
+    <string name="contact_ar">الاسماء</string>
 
     <string name="host_server_settings">Host Server Settings</string>
     <string name="host_server_settings_gr">Ρυθμίσεις Host Server</string>
+    <string name="host_server_settings_ar">اعدادات خادم المضيف</string>
 
     <string name="setup_and_select_active_host_url">Setup and select active host URL</string>
     <string name="setup_and_select_active_host_url_gr">Ρύθμισεις host URL</string>
+    <string name="setup_and_select_active_host_url_ar">الاعدادت وتحديد الخادم المضيف النشط</string>
 
     <string name="remove_url">Are you sure you want to remove the URL ?</string>
     <string name="remove_url_gr">Θέλετε να αφαιρεθεί URL ?</string>
+    <string name="remove_url_ar">هل انت متأكد من حذف الرابط ?</string>
 
     <string name="search_customers">Search Customers</string>
     <string name="search_customers_gr">Αναζήτησή πελατη</string>
+    <string name="search_customers_ar">البحث عن العملاء</string>
 
     <string name="name">Name</string>
     <string name="name_gr">Επωνυμία</string>
+    <string name="name_ar">الاسم</string>
 
     <string name="no_company">No company is available.</string>
     <string name="no_company_gr">Δεν βρέθηκε εγγραφή.</string>
+    <string name="no_company_ar">لا يوجد شركة متاحة.</string>
 
     <string name="companies">Companies</string>
     <string name="companies_gr">Πελάτες</string>
+    <string name="companies_ar">شركات</string>
 
     <string name="company_details">Company Details</string>
     <string name="company_details_gr">Λεπτομέρειες</string>
+    <string name="company_details_ar">تفاصيل الشركة</string>
 
     <string name="company_projects_with_colon">Company Projects:</string>
     <string name="company_projects_with_colon_gr">Σημεία:</string>
+    <string name="company_projects_with_colon_ar">مشاريع الشركة:</string>
 
     <string name="vat_number">Vat Number</string>
     <string name="vat_number_gr">ΑΦΜ</string>
+    <string name="vat_number_ar">رقم الضريبة المضافة</string>
 
     <string name="revenue_with_colon">Revenue:</string>
     <string name="revenue_with_colon_gr">ΔΟΥ:</string>
+    <string name="revenue_with_colon_ar">الايراد:</string>
 
     <string name="discount_with_colon">Discount:</string>
     <string name="discount_with_colon_gr">Έκπτωση:</string>
+    <string name="discount_with_colon_ar">الخصم:</string>
 
     <string name="business_title">Business Title</string>
     <string name="business_title_gr">Διακριτικός Τίτλος</string>
+    <string name="business_title_ar">عنوان العمل</string>
 
     <string name="business">Business</string>
     <string name="business_gr">Επάγγελμα</string>
+    <string name="business_ar">الاعمال</string>
 
     <string name="app_is_not_registered">App is not registered.</string>
     <string name="app_is_not_registered_gr">App is not registered.</string>
+    <string name="app_is_not_registered_ar">التطبيق غير مسجل.</string>
 
     <string name="calendar">Calendar</string>
     <string name="calendar_gr">Ημερολόγιο</string>
+    <string name="calendar_ar">التقويم</string>
 
     <string name="charged">Charged</string>
     <string name="charged_gr">Χρέωση</string>
+    <string name="charged_ar">مكلف</string>
 
     <string name="close">Close</string>
     <string name="close_gr">Έξοδος</string>
+    <string name="close_ar">إغلاق</string>
 
     <string name="current_date">current date</string>
     <string name="current_date_gr">Σήμερα</string>
+    <string name="current_date_ar">البيانات الحالية</string>
 
     <string name="delete">Delete</string>
     <string name="delete_gr">Διαγραφή</string>
+    <string name="delete_ar">حذف</string>
 
     <string name="error">Error</string>
     <string name="error_gr">Error</string>
+    <string name="error_ar">خطأ</string>
 
     <string name="fri">FRI</string>
     <string name="fri_gr">ΠΑΡ</string>
+    <string name="fri_ar">ف ر ي</string>
 
     <string name="full_screen_image">Full Screen Image</string>
     <string name="full_screen_image_gr">Πλήρης οθόνη</string>
+    <string name="full_screen_image_ar">مشاهدة الصورة بالحجم الكامل</string>
 
     <string name="image">Image</string>
     <string name="image_gr">Φωτογραφία</string>
+    <string name="image_ar">صورة</string>
 
     <string name="image_uploaded">Image uploaded.</string>
     <string name="image_uploaded_gr">Η φωτογραφία απεστάλη.</string>
+    <string name="image_uploaded_ar">تم تحميل الصورة.</string>
 
     <string name="mon">MON</string>
     <string name="mon_gr">ΔΕΥ</string>
+    <string name="mon_ar">م و ن</string>
 
     <string name="no_assignments">There is no assignment for you.</string>
     <string name="no_assignments_gr">Δεν υπάρχουν διαθέσιμες αναθέσεις.</string>
+    <string name="no_assignments_ar">لا توجد مهمة لك.</string>
 
     <string name="no_id_is_available">No ID is available to identify and register the device.</string>
     <string name="no_id_is_available_gr">No ID is available to identify and register the device.</string>
+    <string name="no_id_is_available_ar">لا يتوفر معرف لتحديد الجهاز وتسجيله.</string>
 
     <string name="no_internet_image_will_be_sent">No Internet connection. Image is saved and will be automatically sent to server on you next launch of app if Internet is available.</string>
     <string name="no_internet_image_will_be_sent_gr">No Internet connection. Η φωτογραφία αποθηκέυτηκε προς μελλοντική αποστολή.</string>
+    <string name="no_internet_image_will_be_sent_ar">لا يوجد اتصال بالإنترنت. يتم حفظ الصورة وسيتم إرسالها تلقائيًا إلى الخادم عند التشغيل التالي للتطبيق إذا كان الإنترنت متاحًا.</string>
 
     <string name="nothing_is_changed">Nothing is changed.</string>
     <string name="nothing_is_changed_gr">Δεν υπάρχουν αλλαγές.</string>
+    <string name="nothing_is_changed_ar">لايوجد تغييرات.</string>
 
     <string name="ok">OK</string>
     <string name="ok_gr">OK</string>
+    <string name="ok_ar">تم</string>
 
     <string name="paid">Paid</string>
     <string name="paid_gr">Είσπραξη</string>
+    <string name="paid_ar">مدفوع</string>
 
     <string name="photos">Photos</string>
     <string name="photos_gr">Φωτογραφίες</string>
+    <string name="photos_ar">صور</string>
 
     <string name="provide_device_id">You need to provide device ID to be able to use the app.</string>
     <string name="provide_device_id_gr">You need to provide device ID to be able to use the app.</string>
+    <string name="provide_device_id_ar">تحتاج إلى توفير معرف الجهاز لتتمكن من استخدام التطبيق.</string>
 
     <string name="provide_permission_to_upload_image">You need to provide the permission to be able to upload an image.</string>
     <string name="provide_permission_to_upload_image_gr">Πρέπει να ορίσετε δικαιώματα για να στείλετε φωτογραφία.</string>
+    <string name="provide_permission_to_upload_image_ar">تحتاج إلى الإذن لتتمكن من تحميل صورة.</string>
 
     <string name="sat">SAT</string>
     <string name="sat_gr">ΣΑΒ</string>
+    <string name="sat_ar">س ا ت</string>
 
     <string name="start_work">Start Work</string>
     <string name="start_work_gr">Έναρξη Εργασιών</string>
+    <string name="start_work_ar">إبدأ العمل</string>
 
     <string name="suggested_value_with_colon">Suggested value:</string>
     <string name="suggested_value_with_colon_gr">Διάγνωση:</string>
+    <string name="suggested_value_with_colon_ar">القيمة المقترحة:</string>
 
     <string name="sun">SUN</string>
     <string name="sun_gr">ΚΥΡ</string>
+    <string name="sun_ar">س يو ن</string>
 
     <string name="thu">THU</string>
     <string name="thu_gr">ΠΕΜ</string>
+    <string name="thu_ar">ت اتش يو</string>
 
     <string name="tue">TUE</string>
     <string name="tue_gr">ΤΡΙ</string>
+    <string name="tue_ar">ت بي اي</string>
 
     <string name="used_value_with_colon">Used value:</string>
     <string name="used_value_with_colon_gr">Χρήση:</string>
+    <string name="used_value_with_colon_ar">القيمة المستخدمة:</string>
 
     <string name="wed">WED</string>
     <string name="wed_gr">ΤΕΤ</string>
+    <string name="wed_ar">دبلو اي دي</string>
 
     <string name="zone_products">Zone Products</string>
     <string name="zone_products_gr">Προϊόντα ζώνης</string>
+    <string name="zone_products_ar">منطقة المنتج</string>
 
     <string name="zones">Zones</string>
     <string name="zones_gr">Ζώνες</string>
+    <string name="zones_ar">مناطق</string>
 
     <string name="sort_by_time">Sort by time</string>
     <string name="sort_by_time_gr">Ταξινόμηση\nανά ώρα</string>
+    <string name="sort_by_time_ar">فرز حسب الوقت</string>
 
     <string name="sort_by_distance">Sort by distance</string>
     <string name="sort_by_distance_gr">Ταξινόμηση\nανά απόσταση</string>
+    <string name="sort_by_distance_ar">فرز حسب المسافة</string>
 
     <string name="customer_business">Customer Business</string>
     <string name="customer_business_gr">Επάγγελμα</string>
+    <string name="customer_business_ar">عمل العميل</string>
 
     <string name="picking_list">Picking List</string>
     <string name="picking_list_gr">Picking List</string>
+    <string name="picking_list_ar">قائمة الاختيارات</string>
 
     <string name="filter_by_type">Filter by type</string>
     <string name="filter_by_type_gr">Φίλτράρισμα ανά τύπο</string>
+    <string name="filter_by_type_ar">تصفية حسب النوع</string>
 
     <string name="all_caps">ALL</string>
     <string name="all_caps_gr">ΟΛΑ</string>
+    <string name="all_caps_ar">الكل</string>
 
     <string name="selected_date">Selected date</string>
     <string name="selected_date_gr">Επιλεγ. ημ/νια</string>
+    <string name="selected_date_ar">التاريخ المحدد</string>
 
     <string name="use_pt">Use PT</string>
     <string name="use_pt_gr">Χρήση ΜΜΜ</string>
+    <string name="use_pt_ar">USE PT</string>
 
     <string name="overnight">Overnight</string>
     <string name="overnight_gr">Διανυκτέρευση</string>
+    <string name="overnight_ar">بشكل مفاجئ</string>
 
     <string name="turn_on_location">You need to turn on location to be able to send your location.</string>
     <string name="turn_on_location_gr">Ενεργοποιήστε τις ρυθμίσεις τοποθεσίας για αποστολή στίγματος</string>
+    <string name="turn_on_location_ar">تحتاج إلى تشغيل الموقع لتتمكن من إرسال موقعك</string>
 
     <string name="new_assignment">New Assignment</string>
     <string name="new_assignment_gr">Νέα Ανάθεση</string>
+    <string name="new_assignment_ar">مهمة جديدة</string>
 
     <string name="exit">Exit</string>
     <string name="exit_gr">Έξοδος</string>
+    <string name="exit_ar">الخروج</string>
 
     <string name="no_pdf_app">Can\'t open the file. Probably you don\'t have any suitable app to view PDF files.</string>
     <string name="no_pdf_app_gr">Αδυναμία ανάγνωσης αρχείου. Πιθανόν να μην έχετε εγκατεστημένη εφαρμογή διαχείρισης τέτοιου τύπου αρχείων.</string>
+    <string name="no_pdf_app_ar">لا يمكن فتح الملف. ربما ليس لديك أي تطبيق مناسب لعرض ملفات PDF.</string>
 
     <string name="add_new_customer_caps">ADD NEW CUSTOMER</string>
     <string name="add_new_customer_caps_gr">ΑΠΟΘΗΚΕΥΣΗ ΠΕΛΑΤΗ</string>
+    <string name="add_new_customer_caps_ar">اضافة عميل جديد</string>
 
     <string name="zip">Zip</string>
     <string name="zip_gr">T.K.</string>
+    <string name="zip_ar">ZIP</string>
 
     <string name="city">City</string>
     <string name="city_gr">Πόλη</string>
+    <string name="city_ar">المدينة</string>
 
     <string name="revenue_service">Revenue Service</string>
     <string name="revenue_service_gr">ΔΟΥ</string>
+    <string name="revenue_service_ar">إيراد الخدمة</string>
 
     <string name="customer_exists">A customer with the same name already exists. Continue save?</string>
     <string name="customer_exists_gr">Υπάρχει ήδη πελάτης με αυτή την επωνυμία. Να συνεχίσει η αποθήκευση?</string>
+    <string name="customer_exists_ar">يوجد بالفعل عميل بنفس الاسم.هل تود الاستمرار في الحفظ?</string>
 
     <string name="existing_customer">Existing Customer</string>
     <string name="existing_customer_gr">Υπάρχον πελάτης</string>
+    <string name="existing_customer_ar">عميل موجود بالفعل</string>
 
     <string name="choose_customer">Choose a customer</string>
     <string name="choose_customer_gr">Επιλέξτε πελάτη</string>
+    <string name="choose_customer_ar">اختيار العميل</string>
 
     <string name="select_project">Select project</string>
     <string name="select_project_gr">Επιλέξτε σημείο</string>
+    <string name="select_project_ar">اختيار المشروع</string>
 
     <string name="project">Project</string>
     <string name="project_gr">Σημείο</string>
+    <string name="project_ar">المشروع</string>
 
     <string name="select_resources">Select resources</string>
     <string name="select_resources_gr">Επιλέξτε τεχνικούς</string>
+    <string name="select_resources_ar">اختيار الموارد</string>
 
     <string name="select_resource">Select resource</string>
     <string name="select_resource_gr">Επιλέξτε τεχνικό</string>
+    <string name="select_resource_ar">اختيار المورد</string>
 
     <string name="resources">Resources</string>
     <string name="resources_gr">Τεχνικοί</string>
+    <string name="resources_ar">الموارد</string>
 
     <string name="start_date">Start Date</string>
     <string name="start_date_gr">Ημ/νια έναρξης</string>
+    <string name="start_date_ar">تاريخ البداية</string>
 
     <string name="start_time">Start Time</string>
     <string name="start_time_gr">Ώρα έναρξης</string>
+    <string name="start_time_ar">وقت البداية</string>
 
     <string name="end_date">End Date</string>
     <string name="end_date_gr">Ημ/νια λήξης</string>
+    <string name="end_date_ar">تاريخ الانتهاء</string>
 
     <string name="end_time">End Time</string>
     <string name="end_time_gr">Ώρα λήξης</string>
+    <string name="end_time_ar">وقت الانتهاء</string>
 
     <string name="add_new_assignment_caps">ADD NEW ASSIGNMENT</string>
     <string name="add_new_assignment_caps_gr">ΠΡΟΣΘΕΣΤΕ ΝΕΑ ΑΝΑΘΕΣΗ</string>
+    <string name="add_new_assignment_caps_ar">اضافة مهمة جديدة</string>
 
     <string name="describe_problem">Describe problem</string>
     <string name="describe_problem_gr">Περιγραφή προβλήματος</string>
+    <string name="describe_problem_ar">وصف المشكلة</string>
 
     <string name="set_start_date">Set start date &amp; time</string>
     <string name="set_start_date_gr">Ορίστε έναρξη</string>
+    <string name="set_start_date_ar">تحديد تاريخ البداية والوقت</string>
 
     <string name="set_end_date">Set end date &amp; time</string>
     <string name="set_end_date_gr">Ορίστε ληξη</string>
+    <string name="set_end_date_ar">تحديد تاريخ الانتهاء والوقت</string>
 
     <string name="custom_fields">Custom Fields</string>
     <string name="custom_fields_gr">Παραμετρικά πεδία</string>
     <string name="custom_fields_gr_caps">ΠΑΡΑΜΕΤΡΙΚΑ ΠΕΔΙΑ</string>
+    <string name="custom_fields_ar_caps">تخصيص الحقول</string>
 
     <string name="customer_project">Customer - Project</string>
     <string name="customer_project_gr">Πελάτης - Σημείο</string>
+    <string name="customer_project_ar">عميل- مشروع</string>
 
     <string name="fill_signature">Customer signature is mandatory.</string>
     <string name="fill_signature_gr">Η υπογραφή του πελάτη ειναι υποχρεωτική</string>
+    <string name="fill_signature_ar">توقيع العميل إلزامي</string>
 
     <string name="project_history">PROJECT HISTORY</string>
     <string name="project_history_gr">ΙΣΤΟΡΙΚΟ ΣΗΜΕΙΟΥ</string>
+    <string name="project_history_ar">السجل التاريخي للمشروع</string>
 
     <string name="product_history">PRODUCT HISTORY</string>
     <string name="product_history_gr">ΙΣΤΟΡΙΚΟ ΠΡΟΪΟΝΤΟΣ</string>
+    <string name="product_history_ar">السجل التاريخي للمنتج</string>
 
     <string name="change_resource">Change Resource and Date</string>
     <string name="change_resource_gr">Αλλαγή Τεχνικού και ημερομηνίας</string>
+    <string name="change_resource_ar">تغيير المورد والتاريخ</string>
 
     <string name="resource">Resource</string>
     <string name="resource_gr">Τεχνικός</string>
+    <string name="resource_ar">المورد</string>
 
     <string name="send_changes">SEND CHANGES</string>
     <string name="send_changes_gr">ΑΠΟΣΤΟΛΗ ΑΛΛΑΓΩΝ</string>
+    <string name="send_changes_ar">ارسال التغييرات</string>
 
     <string name="clear_cache">Clear Cache</string>
+    <string name="clear_cache_gr">Clear Cache</string>
+    <string name="clear_cache_ar">Clear Cache</string>
 
     <string name="scan_code">Scan Code</string>
+    <string name="scan_code_gr">Scan Code</string>
+    <string name="scan_code_ar">Scan Code</string>
 
     <string name="choose_from_warehouse">Do you want to choose an item from the technician\'s warehouse?</string>
     <string name="choose_from_warehouse_gr">Θέλετε να επιλέξετε είδος από την αποθήκη τεχνικού?</string>
+    <string name="choose_from_warehouse_ar">هل تريد اختيار عنصر من المستودع الفني?</string>
 
     <string name="ask_to_install_product">Do you want to install the selected product to Project</string>
     <string name="ask_to_install_product_gr">Θέλετε να εγκαταστήσετε το επιλεγμένο προϊόν στο σημείο</string>
+    <string name="ask_to_install_product_ar">هل تريد تثبيت المنتج المحدد على المشروع</string>
 
     <string name="Mandatory_Measurements_Missing">Missing mandatory measurements to remove product</string>
     <string name="Mandatory_Measurements_Missing_gr">Υποχρεωτικές μετρήσεις για αφαίρεση προϊόντος που λείπουν</string>
+    <string name="Mandatory_Measurements_Missing_ar">القياسات الإلزامية مفقودة لإزالة المنتج</string>
 
     <string name="no_available_mobile_slots">No available mobile slot</string>
     <string name="no_available_mobile_slots_gr">Δεν υπάρχει διαθέσιμη θέση mobile</string>
+    <string name="no_available_mobile_slots_ar">لايوجد ادراج للجوال</string>
 
     <string name="wrong_credentials">Wrong username or password</string>
     <string name="wrong_credentials_gr">Λάθος κωδικός ή username</string>
+    <string name="wrong_credentials_ar">خطأ باسم المتسخدم او كلمة المرور</string>
 
     <string name="export_shared_prefs">Export Shared Preferences</string>
+    <string name="export_shared_prefs_gr">Export Shared Preferences</string>
+    <string name="export_shared_prefs_ar">Export Shared Preferences</string>
 
     <string name="shared_prefs_exported">Shared Preferences files copied.</string>
     <string name="shared_prefs_exported_gr">Η διαδικασία εξαγωγής ολοκληρώθηκε.</string>
+    <string name="shared_prefs_exported_ar">تم نسخ ملفات المفضلة المشتركة.</string>
 
     <string name="new_update_available">There is a new update available, would you like to download it?</string>
     <string name="new_update_available_gr">Υπάρχει νέο update διαθέσιμο, θέλετε να το κατεβάσετε;</string>
+    <string name="new_update_available_ar">يتوفر تحديث جديد ، هل ترغب في تحميله;</string>
 
     <string name="sub_assignments">Subassignments</string>
     <string name="sub_assignments_gr">Υποαναθέσεις</string>
+    <string name="sub_assignments_ar">المهام الفرعية</string>
 
     <string name="no_sub_assignments">There are not subassignments</string>
     <string name="no_sub_assignments_gr">Δεν υπάρχουν υποαναθέσεις</string>
+    <string name="no_sub_assignments_ar">لايوجد هناك اي مهام فرعية</string>
 
     <string name="select_product_from_project">Do you want to select a product from the selected project?</string>
     <string name="select_product_from_project_gr">Θέλετε να επιλέξετε προϊόν από το επιλεγμένο σημείο;</string>
+    <string name="select_product_from_project_ar">هل تريد تحديد منتج من المشروع المحدد;</string>
 
     <string name="calculate_cost">CALCULATE COST</string>
     <string name="calculate_cost_gr">ΥΠΟΛΟΓΙΣΜΟΣ ΚΟΣΤΟΥΣ</string>
+    <string name="calculate_cost_ar">احسب التكلفة</string>
 
     <string name="user_is_inactive">The user is inactive</string>
     <string name="user_is_inactive_gr">Ο χρήστης είναι ανενεργός</string>
+    <string name="user_is_inactive_ar">المستخدم غير نشط</string>
 
     <string name="successfully_return_to_base">You have successfully returned to base</string>
     <string name="successfully_return_to_base_gr">Η επιστροφή στη βάση έγινε με επιτυχία</string>
+    <string name="successfully_return_to_base_ar">لقد عدت بنجاح إلى القاعدة</string>
 
     <string name="resend_mandatory_steps_successful">Mandatory Steps were sent successfully</string>
     <string name="resend_mandatory_steps_successful_gr">Η επαναποστολή των απαιτούμενων βημάτων ήταν επιτυχής</string>
+    <string name="resend_mandatory_steps_successful_ar">تم إرسال الخطوات الإلزامية بنجاح</string>
 
     <string name="ask_send_zone_measurements">Do you want to send the measurements?</string>
     <string name="ask_send_zone_measurements_gr">Θέλετε να γίνει αποστολή των μετρήσεων;</string>
+    <string name="ask_send_zone_measurements_ar">هل تريد إرسال القياسات;</string>
 
     <string name="default_actions">Default Actions</string>
     <string name="default_actions_gr">Προεπιλεγμένες Ενέργειες</string>
+    <string name="default_actions_ar">الإجراءات الافتراضية</string>
 
     <string name="select_action">Select action</string>
     <string name="select_action_gr">Επιλέξτε ενέργεια</string>
+    <string name="select_action_ar">اختيار الاجراء</string>
 
     <string name="select_gr">Επιλογή</string>
+    <string name="select_ar">اختيار</string>
 
     <string name="select_assignment_type">Select assignment type</string>
     <string name="select_assignment_type_gr">Επιλέξτε τύπο ανάθεσης</string>
+    <string name="select_assignment_type_ar">اختيار نوع المهمة</string>
 
     <string name="assignment_types">Assignment Types</string>
     <string name="assignment_types_gr">Τύποι Ανάθεσης</string>
+    <string name="assignment_types_ar">انوع المهمة</string>
 
     <string name="installations">Installations</string>
     <string name="installations_gr">Εγκαταστάσεις</string>
     <string name="installations_gr_caps">ΕΓΚΑΤΑΣΤΑΣΕΙΣ</string>
+    <string name="installations_ar_caps">التثبيتات</string>
 
     <string name="installation">Installation</string>
     <string name="installation_gr">Εγκατάσταση</string>
     <string name="installation_gr_caps">ΕΓΚΑΤΑΣΤΑΣΗ</string>
+    <string name="installation_ar_caps">تثبيت</string>
 
     <string name="installation_zones">Installation Zones</string>
     <string name="installation_zones_gr">Ζώνες Εγκατάστασης</string>
     <string name="installation_zones_gr_caps">ΖΩΝΕΣ ΕΓΚΑΤΑΣΤΑΣΗΣ</string>
+    <string name="installation_zones_ar_caps">مناطق التثبيت</string>
+
 
 
     <string name="installation_type">Installation Type</string>
     <string name="installation_type_gr">Τύπος Εγκατάστασης</string>
+    <string name="installation_type_ar">نوع التثبيت</string>
 
     <string name="add_new_zone">Add New Zone</string>
     <string name="add_new_zone_gr">ΠΡΟΣΘΗΚΗ ΖΩΝΗΣ</string>
+    <string name="add_new_zone_ar">اضافة منطقة جديدة</string>
 
     <string name="edit">Edit</string>
     <string name="edit_gr">ΕΠΕΞΕΡΓΑΣΙΑ</string>
+    <string name="edit_ar">تعديل</string>
 
     <string name="code">Code</string>
     <string name="code_gr">Κωδικός</string>
+    <string name="code_ar">رمز</string>
 
     <string name="zone_description">Zone Description</string>
     <string name="zone_description_gr">Περιγραφή Ζώνης</string>
+    <string name="zone_description_ar">وصف المنطقة</string>
 
     <string name="select_value">Select Value</string>
     <string name="select_value_gr">Επιλέξτε τιμή</string>
+    <string name="select_value_ar">اختيار القيمة</string>
 
     <string name="new_installation_zone">New Installation Zone</string>
     <string name="new_installation_zone_gr">Νέα Ζώνη Εγκατάστασης</string>
+    <string name="new_installation_zone_ar">منطقة التثبيت الجديدة</string>
 
     <string name="edit_installation_zone">Edit Installation Zone</string>
     <string name="edit_installation_zone_gr">Επεξεργασία Ζώνης Εγκατάστασης</string>
+    <string name="edit_installation_zone_ar">تعديل منطقة التثبيت</string>
 
     <string name="to_delete_zone">Do you want to delete the selected zone?</string>
     <string name="to_delete_zone_gr">Θέλετε να διαγράψετε την επιλεγμένη ζώνη;</string>
+    <string name="to_delete_zone_ar">هل ترغب بحذف المنطقة المحددة;</string>
 
     <string name="fill_zone_description">Please fill Zone description field</string>
     <string name="fill_zone_description_gr">Παρακαλώ συμπληρώστε το πεδίο \'Περιγραφη Ζώνης\'</string>
+    <string name="fill_zone_description_ar">الرجاء تعبئة حقل وصف المنطقة</string>
 
     <string name="zone_deleted">Success…\n\nZone successfully deleted.</string>
     <string name="zone_deleted_gr">Ολοκλήρωση...\n\nη Ζώνη διεγράφη επιτυχώς</string>
+    <string name="zone_deleted_ar">تم حذف المنطقة بنجاح</string>
 
     <string name="to_send_data">Do you want to send changes?</string>
     <string name="to_send_data_gr">Θέλετε να αποστείλετε τις αλλαγές;</string>
+    <string name="to_send_data_ar">هل ترغب بإرسال التغييرات;</string>
 
     <string name="custom_field_details">Custom Field Details</string>
     <string name="custom_field_details_gr">Λεπτομέριες Παραμετρικού</string>
+    <string name="custom_field_details_ar">تفاصيل الحقول المتخصصة</string>
 
     <string name="company_custom_fields">Company Custom Fields</string>
     <string name="company_custom_fields_gr">Παραμετρικά πεδία Εταιρείας</string>
+    <string name="company_custom_fields_ar">حقول الشركة المخصصة</string>
 
     <string name="add_record">Add Record</string>
     <string name="add_record_gr">ΠΡΟΣΘΗΚΗ ΕΓΓΡΑΦΗΣ</string>
+    <string name="add_record_ar">إضافة تسجل</string>
 
     <string name="new_record">New Record</string>
     <string name="new_record_gr">ΝΕΑ ΕΓΓΡΑΦΗ</string>
+    <string name="new_record_ar">تسجيل جديد</string>
 
     <string name="no_measurements">No Measurements</string>
     <string name="no_measurements_gr">Χωρίς Μετρήσεις</string>
+    <string name="no_measurements_ar">لايوجد قياسات</string>
 
-    <string name="complete_zone_measurements">Please fill/send measurements for the following zones:</string>
-    <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για τις παρακάτω ζώνες:</string>
+    <string name="complete_zone_measurements">Please fill/send measurements for all zones</string>
+    <string name="complete_zone_measurements_gr">Δεν έχετε καταχωρίσει/αποστείλει μετρήσεις για όλες τις ζώνες</string>
+    <string name="complete_zone_measurements_ar">يرجى تعبئة / إرسال القياسات لجميع المناطق</string>
 
     <string name="preview_report">PREVIEW REPORT</string>
     <string name="preview_report_gr">ΠΡΟΕΠΙΣΚΟΠΙΣΗ ΔΕΛΤΙΟΥ</string>
+
 
     <string name="select_date_to_check_availability">Please select assignment date to check resources\' availability</string>
     <string name="select_date_to_check_availability_gr">Παρακαλώ επιλέξτε ημερομηνία ανάθεσης για να ελεγχθεί η διαθεσιμότητα των τεχνικών</string>
