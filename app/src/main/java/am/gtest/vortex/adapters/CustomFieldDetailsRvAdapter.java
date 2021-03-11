@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,7 @@ public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFiel
     private final Context ctx;
     private final List<CustomFieldDetailModel> mValues;
     private final CustomFilter mFilter;
-    private String vortexTable;
+    private final String vortexTable;
 
 
     public CustomFieldDetailsRvAdapter(List<CustomFieldDetailModel> items, Context ctx, String vortexTable) {
@@ -51,16 +53,20 @@ public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFiel
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.tvCustomFieldDetailsString.setText(holder.mItem.getCustomFieldDetailsString());
+        holder.tvCustomFieldDetailsString.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         if(SELECTED_CUSTOM_FIELD.getEditable()){
-            holder.mView.setOnClickListener(v -> {
+            holder.tvEditCustomFieldDetails.setBackgroundResource(R.drawable.ic_chevron_right_blue_24dp);
+            holder.tvEditCustomFieldDetails.setOnClickListener(v -> {
                 SELECTED_CUSTOM_FIELD_DETAIL = holder.mItem;
                 Intent intent = new Intent(ctx, CustomFieldDetailsEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(KEY_VORTEX_TABLE, vortexTable);
                 ctx.startActivity(intent);
             });
+        } else {
+            holder.tvEditCustomFieldDetails.setBackgroundResource(R.drawable.ic_chevron_right_gray_24dp);
         }
 
 
@@ -81,12 +87,14 @@ public class CustomFieldDetailsRvAdapter extends RecyclerView.Adapter<CustomFiel
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         final TextView tvCustomFieldDetailsString;
+        final TextView tvEditCustomFieldDetails;
         public CustomFieldDetailModel mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             tvCustomFieldDetailsString = view.findViewById(R.id.tvCustomFieldDetailsString);
+            tvEditCustomFieldDetails = view.findViewById(R.id.tvEditCustomFieldDetails);
         }
     }
 

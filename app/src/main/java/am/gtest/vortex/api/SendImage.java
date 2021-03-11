@@ -71,7 +71,13 @@ public class SendImage extends AsyncTask<String, Void, String > {
             e.printStackTrace();
         }
 
-        String PostBodyLog = postBody.substring(0, 60) + " " + prefKey;
+        String PostBodyLog = "";
+        if (postBody.length() > 60){
+            PostBodyLog = postBody.substring(0, 60) + " " + prefKey;
+        } else {
+            PostBodyLog = postBody + " " + prefKey;
+        }
+
         MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, PostBodyLog, responseCode, responseMessage, responseBody);
 
         return null;

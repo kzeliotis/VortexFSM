@@ -43,6 +43,10 @@ public class ProjectInstallationsData {
 
                     installationModel = new InstallationModel();
 
+                    if (MyJsonParser.getStringValue(oneObject, "ProjectInstallationId", "").equals("0")){
+                        continue;
+                    }
+
                     installationModel.setProjectInstallationId(MyJsonParser.getStringValue(oneObject, "ProjectInstallationId", ""));
                     installationModel.setProjectInstallationCode(MyJsonParser.getStringValue(oneObject, "ProjectInstallationCode", ""));
                     installationModel.setProjectInstallationTypeDescription(MyJsonParser.getStringValue(oneObject, "ProjectInstallationTypeDescription", ""));

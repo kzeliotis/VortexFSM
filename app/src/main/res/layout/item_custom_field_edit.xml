@@ -72,6 +72,7 @@
             android:textSize="@dimen/sp_14"
             android:hint="@string/input_value"
             android:textColorHint="@color/grey_400"
+            android:autoLink="web"
             android:inputType="text|textMultiLine"/>
 
         <Spinner

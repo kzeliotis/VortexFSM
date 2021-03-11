@@ -44,6 +44,10 @@ public class InstallationZonesData {
                 for (int i = 0; i < jArrayDataFromApi.length(); i++) {
                     JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
 
+                    if(MyJsonParser.getStringValue(oneObject, "ProjectZoneDescription", "").length() ==0) {
+                        continue;
+                    }
+
                     zoneModel = new ProjectZoneModel();
                     CustomFieldModel cfModel;
 

@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +48,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
       private final Context ctx;
 
     private final String selectMeasurement;
-    private String vortexTable;
+    private final String vortexTable;
     //private boolean IsNewZone = false;
 
     private ViewHolder mHolder;
@@ -140,6 +141,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 
             if(IsString){
                 holder.etCustomFieldValue.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                holder.etCustomFieldValue.setMovementMethod(LinkMovementMethod.getInstance());
             }else if(IsInt){
                 holder.etCustomFieldValue.setInputType(InputType.TYPE_CLASS_NUMBER);
             } else if(IsDouble){
@@ -148,6 +150,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
         }
 
         if(IsMasterDetail){
+            holder.etCustomFieldValue.setMovementMethod(LinkMovementMethod.getInstance());
             holder.tvToCustomFieldDetails.setVisibility(View.VISIBLE);
             if(holder.mItem.getCustomFieldDetails().size() > 0){
                 holder.tvToCustomFieldDetails.setBackgroundResource(R.drawable.ic_chevron_right_blue_24dp);
@@ -324,13 +327,15 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
         if (holder.mItem.getEditable()) {
             holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.light_blue_50));
             holder.swCustomFieldBool.setEnabled(true);
-            holder.etCustomFieldValue.setEnabled(true);
+            //holder.etCustomFieldValue.setEnabled(true);
+            holder.etCustomFieldValue.setInputType(InputType.TYPE_CLASS_TEXT);
             holder.spCustomFieldDV.setEnabled(true);
 
         } else {
             holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.grey_300));
             holder.swCustomFieldBool.setEnabled(false);
-            holder.etCustomFieldValue.setEnabled(false);
+            //holder.etCustomFieldValue.setEnabled(false);
+            holder.etCustomFieldValue.setInputType(InputType.TYPE_NULL);
             holder.spCustomFieldDV.setEnabled(false);
         }
     }
