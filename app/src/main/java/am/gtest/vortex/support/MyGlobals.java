@@ -1,6 +1,7 @@
 package am.gtest.vortex.support;
 
 import android.Manifest;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,6 +167,7 @@ public class MyGlobals {
     public static boolean resendZoneMeasurements;
     public static boolean singleAssignmentResult = false;
     public static boolean codeScanned = false;
+    public static EditText attributeValueforScan;
 
     // static constants, texts, numbers, etc.
     public static final String CONST_EN = "en";

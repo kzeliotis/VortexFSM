@@ -1,6 +1,8 @@
 package am.gtest.vortex.items;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -26,6 +28,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,6 +40,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.activities.AssignmentsActivity;
 import am.gtest.vortex.adapters.MySpinnerAdapter;
 import am.gtest.vortex.api.ToSendNewMeasurement;
 import am.gtest.vortex.models.MeasurementModel;
@@ -47,7 +53,9 @@ import am.gtest.vortex.support.MyUtils;
 import static am.gtest.vortex.support.MyGlobals.CONST_EN;
 import static am.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
+import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static am.gtest.vortex.support.MyGlobals.codeScanned;
 import static am.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_save;
@@ -81,6 +89,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
     private String selectSetSaveMeasurement;
     private String sureToLeave;
     private String ProjectProductId;
+    private EditText attributeValue_scan;
 
     private String savedMeasurements = "";
     private final List<MeasurementModel> MeasurementsToSend = new ArrayList<>();
@@ -452,30 +461,69 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
                         @SuppressLint("InflateParams")
                         LinearLayout llNewAttributeValue = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_edit_text, null);
                         final TextView tvDialogEditTextTitle = llNewAttributeValue.findViewById(R.id.tvDialogEditTextTitle);
-                        final EditText etNewAttributeValue = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
+                        attributeValue_scan = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
 
                         tvDialogEditTextTitle.setText(measurementValue);
 
-                        new AlertDialog.Builder(MeasurementsToSelectActivity.this)
-                                .setView(llNewAttributeValue)
-                                .setNegativeButton(localized_cancel, null)
-                                .setPositiveButton(localized_save, (dialog, which) -> {
-                                    if (etNewAttributeValue != null && etNewAttributeValue.getText() != null
-                                            && !etNewAttributeValue.getText().toString().equals("")) {
+                        AlertDialog b = new AlertDialog.Builder(MeasurementsToSelectActivity.this).create();
 
-                                        String keyNameWithReplacedSpace = holder.mItem.itemName.replace(" ", "_");
-                                        savedMeasurements = savedMeasurements + "\"" +
-                                                keyNameWithReplacedSpace +
-                                                "\":\"" + etNewAttributeValue.getText().toString() + "\",";
+                        //new AlertDialog.Builder(MeasurementsToSelectActivity.this)
+                        b.setView(llNewAttributeValue);
+//                        b.setNegativeButton(localized_cancel, null);
+//                        b.setPositiveButton(localized_save, (dialog, which) -> {
+//                            if (attributeValue_scan != null && attributeValue_scan.getText() != null
+//                                    && !attributeValue_scan.getText().toString().equals("")) {
+//
+//                                String keyNameWithReplacedSpace = holder.mItem.itemName.replace(" ", "_");
+//                                savedMeasurements = savedMeasurements + "\"" +
+//                                        keyNameWithReplacedSpace +
+//                                        "\":\"" + attributeValue_scan.getText().toString() + "\",";
+//
+//                                MeasurementModel measurement = new MeasurementModel();
+//                                measurement.setAttributeName(holder.mItem.itemName);
+//                                measurement.setProjectProductId(ProjectProductId);
+//                                MeasurementsToSend.add(measurement);
+//
+//                            }
+//                        });
+                        b.setButton(AlertDialog.BUTTON_NEGATIVE, localized_cancel, (DialogInterface.OnClickListener)null);
+                        b.setButton(AlertDialog.BUTTON_POSITIVE, localized_save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (attributeValue_scan != null && attributeValue_scan.getText() != null
+                                                && !attributeValue_scan.getText().toString().equals("")) {
 
-                                        MeasurementModel measurement = new MeasurementModel();
-                                        measurement.setAttributeName(holder.mItem.itemName);
-                                        measurement.setProjectProductId(ProjectProductId);
-                                        MeasurementsToSend.add(measurement);
+                                            String keyNameWithReplacedSpace = holder.mItem.itemName.replace(" ", "_");
+                                            savedMeasurements = savedMeasurements + "\"" +
+                                                    keyNameWithReplacedSpace +
+                                                    "\":\"" + attributeValue_scan.getText().toString() + "\",";
 
+                                            MeasurementModel measurement = new MeasurementModel();
+                                            measurement.setAttributeName(holder.mItem.itemName);
+                                            measurement.setProjectProductId(ProjectProductId);
+                                            MeasurementsToSend.add(measurement);
+
+                                        }
                                     }
-                                })
-                                .show();
+                                });
+                        b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                        b.show();
+
+                        final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+                        scan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                IntentIntegrator integrator = new IntentIntegrator(MeasurementsToSelectActivity.this);
+                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                                integrator.setPrompt("Scan");
+                                integrator.setCameraId(0);
+                                integrator.setBeepEnabled(false);
+                                integrator.setBarcodeImageEnabled(false);
+                                integrator.setOrientationLocked(true);
+                                integrator.initiateScan();
+                            }
+                        });
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -606,4 +654,24 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
                     .show();
         }
     }
+
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 49374:
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        // assignmentsRvAdapter.getFilter().filter(ScannedCode);
+                        //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
+                        attributeValue_scan.setText(ScannedCode);
+                    }
+                }
+                break;
+        }
+    }
+
 }

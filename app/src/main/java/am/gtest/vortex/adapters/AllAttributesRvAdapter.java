@@ -1,13 +1,18 @@
 package am.gtest.vortex.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -15,20 +20,26 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.items.MeasurementsToSelectActivity;
 import am.gtest.vortex.models.AllAttributeModel;
 import am.gtest.vortex.models.AttributeModel;
+import am.gtest.vortex.models.MeasurementModel;
 import am.gtest.vortex.support.MyJsonParser;
 
 import static am.gtest.vortex.activities.AllAttributesActivity.savedAttributes;
 import static am.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST_FILTERED;
 import static am.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
+import static am.gtest.vortex.support.MyGlobals.attributeValueforScan;
 import static am.gtest.vortex.support.MyLocalization.localized_attribute_value;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_save;
@@ -39,6 +50,7 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
     private final Context ctx;
     private final List<AllAttributeModel> mValues;
     private final CustomFilter mFilter;
+
 
     public AllAttributesRvAdapter(List<AllAttributeModel> items, Context ctx) {
         this.ctx = ctx;
@@ -114,30 +126,70 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                     @SuppressLint("InflateParams")
                     View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_edit_text, null);
                     final TextView tvDialogEditTextTitle = view.findViewById(R.id.tvDialogEditTextTitle);
-                    final EditText etNewAttributeValue = view.findViewById(R.id.etNewAttributeValue);
+                    attributeValueforScan = view.findViewById(R.id.etNewAttributeValue);
 
                     tvDialogEditTextTitle.setText(localized_attribute_value);
 
-                    new AlertDialog.Builder(ctx)
-                            .setView(view)
-                            .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
-                            .setPositiveButton(localized_save, (dialog, which) -> {
-                                if (etNewAttributeValue != null && etNewAttributeValue.getText() != null
-                                        && !etNewAttributeValue.getText().toString().equals("")) {
+//                    new AlertDialog.Builder(ctx)
+//                            .setView(view)
+//                            .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
+//                            .setPositiveButton(localized_save, (dialog, which) -> {
+//                                if (attributevalue_scan != null && attributevalue_scan.getText() != null
+//                                        && !attributevalue_scan.getText().toString().equals("")) {
+//
+//                                    // this is used to send to server
+//                                    savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
+//                                            "\": \"" + attributevalue_scan.getText().toString() + "\",\n";
+//
+//                                    // this is used to update offline data
+//                                    AttributeModel attributeModel = new AttributeModel();
+//                                    attributeModel.setAttributeId(holder.mItem.getAttributeId());
+//                                    attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+//                                    attributeModel.setAttributeValue(attributevalue_scan.getText().toString());
+//                                    NEW_ATTRIBUTES_LIST.add(attributeModel);
+//                                }
+//                            })
+//                            .show();
 
-                                    // this is used to send to server
-                                    savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
-                                            "\": \"" + etNewAttributeValue.getText().toString() + "\",\n";
+                    AlertDialog b = new AlertDialog.Builder(ctx).create();
+                    b.setView(view);
+                    b.setButton(AlertDialog.BUTTON_NEGATIVE, localized_cancel, (DialogInterface.OnClickListener)null);
+                    b.setButton(AlertDialog.BUTTON_POSITIVE, localized_save, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (attributeValueforScan != null && attributeValueforScan.getText() != null
+                                    && !attributeValueforScan.getText().toString().equals("")) {
 
-                                    // this is used to update offline data
-                                    AttributeModel attributeModel = new AttributeModel();
-                                    attributeModel.setAttributeId(holder.mItem.getAttributeId());
-                                    attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
-                                    attributeModel.setAttributeValue(etNewAttributeValue.getText().toString());
-                                    NEW_ATTRIBUTES_LIST.add(attributeModel);
-                                }
-                            })
-                            .show();
+                                // this is used to send to server
+                                savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
+                                        "\": \"" + attributeValueforScan.getText().toString() + "\",\n";
+
+                                // this is used to update offline data
+                                AttributeModel attributeModel = new AttributeModel();
+                                attributeModel.setAttributeId(holder.mItem.getAttributeId());
+                                attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+                                attributeModel.setAttributeValue(attributeValueforScan.getText().toString());
+                                NEW_ATTRIBUTES_LIST.add(attributeModel);
+                            }
+                        }
+                    });
+                    b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                    b.show();
+
+                    final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    scan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+                            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                            integrator.setPrompt("Scan");
+                            integrator.setCameraId(0);
+                            integrator.setBeepEnabled(false);
+                            integrator.setBarcodeImageEnabled(false);
+                            integrator.setOrientationLocked(true);
+                            integrator.initiateScan();
+                        }
+                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -201,4 +253,6 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
             this.mAdapter.notifyDataSetChanged();
         }
     }
+
+
 }

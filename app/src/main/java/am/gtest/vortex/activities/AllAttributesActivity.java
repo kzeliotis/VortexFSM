@@ -1,5 +1,6 @@
 package am.gtest.vortex.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
@@ -11,6 +12,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.UUID;
 
@@ -43,6 +47,7 @@ import static am.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static am.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static am.gtest.vortex.support.MyGlobals.attributeValueforScan;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static am.gtest.vortex.support.MyLocalization.localized_please_select_product;
@@ -85,7 +90,6 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         TextView tvSelectedProduct = findViewById(R.id.tvSelectedProduct);
         RecyclerView rvAllAttributes = findViewById(R.id.rvAllAttributes);
         btnSendNewAttributes = findViewById(R.id.btnSendNewAttributes);
-
 
         savedAttributes = "";
         newProductName = getIntent().getStringExtra(KEY_PRODUCT_DESCRIPTION);
@@ -247,6 +251,25 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         tvAssignmentId.setText(assignmentIdText);
 
         btnSendNewAttributes.setText(localized_send_data_caps);
+    }
+
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 49374:
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        // assignmentsRvAdapter.getFilter().filter(ScannedCode);
+                        //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
+                        attributeValueforScan.setText(ScannedCode);
+                    }
+                }
+                break;
+        }
     }
 
 //    @Override
