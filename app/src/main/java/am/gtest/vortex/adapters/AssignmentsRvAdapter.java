@@ -31,10 +31,13 @@ import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DATE;
 import static am.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DISTANCE;
 import static am.gtest.vortex.support.MyGlobals.STATUSES_LIST;
+import static am.gtest.vortex.support.MyGlobals.codeScanned;
+import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static am.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_TRAVEL_STARTED;
+import static am.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static am.gtest.vortex.support.MyPrefs.PREF_PROJECT_ID;
 
 public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdapter.ViewHolder> implements Filterable {
@@ -137,6 +140,12 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
             Intent intent = new Intent(ctx, AssignmentDetailActivity.class);
             ctx.startActivity(intent);
         });
+
+        if (singleAssignmentResult){
+            holder.mView.performClick();
+        }
+
+        codeScanned = false;
     }
 
     @Override
@@ -266,6 +275,8 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
 
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredItems;
+                int result_count = filteredItems.size();
+                if (result_count == 1 && MyPrefs.getBoolean(PREF_PROCESS_ASSIGNMENT_ON_SCAN, false) && codeScanned) {singleAssignmentResult = true;} //
                 return filterResults;
             }
 

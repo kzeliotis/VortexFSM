@@ -45,7 +45,7 @@ public class AssignmentModel {
     private String installationWarning = "";
     private String mandatoryZoneMeasurementsService = "0";
     private String resourceId = "";
-    private JSONArray mandatoryTasks = new JSONArray();
+     private JSONArray mandatoryTasks = new JSONArray();
 
     @NonNull
     @Override
@@ -404,4 +404,6 @@ public class AssignmentModel {
     public void setResourceId(String ResourceId) {
         this.resourceId = ResourceId;
     }
+
+
 }

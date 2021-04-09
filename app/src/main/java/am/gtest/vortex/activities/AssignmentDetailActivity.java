@@ -37,6 +37,7 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static am.gtest.vortex.support.MyLocalization.localized_address;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_details;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
@@ -185,6 +186,14 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        if(singleAssignmentResult){
+            if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false) == false){
+                fabStartTravel.performClick();
+            }
+            fabAssignmentDetails.performClick();
+        }
+
     }
 
     @Override

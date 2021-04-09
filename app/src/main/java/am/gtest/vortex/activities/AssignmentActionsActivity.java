@@ -115,6 +115,7 @@ import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
 import static am.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
+import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static am.gtest.vortex.support.MyLocalization.localized_assignmentActions;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static am.gtest.vortex.support.MyLocalization.localized_calculate_cost;
@@ -160,6 +161,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATURENAME;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
@@ -493,6 +495,20 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         //etNotes.setOnLongClickListener(this);
         tvSolutionTitle.setOnLongClickListener(this);
         tvInternalNotesTitle.setOnLongClickListener(this);
+
+        if(singleAssignmentResult){
+            singleAssignmentResult = false;
+            MyPrefs.setBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, true);
+            if(MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false) &&
+                    !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false)){
+                btnCheckIn.performClick();
+            }else if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false) &&
+                    !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false)){
+                btnCheckOut.performClick();
+            }
+        } else {
+            MyPrefs.setBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, false);
+        }
 
     }
 
@@ -877,7 +893,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 boolean areAllRequiredFieldsFilled = true;
 
-                if (solution.isEmpty()) {
+                if (solution.isEmpty() && !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, false)) {
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillComments);
                 }
@@ -899,7 +915,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
                 boolean MandatorySignature = MyPrefs.getBoolean(PREF_MANDATORY_SIGNATURE, false);
-                if (!isSigned && MandatorySignature ){
+                if (!isSigned && MandatorySignature && !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, false)){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
                 }

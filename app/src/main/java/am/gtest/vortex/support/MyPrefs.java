@@ -99,7 +99,7 @@ public class MyPrefs {
     public static final String PREF_FILE_IS_PT_FINISHED = "pref_file_is_pt_finished";
     public static final String PREF_FILE_IS_OVERNIGHT = "pref_file_is_overnight";
     public static final String PREF_FILE_HAS_RETURNED_TO_BASE = "pref_file_has_returned_to_base";
-
+    public static final String PREF_FILE_IS_SCANNED = "pref_file_is_scanned";
 
     public static final String PREF_KEY_IS_LOGGED_IN = "pref_key_is_logged_in";
     public static final String PREF_KEY_SELECTED_LANGUAGE = "pref_key_selected_language";
@@ -123,6 +123,7 @@ public class MyPrefs {
     public static final String PREF_LOCATION_REFRESH_INTERVAL = "pref_location_refresh_interval";
     public static final String PREF_API_CONNECTION_TIMEOUT = "pref_api_connection_timeout";
     public static final String PREF_GPS_PRIORITY = "pref_GPS_priority";
+    public static final String PREF_PROCESS_ASSIGNMENT_ON_SCAN = "pref_process_assignment_on_scan";
 
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";
     public static final String PREF_START_WORK_TIME = "start_work_time";

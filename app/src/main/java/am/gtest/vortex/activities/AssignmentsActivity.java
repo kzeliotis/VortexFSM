@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import android.util.Log;
@@ -56,6 +57,8 @@ import static am.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
 import static am.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static am.gtest.vortex.support.MyGlobals.STATUSES_LIST;
+import static am.gtest.vortex.support.MyGlobals.codeScanned;
+import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static am.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_select_status;
 import static am.gtest.vortex.support.MyLocalization.localized_selected_date;
@@ -238,6 +241,16 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
                 if (doSearchTexChanged) {
                     searchedText = newText;
                     assignmentsRvAdapter.getFilter().filter(newText);
+//                    int count = rvAssignments.getChildCount();
+//                    LinearLayoutManager lm = (LinearLayoutManager)rvAssignments.getLayoutManager();
+//                    int first = lm.findFirstVisibleItemPosition();
+//                    int last = lm.findLastVisibleItemPosition();
+//                    if (singleAssignmentResult){
+//                        View r_view = rvAssignments.findViewHolderForAdapterPosition(0).itemView;
+//                        if(r_view != null) {r_view.performClick();}
+//                        singleAssignmentResult = false;
+//                    }
+
                 } else {
                     doSearchTexChanged = true;
                 }
@@ -357,23 +370,24 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         }
 
         @Override
-        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+        protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
             switch (requestCode) {
                 case OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS:
                     permGetLocation.myActivityResult(requestCode, resultCode, data);
                     break;
                 case 49374:
-                    IntentResult result = IntentIntegrator.parseActivityResult(requestCode,  resultCode, data);
-                    if (result != null){
-                        if (result.getContents() != null){
+                    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                    if (result != null) {
+                        if (result.getContents() != null) {
+                            codeScanned = true;
                             String ScannedCode = result.getContents();
-                           // assignmentsRvAdapter.getFilter().filter(ScannedCode);
+                            // assignmentsRvAdapter.getFilter().filter(ScannedCode);
                             //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
                             searchView.onActionViewExpanded();
                             searchView.setIconified(false);
                             searchView.setQuery(ScannedCode, false);
                             searchView.clearFocus();
-
                         }
                     }
                     break;

@@ -31,6 +31,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
+import static am.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
@@ -48,7 +49,7 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
     private int responseCode;
     private String responseMessage;
     private String responseBody;
-    private PermGetLocation permGetLocation;
+    private final PermGetLocation permGetLocation;
 
     public GetMobileSettings(Context ctx,PermGetLocation permGetLocation) {
         this.ctx = ctx;
@@ -102,11 +103,7 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     }
 
                     int MobileShowGetAssignmentCostButton = MyJsonParser.getIntValue(oneObject, "MobileShowGetAssignmentCostButton", 0);
-                    if (MobileShowGetAssignmentCostButton == 1){
-                        MyPrefs.setBoolean(PREF_SHOW_GET_ASSIGNMENT_COST, true);
-                    } else {
-                        MyPrefs.setBoolean(PREF_SHOW_GET_ASSIGNMENT_COST, false);
-                    }
+                    MyPrefs.setBoolean(PREF_SHOW_GET_ASSIGNMENT_COST, MobileShowGetAssignmentCostButton == 1);
 
 
                     String MobileShowMandatoryTaskComments = MyJsonParser.getStringValue(oneObject, "MobileShowMandatoryTaskComments", "");
@@ -118,19 +115,13 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
 
                     int MobileSendZoneMeasurementsOnCheckOut = MyJsonParser.getIntValue(oneObject,  "MobileSendZoneMeasurementsOnCheckOut", 0);
-                    if (MobileSendZoneMeasurementsOnCheckOut == 1) {
-                        MyPrefs.setBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT, true);
-                    } else {
-                        MyPrefs.setBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT, false);
-                    }
+                    MyPrefs.setBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT, MobileSendZoneMeasurementsOnCheckOut == 1);
 
                     int MobileShowInstallationsButton = MyJsonParser.getIntValue(oneObject, "MobileShowInstallationsButton", 0);
-                    if (MobileShowInstallationsButton == 1){
-                        MyPrefs.setBoolean(PREF_SHOW_INSTALLATIONS_BUTTON, true);
-                    } else {
-                        MyPrefs.setBoolean(PREF_SHOW_INSTALLATIONS_BUTTON, false);
-                    }
+                    MyPrefs.setBoolean(PREF_SHOW_INSTALLATIONS_BUTTON, MobileShowInstallationsButton == 1);
 
+                    int MobileProcessAssignmentOnScan = MyJsonParser.getIntValue(oneObject,  "MobileProcessAssignmentOnScan", 0);
+                    MyPrefs.setBoolean(PREF_PROCESS_ASSIGNMENT_ON_SCAN, MobileProcessAssignmentOnScan == 1);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);
