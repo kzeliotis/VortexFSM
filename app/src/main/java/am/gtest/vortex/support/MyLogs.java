@@ -30,7 +30,12 @@ public class MyLogs {
 
         showResponseLog(LOG_TAG, responseBody);
 
-        writeFile_FullLog( LOG_TAG, apiUrl, postBody, responseCode, responseMessage, responseBody);
+        try{
+            writeFile_FullLog( LOG_TAG, apiUrl, postBody, responseCode, responseMessage, responseBody);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private static void showResponseLog(String LOG_TAG, String responseBody) {
