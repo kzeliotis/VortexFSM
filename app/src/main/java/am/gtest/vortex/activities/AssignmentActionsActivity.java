@@ -1059,6 +1059,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     checkInCheckOutModel.setChargedAmount(chargedAmount);
                     checkInCheckOutModel.setPaidAmount(paidAmount);
                     checkInCheckOutModel.setStatus(spStatus.getSelectedItem().toString());
+                    checkInCheckOutModel.setStatusCode(getStatusIdFromSpinner());
                     checkInCheckOutModel.setSignatureName(signatureName);
                     checkInCheckOutModel.setSignatureEmail(signatureEmail);
                     checkInCheckOutModel.setEncodedSignature(encodedSignature);
@@ -1398,6 +1399,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             }
 
         }
+    }
+
+    private String getStatusIdFromSpinner(){
+
+        for (int i = 0; i < STATUSES_LIST.size(); i++) {
+                if (STATUSES_LIST.get(i).getStatusDescription().toUpperCase().equals(spStatus.getSelectedItem().toString())) {
+                    return STATUSES_LIST.get(i).getStatusId();
+                }
+        }
+
+        return "-1";
     }
 
     private void updateStatusData() {

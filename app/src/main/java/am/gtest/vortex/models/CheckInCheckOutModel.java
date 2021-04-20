@@ -24,8 +24,9 @@ public class CheckInCheckOutModel {
     private String checkOutLat = "";
     private String checkOutLng = "";
     private String photos = "";
-    private String assignmentSource = "Mobile";
+    private final String assignmentSource = "Mobile";
     private String returnToBase = "";
+    private String statusCode = "";
 
 
     @NonNull
@@ -41,6 +42,7 @@ public class CheckInCheckOutModel {
                 "  \"Charge\": \"" + chargedAmount + "\",\n" +
                 "  \"Payment\": \"" + paidAmount + "\",\n" +
                 "  \"Status\": \"" + status + "\",\n" +
+                "  \"StatusCode\": \"" + statusCode + "\",\n" +
                 "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
                 "  \"SignatureName\": \"" + signatureName + "\",\n" +
                 "  \"SignatureEmail\": \"" + signatureEmail + "\",\n" +
@@ -130,6 +132,14 @@ public class CheckInCheckOutModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getAssignmentId() {
