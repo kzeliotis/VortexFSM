@@ -90,6 +90,7 @@ class MyApi {
     static final String API_GET_VORTEX_TABLE_CUSTOM_FIELDS = "/Vortex.svc/GetVortexTableCustomFields?VortexTable=";
     static final String API_SEND_CUSTOM_FIELDS = "/Vortex.svc/SetCustomFields";
     static final String API_GET_REPORT_PREVIEW = "/Vortex.svc/GetReportFile?AssignmentId=";
+    static final String API_GET_MANUAL_FILE = "/Vortex.svc/GetManualFromAzure?BlobAttachmentId=";
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;

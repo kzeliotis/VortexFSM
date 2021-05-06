@@ -33,7 +33,8 @@ public class ManualsData {
                     manualModel.setManualName(MyJsonParser.getStringValue(oneObject, "ManualName", ""));
                     manualModel.setManualUrl(MyJsonParser.getStringValue(oneObject, "ManualUrl", ""));
                     manualModel.setManualKeywords(MyJsonParser.getStringValue(oneObject, "Keywords", ""));
-
+                    manualModel.setblobAttachmentId(MyJsonParser.getStringValue(oneObject, "BlobAttachmentId", ""));
+                    manualModel.setfileName(MyJsonParser.getStringValue(oneObject, "FileName", ""));
                     MANUALS_LIST.add(manualModel);
                 }
 

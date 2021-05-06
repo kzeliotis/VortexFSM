@@ -13,6 +13,7 @@ import am.gtest.vortex.application.MyApplication;
 import am.gtest.vortex.support.MyLogs;
 import am.gtest.vortex.support.MyPrefs;
 
+import static am.gtest.vortex.api.MyApi.API_GET_MANUAL_FILE;
 import static am.gtest.vortex.api.MyApi.API_GET_REPORT_PREVIEW;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
@@ -24,12 +25,16 @@ public class GetReportPreview extends AsyncTask<String, Void, String > {
 
 private int responseCode;
 private final String assignmentId;
+private final String blobAttachmentId;
+private final String fileName;
 @SuppressLint("StaticFieldLeak")
 private final Context ctx;
 
-public GetReportPreview(Context ctx, String AssignmentId) {
+public GetReportPreview(Context ctx, String AssignmentId, String BlobAttachmentId, String fileName) {
         this.ctx = ctx;
         this.assignmentId = AssignmentId;
+        this.blobAttachmentId = BlobAttachmentId;
+        this.fileName = fileName;
         }
 
 @Override
@@ -38,7 +43,14 @@ protected String doInBackground(String... params) {
         String responseBody = null;
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl+ API_GET_REPORT_PREVIEW + assignmentId;
+        String apiUrl = "";
+
+        if (blobAttachmentId.length() > 0){
+            apiUrl= baseHostUrl+ API_GET_MANUAL_FILE + blobAttachmentId + "&fileName=" + fileName ;
+        } else {
+            apiUrl= baseHostUrl+ API_GET_REPORT_PREVIEW + assignmentId;
+        }
+
 
         try {
         Bundle bundle = MyApi.get(apiUrl);

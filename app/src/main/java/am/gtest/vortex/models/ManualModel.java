@@ -7,6 +7,8 @@ public class ManualModel {
     private String manualName = "";
     private String manualUrl = "";
     private String manualKeywords = "";
+    private String blobAttachmentId = "";
+    private String fileName = "";
 
     @NonNull
     @Override
@@ -15,6 +17,8 @@ public class ManualModel {
                 "{\n" +
                         "  \"manualName\": \"" + manualName + "\",\n" +
                         "  \"manualUrl\": \"" + manualUrl + "\",\n" +
+                        "  \"fileName\": \"" + fileName + "\",\n" +
+                        "  \"BlobAttachmentId\": \"" + blobAttachmentId + "\",\n" +
                         "  \"manualKeywords\": \"" + manualKeywords + "\"\n" +
                         "}";
 
@@ -31,12 +35,28 @@ public class ManualModel {
         this.manualName = manualName;
     }
 
+    public String getfileName() {
+        return fileName;
+    }
+
+    public void setfileName(String FileName) {
+        this.fileName = FileName;
+    }
+
     public String getManualUrl() {
         return manualUrl;
     }
 
     public void setManualUrl(String manualUrl) {
         this.manualUrl = manualUrl;
+    }
+
+    public String getblobAttachmentId() {
+        return blobAttachmentId;
+    }
+
+    public void setblobAttachmentId(String blobAttachmentId) {
+        this.blobAttachmentId = blobAttachmentId;
     }
 
     public String getManualKeywords() {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import am.gtest.vortex.R;
 import am.gtest.vortex.application.MyApplication;
 import am.gtest.vortex.data.HistoryData;
+import am.gtest.vortex.support.MyLogs;
 import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.api.MyApi.API_GET_HISTORY_ASSIGNMENTS;
@@ -93,7 +94,7 @@ public class GetHistory extends AsyncTask<String, Void, String > {
             e.printStackTrace();
         }
 
-//        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no body for get request", responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no body for get request", responseCode, responseMessage, responseBody);
 
         return responseBody;
     }

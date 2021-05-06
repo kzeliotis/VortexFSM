@@ -761,7 +761,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         switch (v.getId()) {
 
             case R.id.btnPreviewReport:
-                GetReportPreview getReportPreview = new GetReportPreview(AssignmentActionsActivity.this, assignmentId);
+                GetReportPreview getReportPreview = new GetReportPreview(AssignmentActionsActivity.this, assignmentId, "", "");
                 getReportPreview.execute();
                 break;
 

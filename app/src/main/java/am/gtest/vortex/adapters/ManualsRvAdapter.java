@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.activities.AssignmentActionsActivity;
+import am.gtest.vortex.api.GetReportPreview;
 import am.gtest.vortex.api.ToDownloadManuals;
 import am.gtest.vortex.models.ManualModel;
 import am.gtest.vortex.support.MyDialogs;
@@ -37,7 +39,7 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
 
     private final Context ctx;
 
-    private List<ManualModel> allItems;
+    private final List<ManualModel> allItems;
     private List<ManualModel> filteredItems;
 
     public ManualsRvAdapter(List<ManualModel> allItems, Context ctx) {
@@ -67,6 +69,9 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
 
             File file = new File(ctx.getExternalFilesDir("/manuals") + "/" + manualFileNameFromUrl);
 
+            String blobAttachmentId = holder.mItem.getblobAttachmentId();
+            String file_name = holder.mItem.getManualName();
+
             if (file.exists()) {
                 try {
                     Uri fileURI;
@@ -89,6 +94,9 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
 
                     Toast.makeText(ctx, localized_no_pdf_app, Toast.LENGTH_LONG).show();
                 }
+            } else if (blobAttachmentId.length() > 0 && !blobAttachmentId.equals("0")){
+                GetReportPreview getReportPreview = new GetReportPreview(ctx, "", blobAttachmentId, file_name);
+                getReportPreview.execute();
             } else  {
                 if (MyUtils.isNetworkAvailable() ) {
                     ToDownloadManuals toDownloadManuals = new ToDownloadManuals(ctx);
