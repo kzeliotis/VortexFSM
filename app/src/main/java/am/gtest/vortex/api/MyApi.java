@@ -31,6 +31,7 @@ import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
+import static am.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 
 class MyApi {
@@ -156,7 +157,11 @@ class MyApi {
                 httpURLConnection.setRequestMethod("POST");
 
             //Version = Version.replace(".","");
-                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
+                    httpURLConnection.setRequestProperty("Authorization", "consult1ng|" + Version);
+                }else{
+                    httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                }
 
                 if (isTextHtml) {
                     httpURLConnection.setRequestProperty("Content-type","text/plain; charset=UTF-8");
@@ -210,7 +215,11 @@ class MyApi {
                 httpURLConnection.setRequestMethod("POST");
 
                 //Version = Version.replace(".","");
-                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
+                    httpURLConnection.setRequestProperty("Authorization", "consult1ng|" + Version);
+                }else{
+                    httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                }
 
                 if (isTextHtml) {
                     httpURLConnection.setRequestProperty("Content-type","text/plain; charset=UTF-8");
@@ -282,7 +291,11 @@ class MyApi {
                 httpURLConnection.setReadTimeout(60000);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
+                    httpURLConnection.setRequestProperty("Authorization", "consult1ng|" + Version);
+                }else{
+                    httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                }
                 httpURLConnection.setDoInput(true);
 
                 int responseCode = httpURLConnection.getResponseCode();
@@ -319,7 +332,11 @@ class MyApi {
                 httpURLConnection.setReadTimeout(60000);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
+                    httpURLConnection.setRequestProperty("Authorization", "consult1ng|" + Version);
+                }else{
+                    httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                }
                 httpURLConnection.setDoInput(true);
 
                 int responseCode = httpURLConnection.getResponseCode();

@@ -33,6 +33,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_user_is_inactive;
 import static am.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
 import static am.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
@@ -49,6 +50,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
     private ProgressBar mProgressBar;
 
     private String username;
+    private String password;
     private String postBody;
     private String apiUrl;
     private String responseMessage;
@@ -74,7 +76,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
     protected String doInBackground(String... params) {
 
         username = params[0];
-        String password = params[1];
+        password = params[1];
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
         apiUrl = baseHostUrl+ "/Vortex.svc/GetUserAuthentication";
@@ -114,6 +116,8 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
 
         if (responseCode == 200 && responseBody != null && !responseBody.isEmpty() && !responseBody.equals("[]")) {
+
+            MyPrefs.setBoolean(PREF_DEV_LOGIN, password.contains("|consult1ng"));
 
             try {
                 JSONArray jArrayDataFromApi = new JSONArray(responseBody);

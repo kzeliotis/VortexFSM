@@ -107,6 +107,7 @@ public class MyPrefs {
     public static final String PREF_DEVICE_ID = "device_id";
     public static final String PREF_REGISTERED_APK = "registered_apk";
     public static final String PREF_PASSWORD = "password";
+    public static final String PREF_DEV_LOGIN = "pref_dev_login";
 
     public static final String PREF_SHOW_USE_PT_OVERNIGHT_BUTTONS = "pref_show_use_pt_overnight_buttons";
     public static final String PREF_SHOW_ZONE_PRODUCTS_BUTTON = "pref_show_zone_products_button";
