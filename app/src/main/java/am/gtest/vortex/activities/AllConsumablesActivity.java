@@ -26,7 +26,9 @@ import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static am.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
+import static am.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static am.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
@@ -39,6 +41,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AllConsumablesActivity extends BaseDrawerActivity {
@@ -65,15 +68,27 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         RecyclerView rvAllConsumables = findViewById(R.id.rvAllConsumables);
         btnSendConsumables = findViewById(R.id.btnSendConsumables);
+        boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
 
-        AllConsumablesData.generate(assignmentId);
-        allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this);
-        rvAllConsumables.setAdapter(allConsumablesRvAdapter);
+        AllConsumablesData.generate(assignmentId, WarehouseProducts);
+        if(WarehouseProducts){
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
+            rvAllConsumables.setAdapter(allConsumablesRvAdapter);
+        }else{
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
+            rvAllConsumables.setAdapter(allConsumablesRvAdapter);
+        }
 
-        String RelatedConsumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, assignmentId, "");
+
+        String RelatedConsumables = "";
+        if(WarehouseProducts){
+            RelatedConsumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0"), "");
+        }else{
+            RelatedConsumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, assignmentId, "");
+        }
 
         if (RelatedConsumables.isEmpty() || MyUtils.isNetworkAvailable()) {
-            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId);
+            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts);
             getAllConsumables.execute();
         }
 

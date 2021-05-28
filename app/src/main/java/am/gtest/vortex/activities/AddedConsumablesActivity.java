@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +25,12 @@ import am.gtest.vortex.support.MySliderMenu;
 
 import static am.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
+import static am.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyLocalization.localized_add_new_consumable_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static am.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static am.gtest.vortex.support.MyLocalization.localized_consumables;
 import static am.gtest.vortex.support.MyLocalization.localized_suggested_used;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
@@ -64,10 +68,25 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
 
         btnAddNewConsumable.setOnClickListener(v -> {
             if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
-                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                new AlertDialog.Builder(this)
+                        .setMessage(localized_choose_from_warehouse)
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton(R.string.no, (dialog, which) -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                            startActivity(intent);
+                        })
+                        .show();
             }
+
         });
     }
 

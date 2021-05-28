@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,14 @@ import java.util.List;
 import am.gtest.vortex.R;
 import am.gtest.vortex.models.AddedConsumableModel;
 import am.gtest.vortex.models.AllConsumableModel;
+import am.gtest.vortex.support.MyPrefs;
+import am.gtest.vortex.unused.MinMaxFilter;
 
 import static am.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST;
+import static am.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static am.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_consumable_value;
@@ -35,10 +41,12 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     private final Context ctx;
     private final List<AllConsumableModel> mValues;
     private final CustomFilter mFilter;
+    private final boolean warehouseProducts;
 
-    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx) {
+    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx, boolean WarehouseProducts) {
         this.ctx = ctx;
         mValues = items;
+        warehouseProducts = WarehouseProducts;
         mFilter = new CustomFilter(AllConsumablesRvAdapter.this);
     }
 
@@ -51,7 +59,16 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.tvConsumableName.setText(holder.mItem.getConsumableName());
+        //holder.tvConsumableName.setText(holder.mItem.getConsumableName());
+
+        if(warehouseProducts){
+            String desc = holder.mItem.getConsumableName();
+            String stock = holder.mItem.getStock();
+            desc = desc + "\n\r" + "Qty: " + stock;
+            holder.tvConsumableName.setText(desc);
+        }else{
+            holder.tvConsumableName.setText(holder.mItem.getConsumableName());
+        }
 
         holder.mView.setOnClickListener(v -> {
             @SuppressLint("InflateParams")
@@ -65,6 +82,11 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             final EditText etSuggestedConsumablesValue = view.findViewById(R.id.etSuggestedConsumablesValue);
             final EditText etUsedConsumablesValue = view.findViewById(R.id.etUsedConsumablesValue);
             final EditText etConsumableNotes = view.findViewById(R.id.etConsumableNotes);
+
+            if(warehouseProducts){
+                String stock = holder.mItem.getStock();
+                etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter("0", stock)});
+            }
 
             tvConsumableValueTitle.setText(localized_consumable_value);
             tvSuggestedConsumableTitle.setText(localized_suggested_value_with_colon);
@@ -85,6 +107,9 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                             addedConsumableModel.setSuggested(etSuggestedConsumablesValue.getText().toString().trim());
                             addedConsumableModel.setUsed(etUsedConsumablesValue.getText().toString().trim());
                             addedConsumableModel.setProductId(holder.mItem.getProductId());
+                            String warehouseId = "0";
+                            if(warehouseProducts){warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");}
+                            addedConsumableModel.setWarehouseId(warehouseId);
 
                             CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
                             ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
@@ -132,22 +157,41 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ALL_CONSUMABLES_LIST_FILTERED.clear();
             final FilterResults results = new FilterResults();
+            if (warehouseProducts){
+                ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.clear();
 
-            if (constraint.length() == 0) {
-                ALL_CONSUMABLES_LIST_FILTERED.addAll(ALL_CONSUMABLES_LIST);
-            } else {
-                final String filterPattern = constraint.toString().toLowerCase().trim();
-                for (final AllConsumableModel mWords : ALL_CONSUMABLES_LIST) {
-                    if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
-                        ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
+                if (constraint.length() == 0) {
+                    ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.addAll(ALL_WAREHOUSE_CONSUMABLES_LIST);
+                } else {
+                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (final AllConsumableModel mWords : ALL_WAREHOUSE_CONSUMABLES_LIST) {
+                        if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                            ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
+                        }
                     }
                 }
+
+                results.values = ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
+                results.count = ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.size();
+            } else {
+                ALL_CONSUMABLES_LIST_FILTERED.clear();
+
+                if (constraint.length() == 0) {
+                    ALL_CONSUMABLES_LIST_FILTERED.addAll(ALL_CONSUMABLES_LIST);
+                } else {
+                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (final AllConsumableModel mWords : ALL_CONSUMABLES_LIST) {
+                        if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                            ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
+                        }
+                    }
+                }
+
+                results.values = ALL_CONSUMABLES_LIST_FILTERED;
+                results.count = ALL_CONSUMABLES_LIST_FILTERED.size();
             }
 
-            results.values = ALL_CONSUMABLES_LIST_FILTERED;
-            results.count = ALL_CONSUMABLES_LIST_FILTERED.size();
             return results;
         }
 

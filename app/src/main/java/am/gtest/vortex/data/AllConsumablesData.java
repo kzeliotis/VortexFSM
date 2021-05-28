@@ -11,48 +11,93 @@ import am.gtest.vortex.support.MyPrefs;
 
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
+import static am.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST;
+import static am.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_CONSUMABLES;
+import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_WAREHOUSE_CONSUMABLES;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
 
 public class AllConsumablesData {
 
-    public static void generate(String AssignmentId) {
+    public static void generate(String AssignmentId, boolean warehouseProducts) {
 
-        ALL_CONSUMABLES_LIST.clear();
-        ALL_CONSUMABLES_LIST_FILTERED.clear();
-        String Consumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, AssignmentId, "");
-        //String allConsumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
-        if(Consumables.isEmpty()){
-            Consumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
-        }
+        if(warehouseProducts){
+            ALL_WAREHOUSE_CONSUMABLES_LIST.clear();
+            ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.clear();
+            String Consumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0"), "");
+            //String allConsumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
+            if(Consumables.isEmpty()){
+                Consumables = MyPrefs.getString(PREF_DATA_ALL_WAREHOUSE_CONSUMABLES, "");
+            }
+            if (!Consumables.isEmpty()) {
+                try {
+                    JSONArray jArrayDataFromApi = new JSONArray(Consumables);
 
+                    AllConsumableModel allConsumableModel;
 
-        if (!Consumables.isEmpty()) {
-            try {
-                JSONArray jArrayDataFromApi = new JSONArray(Consumables);
+                    for (int i = 0; i < jArrayDataFromApi.length(); i++) {
+                        JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
 
-                AllConsumableModel allConsumableModel;
+                        allConsumableModel = new AllConsumableModel();
 
-                for (int i = 0; i < jArrayDataFromApi.length(); i++) {
-                    JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
+                        allConsumableModel.setConsumableName(MyJsonParser.getStringValue(oneObject, "ProductDescription", ""));
+                        allConsumableModel.setNotes(MyJsonParser.getStringValue(oneObject, "notes", ""));
+                        allConsumableModel.setTypeId(MyJsonParser.getIntValue(oneObject, "TypeId", -1));
+                        allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
+                        allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", ""));
 
-                    allConsumableModel = new AllConsumableModel();
+                        ALL_WAREHOUSE_CONSUMABLES_LIST.add(allConsumableModel);
+                    }
 
-                    allConsumableModel.setConsumableName(MyJsonParser.getStringValue(oneObject, "ProductDescription", ""));
-                    allConsumableModel.setNotes(MyJsonParser.getStringValue(oneObject, "notes", ""));
-                    allConsumableModel.setTypeId(MyJsonParser.getIntValue(oneObject, "TypeId", -1));
-                    allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
+                    Collections.sort(ALL_WAREHOUSE_CONSUMABLES_LIST, (a, b) -> a.getConsumableName().compareTo(b.getConsumableName()));
 
-                    ALL_CONSUMABLES_LIST.add(allConsumableModel);
+                    ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.addAll(ALL_WAREHOUSE_CONSUMABLES_LIST);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
 
-                Collections.sort(ALL_CONSUMABLES_LIST, (a, b) -> a.getConsumableName().compareTo(b.getConsumableName()));
+        } else {
+            ALL_CONSUMABLES_LIST.clear();
+            ALL_CONSUMABLES_LIST_FILTERED.clear();
+            String Consumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, AssignmentId, "");
+            //String allConsumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
+            if(Consumables.isEmpty()){
+                Consumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
+            }
 
-                ALL_CONSUMABLES_LIST_FILTERED.addAll(ALL_CONSUMABLES_LIST);
+            if (!Consumables.isEmpty()) {
+                try {
+                    JSONArray jArrayDataFromApi = new JSONArray(Consumables);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                    AllConsumableModel allConsumableModel;
+
+                    for (int i = 0; i < jArrayDataFromApi.length(); i++) {
+                        JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
+
+                        allConsumableModel = new AllConsumableModel();
+
+                        allConsumableModel.setConsumableName(MyJsonParser.getStringValue(oneObject, "ProductDescription", ""));
+                        allConsumableModel.setNotes(MyJsonParser.getStringValue(oneObject, "notes", ""));
+                        allConsumableModel.setTypeId(MyJsonParser.getIntValue(oneObject, "TypeId", -1));
+                        allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
+                        allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", ""));
+
+                        ALL_CONSUMABLES_LIST.add(allConsumableModel);
+                    }
+
+                    Collections.sort(ALL_CONSUMABLES_LIST, (a, b) -> a.getConsumableName().compareTo(b.getConsumableName()));
+
+                    ALL_CONSUMABLES_LIST_FILTERED.addAll(ALL_CONSUMABLES_LIST);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+
     }
 }

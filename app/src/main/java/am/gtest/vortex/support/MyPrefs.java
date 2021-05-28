@@ -63,6 +63,7 @@ public class MyPrefs {
     public static final String PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW = "pref_file_installation_zones_data_for_show";
     public static final String PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_installation_custom_fields_data_for_show";
     public static final String PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW = "prf_file_related_consumables_for_show";
+    public static final String PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW = "prf_file_related_warehouse_consumables_for_show";
     public static final String PREF_FILE_RELATED_SERVICES_FOR_SHOW = "pref_file_related_services_for_show";
     public static final String PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_company_custom_fields_data_for_show";
     // downloaded data
@@ -78,6 +79,7 @@ public class MyPrefs {
     public static final String PREF_DATA_PRODUCT_TYPES = "pref_data_product_types";
     public static final String PREF_DATA_ALL_ATTRIBUTES = "pref_data_all_attributes";
     public static final String PREF_DATA_ALL_CONSUMABLES = "pref_data_all_consumables";
+    public static final String PREF_DATA_ALL_WAREHOUSE_CONSUMABLES = "pref_data_all_warehouse_consumables";
     public static final String PREF_DATA_STATUSES = "pref_data_statuses";
     public static final String PREF_DATA_ZONES_LIST = "pref_data_zones_list";
     public static final String PREF_DATA_INSTALLATION_ZONES_LIST = "pref_data_installation_zones_list";

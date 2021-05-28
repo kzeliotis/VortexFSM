@@ -76,6 +76,8 @@ public class MyGlobals {
 
     public static List<AllConsumableModel> ALL_CONSUMABLES_LIST = new ArrayList<>();
     public static List<AllConsumableModel> ALL_CONSUMABLES_LIST_FILTERED = new ArrayList<>();
+    public static List<AllConsumableModel> ALL_WAREHOUSE_CONSUMABLES_LIST = new ArrayList<>();
+    public static List<AllConsumableModel> ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED = new ArrayList<>();
 
     public static ProjectModel SELECTED_PROJECT = new ProjectModel();
     public static List<ProjectModel> PROJECTS_LIST = new ArrayList<>();

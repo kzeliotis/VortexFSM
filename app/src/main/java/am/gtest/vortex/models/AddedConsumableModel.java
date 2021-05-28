@@ -7,6 +7,7 @@ public class AddedConsumableModel {
     private String suggested = "";
     private String used = "";
     private int ProductId = 0;
+    private String warehouseId = "0";
 
     @Override
     public String toString() {
@@ -16,6 +17,7 @@ public class AddedConsumableModel {
                         "  \"notes\": \"" + notes + "\",\n" +
                         "  \"suggested\": \"" + suggested + "\",\n" +
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
+                        "  \"WarehouseId\": \"" + warehouseId  + "\",\n" +
                         "  \"used\": \"" + used + "\"\n" +
                         "}";
 
@@ -62,5 +64,13 @@ public class AddedConsumableModel {
 
     public void setProductId(int ProductId) {
         this.ProductId = ProductId;
+    }
+
+    public String getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(String WarehouseId) {
+        this.warehouseId = WarehouseId;
     }
 }

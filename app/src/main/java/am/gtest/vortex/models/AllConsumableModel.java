@@ -6,6 +6,7 @@ public class AllConsumableModel {
     private String notes = "";
     private int ProductId = 0;
     private int typeId = -1;
+    private String Stock = "";
 
     public String getConsumableName() {
         return consumableName;
@@ -39,6 +40,10 @@ public class AllConsumableModel {
         this.typeId = typeId;
     }
 
+    public String getStock() { return Stock;}
+
+    public void setStock(String Stock) { this.Stock = Stock; }
+
     @Override
     public String toString() {
         String modelToString =
@@ -46,6 +51,7 @@ public class AllConsumableModel {
                         "  \"ProductDescription\": \"" + consumableName + "\",\n" +
                         "  \"notes\": \"" + notes + "\",\n" +
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
+                        "  \"Stock\": \"" + Stock + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +
                         "}";
 
