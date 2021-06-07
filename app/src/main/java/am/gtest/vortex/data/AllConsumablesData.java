@@ -45,7 +45,7 @@ public class AllConsumablesData {
                         allConsumableModel.setNotes(MyJsonParser.getStringValue(oneObject, "notes", ""));
                         allConsumableModel.setTypeId(MyJsonParser.getIntValue(oneObject, "TypeId", -1));
                         allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
-                        allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", ""));
+                        allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", "0"));
 
                         ALL_WAREHOUSE_CONSUMABLES_LIST.add(allConsumableModel);
                     }

@@ -86,6 +86,9 @@ protected void onPostExecute(String responseBody) {
             intent.putExtras(b);
             ctx.startActivity(intent);
         } catch (Exception ex) {
+            if (responseBody.contains("<div id=\"content\">")){
+                responseBody = responseBody.split("<div id=\"content\">")[1];
+            }
             Toast toast = Toast.makeText(MyApplication.getContext(), "Invalid URL \r\n " + responseBody, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
