@@ -154,7 +154,7 @@ public class MySynchronize {
         for (Map.Entry<String, ?> entry : updatedAttributesDataForSync.entrySet()) {
             String prefKey = entry.getKey();
 
-            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx);
+            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, "", "");
             sendUpdatedAttribute.execute(prefKey);
         }
 

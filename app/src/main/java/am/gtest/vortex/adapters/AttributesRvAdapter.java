@@ -49,7 +49,7 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
     private final Context ctx;
 
-    private List<AttributeModel> allItems;
+    private final List<AttributeModel> allItems;
     private List<AttributeModel> filteredItems;
 
     public AttributesRvAdapter(List<AttributeModel> allItems, Context ctx) {
@@ -154,7 +154,7 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                         MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
 
                                         if (MyUtils.isNetworkAvailable()) {
-                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx);
+                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
                                             sendUpdatedAttribute.execute(prefKey);
                                         } else {
                                             Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
@@ -215,7 +215,7 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                         MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
 
                                         if (MyUtils.isNetworkAvailable()) {
-                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx);
+                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
                                             sendUpdatedAttribute.execute(prefKey);
                                         } else {
                                             Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();

@@ -20,6 +20,7 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyLocalization.localized_delete_failed;
+import static am.gtest.vortex.support.MyLocalization.localized_no_permission_delete;
 import static am.gtest.vortex.support.MyLocalization.localized_product_deleted;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 
@@ -29,7 +30,7 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
 
     @SuppressLint("StaticFieldLeak")
     private final Context ctx;
-    private String AssignmentId;
+    private final String AssignmentId;
 
     @SuppressLint("StaticFieldLeak")
     private ProgressBar mProgressBar;
@@ -90,6 +91,10 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
                 GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0");
                 getProducts.execute();
             }
+        } else if (responseBody != null && responseBody.equals("2")) {
+
+            MyDialogs.showOK(ctx, localized_no_permission_delete);
+
         } else {
             MyDialogs.showOK(ctx, localized_delete_failed);
         }

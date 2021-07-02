@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.adapters.AttributesRvAdapter;
 import am.gtest.vortex.support.MyDialogs;
 import am.gtest.vortex.support.MyLogs;
 import am.gtest.vortex.support.MyPrefs;
@@ -22,6 +23,7 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static am.gtest.vortex.support.MyLocalization.localized_failed_to_send_data_saved_for_sync;
+import static am.gtest.vortex.support.MyLocalization.localized_no_permission_write;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC;
 
@@ -36,11 +38,15 @@ public class SendUpdatedAttribute extends AsyncTask<String, Void, String > {
     private ProgressBar mProgressBar;
 
     private String prefKey;
+    private final String PpjId;
+    private final String ValueId;
 
     private int responseCode;
 
-    public SendUpdatedAttribute(Context ctx) {
+    public SendUpdatedAttribute(Context ctx, String PpjId, String ValueId) {
         this.ctx = ctx;
+        this.PpjId = PpjId;
+        this.ValueId = ValueId;
     }
 
     @Override
@@ -86,7 +92,7 @@ public class SendUpdatedAttribute extends AsyncTask<String, Void, String > {
             mProgressBar.setVisibility(View.GONE);
         }
 
-        if (responseBody != null && responseBody.equals("")) {
+        if (responseBody != null && responseBody.equals("1")) {
 
             MyPrefs.removeStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey);
 
@@ -96,6 +102,15 @@ public class SendUpdatedAttribute extends AsyncTask<String, Void, String > {
                 GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0");
                 getProducts.execute();
             }
+        } else if (responseBody != null && responseBody.equals("2")) {
+            MyPrefs.removeStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey);
+            String newV = MyPrefs.getStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + PpjId, ValueId, "");
+            String oldV = MyPrefs.getStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + PpjId, ValueId, "");
+
+            MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + PpjId, ValueId, "");
+            MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + PpjId, ValueId, oldV);
+
+            MyDialogs.showOK(ctx, localized_no_permission_write);
 
         } else {
             MyDialogs.showOK(ctx, localized_failed_to_send_data_saved_for_sync+ "\n\n" + this.getClass().getSimpleName());

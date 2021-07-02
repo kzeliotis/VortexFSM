@@ -20,6 +20,7 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static am.gtest.vortex.support.MyLocalization.localized_failed_to_send_data_saved_for_sync;
+import static am.gtest.vortex.support.MyLocalization.localized_no_permission_write;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC;
 
@@ -33,7 +34,7 @@ public class SendNewAttribute extends AsyncTask<String, Void, String > {
     @SuppressLint("StaticFieldLeak")
     private ProgressBar mProgressBar;
 
-    private boolean finishActivity;
+    private final boolean finishActivity;
 
     private String prefKey;
 
@@ -98,9 +99,11 @@ public class SendNewAttribute extends AsyncTask<String, Void, String > {
 //            }
 
             if (finishActivity) {
-                ((Activity)ctx).finish();
+                ((Activity) ctx).finish();
             }
-
+        } else if (responseBody != null && responseBody.equals("2") ) {
+            MyPrefs.removeStringWithFileName(PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC, prefKey);
+            MyDialogs.showOK(ctx, localized_no_permission_write);
         } else {
             MyDialogs.showOK(ctx, localized_failed_to_send_data_saved_for_sync+ "\n\n" + this.getClass().getSimpleName());
         }

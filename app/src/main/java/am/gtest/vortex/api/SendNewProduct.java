@@ -23,6 +23,8 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static am.gtest.vortex.support.MyLocalization.localized_failed_to_send_data_saved_for_sync;
+import static am.gtest.vortex.support.MyLocalization.localized_no_permission_delete;
+import static am.gtest.vortex.support.MyLocalization.localized_no_permission_write;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
@@ -101,7 +103,7 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
                 GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0");
                 getProducts.execute();
 
-                if(MyPrefs.getString(PREF_WAREHOUSEID, "0") != "0"){
+                if (MyPrefs.getString(PREF_WAREHOUSEID, "0") != "0") {
                     GetAllProducts getAllProducts = new GetAllProducts(null, true);
                     getAllProducts.execute();
                 }
@@ -112,6 +114,11 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
                 Toast.makeText(MyApplication.getContext(), localized_data_sent_2_rows, Toast.LENGTH_SHORT).show();
 //                ((AppCompatActivity)ctx).finish();
             }
+        } else if (responseBody != null && responseBody.equals("2") ) {
+            MyPrefs.removeStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey);
+            Toast.makeText(MyApplication.getContext(), localized_no_permission_write, Toast.LENGTH_SHORT).show();
+
+
         } else {
             if (showProgressOrToast) {
                 MyDialogs.showOK(ctx, localized_failed_to_send_data_saved_for_sync+ "\n\n" + this.getClass().getSimpleName());

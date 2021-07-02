@@ -1222,7 +1222,16 @@
     <string name="resources_not_available">The following resources are not available during the selected date:</string>
     <string name="resources_not_available_gr">Οι παρακάτω τεχνικοί δεν είναι διαθέσιμοι για την επιλεγμένη ημερομηνία:</string>
 
+    <string name="no_permission_delete">You don\'t have permissions to delete this object</string>
+    <string name="no_permission_delete_gr">Δεν έχετε δικαιώματα διαγραφής του αντικειμένου</string>
+
+    <string name="no_permission_read">You don\'t have permissions to read this object</string>
+    <string name="no_permission_read_gr">Δεν έχετε δικαιώματα ανάγνωσης του αντικειμένου</string>
+
+    <string name="no_permission_write">You don\'t have permissions to complete this action</string>
+    <string name="no_permission_write_gr">Δεν έχετε δικαιώματα για να ολοκληρώσετε αυτή την ενέργεια</string>
      <!--to be translated-->
+
 
     <item type="id" name="TAG_ID" />
 

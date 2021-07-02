@@ -229,6 +229,9 @@ public class MyLocalization {
     public static String localized_preview_report = "";
     public static String localized_select_date_for_availability = "";
     public static String localized_resources_not_available = "";
+    public static String localized_no_permission_delete = "";
+    public static String localized_no_permission_write = "";
+    public static String localized_no_permission_read = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -450,6 +453,9 @@ public class MyLocalization {
                 localized_preview_report = ctx.getString(R.string.preview_report_gr);
                 localized_select_date_for_availability = ctx.getString(R.string.select_date_to_check_availability_gr);
                 localized_resources_not_available = ctx.getString(R.string.resources_not_available_gr);
+                localized_no_permission_delete = ctx.getString(R.string.no_permission_delete_gr);
+                localized_no_permission_write = ctx.getString(R.string.no_permission_write_gr);
+                localized_no_permission_read = ctx.getString(R.string.no_permission_read_gr);
                 break;
 
             case CONST_AR:
@@ -668,6 +674,9 @@ public class MyLocalization {
                 localized_preview_report = ctx.getString(R.string.preview_report);
                 localized_select_date_for_availability = ctx.getString(R.string.select_date_to_check_availability);
                 localized_resources_not_available = ctx.getString(R.string.resources_not_available);
+                localized_no_permission_delete = ctx.getString(R.string.no_permission_delete);
+                localized_no_permission_write = ctx.getString(R.string.no_permission_write);
+                localized_no_permission_read = ctx.getString(R.string.no_permission_read);
                 break;
 
             default:
@@ -887,6 +896,9 @@ public class MyLocalization {
                 localized_preview_report = ctx.getString(R.string.preview_report);
                 localized_select_date_for_availability = ctx.getString(R.string.select_date_to_check_availability);
                 localized_resources_not_available = ctx.getString(R.string.resources_not_available);
+                localized_no_permission_delete = ctx.getString(R.string.no_permission_delete);
+                localized_no_permission_write = ctx.getString(R.string.no_permission_write);
+                localized_no_permission_read = ctx.getString(R.string.no_permission_read);
                 break;
 
 
