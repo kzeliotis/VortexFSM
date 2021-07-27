@@ -128,6 +128,9 @@ public class ChangeResourceActivity extends BaseDrawerActivity  implements View.
             String StartDate = SELECTED_ASSIGNMENT.getStartDateTime();
             SimpleDateFormat serverDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
             Date SDate = serverDateFormat.parse(StartDate);
+            if (StartDate.equals("1900-01-01T00:00:00")){
+                SDate = new Date();
+            }
             Calendar cal = Calendar.getInstance(Locale.ENGLISH);
             cal.setTime(SDate);
             dayStart = cal.get(Calendar.DAY_OF_MONTH);
