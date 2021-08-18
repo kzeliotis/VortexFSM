@@ -38,6 +38,7 @@ import am.gtest.vortex.support.MyUtils;
 import static am.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
+import static am.gtest.vortex.support.MyLocalization.localized_additional_technicians;
 import static am.gtest.vortex.support.MyLocalization.localized_address;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_details;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
@@ -86,6 +87,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
     private TextView tvAssignmentTime;
     private TextView tvServiceDescription;
     private TextView tvProductDescription;
+    private TextView tvAdditionalTechnicians;
     private TextView tvProblem;
     private TextView tvCustomFields;
     private TextView tvPickingList;
@@ -116,6 +118,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         tvAssignmentTime = findViewById(R.id.tvAssignmentTime);
         tvServiceDescription = findViewById(R.id.tvServiceDescription);
         tvProductDescription = findViewById(R.id.tvProductDescription);
+        tvAdditionalTechnicians = findViewById(R.id.tvAdditionalTechnicians);
         tvProblem = findViewById(R.id.tvProblem);
         tvCustomFields = findViewById(R.id.tvCustomFields);
         tvPickingList = findViewById(R.id.tvPickingList);
@@ -273,11 +276,19 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         String address = localized_address + ": " + SELECTED_ASSIGNMENT.getAddress();
         String phone = localized_phone + ": " + SELECTED_ASSIGNMENT.getPhone();
         String mobile = localized_mobile + ": " + SELECTED_ASSIGNMENT.getMobile();
+        String additionalTechs = localized_additional_technicians + ": " + SELECTED_ASSIGNMENT.getAdditionalTechnicians();
         String assignmentTime = SELECTED_ASSIGNMENT.getAssignmentTime();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(localized_assignment_details);
             getSupportActionBar().setSubtitle(localized_user + ": " + MyPrefs.getString(PREF_USER_NAME, ""));
+        }
+
+        if (SELECTED_ASSIGNMENT.getAdditionalTechnicians().equals("")){
+            tvAdditionalTechnicians.setVisibility(View.GONE);
+        } else {
+            tvAdditionalTechnicians.setVisibility(View.VISIBLE);
+            tvAdditionalTechnicians.setText(additionalTechs);
         }
 
         tvAssignmentId.setText(assignmentIdText);

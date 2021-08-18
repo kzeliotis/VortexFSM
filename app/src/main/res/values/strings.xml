@@ -1230,6 +1230,9 @@
 
     <string name="no_permission_write">You don\'t have permissions to complete this action</string>
     <string name="no_permission_write_gr">Δεν έχετε δικαιώματα για να ολοκληρώσετε αυτή την ενέργεια</string>
+
+    <string name="additional_technicians">Additional Technicians</string>
+    <string name="additional_technicians_gr">Βοηθοί Τεχνικού</string>
      <!--to be translated-->
 
 

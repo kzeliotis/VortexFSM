@@ -232,6 +232,7 @@ public class MyLocalization {
     public static String localized_no_permission_delete = "";
     public static String localized_no_permission_write = "";
     public static String localized_no_permission_read = "";
+    public static String localized_additional_technicians = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -456,6 +457,7 @@ public class MyLocalization {
                 localized_no_permission_delete = ctx.getString(R.string.no_permission_delete_gr);
                 localized_no_permission_write = ctx.getString(R.string.no_permission_write_gr);
                 localized_no_permission_read = ctx.getString(R.string.no_permission_read_gr);
+                localized_additional_technicians = ctx.getString(R.string.additional_technicians_gr);
                 break;
 
             case CONST_AR:
@@ -677,6 +679,8 @@ public class MyLocalization {
                 localized_no_permission_delete = ctx.getString(R.string.no_permission_delete);
                 localized_no_permission_write = ctx.getString(R.string.no_permission_write);
                 localized_no_permission_read = ctx.getString(R.string.no_permission_read);
+                localized_additional_technicians = ctx.getString(R.string.additional_technicians);
+
                 break;
 
             default:
@@ -899,6 +903,8 @@ public class MyLocalization {
                 localized_no_permission_delete = ctx.getString(R.string.no_permission_delete);
                 localized_no_permission_write = ctx.getString(R.string.no_permission_write);
                 localized_no_permission_read = ctx.getString(R.string.no_permission_read);
+                localized_additional_technicians = ctx.getString(R.string.additional_technicians);
+
                 break;
 
 

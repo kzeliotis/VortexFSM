@@ -45,7 +45,8 @@ public class AssignmentModel {
     private String installationWarning = "";
     private String mandatoryZoneMeasurementsService = "0";
     private String resourceId = "";
-     private JSONArray mandatoryTasks = new JSONArray();
+    private String additionalTechnicians = "";
+    private JSONArray mandatoryTasks = new JSONArray();
 
     @NonNull
     @Override
@@ -85,6 +86,7 @@ public class AssignmentModel {
                         "\"MandatoryZoneMeasurementsService\": \"" + mandatoryZoneMeasurementsService + "\",\n" +
                         "\"InstallationWarning\": \"" + installationWarning + "\",\n" +
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
+                        "\"additionalTechnicians\": \"" + additionalTechnicians + "\",\n" +
                         "\"ResourceId\": \"" + resourceId + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\"\n"
                 ;
@@ -318,6 +320,9 @@ public class AssignmentModel {
 
     public void setSignatureName(String SignatureName) { this.SignatureName = SignatureName; }
 
+    public String getAdditionalTechnicians() { return additionalTechnicians; }
+
+    public void setAdditionalTechnicians(String AdditionalTechnicians) { this.additionalTechnicians = AdditionalTechnicians; }
 
     public String getStatusId() {
         return statusId;

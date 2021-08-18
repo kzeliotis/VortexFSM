@@ -159,6 +159,7 @@ public class AssignmentsData {
                     assignmentModel.setInstallationWarning(MyJsonParser.getStringValue(oneObject, "InstallationWarning", ""));
                     assignmentModel.setMandatoryZoneMeasurementsService(MyJsonParser.getStringValue(oneObject, "MandatoryZoneMeasurementsService", "0"));
                     assignmentModel.setResourceId(MyJsonParser.getStringValue(oneObject, "ResourceId", ""));
+                    assignmentModel.setAdditionalTechnicians(MyJsonParser.getStringValue(oneObject, "AdditionalTechnicians", ""));
 
 
                     String assignmentid = assignmentModel.getAssignmentId();

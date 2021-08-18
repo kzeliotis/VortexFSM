@@ -61,6 +61,20 @@
         android:drawablePadding="@dimen/dp_6" />
 
     <TextView
+        android:id="@+id/tvAdditionalTechnicians"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_2"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/grey_800"
+        android:textStyle="bold"
+        android:drawableStart="@drawable/ic_add_tech_24"
+        android:drawableLeft="@drawable/ic_add_tech_24"
+        android:drawablePadding="@dimen/dp_6" />
+
+
+    <TextView
         android:id="@+id/tvProblem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
