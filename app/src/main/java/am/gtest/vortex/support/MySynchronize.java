@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import java.util.List;
 import java.util.Map;
 
+import am.gtest.vortex.activities.AssignmentActionsActivity;
 import am.gtest.vortex.activities.AssignmentsActivity;
 import am.gtest.vortex.api.GetAssignments;
 import am.gtest.vortex.api.SendCheckIn;
@@ -24,6 +25,7 @@ import am.gtest.vortex.api.SendProjectZone;
 import am.gtest.vortex.api.SendStartTravel;
 import am.gtest.vortex.api.SendUsePTOvernight;
 import am.gtest.vortex.api.SendNewAttribute;
+import am.gtest.vortex.api.SendZonesWithNoMeasurement;
 import am.gtest.vortex.api.ToSendNewMeasurement;
 import am.gtest.vortex.api.ToSendServices;
 import am.gtest.vortex.api.SendUpdatedAttribute;
@@ -49,6 +51,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYN
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static am.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
@@ -259,6 +262,14 @@ public class MySynchronize {
         }
 //        GetAssignments getAssignments = new GetAssignments(ctx, true);
 //        getAssignments.execute();
+
+        Map<String, ?> zonesWithNoMeasurements = ctx.getSharedPreferences(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC, MODE_PRIVATE).getAll();
+        for (Map.Entry<String, ?> entry : zonesWithNoMeasurements.entrySet()) {
+            String prefKey = entry.getKey();
+
+            SendZonesWithNoMeasurement sendZonesWithNoMeasurement = new SendZonesWithNoMeasurement(ctx, prefKey);
+            sendZonesWithNoMeasurement.execute();
+        }
 
         String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
         String username = MyPrefs.getString(PREF_USER_NAME, "");

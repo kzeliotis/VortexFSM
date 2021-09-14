@@ -92,6 +92,8 @@ class MyApi {
     static final String API_SEND_CUSTOM_FIELDS = "/Vortex.svc/SetCustomFields";
     static final String API_GET_REPORT_PREVIEW = "/Vortex.svc/GetReportFile?AssignmentId=";
     static final String API_GET_MANUAL_FILE = "/Vortex.svc/GetManualFromAzure?BlobAttachmentId=";
+    static final String API_SEND_ZONES_WITH_NO_MEASUREMENTS = "/Vortex.svc/SetZonesWithNoMeasurements?AssignmentId=";
+
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;

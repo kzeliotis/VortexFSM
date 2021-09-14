@@ -74,6 +74,7 @@ import am.gtest.vortex.api.SendCheckOut;
 import am.gtest.vortex.api.SendMandatoryTasks;
 import am.gtest.vortex.api.SendProductMeasurements;
 import am.gtest.vortex.api.SendUsePTOvernight;
+import am.gtest.vortex.api.SendZonesWithNoMeasurement;
 import am.gtest.vortex.data.MandatoryTasksData;
 import am.gtest.vortex.data.ZonesData;
 import am.gtest.vortex.items.ServicesListActivity;
@@ -179,6 +180,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_USE_PT_OVERNIGHT_FOR_SYN
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_DATA_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
@@ -1149,6 +1151,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                         MyPrefs.removeStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, assignmentId);
 
+                        if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC, assignmentId, "").length() > 0) {
+                            SendZonesWithNoMeasurement sendZonesWithNoMeasurement = new SendZonesWithNoMeasurement(AssignmentActionsActivity.this, assignmentId);
+                            sendZonesWithNoMeasurement.execute();
+                        }
 
 
                     } else {

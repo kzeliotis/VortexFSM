@@ -33,6 +33,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_add_new_zone;
 import static am.gtest.vortex.support.MyLocalization.localized_no_measurements;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 
 public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHolder> implements Filterable {
 
@@ -105,7 +106,7 @@ public class ZonesRvAdapter extends RecyclerView.Adapter<ZonesRvAdapter.ViewHold
 
             ZONES_WITH_NO_MEASUREMENTS_MAP.put(assignmentId, zoneIds);
             MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS, assignmentId, new Gson().toJson(ZONES_WITH_NO_MEASUREMENTS_MAP));
-
+            MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC, assignmentId, new Gson().toJson(ZONES_WITH_NO_MEASUREMENTS_MAP));
         });
 
         holder.mView.setOnClickListener(v -> {
