@@ -17,6 +17,7 @@ public class MandatoryTaskModel {
     private String Comments = "";
     private String isDateTime = "";
     private String isOptional = "";
+    private String stepId = "";
     private JSONArray serviceStepDefaultValues = new JSONArray();
 
     @Override
@@ -44,6 +45,7 @@ public class MandatoryTaskModel {
                         "    \"ProductId\": \"" + ProductId + "\",\n" +
                         "    \"Comments\": \"" + Comments + "\",\n" +
                         "    \"SetToProject\": \"" + SetToProject + "\",\n" +
+                        "    \"StepId\": \"" + stepId + "\",\n" +
                         "    \"StepImage\": \"" + stepPhoto + "\",\n" +
                         "    \"ServiceStepDefaultValues\": " + defaultValues + "\n" +
                         "  }";
@@ -156,4 +158,15 @@ public class MandatoryTaskModel {
     public void setServiceStepDefaultValues(JSONArray serviceStepDefaultValues) {
         this.serviceStepDefaultValues = serviceStepDefaultValues;
     }
+
+    public String getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(String StepId) {
+        this.stepId = StepId;
+    }
+
+
+
 }

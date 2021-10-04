@@ -53,6 +53,7 @@ public class MandatoryTasksData {
                     mandatoryTaskModel.setStepComments(MyJsonParser.getStringValue(oneObject, "Comments", ""));
                     mandatoryTaskModel.setIsDateTime(MyJsonParser.getStringValue(oneObject, "IsDateTime", "0"));
                     mandatoryTaskModel.setIsOptional(MyJsonParser.getStringValue(oneObject, "IsOptional", "0"));
+                    mandatoryTaskModel.setStepId(MyJsonParser.getStringValue(oneObject, "StepId", "0"));
 
                     MANDATORY_TASKS_LIST.add(mandatoryTaskModel);
                 }
@@ -87,6 +88,7 @@ public class MandatoryTasksData {
                     mandatoryTaskModel.setStepComments(MyJsonParser.getStringValue(oneObject, "Comments", ""));
                     mandatoryTaskModel.setIsDateTime(MyJsonParser.getStringValue(oneObject, "IsDateTime", "0"));
                     mandatoryTaskModel.setIsOptional(MyJsonParser.getStringValue(oneObject, "IsOptional", "0"));
+                    mandatoryTaskModel.setStepId(MyJsonParser.getStringValue(oneObject, "StepId", "0"));
 
                     MANDATORY_TASKS_LIST.add(mandatoryTaskModel);
                 }
