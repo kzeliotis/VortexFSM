@@ -1234,6 +1234,9 @@
     <string name="additional_technicians">Additional Technicians</string>
     <string name="additional_technicians_gr">Βοηθοί Τεχνικού</string>
      <!--to be translated-->
+    <string name="contract">Contract</string>
+    <string name="contract_gr">Συμβόλαιο</string>
+    <string name="contract_ar">Contract</string>
 
 
     <item type="id" name="TAG_ID" />

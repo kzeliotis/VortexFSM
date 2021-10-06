@@ -45,6 +45,7 @@ public class AssignmentModel {
     private String installationWarning = "";
     private String mandatoryZoneMeasurementsService = "0";
     private String resourceId = "";
+    private String contract = "";
     private String additionalTechnicians = "";
     private JSONArray mandatoryTasks = new JSONArray();
 
@@ -88,6 +89,7 @@ public class AssignmentModel {
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
                         "\"additionalTechnicians\": \"" + additionalTechnicians + "\",\n" +
                         "\"ResourceId\": \"" + resourceId + "\",\n" +
+                        "\"Contract\": \"" + contract + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\"\n"
                 ;
     }
@@ -408,6 +410,14 @@ public class AssignmentModel {
 
     public void setResourceId(String ResourceId) {
         this.resourceId = ResourceId;
+    }
+
+    public String getContract() {
+        return contract;
+    }
+
+    public void setContract(String Contract) {
+        this.contract = Contract;
     }
 
 

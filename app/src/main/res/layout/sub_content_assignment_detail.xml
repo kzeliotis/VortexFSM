@@ -165,6 +165,20 @@
         android:drawableLeft="@drawable/ic_revenue_vat_24dp"
         android:drawablePadding="@dimen/dp_6" />
 
+
+    <TextView
+        android:id="@+id/tvContract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_2"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textColor="@color/grey_800"
+        android:textSize="@dimen/sp_14"
+        android:drawableStart="@drawable/ic_revenue_vat_24dp"
+        android:drawableLeft="@drawable/ic_revenue_vat_24dp"
+        android:drawablePadding="@dimen/dp_6" />
+
     <TextView
         android:id="@+id/tvProjectDescription"
         android:layout_width="wrap_content"

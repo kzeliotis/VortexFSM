@@ -44,6 +44,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_assignment_detail
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel_start_travel;
 import static am.gtest.vortex.support.MyLocalization.localized_contact;
+import static am.gtest.vortex.support.MyLocalization.localized_contract;
 import static am.gtest.vortex.support.MyLocalization.localized_custom_fields;
 import static am.gtest.vortex.support.MyLocalization.localized_customer;
 import static am.gtest.vortex.support.MyLocalization.localized_customer_business;
@@ -100,6 +101,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
     private TextView tvAddress;
     private TextView tvPhone;
     private TextView tvMobile;
+    private TextView tvContract;
 
     private String assignmentId;
 
@@ -131,6 +133,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         tvAddress = findViewById(R.id.tvAddress);
         tvPhone = findViewById(R.id.tvPhone);
         tvMobile = findViewById(R.id.tvMobile);
+        tvContract = findViewById(R.id.tvContract);
 
         fabStartTravel = findViewById(R.id.fabStartTravel);
         fabChangeResource = findViewById(R.id.fabChangeResource);
@@ -278,6 +281,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         String mobile = localized_mobile + ": " + SELECTED_ASSIGNMENT.getMobile();
         String additionalTechs = localized_additional_technicians + ": " + SELECTED_ASSIGNMENT.getAdditionalTechnicians();
         String assignmentTime = SELECTED_ASSIGNMENT.getAssignmentTime();
+        String contract = localized_contract + ": " + SELECTED_ASSIGNMENT.getContract();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(localized_assignment_details);
@@ -289,6 +293,13 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         } else {
             tvAdditionalTechnicians.setVisibility(View.VISIBLE);
             tvAdditionalTechnicians.setText(additionalTechs);
+        }
+
+        if (SELECTED_ASSIGNMENT.getContract().equals("")){
+            tvContract.setVisibility(View.GONE);
+        } else {
+            tvContract.setVisibility(View.VISIBLE);
+            tvContract.setText(contract);
         }
 
         tvAssignmentId.setText(assignmentIdText);
