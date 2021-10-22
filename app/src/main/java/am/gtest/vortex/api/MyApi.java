@@ -145,6 +145,8 @@ class MyApi {
 
         Bundle bundle = new Bundle();
 
+        postBody = postBody.replace("\\", "\\\\");
+
         try {
 
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
