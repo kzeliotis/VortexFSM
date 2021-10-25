@@ -14,6 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import am.gtest.vortex.R;
 import am.gtest.vortex.adapters.AttributesRvAdapter;
 import am.gtest.vortex.api.GetProducts;
@@ -33,6 +36,7 @@ import static am.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static am.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static am.gtest.vortex.support.MyGlobals.attributeValueforScan;
 import static am.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static am.gtest.vortex.support.MyLocalization.localized_add_new_attributes_caps;
 import static am.gtest.vortex.support.MyLocalization.localized_assignment_id;
@@ -169,5 +173,23 @@ public class AttributesActivity extends BaseDrawerActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 49374:
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        // assignmentsRvAdapter.getFilter().filter(ScannedCode);
+                        //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
+                        attributeValueforScan.setText(ScannedCode);
+                    }
+                }
+                break;
+        }
     }
 }

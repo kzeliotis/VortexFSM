@@ -1,13 +1,17 @@
 package am.gtest.vortex.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -16,9 +20,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +42,10 @@ import am.gtest.vortex.support.MyJsonParser;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.support.MyUtils;
 
+import static am.gtest.vortex.activities.AllAttributesActivity.savedAttributes;
+import static am.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static am.gtest.vortex.support.MyGlobals.attributeValueforScan;
 import static am.gtest.vortex.support.MyLocalization.localized_attribute_value;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
@@ -144,10 +157,12 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
                                         String prefKey = UUID.randomUUID().toString();
 
+                                        String newValue = spDialog.getSelectedItem().toString();
+                                        newValue = escapeUrlCharacters(newValue);
                                         // In old version attribute new value was encoded by URLEncoder. Check if it is need.
                                         String urlSuffix = "ProjectProductId=" + holder.mItem.getProjectProductId() +
                                                 "&AttributeId=" + holder.mItem.getAttributeId() +
-                                                "&Value=" + spDialog.getSelectedItem().toString() +
+                                                "&Value=" + newValue +
                                                 "&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") +
                                                 "&ValueId=" + holder.mItem.getValueId();
 
@@ -167,7 +182,8 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                         @SuppressLint("InflateParams")
                         LinearLayout llNewAttributeValue = (LinearLayout) LayoutInflater.from(ctx).inflate(R.layout.dialog_edit_text, null);
                         final TextView tvDialogEditTextTitle = llNewAttributeValue.findViewById(R.id.tvDialogEditTextTitle);
-                        final EditText etNewAttributeValue = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
+                        //final EditText etNewAttributeValue = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
+                        attributeValueforScan = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
 
                         String dialogEditTextTitle;
 
@@ -180,49 +196,69 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
                         tvDialogEditTextTitle.setText(dialogEditTextTitle);
 
-                        new AlertDialog.Builder(ctx)
-                                .setView(llNewAttributeValue)
-                                .setNegativeButton(localized_cancel, null)
-                                .setPositiveButton(localized_save, (dialog, which) -> {
+                        AlertDialog b = new AlertDialog.Builder(ctx).create();
+                        b.setView(llNewAttributeValue);
+                        b.setButton(AlertDialog.BUTTON_NEGATIVE, localized_cancel, (DialogInterface.OnClickListener)null);
+                        b.setButton(AlertDialog.BUTTON_POSITIVE, localized_save, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MyUtils.hideKeypad(ctx, v);
 
-                                    dialog.dismiss();
+                                if (attributeValueforScan != null && attributeValueforScan.getText() != null && !attributeValueforScan.getText().toString().trim().isEmpty()) {
 
-                                    MyUtils.hideKeypad(ctx, v);
+                                    // saving old value
+                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + holder.mItem.getProjectProductId(),
+                                            holder.mItem.getValueId(), holder.mItem.getAttributeValue());
 
-                                    if (etNewAttributeValue != null && etNewAttributeValue.getText() != null && !etNewAttributeValue.getText().toString().trim().isEmpty()) {
+                                    // saving new value
+                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + holder.mItem.getProjectProductId(),
+                                            holder.mItem.getValueId(),attributeValueforScan.getText().toString().trim());
 
-                                        // saving old value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + holder.mItem.getProjectProductId(),
-                                                holder.mItem.getValueId(), holder.mItem.getAttributeValue());
+                                    holder.tvAttributeOldValue.setText(holder.mItem.getAttributeValue());
 
-                                        // saving new value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + holder.mItem.getProjectProductId(),
-                                                holder.mItem.getValueId(),etNewAttributeValue.getText().toString().trim());
+                                    holder.tvAttributeValue.setText(attributeValueforScan.getText().toString().trim());
 
-                                        holder.tvAttributeOldValue.setText(holder.mItem.getAttributeValue());
+                                    String prefKey = UUID.randomUUID().toString();
 
-                                        holder.tvAttributeValue.setText(etNewAttributeValue.getText().toString().trim());
+                                    String newValue = attributeValueforScan.getText().toString().trim();
+                                    newValue = escapeUrlCharacters(newValue);
+                                    // In old version attribute new value was encoded by URLEncoder. Check if it is need.
+                                    String urlSuffix = "ProjectProductId=" + holder.mItem.getProjectProductId() +
+                                            "&AttributeId=" + holder.mItem.getAttributeId() +
+                                            "&Value=" + newValue +
+                                            "&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") +
+                                            "&ValueId=" + holder.mItem.getValueId();
 
-                                        String prefKey = UUID.randomUUID().toString();
+                                    MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
 
-                                        // In old version attribute new value was encoded by URLEncoder. Check if it is need.
-                                        String urlSuffix = "ProjectProductId=" + holder.mItem.getProjectProductId() +
-                                                "&AttributeId=" + holder.mItem.getAttributeId() +
-                                                "&Value=" + etNewAttributeValue.getText().toString().trim() +
-                                                "&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") +
-                                                "&ValueId=" + holder.mItem.getValueId();
-
-                                        MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
-
-                                        if (MyUtils.isNetworkAvailable()) {
-                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
-                                            sendUpdatedAttribute.execute(prefKey);
-                                        } else {
-                                            Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
-                                        }
+                                    if (MyUtils.isNetworkAvailable()) {
+                                        SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
+                                        sendUpdatedAttribute.execute(prefKey);
+                                    } else {
+                                        Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
                                     }
-                                })
-                                .show();
+                                }
+                            }
+                        });
+                        b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                        b.show();
+
+                        final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+                        scan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                                integrator.setPrompt("Scan");
+                                integrator.setCameraId(0);
+                                integrator.setBeepEnabled(false);
+                                integrator.setBarcodeImageEnabled(false);
+                                integrator.setOrientationLocked(true);
+                                integrator.initiateScan();
+                            }
+                        });
+
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -304,4 +340,39 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
             }
         };
     }
+
+    static String escapeUrlCharacters(String textValue) {
+        try{
+            textValue = textValue.replace("%", "%25");
+            textValue = textValue.replace("&", "%26");
+            textValue = textValue.replace("$", "%24");
+            textValue = textValue.replace(":", "%3A");
+            textValue = textValue.replace("@", "%40");
+            textValue = textValue.replace("/", "%2F");
+            textValue = textValue.replace(";", "%3B");
+            textValue = textValue.replace("@", "%40");
+            textValue = textValue.replace(" ", "%20");
+            textValue = textValue.replace("<", "%3C");
+            textValue = textValue.replace(">", "%3E");
+            textValue = textValue.replace("#", "%23");
+            textValue = textValue.replace("+", "%2B");
+            textValue = textValue.replace("{", "%7B");
+            textValue = textValue.replace("}", "%7D");
+            textValue = textValue.replace("|", "%7C");
+            textValue = textValue.replace("\\", "%5C");
+            textValue = textValue.replace("^", "%5E");
+            textValue = textValue.replace("~", "%7E");
+            textValue = textValue.replace("[", "%5B");
+            textValue = textValue.replace("]", "%5D");
+            textValue = textValue.replace("‘", "%60");
+            textValue = textValue.replace("?", "%3F");
+            textValue = textValue.replace("=", "%3D");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return textValue;
+    }
+
+
 }

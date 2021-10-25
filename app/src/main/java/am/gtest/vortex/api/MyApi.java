@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 //import java.net.HttpURLConnection;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
@@ -284,6 +285,8 @@ class MyApi {
 
         Bundle bundle = new Bundle();
 
+        //apiUrl = escapeUrlCharacters(apiUrl);
+
         try {
 
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
@@ -381,4 +384,17 @@ class MyApi {
 
         return bundle;
     }
+
+    static String escapeUrlCharacters(String textValue) {
+        try{
+            URL url= new URL(textValue);
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+            textValue = uri.toASCIIString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return textValue;
+    }
+
 }
