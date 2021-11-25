@@ -494,7 +494,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         MyUtils.hideKeypad(this, etNewAssignmentProblem);
         etNewAssignmentProblem.clearFocus();
 
-        NEW_ASSIGNMENT.setProblem(etNewAssignmentProblem.getText().toString().trim());
+        NEW_ASSIGNMENT.setProblem(etNewAssignmentProblem.getText().toString().trim().replace("\n", " ").replace("\r", " "));
         NEW_ASSIGNMENT.setCurrentTime(MyDateTime.get_server_short_format_current_date_time());
 
         String startDateTime = MyDateTime.getServerFormatFormAppDateTime(

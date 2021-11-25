@@ -1056,14 +1056,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     checkInCheckOutModel.setCheckInLng(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_LNG, ""));
                     checkInCheckOutModel.setCheckOutLat(MyPrefs.getString(PREF_CURRENT_LAT, ""));
                     checkInCheckOutModel.setCheckOutLng(MyPrefs.getString(PREF_CURRENT_LNG, ""));
-                    checkInCheckOutModel.setSolution(solution);
-                    checkInCheckOutModel.setNotes(notes);
-                    checkInCheckOutModel.setChargedAmount(chargedAmount);
-                    checkInCheckOutModel.setPaidAmount(paidAmount);
+                    checkInCheckOutModel.setSolution(solution.replace("\n", " ").replace("\r", " "));
+                    checkInCheckOutModel.setNotes(notes.replace("\n", " ").replace("\r", " "));
+                    checkInCheckOutModel.setChargedAmount(chargedAmount.replace("\n", " ").replace("\r", " "));
+                    checkInCheckOutModel.setPaidAmount(paidAmount.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setStatus(spStatus.getSelectedItem().toString());
                     checkInCheckOutModel.setStatusCode(getStatusIdFromSpinner());
-                    checkInCheckOutModel.setSignatureName(signatureName);
-                    checkInCheckOutModel.setSignatureEmail(signatureEmail);
+                    checkInCheckOutModel.setSignatureName(signatureName.replace("\n", " ").replace("\r", " "));
+                    checkInCheckOutModel.setSignatureEmail(signatureEmail.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setEncodedSignature(encodedSignature);
 
 //                        Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
