@@ -91,8 +91,11 @@ public class SendZonesWithNoMeasurement extends AsyncTask<String, Void, String >
             sb.append(", ");
         }
 
-        Zoneids = sb.toString();
-        Zoneids = Zoneids.substring(0, Zoneids.length()-2);
+        if(zoneIds_without.size() > 0) {
+            Zoneids = sb.toString();
+            if(Zoneids.length() > 2) {Zoneids = Zoneids.substring(0, Zoneids.length()-2);}
+        }
+
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String apiUrl = baseHostUrl + API_SEND_ZONES_WITH_NO_MEASUREMENTS + assignmentId + "&ZoneIds=" + Zoneids;
