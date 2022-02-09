@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +31,14 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
     private final boolean isForNewAssignment;
     private final boolean singleSelection;
     private final String assignmentDate;
+    private final List<String> rIDs;
 
-    public UserPartnerResourcesRvAdapter(List<UserPartnerResourceModel> items, Context ctx, boolean isForNewAssignment, boolean singleSelection, String AssignmentDate) {
+    public UserPartnerResourcesRvAdapter(List<UserPartnerResourceModel> items, Context ctx, boolean isForNewAssignment, boolean singleSelection, String AssignmentDate, List<String> rIDs) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         this.singleSelection = singleSelection;
         this.assignmentDate =AssignmentDate;
+        this.rIDs = rIDs;
         mValues = items;
     }
 
@@ -68,40 +71,46 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
 
         holder.chkBox.setOnCheckedChangeListener(null);
 
-        holder.chkBox.setChecked(holder.mItem.isChecked());
+        holder.chkBox.setChecked(false);
 
         holder.chkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             holder.mItem.setChecked(isChecked);
 
-            StringBuilder selectedResourcesIds = new StringBuilder();
-            StringBuilder selectedResourcesNames = new StringBuilder();
+            String selectedResourcesIds = "";
+            String selectedResourcesNames = "";
 
             if (singleSelection) {
                 for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {
                     if ( USER_PARTNER_RESOURCE_LIST.get(i).isChecked() ) {
-                        selectedResourcesIds.append(USER_PARTNER_RESOURCE_LIST.get(i).getResourceId());
-                        selectedResourcesNames.append(USER_PARTNER_RESOURCE_LIST.get(i).getResourceName());
+                        selectedResourcesIds = USER_PARTNER_RESOURCE_LIST.get(i).getResourceId() + "  ";
+                        selectedResourcesNames = USER_PARTNER_RESOURCE_LIST.get(i).getResourceName() + "  ";
                     }
                 }
             } else {
                 for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {
                     if ( USER_PARTNER_RESOURCE_LIST.get(i).isChecked() ) {
-                        selectedResourcesIds.append(USER_PARTNER_RESOURCE_LIST.get(i).getResourceId()).append(", ");
-                        selectedResourcesNames.append(USER_PARTNER_RESOURCE_LIST.get(i).getResourceName()).append(", ");
+                        selectedResourcesIds += USER_PARTNER_RESOURCE_LIST.get(i).getResourceId() + ", ";
+                        selectedResourcesNames += USER_PARTNER_RESOURCE_LIST.get(i).getResourceName() + ", ";
                     }
                 }
             }
 
 
-            NEW_ASSIGNMENT.setResourceIds(selectedResourcesIds.toString());
-            NEW_ASSIGNMENT.setResourceNames(selectedResourcesNames.toString());
+            NEW_ASSIGNMENT.setResourceIds(selectedResourcesIds.substring(0, selectedResourcesIds.length() - 2));
+            NEW_ASSIGNMENT.setResourceNames(selectedResourcesNames.substring(0, selectedResourcesNames.length() - 2));
 
             if (singleSelection) {
                 ((Activity) ctx).finish();
             }
 
         });
+
+        //holder.chkBox.setChecked(holder.mItem.isChecked());
+        if (!singleSelection) {
+            String r_id = holder.mItem.getResourceId();
+            holder.chkBox.setChecked(rIDs.contains(r_id));
+        }
     }
 
     private boolean filterResourceLeaves(String resourceId, String assDate) throws ParseException {

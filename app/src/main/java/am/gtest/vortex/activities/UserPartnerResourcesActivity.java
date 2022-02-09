@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import static am.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.CONST_SINGLE_SELECTION;
 import static am.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
 import static am.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
+import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_resources;
@@ -76,7 +78,8 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         String assDate = getIntent().getStringExtra(KEY_ASSIGNMENT_DATE);
-        UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate);
+        List<String> rIds = Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", "));
+        UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate, rIds);
         rvUserPartnerResources.setAdapter(userPartnerResourcesRvAdapter);
     }
 
