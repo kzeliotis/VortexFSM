@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.common.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
         this.assignmentDate =AssignmentDate;
         this.rIDs = rIDs;
         mValues = items;
+        NEW_ASSIGNMENT.setResourceIds("");
+        NEW_ASSIGNMENT.setResourceNames("");
     }
 
     @NonNull
@@ -82,37 +86,47 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
             String selectedResourcesIds = "";
             String selectedResourcesNames = "";
 
-            if (singleSelection) {
-                for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {
-                    if ( USER_PARTNER_RESOURCE_LIST.get(i).isChecked() ) {
-                        selectedResourcesIds = USER_PARTNER_RESOURCE_LIST.get(i).getResourceId() + "  ";
-                        selectedResourcesNames = USER_PARTNER_RESOURCE_LIST.get(i).getResourceName() + "  ";
-                    }
+            if (isChecked){
+                if (singleSelection) {
+                    NEW_ASSIGNMENT.setResourceIds(holder.mItem.getResourceId());
+                    NEW_ASSIGNMENT.setResourceNames(holder.mItem.getResourceName());
+                } else {
+                    String resourceIDs = NEW_ASSIGNMENT.getResourceIds() + holder.mItem.getResourceId() + ", ";
+                    String resourceNames = NEW_ASSIGNMENT.getResourceNames() + holder.mItem.getResourceName() + ", ";
+                    NEW_ASSIGNMENT.setResourceIds(resourceIDs);
+                    NEW_ASSIGNMENT.setResourceNames(resourceNames);
                 }
             } else {
-                for (int i = 0; i < USER_PARTNER_RESOURCE_LIST.size(); i++) {
-                    if ( USER_PARTNER_RESOURCE_LIST.get(i).isChecked() ) {
-                        selectedResourcesIds += USER_PARTNER_RESOURCE_LIST.get(i).getResourceId() + ", ";
-                        selectedResourcesNames += USER_PARTNER_RESOURCE_LIST.get(i).getResourceName() + ", ";
+                List<String> rIds_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", ")));
+                List<String> rNs_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceNames().split(", ")));
+                NEW_ASSIGNMENT.setResourceIds("");
+                NEW_ASSIGNMENT.setResourceNames("");
+                if (rIds_.contains(holder.mItem.getResourceId())){
+                    rIds_.remove(holder.mItem.getResourceId());
+                    rNs_.remove(holder.mItem.getResourceName());
+                    for (String id : rIds_)
+                    {
+                        NEW_ASSIGNMENT.setResourceIds(NEW_ASSIGNMENT.getResourceIds() + id + ", ");
+                    }
+                    for (String name : rNs_)
+                    {
+                        NEW_ASSIGNMENT.setResourceNames(NEW_ASSIGNMENT.getResourceNames() + name + ", ");
                     }
                 }
             }
 
+//            try{
+//                if(NEW_ASSIGNMENT.getResourceIds().endsWith("  ") || NEW_ASSIGNMENT.getResourceIds().endsWith(", ")){
+//                    NEW_ASSIGNMENT.setResourceIds(NEW_ASSIGNMENT.getResourceIds().substring(0, NEW_ASSIGNMENT.getResourceIds().length() - 2));
+//                }
+//                if(NEW_ASSIGNMENT.getResourceNames().endsWith("  ") || NEW_ASSIGNMENT.getResourceNames().endsWith(", ")){
+//                    NEW_ASSIGNMENT.setResourceNames(NEW_ASSIGNMENT.getResourceNames().substring(0, NEW_ASSIGNMENT.getResourceNames().length() - 2));
+//                }
+//            } catch (Exception ex){
+//                Toast.makeText(ctx, selectedResourcesIds + "\n\r" + selectedResourcesNames + "\n\r" + ex.getMessage(), Toast.LENGTH_LONG).show();
+//                ((Activity) ctx).finish();
+//            }
 
-            try{
-                if(selectedResourcesIds.endsWith("  ") || selectedResourcesIds.endsWith(", ")){
-                    selectedResourcesIds = selectedResourcesIds.substring(0, selectedResourcesIds.length() - 2);
-                }
-                if(selectedResourcesNames.endsWith("  ") || selectedResourcesNames.endsWith(", ")){
-                    selectedResourcesNames = selectedResourcesNames.substring(0, selectedResourcesNames.length() - 2);
-                }
-            } catch (Exception ex){
-                Toast.makeText(ctx, selectedResourcesIds + "\n\r" + selectedResourcesNames + "\n\r" + ex.getMessage(), Toast.LENGTH_LONG).show();
-                ((Activity) ctx).finish();
-            }
-
-            NEW_ASSIGNMENT.setResourceIds(selectedResourcesIds);
-            NEW_ASSIGNMENT.setResourceNames(selectedResourcesNames);
 
             if (singleSelection) {
                 ((Activity) ctx).finish();

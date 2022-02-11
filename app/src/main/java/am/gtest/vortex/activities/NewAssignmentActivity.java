@@ -224,6 +224,16 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         if (NEW_ASSIGNMENT.getResourceIds().isEmpty()) {
             tvNewAssignmentResources.setText(localized_select_resources);
         } else {
+            try{
+                if(NEW_ASSIGNMENT.getResourceIds().endsWith("  ") || NEW_ASSIGNMENT.getResourceIds().endsWith(", ")){
+                    NEW_ASSIGNMENT.setResourceIds(NEW_ASSIGNMENT.getResourceIds().substring(0, NEW_ASSIGNMENT.getResourceIds().length() - 2));
+                }
+                if(NEW_ASSIGNMENT.getResourceNames().endsWith("  ") || NEW_ASSIGNMENT.getResourceNames().endsWith(", ")){
+                    NEW_ASSIGNMENT.setResourceNames(NEW_ASSIGNMENT.getResourceNames().substring(0, NEW_ASSIGNMENT.getResourceNames().length() - 2));
+                }
+            } catch (Exception ex){
+                Toast.makeText(this, NEW_ASSIGNMENT.getResourceIds() + "\n\r" + NEW_ASSIGNMENT.getResourceNames() + "\n\r" + ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
             String resourcesText = localized_resources + ": " + NEW_ASSIGNMENT.getResourceNames();
             tvNewAssignmentResources.setText(resourcesText);
         }
