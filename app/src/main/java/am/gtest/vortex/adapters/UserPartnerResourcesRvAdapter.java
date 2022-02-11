@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import am.gtest.vortex.models.UserPartnerResourceModel;
 
 import static am.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static am.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
+import static am.gtest.vortex.support.MyLocalization.localized_resources_not_available;
 
 public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPartnerResourcesRvAdapter.ViewHolder> {
 
@@ -97,8 +99,20 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
             }
 
 
-            NEW_ASSIGNMENT.setResourceIds(selectedResourcesIds.substring(0, selectedResourcesIds.length() - 2));
-            NEW_ASSIGNMENT.setResourceNames(selectedResourcesNames.substring(0, selectedResourcesNames.length() - 2));
+            try{
+                if(selectedResourcesIds.endsWith("  ") || selectedResourcesIds.endsWith(", ")){
+                    selectedResourcesIds = selectedResourcesIds.substring(0, selectedResourcesIds.length() - 2);
+                }
+                if(selectedResourcesNames.endsWith("  ") || selectedResourcesNames.endsWith(", ")){
+                    selectedResourcesNames = selectedResourcesNames.substring(0, selectedResourcesNames.length() - 2);
+                }
+            } catch (Exception ex){
+                Toast.makeText(ctx, selectedResourcesIds + "\n\r" + selectedResourcesNames + "\n\r" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                ((Activity) ctx).finish();
+            }
+
+            NEW_ASSIGNMENT.setResourceIds(selectedResourcesIds);
+            NEW_ASSIGNMENT.setResourceNames(selectedResourcesNames);
 
             if (singleSelection) {
                 ((Activity) ctx).finish();
