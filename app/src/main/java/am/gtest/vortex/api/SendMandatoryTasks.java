@@ -19,6 +19,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_resend_mandatory_
 import static am.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC;
 
 public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
 
@@ -51,11 +52,14 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
             Resend = true;
         }
 
+        String sendReport = MyPrefs.getStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId, "1");
+
         String mandatoryTasks = MyPrefs.getStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, "");
 
         postBody = "{\n" +
                 "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
                 "  \"NoEmail\": \"" + NoEmail + "\",\n" +
+                "  \"SendReport\": \"" + sendReport + "\",\n" +
                 "  \"ServiceSteps\": " + mandatoryTasks + "\n" +
                 "}";
 
@@ -87,7 +91,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
 
         if (responseBody != null && responseBody.equals("1") ) {
             MyPrefs.removeStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId);
-
+            MyPrefs.removeStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId);
             if (Resend){
                 Toast.makeText(ctx, localized_resend_mandatory_steps_successful, Toast.LENGTH_LONG).show();
             }

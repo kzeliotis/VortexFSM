@@ -27,6 +27,7 @@ public class CheckInCheckOutModel {
     private final String assignmentSource = "Mobile";
     private String returnToBase = "";
     private String statusCode = "";
+    private String sendReport = "";
 
 
     @NonNull
@@ -55,6 +56,7 @@ public class CheckInCheckOutModel {
                 "  \"CheckOutLng\": \"" + checkOutLng + "\",\n" +
                 "  \"ReturnToBase\": \"" + returnToBase + "\",\n" +
                 "  \"Signature\": \"" + encodedSignature + "\",\n" +
+                "  \"SendReport\": \"" + sendReport + "\",\n" +
                 "  \"Photos\": [" + photos + "]" + "\n" +
                 "}";
 
@@ -233,5 +235,11 @@ public class CheckInCheckOutModel {
     public String getReturnToBaseTime() {
         return returnToBase;
     }
+
+    public void setSendReport(String SendReport) {
+        this.sendReport = SendReport;
+    }
+
+
 
 }

@@ -31,6 +31,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -143,6 +144,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_products;
 import static am.gtest.vortex.support.MyLocalization.localized_select;
 import static am.gtest.vortex.support.MyLocalization.localized_select_action;
 import static am.gtest.vortex.support.MyLocalization.localized_select_measurement;
+import static am.gtest.vortex.support.MyLocalization.localized_send_report;
 import static am.gtest.vortex.support.MyLocalization.localized_services;
 import static am.gtest.vortex.support.MyLocalization.localized_status;
 import static am.gtest.vortex.support.MyLocalization.localized_use_pt;
@@ -164,6 +166,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATURENAME;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
@@ -189,6 +192,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
+import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_USE_PT_OVERNIGHT_BUTTONS;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_ZONE_PRODUCTS_BUTTON;
@@ -234,6 +238,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private LinearLayout llPayment;
     private FrameLayout flSignatureImage;
     private Button btnInstallations;
+    private TextView tvSendReport;
+    private CheckBox chkSendReportFile;
 
     private MandatoryTasksRvAdapter mandatoryTasksRvAdapter;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
@@ -308,6 +314,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         tvInternalNotesTitle = findViewById(R.id.tvInternalNotesTitle);
         btnInstallations = findViewById(R.id.btnInstallations);
         btnPreviewReport = findViewById(R.id.btnPreviewReport);
+        tvSendReport = findViewById(R.id.tvSendReport);
+        chkSendReportFile = findViewById(R.id.chkSendReport);
 
         rvProjectPhotos.setLayoutManager(new GridLayoutManager(AssignmentActionsActivity.this, 3, GridLayoutManager.VERTICAL, false));
         photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter(PHOTO_ITEMS, AssignmentActionsActivity.this);
@@ -331,6 +339,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         if (MyPrefs.getBoolean(PREF_SHOW_GET_ASSIGNMENT_COST,  false)) {
             btnGetCost.setVisibility(View.VISIBLE);
+        }
+
+        if (MyPrefs.getBoolean(PREF_SHOW_SEND_REPORT_CHECKBOX,  false)) {
+            tvSendReport.setVisibility(View.VISIBLE);
+            chkSendReportFile.setVisibility(View.VISIBLE);
         }
 
         if (assignmentId.contains("-")) {
@@ -617,6 +630,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnGetCost.setText(localized_calculate_cost);
         btnInstallations.setText(localized_installations_caps);
         btnPreviewReport.setText(localized_preview_report);
+        tvSendReport.setText(localized_send_report);
 
     }
 
@@ -648,6 +662,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
                 if(isCheckedOut){
                     MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MANDATORY_TASKS_LIST.toString());
+
                     SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                     sendMandatoryTasks.execute(assignmentId, "true");
 //                } else {
@@ -887,6 +902,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             case R.id.btnCheckOut:
                 String solution = etCommentsSolution.getText().toString().trim();
                 String notes = etNotes.getText().toString().trim();
+
+                String sendreport = "0";
+                if(!chkSendReportFile.isShown()) {
+                    sendreport = "1";
+                }else{
+                    sendreport = chkSendReportFile.isChecked() ? "1" : "0";
+                }
+
                 if (hideInternalNotes){
                     notes = MyPrefs.getStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, "");
                 }
@@ -1065,6 +1088,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     checkInCheckOutModel.setSignatureName(signatureName.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setSignatureEmail(signatureEmail.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setEncodedSignature(encodedSignature);
+                    checkInCheckOutModel.setSendReport(sendreport);
 
 //                        Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
 
@@ -1106,6 +1130,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MANDATORY_TASKS_LIST.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
+                    if(MANDATORY_TASKS_LIST.size() > 0){
+                        MyPrefs.setStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId, sendreport);
+                    }
 
 
                     if (MyUtils.isNetworkAvailable()) {

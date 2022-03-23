@@ -28,6 +28,7 @@ public class MyPrefs {
     public static final String PREF_FILE_MANDATORY_TASKS_FOR_SYNC = "pref_file_mandatory_tasks_for_sync";
     public static final String PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC = "pref_file_use_pt_overnight_for_sync";
     public static final String PREF_FILE_IMAGE_FOR_SYNC = "pref_file_image_to_be_sync";
+    public static final String PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC = "pref_file_send_report_value_for_sync";
 
     public static final String PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC = "pref_file_added_consumables_for_sync";
     public static final String PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC = "pref_file_added_measurements_for_sync";
@@ -118,7 +119,7 @@ public class MyPrefs {
     public static final String PREF_SHOW_GET_ASSIGNMENT_COST = "pref_show_get_assignment_cost";
     public static final String PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT = "pref_send_zone_measurements_on_check_out";
     public static final String PREF_SHOW_INSTALLATIONS_BUTTON = "pref_show_installations_button";
-
+    public static final String PREF_SHOW_SEND_REPORT_CHECKBOX = "pref_show_send_report_checkbox";
 
     public static final String PREF_MANDATORY_SIGNATURE = "pref_mandatory_signaure";
     public static final String PREF_SHOW_MANDATORY_TASKS_COMMENTS = "pref_show_mandatory_tasks_comments";

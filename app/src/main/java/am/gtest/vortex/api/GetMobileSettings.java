@@ -36,6 +36,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHE
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_MANDATORY_TASKS_COMMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 
 
@@ -122,6 +123,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileProcessAssignmentOnScan = MyJsonParser.getIntValue(oneObject,  "MobileProcessAssignmentOnScan", 0);
                     MyPrefs.setBoolean(PREF_PROCESS_ASSIGNMENT_ON_SCAN, MobileProcessAssignmentOnScan == 1);
+
+                    int MobileShowSendReportCheckbox = MyJsonParser.getIntValue(oneObject,  "MobileShowSendReportCheckbox", 0);
+                    MyPrefs.setBoolean(PREF_SHOW_SEND_REPORT_CHECKBOX, MobileShowSendReportCheckbox == 1);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);

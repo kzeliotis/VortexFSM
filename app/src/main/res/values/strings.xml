@@ -1238,6 +1238,9 @@
     <string name="contract_gr">Συμβόλαιο</string>
     <string name="contract_ar">Contract</string>
 
+    <string name="send_Report">Send Workorder Report</string>
+    <string name="send_Report_gr">Αποστολή Δελτίου</string>
+    <string name="send_Report_ar">Send Workorder Report</string>
 
     <item type="id" name="TAG_ID" />
 

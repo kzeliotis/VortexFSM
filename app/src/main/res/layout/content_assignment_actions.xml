@@ -51,6 +51,7 @@
             android:gravity="center"
             android:minLines="3" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,6 +105,36 @@
                 android:background="@drawable/btn_blue_rounded"
                 tools:ignore="RelativeOverlap"
                 style="?android:attr/buttonBarButtonStyle"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_16"
+            style="?android:attr/buttonBarStyle">
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvSendReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_2"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold"
+                android:text="@string/send_Report"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="end" />
+
+            <CheckBox
+                android:visibility="gone"
+                android:id="@+id/chkSendReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:layout_marginRight="@dimen/dp_6"/>
 
         </LinearLayout>
 
