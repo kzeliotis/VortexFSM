@@ -3,6 +3,7 @@ package am.gtest.vortex.support;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.util.Patterns;
 import android.view.Display;
@@ -25,6 +26,12 @@ public class MyUtils {
     public static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = ((ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager != null && connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public static boolean checkGPSStatus(){
+        LocationManager manager = (LocationManager) MyApplication.getContext().getSystemService(Context.LOCATION_SERVICE );
+        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return statusOfGPS;
     }
 
     public static void hideKeypad(Activity activity){

@@ -42,8 +42,8 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
     private ProgressBar mProgressBar;
 
     private final boolean isForNewAssignment;
-    private String CustomerId;
-    private String ProjectId;
+    private final String CustomerId;
+    private final String ProjectId;
 
 
     private String apiUrl;
@@ -86,6 +86,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
                 "  \"Address\": \"" + params[2] + "\",\n" +
                 "  \"ProjectDescription\": \"" + params[3] + "\",\n" +
                 "  \"CustomerId\": \"" + CustomerId + "\",\n" +
+                "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                 "  \"ProjectId\": \"" + ProjectId + "\"\n" +
                 "}";
 

@@ -28,6 +28,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import am.gtest.vortex.R;
 import am.gtest.vortex.activities.AssignmentsActivity;
 import am.gtest.vortex.adapters.AssignmentsRvAdapter;
@@ -42,6 +46,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_turn_on_location;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
+import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_SENDING_INTERVAL;
 import static android.app.Activity.RESULT_CANCELED;
@@ -58,6 +63,7 @@ public class PermGetLocation {
 
     private int countDown = 0;
     private int refreshInterval = 0;
+    private long mLastLocationTime = 0;
 
     // The desired interval for location updates. Inexact. Updates may be more or less frequent.
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -246,6 +252,11 @@ public class PermGetLocation {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
 
+                String logText = "-------------------- \n";
+                logText += MyUtils.isNetworkAvailable() ? "NetworkAvailable\n" : "NetworkNotAvailable\n";
+                logText += MyUtils.checkGPSStatus() ? "GPS Enabled\n" : "GPS Disabled\n";
+                logText += "Refresh Interval:" + refreshInterval +"\n";
+
                 countDown = countDown - refreshInterval;
                 boolean sendToService = false;
                 if (countDown <= 0){
@@ -253,7 +264,15 @@ public class PermGetLocation {
                     countDown = MyPrefs.getInt(PREF_LOCATION_SENDING_INTERVAL, 0);
                 }
 
+                logText += "Countdown: " + countDown + "\n";
+                logText += sendToService ? "SendToService = True\n" : "SendToService = False\n";
+
+
                 if (locationResult == null) {
+                    logText += " LocactionResult == null";
+                    if(MyPrefs.getBoolean(PREF_KEEP_GPS_LOG,  false)){
+                        MyLogs.appendFile_FullLog("GPS_LOG", logText, "gps_log");
+                    }
                     return;
                 }
 
@@ -262,9 +281,21 @@ public class PermGetLocation {
 
                 mCurrentLocation = locationResult.getLastLocation();
 
+
                 if (mCurrentLocation != null) {
                     currentLat = mCurrentLocation.getLatitude();
                     currentLng = mCurrentLocation.getLongitude();
+
+                    long locationTime = mCurrentLocation.getTime();
+                    Date lastdate = new Date(mLastLocationTime);
+                    Date currentDate = new Date(locationTime);
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    logText += "LatLng: " + currentLat + "; " + currentLng + "\n";
+                    logText += "LastLocationTime:" + df.format(lastdate) + "\nCurrLocationTime:" + df.format(currentDate) + "\n";
+
+
+                    mLastLocationTime = locationTime;
 
                     if (currentLat != 0 && currentLng != 0) {
 
@@ -290,6 +321,16 @@ public class PermGetLocation {
                             }
                         }
 
+                    }
+
+                    if(MyPrefs.getBoolean(PREF_KEEP_GPS_LOG,  false)){
+                        MyLogs.appendFile_FullLog("GPS_LOG", logText, "gps_log");
+                    }
+
+                } else {
+                    logText += "LastLocation == null\n";
+                    if(MyPrefs.getBoolean(PREF_KEEP_GPS_LOG,  false)){
+                        MyLogs.appendFile_FullLog("GPS_LOG", logText, "gps_log");
                     }
                 }
             }

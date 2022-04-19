@@ -29,6 +29,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_new_update_availa
 import static am.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
+import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static am.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
@@ -126,6 +127,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileShowSendReportCheckbox = MyJsonParser.getIntValue(oneObject,  "MobileShowSendReportCheckbox", 0);
                     MyPrefs.setBoolean(PREF_SHOW_SEND_REPORT_CHECKBOX, MobileShowSendReportCheckbox == 1);
+
+                    int MobileKeepGPSLog = MyJsonParser.getIntValue(oneObject,  "MobileKeepGPSLog", 0);
+                    MyPrefs.setBoolean(PREF_KEEP_GPS_LOG, MobileKeepGPSLog == 1);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);

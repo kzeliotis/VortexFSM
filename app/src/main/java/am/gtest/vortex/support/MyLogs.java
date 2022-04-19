@@ -11,7 +11,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -112,6 +116,31 @@ public class MyLogs {
 
             FileWriter writer = new FileWriter(logFile);
             writer.append(LogText);
+            writer.flush();
+            writer.close();
+
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+
+    }
+
+
+    public static void appendFile_FullLog(String LOG_TAG, String LogText, String filename) {
+
+        String timeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH).format(new Date());
+
+        LogText = timeStamp + " - " + LogText + "\n";
+
+        try {
+            File directory = new File(globalExternalFileDir + "/LOGS/" + LOG_TAG.replace("myLogs: ", ""));
+            MyUtils.checkMakeDir(directory);
+            File logFile = new File(directory, filename + ".txt");
+
+            FileWriter writer = new FileWriter(logFile, true);
+            writer.write(LogText);
             writer.flush();
             writer.close();
 

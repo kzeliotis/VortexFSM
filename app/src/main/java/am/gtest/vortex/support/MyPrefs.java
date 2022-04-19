@@ -120,6 +120,7 @@ public class MyPrefs {
     public static final String PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT = "pref_send_zone_measurements_on_check_out";
     public static final String PREF_SHOW_INSTALLATIONS_BUTTON = "pref_show_installations_button";
     public static final String PREF_SHOW_SEND_REPORT_CHECKBOX = "pref_show_send_report_checkbox";
+    public static final String PREF_KEEP_GPS_LOG = "pref_keep_gps_log";
 
     public static final String PREF_MANDATORY_SIGNATURE = "pref_mandatory_signaure";
     public static final String PREF_SHOW_MANDATORY_TASKS_COMMENTS = "pref_show_mandatory_tasks_comments";

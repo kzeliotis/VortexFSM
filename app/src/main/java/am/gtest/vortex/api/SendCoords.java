@@ -13,6 +13,8 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
+import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
+import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class SendCoords extends AsyncTask<String,Void,String> {
@@ -40,6 +42,7 @@ public class SendCoords extends AsyncTask<String,Void,String> {
 
         } catch (Exception e) {
             e.printStackTrace();
+            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, e.toString(), responseCode, responseMessage, responseBody);
         }
 
         return responseBody;
@@ -47,6 +50,9 @@ public class SendCoords extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String responseBody) {
-       // MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "No body for GET request.", responseCode, responseMessage, responseBody);
+       if(MyPrefs.getBoolean(PREF_KEEP_GPS_LOG,  false)){
+           MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "No body for GET request.", responseCode, responseMessage, responseBody);
+       }
+
     }
 }
