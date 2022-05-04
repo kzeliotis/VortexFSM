@@ -1242,6 +1242,12 @@
     <string name="send_Report_gr">Αποστολή Δελτίου</string>
     <string name="send_Report_ar">Send Workorder Report</string>
 
+    <string name="vortex_location_running">Vortex location tracking is running</string>
+    <string name="vortex_location_running_gr">Η αποστολή θέσης τεχνικού είναι ενεργή</string>
+    <string name="vortex_location_running_ar">Vortex location tracking is running</string>
+
+
+
     <item type="id" name="TAG_ID" />
 
 

@@ -1,25 +1,31 @@
-package am.gtest.vortex.support;
+package am.gtest.vortex.services;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
+import android.os.IBinder;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,32 +41,32 @@ import java.util.Date;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.activities.AssignmentsActivity;
+import am.gtest.vortex.activities.MainActivity;
 import am.gtest.vortex.adapters.AssignmentsRvAdapter;
 import am.gtest.vortex.api.SendCoords;
+import am.gtest.vortex.application.MyApplication;
 import am.gtest.vortex.data.AssignmentsData;
-import am.gtest.vortex.services.SendLocationSRV;
+import am.gtest.vortex.support.MyLogs;
+import am.gtest.vortex.support.MyPrefs;
+import am.gtest.vortex.support.MyUtils;
 
 import static am.gtest.vortex.support.MyGlobals.ASSIGNMENTS_CTX;
 import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
-import static am.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
-import static am.gtest.vortex.support.MyLocalization.localized_access_to_location_for_features;
-import static am.gtest.vortex.support.MyLocalization.localized_some_features;
-import static am.gtest.vortex.support.MyLocalization.localized_turn_on_location;
+import static am.gtest.vortex.support.MyLocalization.localized_vortex_tracking_running;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
-import static am.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_SENDING_INTERVAL;
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
-public class PermGetLocation {
+
+
+public class SendLocationSRV extends Service {
 
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
-    private final Context ctx;
+    private static Context ctx;
 
     private double currentLat = 0;
     private double currentLng = 0;
@@ -92,111 +98,73 @@ public class PermGetLocation {
     // Represents a geographical location.
     private Location mCurrentLocation;
 
-    public PermGetLocation(Context ctx) {
-        this.ctx = ctx;
-    }
 
-    public void myRequestPermission(int requestCode) {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
 
-        switch (requestCode) {
+        if(intent.getAction().equals("Start")){
 
-            case PERMISSIONS_FINE_LOCATION:
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        new AlertDialog.Builder(ctx)
-                                .setMessage(localized_access_to_location_for_features)
-                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    ActivityCompat.requestPermissions((AppCompatActivity) ctx, new String[] { Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, requestCode);
-                                })
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .show();
-                    } else {
-                        setupLocationUpdates(ctx);
-                    }
-                } else {
-                    setupLocationUpdates(ctx);
-                }
-                break;
+            String NOTIFICATION_CHANNEL_ID = createNotificationChannel("am.gtest.vortex", "Vortex Location service");
+
+            Intent notificationIntent = new Intent(this, ASSIGNMENTS_CTX.getClass());
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            int requestID = (int) System.currentTimeMillis();
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,requestID, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            Notification notification = notificationBuilder.setOngoing(true)
+                    .setContentTitle("Vortex")
+                    .setContentText(localized_vortex_tracking_running)
+                    //.setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+                    .setCategory(Notification.CATEGORY_NAVIGATION)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    //.setOngoing(true)
+                    .build();
+            startForeground(666, notification);
+
+//            NotificationChannel nc = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Vortex Location Service", NotificationManager.IMPORTANCE_DEFAULT);
+//            NotificationManager nm = getSystemService(NotificationManager.class);
+//            nm.createNotificationChannel(nc);
+
         }
-    }
-
-    public void myPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        Log.e(LOG_TAG, "PermGetLocation ---------------------------- onRequestPermissionsResult requestCode: " + requestCode);
-
-        switch (requestCode) {
-
-            case PERMISSIONS_FINE_LOCATION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
-                        setupLocationUpdates(ctx);
-                    }
-                } else {
-                    new AlertDialog.Builder(ctx)
-                            .setMessage(localized_some_features)
-                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                                dialog.dismiss();
-                                ActivityCompat.requestPermissions((AppCompatActivity) ctx, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
-                            })
-                            .show();
-                }
-                break;
-        }
-    }
-
-    public void myActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Log.e(LOG_TAG, "PermGetLocation ------------------------ onActivityResult requestCode: " + requestCode);
-
-        switch (requestCode) {
-
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS:
-                switch (resultCode) {
-                    case RESULT_OK:
-
-                        Log.e(LOG_TAG, "User agreed to make required location settings changes.");
-
-                        break;
-                    case RESULT_CANCELED:
-
-                        Log.e(LOG_TAG, "User chose not to make required location settings changes.");
-
-                        new AlertDialog.Builder(ctx)
-                                .setMessage(localized_turn_on_location)
-                                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    ctx.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                })
-                                .show();
-
-                        break;
-                }
-                break;
-        }
-    }
-
-    private void setupLocationUpdates(Context ctx) {
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && MyPrefs.getBoolean(PREF_ENABLE_LOCATION_SERVICE, false)) {
-            //Context context = getApplicationContext();
-            ASSIGNMENTS_CTX = ctx;
-            Intent srv = new Intent(ASSIGNMENTS_CTX, SendLocationSRV.class); // Build the intent for the service
-            srv.setAction("Start");
-            ASSIGNMENTS_CTX.startForegroundService(srv);
-            return;
+        else if (intent.getAction().equals("Stop")){
+            stopLocationUpdates();
+            stopForeground(true);
+            stopSelfResult(startId);
         }
 
 
+        return START_STICKY;
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private String createNotificationChannel(String channelId, String channelName){
+        NotificationChannel chan = new NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        chan.setDescription(channelName);
+        chan.enableLights(true);
+        chan.setLightColor(Color.BLUE);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(chan);
+
+        return channelId;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+
+        ctx = ASSIGNMENTS_CTX;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
 
         //Provides access to the Location Settings API.
         SettingsClient mSettingsClient = LocationServices.getSettingsClient(ctx);
 
         // Kick off the process of building the LocationCallback, LocationRequest, and LocationSettingsRequest objects.
-        createLocationCallback(ctx);
+        createLocationCallback();
         createLocationRequest();
         buildLocationSettingsRequest();
 
@@ -236,6 +204,8 @@ public class PermGetLocation {
         startLocationUpdates();
     }
 
+
+
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -250,15 +220,6 @@ public class PermGetLocation {
                     .removeLocationUpdates(mLocationCallback);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && MyPrefs.getBoolean(PREF_ENABLE_LOCATION_SERVICE, false)) {
-            //Context context = getApplicationContext();
-            ASSIGNMENTS_CTX = ctx;
-            Intent srv = new Intent(ASSIGNMENTS_CTX, SendLocationSRV.class); // Build the intent for the service
-            srv.setAction("Stop");
-            ASSIGNMENTS_CTX.startForegroundService(srv);
-            return;
-        }
-
         Log.e(LOG_TAG, "----------------------------------------------------- stopLocationUpdates.");
     }
 
@@ -269,7 +230,7 @@ public class PermGetLocation {
 
 
     // Creates a callback for receiving location events.
-    private void createLocationCallback(Context ctx) {
+    private void createLocationCallback() {
 
         mLocationCallback = new LocationCallback() {
             @Override
@@ -363,7 +324,7 @@ public class PermGetLocation {
 
     private void createLocationRequest() {
 
-      refreshInterval = MyPrefs.getInt(PREF_LOCATION_REFRESH_INTERVAL, 30);
+        refreshInterval = MyPrefs.getInt(PREF_LOCATION_REFRESH_INTERVAL, 30);
 
         if (refreshInterval == 0) {
             refreshInterval = 30;
@@ -391,7 +352,7 @@ public class PermGetLocation {
         mLocationRequest.setFastestInterval(refreshInterval/2);
         //mLocationRequest.setSmallestDisplacement(20);
 
-       // mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        // mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         int Priority = MyPrefs.getInt(PREF_GPS_PRIORITY, 3);
 
         if (Priority == 0) {
@@ -424,5 +385,13 @@ public class PermGetLocation {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
         mLocationSettingsRequest = builder.build();
+    }
+
+
+
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }

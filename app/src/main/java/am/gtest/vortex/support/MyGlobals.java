@@ -1,6 +1,7 @@
 package am.gtest.vortex.support;
 
 import android.Manifest;
+import android.content.Context;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -133,6 +134,8 @@ public class MyGlobals {
     public static List<HAssignmentModel> HISTORY_LIST = new ArrayList<>();
 
     public static List<ManualModel> MANUALS_LIST = new ArrayList<>();
+
+    public static Context ASSIGNMENTS_CTX;
 
     // this app startActivityForResult from 1001
     public static final int RESULT_SIGNATURE = 1001;

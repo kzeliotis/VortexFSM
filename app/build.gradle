@@ -8,10 +8,10 @@ android {
 
     defaultConfig {
         applicationId "am.gtest.vortex"
-        minSdkVersion 19
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 5
-        versionName "5.13.16"
+        versionName "5.14.01"
     }
 
     buildTypes {
