@@ -110,7 +110,7 @@ public class SendLocationSRV extends Service {
             Intent notificationIntent = new Intent(this, ASSIGNMENTS_CTX.getClass());
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             int requestID = (int) System.currentTimeMillis();
-            PendingIntent pendingIntent = PendingIntent.getActivity(this,requestID, notificationIntent ,PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
             Notification notification = notificationBuilder.setOngoing(true)

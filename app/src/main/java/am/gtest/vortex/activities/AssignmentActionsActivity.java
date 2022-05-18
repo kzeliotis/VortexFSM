@@ -200,6 +200,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_START_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_TRAVEL_TIME;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_WORK_TIME;
+import static am.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AssignmentActionsActivity extends BaseDrawerActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -885,6 +886,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 checkInCheckOutModel.setStartLng(MyPrefs.getStringWithFileName(assignmentId, PREF_START_LNG, ""));
                 checkInCheckOutModel.setCheckInLat(MyPrefs.getString(PREF_CURRENT_LAT, ""));
                 checkInCheckOutModel.setCheckInLng(MyPrefs.getString(PREF_CURRENT_LNG, ""));
+                checkInCheckOutModel.setUserId(MyPrefs.getString(PREF_USERID, ""));
 
 //                Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
 
@@ -1089,6 +1091,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     checkInCheckOutModel.setSignatureEmail(signatureEmail.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setEncodedSignature(encodedSignature);
                     checkInCheckOutModel.setSendReport(sendreport);
+                    checkInCheckOutModel.setUserId(MyPrefs.getString(PREF_USERID, ""));
 
 //                        Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
 

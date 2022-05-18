@@ -101,13 +101,13 @@ public class PermGetLocation {
         switch (requestCode) {
 
             case PERMISSIONS_FINE_LOCATION:
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT > 23) {
                     if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         new AlertDialog.Builder(ctx)
                                 .setMessage(localized_access_to_location_for_features)
                                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                     dialog.dismiss();
-                                    ActivityCompat.requestPermissions((AppCompatActivity) ctx, new String[] { Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, requestCode);
+                                    ActivityCompat.requestPermissions((AppCompatActivity) ctx, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, requestCode);
                                 })
                                 .setNegativeButton(android.R.string.cancel, null)
                                 .show();

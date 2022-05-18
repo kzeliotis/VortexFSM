@@ -161,7 +161,7 @@ public class AssignmentsData {
                     assignmentModel.setResourceId(MyJsonParser.getStringValue(oneObject, "ResourceId", ""));
                     assignmentModel.setAdditionalTechnicians(MyJsonParser.getStringValue(oneObject, "AdditionalTechnicians", ""));
                     assignmentModel.setContract(MyJsonParser.getStringValue(oneObject, "Contract", ""));
-
+                    assignmentModel.setProjectInstallationDescription(MyJsonParser.getStringValue(oneObject, "ProjectInstallationDescription", ""));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

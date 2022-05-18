@@ -43,6 +43,7 @@ public class AssignmentModel {
     private String SignatureName = "";
     private String ProposedCheckOutStatus = "0";
     private String installationWarning = "";
+    private String projectInstallationDescription = "";
     private String mandatoryZoneMeasurementsService = "0";
     private String resourceId = "";
     private String contract = "";
@@ -84,6 +85,7 @@ public class AssignmentModel {
                         "\"CustomFields\": \"" + customFields + "\",\n" +
                         "\"pickingList\": \"" + pickingList + "\",\n" +
                         "\"ProposedCheckOutStatus\": \"" + ProposedCheckOutStatus + "\",\n" +
+                        "\"ProjectInstallationDescription\": \"" + projectInstallationDescription + "\",\n" +
                         "\"MandatoryZoneMeasurementsService\": \"" + mandatoryZoneMeasurementsService + "\",\n" +
                         "\"InstallationWarning\": \"" + installationWarning + "\",\n" +
                         "\"SignatureName\": \"" + SignatureName + "\",\n" +
@@ -108,6 +110,14 @@ public class AssignmentModel {
 
     public void setInstallationWarning(String InstallationWarning) {
         this.installationWarning = InstallationWarning;
+    }
+
+    public String getProjectInstallationDescription() {
+        return projectInstallationDescription;
+    }
+
+    public void setProjectInstallationDescription(String ProjectInstallationDescription) {
+        this.projectInstallationDescription = ProjectInstallationDescription;
     }
 
     public String getProductDescription() {

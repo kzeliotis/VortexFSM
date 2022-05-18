@@ -28,6 +28,7 @@ public class CheckInCheckOutModel {
     private String returnToBase = "";
     private String statusCode = "";
     private String sendReport = "";
+    private String userId = "";
 
 
     @NonNull
@@ -45,6 +46,7 @@ public class CheckInCheckOutModel {
                 "  \"Status\": \"" + status + "\",\n" +
                 "  \"StatusCode\": \"" + statusCode + "\",\n" +
                 "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
+                "  \"UserId\": \"" + userId + "\",\n" +
                 "  \"SignatureName\": \"" + signatureName + "\",\n" +
                 "  \"SignatureEmail\": \"" + signatureEmail + "\",\n" +
                 "  \"AssignmentSource\": \"" + assignmentSource + "\",\n" +
@@ -110,6 +112,10 @@ public class CheckInCheckOutModel {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getChargedAmount() {

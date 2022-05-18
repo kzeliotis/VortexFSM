@@ -71,6 +71,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYN
 import static am.gtest.vortex.support.MyPrefs.PREF_START_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_START_TRAVEL_TIME;
+import static am.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMapReadyCallback, View.OnClickListener, View.OnLongClickListener {
@@ -377,6 +378,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
 
                 rtnToBase.setAssignmentId(assignmentId);
                 rtnToBase.setReturnToBaseTime(MyDateTime.getCurrentTime());
+                rtnToBase.setUserId(MyPrefs.getString(PREF_USERID, ""));
 
                 MyPrefs.setStringWithFileName(PREF_FILE_RETURN_TO_BASE_DATA_TO_SYNC, assignmentId, rtnToBase.toString());
 
@@ -445,6 +447,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
                 checkInCheckOutModel.setStartTravelTime(MyDateTime.getCurrentTime());
                 checkInCheckOutModel.setStartLat(MyPrefs.getString(PREF_CURRENT_LAT, ""));
                 checkInCheckOutModel.setStartLng(MyPrefs.getString(PREF_CURRENT_LNG, ""));
+                checkInCheckOutModel.setUserId(MyPrefs.getString(PREF_USERID, ""));
 
                 Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
 
