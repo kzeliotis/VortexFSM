@@ -1401,7 +1401,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 "}";
 
         MyPrefs.setStringWithFileName(PREF_FILE_IMAGE_FOR_SYNC, prefKey, postBody);
-        String PostBodyLog = postBody.substring(0, 60) + " " + prefKey;
+        String PostBodyLog = "";
+        if (postBody.length() > 59) {PostBodyLog = postBody.substring(0, 60) + " " + prefKey;} else {PostBodyLog = postBody;}
         MyLogs.writeFile_FullLog("myLogs: PrepareImage", "", PostBodyLog, 0, prefKey, globalCurrentPhotoPath);
     }
 
