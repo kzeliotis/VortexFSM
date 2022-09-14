@@ -108,7 +108,9 @@ public class CaptureSignature extends Activity {
                 Bundle b = new Bundle();
                 b.putString("status", "done");
                 b.putString("signatureName", yourName.getText().toString());
-                b.putString("signatureEmail", etSignatureEmail.getText().toString());
+                String signatureEmail = etSignatureEmail.getText().toString();
+                if (!signatureEmail.contains("@")) {signatureEmail = "";}
+                b.putString("signatureEmail", signatureEmail);
                 b.putString("imagePath", myPath.getAbsolutePath());
                 Intent intent = new Intent();
                 intent.putExtras(b);
@@ -183,8 +185,8 @@ public class CaptureSignature extends Activity {
     public class signature extends View {
         private static final float STROKE_WIDTH = 5f;
         private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
-        private Paint paint = new Paint();
-        private Path path = new Path();
+        private final Paint paint = new Paint();
+        private final Path path = new Path();
 
         private float lastTouchX;
         private float lastTouchY;
