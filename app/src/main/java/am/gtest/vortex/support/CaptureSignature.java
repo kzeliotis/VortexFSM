@@ -108,7 +108,7 @@ public class CaptureSignature extends Activity {
                 Bundle b = new Bundle();
                 b.putString("status", "done");
                 b.putString("signatureName", yourName.getText().toString());
-                String signatureEmail = etSignatureEmail.getText().toString();
+                String signatureEmail = etSignatureEmail.getText().toString().replaceAll("\"", "\\\\\"").replaceAll("'", "\\\\'");
                 if (!signatureEmail.contains("@")) {signatureEmail = "";}
                 b.putString("signatureEmail", signatureEmail);
                 b.putString("imagePath", myPath.getAbsolutePath());
