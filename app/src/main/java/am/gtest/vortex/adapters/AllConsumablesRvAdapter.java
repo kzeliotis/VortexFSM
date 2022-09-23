@@ -23,6 +23,7 @@ import am.gtest.vortex.models.AllConsumableModel;
 import am.gtest.vortex.support.MyPrefs;
 import am.gtest.vortex.unused.MinMaxFilter;
 
+
 import static am.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
@@ -84,8 +85,8 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             final EditText etConsumableNotes = view.findViewById(R.id.etConsumableNotes);
 
             if(warehouseProducts){
-                String stock = holder.mItem.getStock();
-                etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter("0", stock)});
+                String stock = holder.mItem.getStock().replace(",", ".");
+                etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
             }
 
             tvConsumableValueTitle.setText(localized_consumable_value);
