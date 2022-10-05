@@ -1246,6 +1246,9 @@
     <string name="vortex_location_running_gr">Η αποστολή θέσης τεχνικού είναι ενεργή</string>
     <string name="vortex_location_running_ar">Vortex location tracking is running</string>
 
+    <string name="workOrder_Not_available">Work order not available</string>
+    <string name="workOrder_Not_available_gr">Η ανάθεση δεν είναι διαθέσιμη</string>
+    <string name="workOrder_Not_available_ar">Work order not available</string>
 
 
     <item type="id" name="TAG_ID" />

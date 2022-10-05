@@ -31,6 +31,7 @@ import static am.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static am.gtest.vortex.support.MyLocalization.localized_no_assignments;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
+import static am.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
 import static am.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
@@ -114,9 +115,12 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
             if (downloadAllData) {
                 // get and save products data
-                for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
-                    GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0");
-                    getProducts.execute();
+
+                if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
+                    for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
+                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0");
+                        getProducts.execute();
+                    }
                 }
 
                 // get and save history data
@@ -127,20 +131,24 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
                         AssignmentIds.add(ASSIGNMENTS_LIST.get(i).getAssignmentId());
                     }
                 }
-                for (int i = 0; i < AssignmentIds.size(); i++) {
 
-                    boolean hideProgress = false;
+                if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
+                    for (int i = 0; i < AssignmentIds.size(); i++) {
 
-                    if (i == AssignmentIds.size() - 1) {
-                        hideProgress = true;
+                        boolean hideProgress = false;
+
+                        if (i == AssignmentIds.size() - 1) {
+                            hideProgress = true;
+                        }
+                        String AssId = AssignmentIds.get(i);
+                        if (!AssId.contains("-")) {
+                            GetHistory getHistory = new GetHistory(ctx, AssignmentIds.get(i), hideProgress, false, "0");
+                            getHistory.execute();
+                        }
+
                     }
-                    String AssId = AssignmentIds.get(i);
-                    if (!AssId.contains("-")) {
-                        GetHistory getHistory = new GetHistory(ctx, AssignmentIds.get(i), hideProgress, false, "0");
-                        getHistory.execute();
-                    }
-
                 }
+
 
                 Log.e(LOG_TAG, "================= ASSIGNMENTS_LIST.size(): " + ASSIGNMENTS_LIST.size() + "; projectIds.size(): " + AssignmentIds.size());
             }

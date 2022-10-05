@@ -236,6 +236,7 @@ public class MyLocalization {
     public static String localized_contract = "";
     public static String localized_send_report = "";
     public static String localized_vortex_tracking_running = "";
+    public static String localized_workorder_not_available = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -464,6 +465,7 @@ public class MyLocalization {
                 localized_contract = ctx.getString(R.string.contract_gr);
                 localized_send_report = ctx.getString(R.string.send_Report_gr);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running_gr);
+                localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_gr);
                 break;
 
             case CONST_AR:
@@ -689,6 +691,7 @@ public class MyLocalization {
                 localized_contract = ctx.getString(R.string.contract_ar);
                 localized_send_report = ctx.getString(R.string.send_Report);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running_ar);
+                localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_ar);
 
                 break;
 
@@ -916,7 +919,7 @@ public class MyLocalization {
                 localized_contract = ctx.getString(R.string.contract);
                 localized_send_report = ctx.getString(R.string.send_Report);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running);
-
+                localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available);
                 break;
 
 

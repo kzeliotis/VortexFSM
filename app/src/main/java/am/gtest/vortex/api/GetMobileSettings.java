@@ -28,6 +28,7 @@ import static am.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static am.gtest.vortex.support.MyLocalization.localized_new_update_available;
 import static am.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static am.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
 import static am.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
 import static am.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
@@ -134,6 +135,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileEnableLocationService = MyJsonParser.getIntValue(oneObject,  "MobileEnableLocationService", 0);
                     MyPrefs.setBoolean(PREF_ENABLE_LOCATION_SERVICE, MobileEnableLocationService == 1);
+
+                    int MobileDownloadAllDataOnSync = MyJsonParser.getIntValue(oneObject,  "MobileDownloadAllDataOnSync", 1);
+                    MyPrefs.setBoolean(PREF_DOWNLOAD_ALL_DATA, MobileDownloadAllDataOnSync == 1);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);

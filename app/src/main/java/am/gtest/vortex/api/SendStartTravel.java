@@ -20,7 +20,9 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static am.gtest.vortex.support.MyLocalization.localized_error_synchronizing;
+import static am.gtest.vortex.support.MyLocalization.localized_workorder_not_available;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IS_TRAVEL_STARTED;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYNC;
 
 public class SendStartTravel extends AsyncTask<String, Void, String > {
@@ -94,6 +96,14 @@ public class SendStartTravel extends AsyncTask<String, Void, String > {
             if (showProgressAndToast) {
                 Toast.makeText(ctx, localized_data_sent_2_rows, Toast.LENGTH_LONG).show();
             }
+
+        } else if (responseBody != null && responseBody.equals("2") ) {
+
+            MyPrefs.removeStringWithFileName(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, assignmentId);
+
+            MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false);
+
+            Toast.makeText(ctx, localized_workorder_not_available, Toast.LENGTH_LONG).show();
 
         } else {
             if (showProgressAndToast) {
