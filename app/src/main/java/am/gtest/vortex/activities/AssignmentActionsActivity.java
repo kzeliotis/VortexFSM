@@ -807,7 +807,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         Intent intent;
         CheckInCheckOutModel checkInCheckOutModel;
-        FirebaseCrashlytics.getInstance().log("v.getId: " + v.getId());
+        String btn = "";
+        try {
+             btn = ((Button) v).getText().toString();
+        } catch (Exception ex){
+
+        }
+        FirebaseCrashlytics.getInstance().log("v.getId: " + btn);
+
 
         switch (v.getId()) {
 
