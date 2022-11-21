@@ -41,6 +41,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -806,6 +807,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         Intent intent;
         CheckInCheckOutModel checkInCheckOutModel;
+        FirebaseCrashlytics.getInstance().log("v.getId: " + v.getId());
 
         switch (v.getId()) {
 
