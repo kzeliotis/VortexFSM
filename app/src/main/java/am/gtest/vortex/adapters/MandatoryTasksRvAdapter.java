@@ -249,7 +249,9 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position != 0) {
-                        holder.mItem.setMeasurementValue(holder.spMandatoryTasks.getSelectedItem().toString());
+                        try{
+                            holder.mItem.setMeasurementValue(holder.spMandatoryTasks.getSelectedItem().toString());
+                        } catch (Exception ex){ex.printStackTrace();}
                     } else {
                         holder.mItem.setMeasurementValue("");
                     }

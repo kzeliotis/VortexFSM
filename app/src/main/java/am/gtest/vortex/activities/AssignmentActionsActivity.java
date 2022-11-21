@@ -27,14 +27,17 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.SwitchCompat;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -241,6 +244,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnInstallations;
     private TextView tvSendReport;
     private CheckBox chkSendReportFile;
+    private ScrollView scrollView1;
 
     private MandatoryTasksRvAdapter mandatoryTasksRvAdapter;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
@@ -290,6 +294,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         etWarning = findViewById(R.id.etWarning);
         flSignatureImage = findViewById(R.id.flSignatureImage);
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
+        scrollView1 = findViewById(R.id.ScrollView1);
         tvProblem = findViewById(R.id.tvProblem);
         tvStatusTitle = findViewById(R.id.tvStatusTitle);
         btnCheckIn = findViewById(R.id.btnCheckIn);
@@ -317,6 +322,31 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnPreviewReport = findViewById(R.id.btnPreviewReport);
         tvSendReport = findViewById(R.id.tvSendReport);
         chkSendReportFile = findViewById(R.id.chkSendReport);
+
+        scrollView1.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                tvProblem.getParent().requestDisallowInterceptTouchEvent(false);
+
+                return false;
+            }
+        });
+
+        tvProblem.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                tvProblem.getParent().requestDisallowInterceptTouchEvent(true);
+
+                return false;
+            }
+        });
+
+
+
 
         rvProjectPhotos.setLayoutManager(new GridLayoutManager(AssignmentActionsActivity.this, 3, GridLayoutManager.VERTICAL, false));
         photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter(PHOTO_ITEMS, AssignmentActionsActivity.this);
@@ -602,6 +632,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         String problemText = localized_problem + ": " + SELECTED_ASSIGNMENT.getProblem();
         tvProblem.setText(problemText);
+        tvProblem.setMovementMethod(new ScrollingMovementMethod());
 
         String SignatureName = SELECTED_ASSIGNMENT.getSignatureName();
 
