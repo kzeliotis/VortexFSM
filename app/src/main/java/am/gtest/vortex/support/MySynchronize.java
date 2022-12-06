@@ -70,6 +70,8 @@ public class MySynchronize {
 
     public void mySynchronize() {
 
+        String result = "Success";
+
         if (MyUtils.isNetworkAvailable()) {
 
             if (MyPrefs.getBoolean(PREF_ONLY_WIFI, false)) {
@@ -80,6 +82,8 @@ public class MySynchronize {
 
                     if (mWifi.isConnected()) {
                         synchronizeSavedImages(ctx);
+                    }  else {
+                        result = "Failed - NoWifi";
                     }
                 }
             } else {
@@ -90,7 +94,10 @@ public class MySynchronize {
 
         } else {
             MyDialogs.showOK(ctx, localized_no_internet_try_later_2_lines);
+            result = "Failed";
         }
+
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), "", "", 0, "", result);
     }
 
     public static void synchronizeSavedImages(Context ctx) {
