@@ -110,6 +110,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
 
         holder.mView.setOnClickListener(v -> {
 
+
             for (int i = 0; i < STATUSES_LIST.size(); i++) {
                 if (STATUSES_LIST.get(i).getStatusId().equals(holder.mItem.getStatusId())) {
                     if (STATUSES_LIST.get(i).getIsPending() != 1) {
@@ -121,13 +122,6 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
                     if (STATUSES_LIST.get(i).getIsRollback() == 1) {
                         MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, holder.mItem.getAssignmentId(), false);
                     }
-
-                    // old code just for info - delete
-//                    if (STATUSES_LIST.get(i).getIsPending() != 1 && STATUSES_LIST.get(i).getIsRollback() !=1) {
-//                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, holder.mItem.getAssignmentId(), true);
-//                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, holder.mItem.getAssignmentId(), true);
-//                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, holder.mItem.getAssignmentId(), true);
-//                    }
                     break;
                 }
             }

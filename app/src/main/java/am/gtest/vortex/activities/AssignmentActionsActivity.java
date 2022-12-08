@@ -101,6 +101,8 @@ import am.gtest.vortex.support.TakeUploadPhoto;
 import static am.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static am.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
+import static am.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
+import static am.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_INSTALLATIONS;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_ZONES;
 import static am.gtest.vortex.support.MyGlobals.MANDATORY_TASKS_LIST;
@@ -128,6 +130,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_calculate_cost;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_changeStatus;
 import static am.gtest.vortex.support.MyLocalization.localized_charged;
+import static am.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static am.gtest.vortex.support.MyLocalization.localized_clickToSign;
 import static am.gtest.vortex.support.MyLocalization.localized_commentsSolution;
 import static am.gtest.vortex.support.MyLocalization.localized_complete_measurements;
@@ -1173,6 +1176,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MANDATORY_TASKS_LIST.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
+
+//                    for (int i = 0; i < STATUSES_LIST.size(); i++) {
+//                        if (STATUSES_LIST.get(i).getStatusId().equals(selectedStatusId)) {
+//                            if (STATUSES_LIST.get(i).getIsRollback() == 1) {
+//                                MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
+//                            }
+//                            break;
+//                        }
+//                    }
+
+
                     if(MANDATORY_TASKS_LIST.size() > 0){
                         MyPrefs.setStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId, sendreport);
                     }
@@ -1228,7 +1242,19 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
                     } else {
-                        MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_internet_data_saved);
+                        new androidx.appcompat.app.AlertDialog.Builder(this)
+                                .setMessage(localized_no_internet_data_saved)
+                                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    this.finishAffinity();
+                                    Intent _intent = new Intent(AssignmentActionsActivity.this, AssignmentsActivity.class);
+                                    _intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    _intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
+                                    AssignmentActionsActivity.this.startActivity(_intent);
+                                })
+                                .show();
+
+                        //MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_internet_data_saved);
                     }
                 }
 
@@ -1501,10 +1527,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                     if (oneObject.getString("AssignmentId").equals(assignmentId)) {
                         jsonArr.getJSONObject(i).put("Status", spStatus.getSelectedItem().toString());
+                        jsonArr.getJSONObject(i).put("StatusId", getStatusIdFromSpinner());
                     }
                 }
 
                 MyPrefs.setString(PREF_DATA_ASSIGNMENTS, jsonArr.toString());
+
 
             } catch (Exception e) {
                 e.printStackTrace();
