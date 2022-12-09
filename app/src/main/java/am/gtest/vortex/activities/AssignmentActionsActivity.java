@@ -196,6 +196,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENT
 import static am.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static am.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
+import static am.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
@@ -327,29 +328,32 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         tvSendReport = findViewById(R.id.tvSendReport);
         chkSendReportFile = findViewById(R.id.chkSendReport);
 
-        scrollView1.setOnTouchListener(new View.OnTouchListener() {
+        if (MyPrefs.getBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, false)){
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            tvProblem.setMaxLines(6);
 
-                tvProblem.getParent().requestDisallowInterceptTouchEvent(false);
+            scrollView1.setOnTouchListener(new View.OnTouchListener() {
 
-                return false;
-            }
-        });
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
-        tvProblem.setOnTouchListener(new View.OnTouchListener() {
+                    tvProblem.getParent().requestDisallowInterceptTouchEvent(false);
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
 
-                tvProblem.getParent().requestDisallowInterceptTouchEvent(true);
+            tvProblem.setOnTouchListener(new View.OnTouchListener() {
 
-                return false;
-            }
-        });
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
+                    tvProblem.getParent().requestDisallowInterceptTouchEvent(true);
 
+                    return false;
+                }
+            });
+        }
 
 
         rvProjectPhotos.setLayoutManager(new GridLayoutManager(AssignmentActionsActivity.this, 3, GridLayoutManager.VERTICAL, false));
@@ -636,7 +640,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         String problemText = localized_problem + ": " + SELECTED_ASSIGNMENT.getProblem();
         tvProblem.setText(problemText);
-        tvProblem.setMovementMethod(new ScrollingMovementMethod());
+        if (MyPrefs.getBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, false)){
+            tvProblem.setMovementMethod(new ScrollingMovementMethod());
+        }
+
 
         String SignatureName = SELECTED_ASSIGNMENT.getSignatureName();
 

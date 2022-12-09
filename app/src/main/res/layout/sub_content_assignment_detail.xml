@@ -85,6 +85,8 @@
         android:textStyle="bold"
         android:drawableStart="@drawable/ic_alert_octagram"
         android:drawableLeft="@drawable/ic_alert_octagram"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:drawablePadding="@dimen/dp_6" />
 
     <TextView
@@ -98,6 +100,8 @@
         android:textStyle="bold"
         android:drawableStart="@drawable/ic_subject_black_24dp"
         android:drawableLeft="@drawable/ic_subject_black_24dp"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:drawablePadding="@dimen/dp_6" />
 
     <TextView

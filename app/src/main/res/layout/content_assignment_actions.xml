@@ -37,7 +37,6 @@
             android:linksClickable="true"
             android:textStyle="bold"
             android:scrollbars="vertical"
-            android:maxLines="6"
             android:textColor="@color/grey_600" />
 
 

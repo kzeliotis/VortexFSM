@@ -35,6 +35,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static am.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static am.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
+import static am.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static am.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static am.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
@@ -138,6 +139,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileDownloadAllDataOnSync = MyJsonParser.getIntValue(oneObject,  "MobileDownloadAllDataOnSync", 1);
                     MyPrefs.setBoolean(PREF_DOWNLOAD_ALL_DATA, MobileDownloadAllDataOnSync == 1);
+
+                    int MobileScrollableProblemDescription = MyJsonParser.getIntValue(oneObject,  "MobileScrollableProblemDescription", 0);
+                    MyPrefs.setBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, MobileScrollableProblemDescription == 1);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);

@@ -123,6 +123,7 @@ public class MyPrefs {
     public static final String PREF_KEEP_GPS_LOG = "pref_keep_gps_log";
     public static final String PREF_ENABLE_LOCATION_SERVICE = "pref_enable_location_service";
     public static final String PREF_DOWNLOAD_ALL_DATA = "pref_download_all_data";
+    public static final String PREF_SCROLLABLE_PROBLEM_DESCRIPTION = "pref_scrollable_problem_description";
 
     public static final String PREF_MANDATORY_SIGNATURE = "pref_mandatory_signaure";
     public static final String PREF_SHOW_MANDATORY_TASKS_COMMENTS = "pref_show_mandatory_tasks_comments";
