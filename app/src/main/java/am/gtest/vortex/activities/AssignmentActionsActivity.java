@@ -157,6 +157,7 @@ import static am.gtest.vortex.support.MyLocalization.localized_status;
 import static am.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static am.gtest.vortex.support.MyLocalization.localized_user;
 import static am.gtest.vortex.support.MyLocalization.localized_zones;
+import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_TIME;
@@ -823,7 +824,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         } catch (Exception ex){
 
         }
-        FirebaseCrashlytics.getInstance().log("v.getId: " + btn);
+        FirebaseCrashlytics.getInstance().log("v.getId: " + btn + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
 
 
         switch (v.getId()) {
@@ -975,6 +976,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillComments);
                 }
 
+                FirebaseCrashlytics.getInstance().log("GetSelectedStatus" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                 String selectedStatusId = "0";
                 try {
                     selectedStatusId = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getStatusId();
@@ -997,8 +999,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
                 }
 
+                FirebaseCrashlytics.getInstance().log("GetSelectedStatusMandatorySteps" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                 int MandatorySteps = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatorySteps();
                 if (MandatorySteps != 0){
+                    FirebaseCrashlytics.getInstance().log("CheckMandatoryTasks" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     for (int i = 0; i < MANDATORY_TASKS_LIST.size(); i++) {
 
                         if (!MANDATORY_TASKS_LIST.get(i).getStepDescription().isEmpty() &&
@@ -1015,7 +1019,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
                 if(SELECTED_ASSIGNMENT.getMandatoryZoneMeasurementsService().equals("1")){
-
+                    FirebaseCrashlytics.getInstance().log("CheckZoneMeasurements" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     if (MyPrefs.getBoolean(PREF_SHOW_ZONE_PRODUCTS_BUTTON, false)) {
                         String Zones = MyPrefs.getStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, assignmentId, "");
                         if (Zones.isEmpty()) {
@@ -1075,7 +1079,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
 
-
+                FirebaseCrashlytics.getInstance().log("areAllRequiredFieldsFilled" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                 if (areAllRequiredFieldsFilled) {
                     String encodedSignature;
                     InputStream inputStream = null;
@@ -1119,7 +1123,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     }
 
                     checkInCheckOutModel = new CheckInCheckOutModel();
-
+                    FirebaseCrashlytics.getInstance().log("FillCheckoutModel" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     checkInCheckOutModel.setAssignmentId(assignmentId);
                     checkInCheckOutModel.setStartWorkTime(MyPrefs.getStringWithFileName(assignmentId, PREF_START_WORK_TIME, ""));
                     checkInCheckOutModel.setStartTravelTime(MyPrefs.getStringWithFileName(assignmentId, PREF_START_TRAVEL_TIME, ""));
@@ -1226,7 +1230,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         sendMandatoryTasks.execute(assignmentId, "");
 
                         boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
-
+                        FirebaseCrashlytics.getInstance().log("SEND_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                         Map<String, ?> Zone_Measurements = this.getSharedPreferences(PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC, MODE_PRIVATE).getAll();
                         for (Map.Entry<String, ?> entry : Zone_Measurements.entrySet()) {
                             String prefKey = entry.getKey();
@@ -1242,6 +1246,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                         MyPrefs.removeStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, assignmentId);
 
+                        FirebaseCrashlytics.getInstance().log("SEND_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                         if (MyPrefs.getStringWithFileName(PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC, assignmentId, "").length() > 0) {
                             SendZonesWithNoMeasurement sendZonesWithNoMeasurement = new SendZonesWithNoMeasurement(AssignmentActionsActivity.this, assignmentId);
                             sendZonesWithNoMeasurement.execute();
