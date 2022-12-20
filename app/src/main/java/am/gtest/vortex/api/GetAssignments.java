@@ -12,8 +12,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import am.gtest.vortex.R;
 import am.gtest.vortex.activities.AssignmentsActivity;
@@ -28,13 +32,18 @@ import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static am.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static am.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
+import static am.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
+import static am.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static am.gtest.vortex.support.MyLocalization.localized_no_assignments;
 import static am.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static am.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static am.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+import static android.content.Context.MODE_PRIVATE;
 
 public class GetAssignments extends AsyncTask<String, Void, String > {
 
@@ -109,8 +118,17 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
             AssignmentsData.generate(ctx);
             boolean LoggedIn = MyPrefs.getBoolean(PREF_KEY_IS_LOGGED_IN, false);
 
+            List<String> AssignmentIds = new ArrayList<>();
             if (ASSIGNMENTS_LIST.size() == 0 && LoggedIn) {
                 Toast.makeText(MyApplication.getContext(), localized_no_assignments, Toast.LENGTH_LONG).show();
+            } else {
+
+                for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
+                    if (!AssignmentIds.contains(ASSIGNMENTS_LIST.get(i).getAssignmentId())) {
+                        AssignmentIds.add(ASSIGNMENTS_LIST.get(i).getAssignmentId());
+                    }
+                }
+                emptyUnusedFiles(ctx, AssignmentIds);
             }
 
             if (downloadAllData) {
@@ -125,12 +143,7 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
                 // get and save history data
                 // create project ids array to avoid multiple calls to the same history API
-                List<String> AssignmentIds = new ArrayList<>();
-                for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
-                    if (!AssignmentIds.contains(ASSIGNMENTS_LIST.get(i).getAssignmentId())) {
-                        AssignmentIds.add(ASSIGNMENTS_LIST.get(i).getAssignmentId());
-                    }
-                }
+
 
                 if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
                     for (int i = 0; i < AssignmentIds.size(); i++) {
@@ -166,4 +179,65 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
             }
         }
     }
+
+
+    private void emptyUnusedFiles(Context ctx, List<String> AssignmentIds){
+
+        if (AssignmentIds.size() == 0) {return;}
+
+        try{
+            File[] folders = new File(ctx.getExternalFilesDir(null).toString()).listFiles(File::isDirectory);
+
+            for (File folder : folders){
+                String folderName = folder.getName();
+                if (folderName.contains(CONST_ASSIGNMENT_PHOTOS_FOLDER) || folderName.contains(CONST_ASSIGNMENT_ATTACHMENTS_FOLDER)){
+                    boolean IsPhoto = folderName.contains(CONST_ASSIGNMENT_PHOTOS_FOLDER);
+                    String assignmentId = folderName.split("_")[0];
+                    if (!AssignmentIds.contains(assignmentId)){
+                        long diff = new Date().getTime() - folder.lastModified();
+                        int x = 4; //4 days
+                        if (diff > x * 24 * 60 * 60 * 1000) {
+                            Map<String, ?> filesToBeSynced = new HashMap<>();
+                            if (IsPhoto){
+                                filesToBeSynced = ctx.getSharedPreferences(PREF_FILE_IMAGE_FOR_SYNC, MODE_PRIVATE).getAll();
+                            } else {
+                                filesToBeSynced = ctx.getSharedPreferences(PREF_FILE_ATTACHMENT_FOR_SYNC, MODE_PRIVATE).getAll();
+                            }
+
+                            boolean permissionToDelete = true;
+                            for (Map.Entry<String, ?> entry : filesToBeSynced.entrySet()) {
+                                String prefKey = entry.getKey();
+                                if (prefKey.split("_")[0].equals(assignmentId)){
+                                    permissionToDelete = false;
+                                }
+                            }
+
+                            if (permissionToDelete){
+                                try{
+                                    File[] files = folder.listFiles();
+                                    if(files!=null) { //some JVMs return null for empty dirs
+                                        for(File f: files) {
+                                            if(f.isDirectory()) {
+                                                //deleteFolder(f);
+                                            } else {
+                                                f.delete();
+                                            }
+                                        }
+                                    }
+                                    folder.delete();
+                                } catch (Exception ex){
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
 }

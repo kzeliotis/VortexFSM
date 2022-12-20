@@ -1250,6 +1250,13 @@
     <string name="workOrder_Not_available_gr">Η ανάθεση δεν είναι διαθέσιμη</string>
     <string name="workOrder_Not_available_ar">Work order not available</string>
 
+    <string name="file_uploaded">File Uploaded Successfully</string>
+    <string name="file_uploaded_gr">To αρχείο απεστάλη</string>
+    <string name="file_uploaded_ar">ile Uploaded Successfully</string>
+
+    <string name="no_internet_file_will_be_sent">No Internet connection. Attachment is saved and will be automatically sent to server on you next launch of app if Internet is available.</string>
+    <string name="no_internet_file_will_be_sent_gr">No Internet connection. Το αρχείο αποθηκέυτηκε προς μελλοντική αποστολή.</string>
+    <string name="no_internet_file_will_be_sent_ar">No Internet connection. Attachment is saved and will be automatically sent to server on you next launch of app if Internet is available.</string>
 
     <item type="id" name="TAG_ID" />
 

@@ -28,6 +28,7 @@ public class MyPrefs {
     public static final String PREF_FILE_MANDATORY_TASKS_FOR_SYNC = "pref_file_mandatory_tasks_for_sync";
     public static final String PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC = "pref_file_use_pt_overnight_for_sync";
     public static final String PREF_FILE_IMAGE_FOR_SYNC = "pref_file_image_to_be_sync";
+    public static final String PREF_FILE_ATTACHMENT_FOR_SYNC = "pref_file_attachment_to_be_sync";
     public static final String PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC = "pref_file_send_report_value_for_sync";
 
     public static final String PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC = "pref_file_added_consumables_for_sync";

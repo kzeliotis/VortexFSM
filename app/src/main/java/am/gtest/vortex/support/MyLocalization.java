@@ -237,6 +237,9 @@ public class MyLocalization {
     public static String localized_send_report = "";
     public static String localized_vortex_tracking_running = "";
     public static String localized_workorder_not_available = "";
+    public static String localized_file_uploaded = "";
+    public static String localized_file_will_be_sent = "";
+
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -466,6 +469,8 @@ public class MyLocalization {
                 localized_send_report = ctx.getString(R.string.send_Report_gr);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running_gr);
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_gr);
+                localized_file_uploaded = ctx.getString(R.string.file_uploaded_gr);
+                localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent_gr);
                 break;
 
             case CONST_AR:
@@ -692,6 +697,8 @@ public class MyLocalization {
                 localized_send_report = ctx.getString(R.string.send_Report);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running_ar);
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_ar);
+                localized_file_uploaded = ctx.getString(R.string.file_uploaded);
+                localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
 
                 break;
 
@@ -920,6 +927,9 @@ public class MyLocalization {
                 localized_send_report = ctx.getString(R.string.send_Report);
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running);
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available);
+                localized_file_uploaded = ctx.getString(R.string.file_uploaded);
+                localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
+
                 break;
 
 

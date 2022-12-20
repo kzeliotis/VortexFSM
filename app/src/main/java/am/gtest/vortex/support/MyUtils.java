@@ -1,15 +1,18 @@
 package am.gtest.vortex.support;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.util.Patterns;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
@@ -60,6 +63,22 @@ public class MyUtils {
             }
         }
     }
+
+
+    public static String getMimeType(Uri uri, Context ctx) {
+        String mimeType = null;
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            ContentResolver cr = ctx.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
+    }
+
 
     public static void showKeypad(Context ctx, View view){
         if (view != null) {

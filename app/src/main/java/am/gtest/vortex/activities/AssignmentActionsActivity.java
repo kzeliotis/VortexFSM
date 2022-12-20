@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +16,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 import androidx.core.app.ActivityCompat;
@@ -24,7 +27,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.SwitchCompat;
+
+import android.provider.OpenableColumns;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -54,8 +58,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,6 +72,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import am.gtest.vortex.R;
+import am.gtest.vortex.adapters.AssignmentAttachmentsRvAdapter;
+import am.gtest.vortex.adapters.FileUtils;
 import am.gtest.vortex.adapters.MandatoryTasksRvAdapter;
 import am.gtest.vortex.adapters.MySpinnerAdapter;
 import am.gtest.vortex.adapters.PhotosRecyclerViewAdapter;
@@ -98,10 +106,10 @@ import am.gtest.vortex.support.MySynchronize;
 import am.gtest.vortex.support.MyUtils;
 import am.gtest.vortex.support.TakeUploadPhoto;
 
+import static am.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 import static am.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static am.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
-import static am.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static am.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_INSTALLATIONS;
 import static am.gtest.vortex.support.MyGlobals.KEY_REFRESH_ZONES;
@@ -111,6 +119,7 @@ import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_MANDATORY_
 import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_ASSIGNMENT_PHOTO;
 import static am.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO;
 import static am.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
+import static am.gtest.vortex.support.MyGlobals.PICKFILE_RESULT_CODE;
 import static am.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO;
 import static am.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
 import static am.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO;
@@ -121,6 +130,7 @@ import static am.gtest.vortex.support.MyGlobals.STATUSES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONES_LIST;
 import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static am.gtest.vortex.support.MyGlobals.ZONES_WITH_NO_MEASUREMENTS_MAP;
+import static am.gtest.vortex.support.MyGlobals.globalCurrentAttachmentPath;
 import static am.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
 import static am.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
 import static am.gtest.vortex.support.MyGlobals.singleAssignmentResult;
@@ -130,7 +140,6 @@ import static am.gtest.vortex.support.MyLocalization.localized_calculate_cost;
 import static am.gtest.vortex.support.MyLocalization.localized_cancel;
 import static am.gtest.vortex.support.MyLocalization.localized_changeStatus;
 import static am.gtest.vortex.support.MyLocalization.localized_charged;
-import static am.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static am.gtest.vortex.support.MyLocalization.localized_clickToSign;
 import static am.gtest.vortex.support.MyLocalization.localized_commentsSolution;
 import static am.gtest.vortex.support.MyLocalization.localized_complete_measurements;
@@ -167,6 +176,7 @@ import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static am.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_DATA_DEFAULT_TECH_ACTIONS;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHARGED_AMOUNT_FOR_SHOW;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
@@ -193,7 +203,6 @@ import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
-import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENTS;
 import static am.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
 import static am.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static am.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
@@ -244,6 +253,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnToServices;
     private Button btnZones;
     private Button btnTakePhoto;
+    private Button btnAddAttachment;
     private Button btnPreviewReport;
     private LinearLayout llPayment;
     private FrameLayout flSignatureImage;
@@ -254,6 +264,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
     private MandatoryTasksRvAdapter mandatoryTasksRvAdapter;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
+    private AssignmentAttachmentsRvAdapter attachmentsRvAdapter;
 
     private String assignmentId;
     private String imagePath = "";
@@ -261,6 +272,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private String signatureEmail = "";
 
     private final List<String> PHOTO_ITEMS = new ArrayList<>();
+    private final List<String> ATTACHMENT_ITEMS = new ArrayList<>();
 
     private boolean isSigned = false;
     private boolean resetStatus = false;
@@ -277,10 +289,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
 
-        PHOTO_ITEMS.clear();
-
         hideInternalNotes = MyPrefs.getBoolean(PREF_HIDE_INTERNAL_NOTES, false);
 
+        PHOTO_ITEMS.clear();
         String photoFolderName = assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER;
         File path = new File(getExternalFilesDir(null) + File.separator + photoFolderName);
         if (path.exists()) {
@@ -290,8 +301,19 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             }
         }
 
+        ATTACHMENT_ITEMS.clear();
+        String attachmentsFolderName = assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
+        File _path = new File(getExternalFilesDir(null) + File.separator + attachmentsFolderName);
+        if (_path.exists()) {
+            File[] files = _path.listFiles();
+            for (File file : files) {
+                ATTACHMENT_ITEMS.add(String.valueOf(file));
+            }
+        }
+
         rvMandatoryTasks = findViewById(R.id.rvMandatoryTasks);
         RecyclerView rvProjectPhotos = findViewById(R.id.rvProjectPhotos);
+        RecyclerView rvAttachments = findViewById(R.id.rvDetAttachments);
         etCommentsSolution = findViewById(R.id.etCommentsSolution);
         //etCommentsSolution.setMovementMethod(LinkMovementMethod.getInstance());
         etNotes = findViewById(R.id.etNotes);
@@ -315,6 +337,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnToServices = findViewById(R.id.btnToServices);
         btnZones = findViewById(R.id.btnZones);
         btnTakePhoto = findViewById(R.id.btnTakePhoto);
+        btnAddAttachment = findViewById(R.id.btnAddAttachment);
         llPayment = findViewById(R.id.llPayment);
         tvSignatureImage = findViewById(R.id.tvSignatureImage);
         tvSignatureName = findViewById(R.id.tvSignatureName);
@@ -360,6 +383,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         rvProjectPhotos.setLayoutManager(new GridLayoutManager(AssignmentActionsActivity.this, 3, GridLayoutManager.VERTICAL, false));
         photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter(PHOTO_ITEMS, AssignmentActionsActivity.this);
         rvProjectPhotos.setAdapter(photosRecyclerViewAdapter);
+
+        attachmentsRvAdapter = new AssignmentAttachmentsRvAdapter(ATTACHMENT_ITEMS, AssignmentActionsActivity.this);
+        rvAttachments.setAdapter(attachmentsRvAdapter);
+
 
         if (MyPrefs.getBoolean(PREF_SHOW_START_WORK, false)) {
             btnStartWork.setVisibility(View.VISIBLE);
@@ -480,6 +507,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             tvInternalNotesTitle.setEnabled(true);
             tvSolutionTitle.setEnabled(true);
             btnTakePhoto.setEnabled(true);
+            btnAddAttachment.setEnabled(true);
             etChargedAmount.setEnabled(true);
             etPaidAmount.setEnabled(true);
             tvSignatureImage.setEnabled(true);
@@ -539,6 +567,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnZones.setOnClickListener(this);
         btnZones.setOnLongClickListener(this);
         btnTakePhoto.setOnClickListener(this);
+        btnAddAttachment.setOnClickListener(this);
         tvSignatureImage.setOnClickListener(this);
         btnGetCost.setOnClickListener(this);
         btnInstallations.setOnClickListener(this);
@@ -888,6 +917,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         .show();
                 break;
 
+            case R.id.btnAddAttachment:
+
+                int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permission != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, PICKFILE_RESULT_CODE);
+                } else {
+                    pickFileFromStorage(this);
+                }
+
+                break;
+
             case R.id.tvSignatureImage:
                 if(!hideInternalNotes) {etNotes.setVisibility(View.GONE);}
                 intent = new Intent(AssignmentActionsActivity.this, CaptureSignature.class);
@@ -912,6 +952,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 tvInternalNotesTitle.setEnabled(true);
                 tvSolutionTitle.setEnabled(true);
                 btnTakePhoto.setEnabled(true);
+                btnAddAttachment.setEnabled(true);
                 etChargedAmount.setEnabled(true);
                 etPaidAmount.setEnabled(true);
                 tvSignatureImage.setEnabled(true);
@@ -1160,6 +1201,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     tvSolutionTitle.setEnabled(false);
                     tvInternalNotesTitle.setEnabled(true);
                     btnTakePhoto.setEnabled(false);
+                    btnAddAttachment.setEnabled(false);
                     etChargedAmount.setEnabled(false);
                     etPaidAmount.setEnabled(false);
                     tvSignatureImage.setEnabled(false);
@@ -1214,10 +1256,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                                 if (mWifi.isConnected()) {
                                     MySynchronize.synchronizeSavedImages(AssignmentActionsActivity.this);
+                                    MySynchronize.synchronizeSavedAttachments(AssignmentActionsActivity.this);
                                 }
                             }
                         } else {
                             MySynchronize.synchronizeSavedImages(AssignmentActionsActivity.this);
+                            MySynchronize.synchronizeSavedAttachments(AssignmentActionsActivity.this);
                         }
 
                         SendCheckOut sendCheckOut = new SendCheckOut(AssignmentActionsActivity.this, assignmentId, CONST_SHOW_PROGRESS_AND_TOAST, false);
@@ -1449,6 +1493,50 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
                 break;
+
+            case PICKFILE_RESULT_CODE:
+                if (data != null) {
+                    Uri attachmentFile = data.getData();
+                    String Filename = getFileName(attachmentFile);
+                    File outputFile = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER + "/" + Filename);
+                    InputStream in = null;
+                    OutputStream out = null;
+                    boolean transferSuccessful = true;
+                    try {
+                        in = getContentResolver().openInputStream(attachmentFile);
+                        outputFile.getParentFile().mkdirs();
+                        outputFile.createNewFile();
+                        out = new FileOutputStream(outputFile, true);
+                        byte[] buffer = new byte[1024];
+                        int len;
+                        while ((len = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, len);
+                        }
+                        if (in != null) {
+                            in.close();
+                        }
+                        if (out != null){
+                            out.close();
+                        }
+                    } catch (Exception ex) {
+                        transferSuccessful = false;
+                        ex.printStackTrace();
+                        MyDialogs.showOK(AssignmentActionsActivity.this, ex.toString());
+                    }
+
+//                    File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER);
+//                    File movedPhoto = new File(newFileLocation, pickedFile.getName());
+//                    copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                    if (transferSuccessful){
+                        globalCurrentAttachmentPath = outputFile.getAbsolutePath(); //movedPhoto.getAbsolutePath();
+                        ATTACHMENT_ITEMS.add(globalCurrentAttachmentPath);
+                        attachmentsRvAdapter.notifyDataSetChanged();
+                        prepareAttachmentForSending();
+                    }
+
+                }
+
+
         }
     }
 
@@ -1466,6 +1554,31 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         return path;
     }
 
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
+
+
     private void prepareImageForSending(boolean fromGallery) {
         String photoBase64String = MyImages.getImageBase64String(AssignmentActionsActivity.this, globalCurrentPhotoPath, fromGallery);
 
@@ -1482,6 +1595,41 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         String PostBodyLog = "";
         if (postBody.length() > 59) {PostBodyLog = postBody.substring(0, 60) + " " + prefKey;} else {PostBodyLog = postBody;}
         MyLogs.writeFile_FullLog("myLogs: PrepareImage", "", PostBodyLog, 0, prefKey, globalCurrentPhotoPath);
+    }
+
+
+
+    private void prepareAttachmentForSending() {
+
+        File file = new File(globalCurrentAttachmentPath);
+        String fileBase64String = encodeFileToBase64(file);
+
+        if (fileBase64String.length() == 0){ return;}
+
+        int lastIndex = globalCurrentAttachmentPath.lastIndexOf("/");
+        String attachmentFileName = globalCurrentAttachmentPath.substring(lastIndex + 1);
+        String prefKey = assignmentId + "_" + attachmentFileName;
+
+        String postBody = "{\n" +
+                "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
+                "  \"Filename\": \"" + attachmentFileName + "\",\n" +
+                "  \"Attachment64\": \"" + fileBase64String + "\"\n" +
+                "}";
+
+        MyPrefs.setStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey, postBody);
+        String PostBodyLog = "";
+        if (postBody.length() > 59) {PostBodyLog = postBody.substring(0, 60) + " " + prefKey;} else {PostBodyLog = postBody;}
+        MyLogs.writeFile_FullLog("myLogs: PrepareImage", "", PostBodyLog, 0, prefKey, globalCurrentAttachmentPath);
+    }
+
+    private static String encodeFileToBase64(File file) {
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            return Base64.encodeToString(fileContent, Base64.NO_WRAP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void setupStatusesSpinner() {
@@ -1563,6 +1711,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 takeAssignmentPhotoWithCamera(this);
             } else if (requestCode == REQUEST_CAMERA_FOR_MANDATORY_PHOTO) {
                 takeMandatoryPhotoWithCamera(this);
+            } else if (requestCode == PICKFILE_RESULT_CODE){
+                pickFileFromStorage(this);
             }
         }
      /*   } else {
@@ -1652,6 +1802,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     public static void takeMandatoryPhotoWithCamera(Context ctx) {
         String photoFolderName = SELECTED_ASSIGNMENT.getAssignmentId() + CONST_ASSIGNMENT_PHOTOS_FOLDER;
         new TakeUploadPhoto(ctx).dispatchTakePictureIntent(OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO, photoFolderName);
+    }
+
+    public static void pickFileFromStorage(Activity activity){
+        globalCurrentAttachmentPath = null;
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        activity.startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
     }
 
 }

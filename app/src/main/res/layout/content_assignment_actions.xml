@@ -417,67 +417,44 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-       <!-- <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDetAttachments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp_16"
             style="?android:attr/buttonBarStyle">
 
-            &lt;!&ndash;<Button&ndash;&gt;
-            &lt;!&ndash;android:id="@+id/btnStartTravel"&ndash;&gt;
-            &lt;!&ndash;android:layout_width="0dp"&ndash;&gt;
-            &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
-            &lt;!&ndash;android:layout_weight="1"&ndash;&gt;
-            &lt;!&ndash;android:padding="@dimen/dp_6"&ndash;&gt;
-            &lt;!&ndash;android:background="@drawable/rounded_button_grey"&ndash;&gt;
-            &lt;!&ndash;android:text="@string/start_travel"&ndash;&gt;
-            &lt;!&ndash;android:layout_gravity="center_vertical"&ndash;&gt;
-            &lt;!&ndash;android:drawableStart="@drawable/ic_forward_black_24dp"&ndash;&gt;
-            &lt;!&ndash;android:drawableLeft="@drawable/ic_forward_black_24dp" />&ndash;&gt;
-
             <Button
-                android:enabled="false"
-                android:id="@+id/btnCheckIn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="@dimen/dp_6"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:layout_marginRight="@dimen/dp_10"
-                android:background="@drawable/btn_blue_rounded"
-                android:text="@string/check_in"
-                android:textColor="@color/grey_800"
-                android:layout_gravity="center_vertical"
-                android:drawableStart="@drawable/ic_directions_walk_blue_24dp"
-                android:drawableLeft="@drawable/ic_directions_walk_blue_24dp"
-                android:drawablePadding="@dimen/dp_2"
-                style="?android:attr/buttonBarButtonStyle"/>
-
-            <Button
-                android:enabled="false"
                 android:id="@+id/btnTakePhoto"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="@dimen/dp_16"
-                android:layout_gravity="center_vertical"
-                android:drawableTop="@drawable/ic_add_a_photo_black_24dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_24"
                 android:background="@drawable/btn_amber_rounded"
-                tools:ignore="RelativeOverlap"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:drawableTop="@drawable/ic_add_a_photo_black_24dp"
+                android:enabled="false"
+                android:paddingTop="@dimen/dp_16" />
 
-        </LinearLayout>-->
+            <Button
+                android:id="@+id/btnAddAttachment"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_24"
+                android:background="@drawable/btn_amber_rounded"
+                android:drawableTop="@drawable/ic_add_attachment_24"
+                android:enabled="false"
+                android:paddingTop="@dimen/dp_16" />
 
-        <Button
-            android:id="@+id/btnTakePhoto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_24"
-            android:background="@drawable/btn_amber_rounded"
-            android:drawableTop="@drawable/ic_add_a_photo_black_24dp"
-            android:enabled="false"
-            android:paddingTop="@dimen/dp_16" />
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/llPayment"

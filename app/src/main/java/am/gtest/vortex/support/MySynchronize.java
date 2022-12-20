@@ -10,6 +10,7 @@ import java.util.Map;
 import am.gtest.vortex.activities.AssignmentActionsActivity;
 import am.gtest.vortex.activities.AssignmentsActivity;
 import am.gtest.vortex.api.GetAssignments;
+import am.gtest.vortex.api.SendAttachment;
 import am.gtest.vortex.api.SendCheckIn;
 import am.gtest.vortex.api.SendCheckOut;
 import am.gtest.vortex.api.SendCustomFields;
@@ -35,6 +36,7 @@ import static am.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
 import static am.gtest.vortex.support.MyGlobals.CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST;
 import static am.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC;
+import static am.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static am.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC;
@@ -88,6 +90,7 @@ public class MySynchronize {
                 }
             } else {
                 synchronizeSavedImages(ctx);
+                synchronizeSavedAttachments(ctx);
             }
 
             synchronizeSavedData();
@@ -109,6 +112,18 @@ public class MySynchronize {
 
             SendImage sendImage = new SendImage(ctx);
             sendImage.execute(prefKey);
+        }
+    }
+
+    public static void synchronizeSavedAttachments(Context ctx) {
+
+        Map<String, ?> filesToBeSynchronized = ctx.getSharedPreferences(PREF_FILE_ATTACHMENT_FOR_SYNC, MODE_PRIVATE).getAll();
+
+        for (Map.Entry<String, ?> entry : filesToBeSynchronized.entrySet()) {
+            String prefKey = entry.getKey();
+
+            SendAttachment sendAttachment = new SendAttachment(ctx);
+            sendAttachment.execute(prefKey);
         }
     }
 

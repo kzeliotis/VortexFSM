@@ -150,6 +150,7 @@ public class MyGlobals {
     public static final int REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO = 2007;
     public static final int REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO = 2008;
     public static final int REQUEST_CAMERA_FOR_MANDATORY_PHOTO = 2009;
+    public static final int PICKFILE_RESULT_CODE = 2010;
 
     // requests for permissions from 3001
     public static final int PERMISSIONS_FINE_LOCATION = 3001;
@@ -163,6 +164,7 @@ public class MyGlobals {
     // global variables
     public static String globalSelectedProductId;
     public static String globalCurrentPhotoPath;
+    public static String globalCurrentAttachmentPath;
     public static String globalGetHistoryParameter = "";
     public static String globalExternalFileDir = "";
 
@@ -183,6 +185,7 @@ public class MyGlobals {
     public static final String CONST_PARENT_ALL_PRODUCTS_ACTIVITY = "const_parent_all_products_activity";
     public static final String CONST_PARENT_ATTRIBUTES_ACTIVITY = "const_parent_attributes_activity";
     public static final String CONST_ASSIGNMENT_PHOTOS_FOLDER = "_Assignment_Photos";
+    public static final String CONST_ASSIGNMENT_ATTACHMENTS_FOLDER = "_Assignment_Attachments";
     public static final String CONST_MANDATORY_TASKS_PHOTOS_FOLDER = "_Mandatory_Tasks";
     public static final String CONST_IS_FOR_NEW_ASSIGNMENT = "const_is_for_new_assignment";
     public static final String CONST_SINGLE_SELECTION = "const_single_selection";
