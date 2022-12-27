@@ -631,16 +631,16 @@
     <string name="product_description_gr">Προϊόν</string>
     <string name="product_description_ar">وصف المنتج</string>
 
-    <string name="photo_settings">Photo Settings</string>
-    <string name="photo_settings_gr">Ρυμίσεις Φωτογραφιών</string>
+    <string name="photo_settings">Attachments Settings</string>
+    <string name="photo_settings_gr">Ρυθμίσεις Επισυναπτόμενων</string>
     <string name="photo_settings_ar">إعدادات الصورة</string>
 
     <string name="photo_image_size">Photo Image Size</string>
     <string name="photo_image_size_gr">Μέγεθος Φωτογραφιών</string>
     <string name="photo_image_size_ar">قياس الصورة</string>
 
-    <string name="image_sending_network_type">Image Sending Network Type</string>
-    <string name="image_sending_network_type_gr">Αποστολή φωτογραφιών μέσω</string>
+    <string name="image_sending_network_type">File Sending Network Type</string>
+    <string name="image_sending_network_type_gr">Αποστολή αρχείων μέσω</string>
     <string name="image_sending_network_type_ar">نوع شبكة ارسال الصورة</string>
 
     <string name="internal_communication">Internal communication</string>
