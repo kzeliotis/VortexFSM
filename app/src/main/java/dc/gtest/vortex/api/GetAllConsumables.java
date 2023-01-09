@@ -1,0 +1,81 @@
+package dc.gtest.vortex.api;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+
+import dc.gtest.vortex.adapters.AllConsumablesRvAdapter;
+import dc.gtest.vortex.data.AllConsumablesData;
+import dc.gtest.vortex.support.MyLogs;
+import dc.gtest.vortex.support.MyPrefs;
+
+import static dc.gtest.vortex.api.MyApi.API_GET_ALL_CONSUMABLES;
+import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
+import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
+import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_CONSUMABLES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
+
+public class GetAllConsumables extends AsyncTask<String, Void, String > {
+
+//    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
+
+    private final AllConsumablesRvAdapter allConsumablesRvAdapter;
+    private final String AssignmentId;
+    private final boolean warehouseProducts;
+
+    private String apiUrl;
+    private int responseCode;
+    private String responseMessage;
+    private String responseBody;
+
+    public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts) {
+        this.allConsumablesRvAdapter = allConsumablesRvAdapter;
+        this.AssignmentId = AssignmentId;
+        this.warehouseProducts = warehouseProducts;
+    }
+
+    @Override
+    protected String doInBackground(String... params) {
+
+        String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
+        String warehouseID = "0";
+        if(warehouseProducts){warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");}
+        apiUrl = baseHostUrl + API_GET_ALL_CONSUMABLES + AssignmentId + "&WarehouseId=" + warehouseID;
+
+        try {
+            Bundle bundle = MyApi.get(apiUrl);
+
+            responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
+            responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
+            responseBody = bundle.getString(MY_API_RESPONSE_BODY);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return responseBody;
+    }
+
+    @Override
+    protected void onPostExecute(String responseBody) {
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no_body_for_get_request", responseCode, responseMessage, responseBody);
+
+        if ( responseCode == 200 && responseBody != null ) {
+            MyPrefs.setString(PREF_DATA_ALL_CONSUMABLES, responseBody);
+            if(warehouseProducts){
+                MyPrefs.setStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(PREF_WAREHOUSEID, "0"), responseBody);
+            } else {
+                MyPrefs.setStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, AssignmentId, responseBody);
+            }
+
+            AllConsumablesData.generate(AssignmentId, warehouseProducts);
+
+            if (allConsumablesRvAdapter != null) {
+                allConsumablesRvAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+}

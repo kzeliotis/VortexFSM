@@ -3,7 +3,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="am.gtest.vortex">
+    package="dc.gtest.vortex">
 
     <queries>
         <package android:name="com.google.android.apps.maps" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".application.MyApplication"
+        android:name="dc.gtest.vortex.application.MyApplication"
         android:hardwareAccelerated="false"
         android:largeHeap="true"
         android:allowBackup="true"
@@ -29,7 +29,8 @@
         android:theme="@style/AppTheme"
         android:fullBackupContent="true"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:exported="true">
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -41,10 +42,11 @@
             android:required="false" />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name="dc.gtest.vortex.activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,198 +55,198 @@
         </activity>
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="dc.gtest.vortex.activities.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".activities.AssignmentsActivity"
+            android:name="dc.gtest.vortex.activities.AssignmentsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/assignments"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.AssignmentDetailActivity"
+            android:name="dc.gtest.vortex.activities.AssignmentDetailActivity"
             android:label="@string/assignment_details"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.MapActivity"
+            android:name="dc.gtest.vortex.activities.MapActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.HistoryActivity"
+            android:name="dc.gtest.vortex.activities.HistoryActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/history"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AssignmentActionsActivity"
+            android:name="dc.gtest.vortex.activities.AssignmentActionsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/assignment_actions"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ProductsActivity"
+            android:name="dc.gtest.vortex.activities.ProductsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/products"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AllProductsActivity"
+            android:name="dc.gtest.vortex.activities.AllProductsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/add_new_product"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AllAttributesActivity"
+            android:name="dc.gtest.vortex.activities.AllAttributesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/select_attribute"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AttributesActivity"
+            android:name="dc.gtest.vortex.activities.AttributesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/attributes"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".items.MeasurementsListActivity"
+            android:name="dc.gtest.vortex.items.MeasurementsListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/measurements"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AddedConsumablesActivity"
+            android:name="dc.gtest.vortex.activities.AddedConsumablesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/select_consumable"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AllConsumablesActivity"
+            android:name="dc.gtest.vortex.activities.AllConsumablesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/consumables"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".items.ServicesListActivity"
+            android:name="dc.gtest.vortex.items.ServicesListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/services"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".items.ServicesToSelectActivity"
+            android:name="dc.gtest.vortex.items.ServicesToSelectActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/services"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".items.MeasurementsToSelectActivity"
+            android:name="dc.gtest.vortex.items.MeasurementsToSelectActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/select_measurement"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ManualsActivity"
+            android:name="dc.gtest.vortex.activities.ManualsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/manuals"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.PhotoSettingsActivity"
+            android:name="dc.gtest.vortex.activities.PhotoSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/photo_settings"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ApiUrlSettingsActivity"
+            android:name="dc.gtest.vortex.activities.ApiUrlSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/host_server_settings"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.MapsActivity"
+            android:name="dc.gtest.vortex.activities.MapsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/map"/>
 
         <activity
-            android:name=".support.CaptureSignature"
+            android:name="dc.gtest.vortex.support.CaptureSignature"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="Signature"
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
 
         <activity
-            android:name=".activities.FullScreenImageActivity"
+            android:name="dc.gtest.vortex.activities.FullScreenImageActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.NewAssignmentActivity"
+            android:name="dc.gtest.vortex.activities.NewAssignmentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/new_assignment"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.NewCustomerActivity"
+            android:name="dc.gtest.vortex.activities.NewCustomerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/new_customer"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.SearchCustomersActivity"
+            android:name="dc.gtest.vortex.activities.SearchCustomersActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/search_customers"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.SearchProductsActivity"
+            android:name="dc.gtest.vortex.activities.SearchProductsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/products"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.SearchAttributesActivity"
+            android:name="dc.gtest.vortex.activities.SearchAttributesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/attributes"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.CompaniesActivity"
+            android:name="dc.gtest.vortex.activities.CompaniesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/companies"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ServicesActivity"
+            android:name="dc.gtest.vortex.activities.ServicesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/services"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.UserPartnerResourcesActivity"
+            android:name="dc.gtest.vortex.activities.UserPartnerResourcesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/resources"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.CompanyDetailsActivity"
+            android:name="dc.gtest.vortex.activities.CompanyDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/company_details"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ZonesActivity"
+            android:name="dc.gtest.vortex.activities.ZonesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/zones"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ZoneProductsActivity"
+            android:name="dc.gtest.vortex.activities.ZoneProductsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/zone_products"
@@ -252,56 +254,56 @@
 
 
         <activity
-            android:name=".activities.ChangeResourceActivity"
+            android:name="dc.gtest.vortex.activities.ChangeResourceActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/change_resource"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.AssignmentTypesActivity"
+            android:name="dc.gtest.vortex.activities.AssignmentTypesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/assignment_types"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.ProjectInstallationActivity"
+            android:name="dc.gtest.vortex.activities.ProjectInstallationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/installations"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.InstallationDetailActivity"
+            android:name="dc.gtest.vortex.activities.InstallationDetailActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/installations"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.InstallationZonesActivity"
+            android:name="dc.gtest.vortex.activities.InstallationZonesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/installation_zones"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.InstallationZoneEditActivity"
+            android:name="dc.gtest.vortex.activities.InstallationZoneEditActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/installation_zones"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.CustomFieldsActivity"
+            android:name="dc.gtest.vortex.activities.CustomFieldsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/custom_fields"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.CustomFieldDetailsActivity"
+            android:name="dc.gtest.vortex.activities.CustomFieldDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/custom_field_details"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.CustomFieldDetailsEditActivity"
+            android:name="dc.gtest.vortex.activities.CustomFieldDetailsEditActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/custom_field_details"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -313,7 +315,7 @@
             android:stateNotNeeded="true"/>
 
         <service
-            android:name=".services.SendLocationSRV"
+            android:name="dc.gtest.vortex.services.SendLocationSRV"
             android:foregroundServiceType="location"
             android:enabled="true"
             android:exported="true" />
@@ -329,7 +331,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="am.gtest.vortex"
+            android:authorities="dc.gtest.vortex"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

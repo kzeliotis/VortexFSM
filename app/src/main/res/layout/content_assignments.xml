@@ -90,7 +90,7 @@
         <!--android:paddingBottom="@dimen/dp_16">-->
     <!--</LinearLayout>-->
 
-    <am.gtest.vortex.support.CalendarView
+    <dc.gtest.vortex.support.CalendarView
         android:visibility="gone"
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
