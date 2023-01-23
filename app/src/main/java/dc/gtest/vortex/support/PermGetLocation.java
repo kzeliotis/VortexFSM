@@ -41,8 +41,10 @@ import dc.gtest.vortex.services.SendLocationSRV;
 
 import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_CTX;
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
+import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_BACKGROUND_LOCATION;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_access_to_location_for_features;
+import static dc.gtest.vortex.support.MyLocalization.localized_access_to_location_for_features2;
 import static dc.gtest.vortex.support.MyLocalization.localized_some_features;
 import static dc.gtest.vortex.support.MyLocalization.localized_turn_on_location;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
@@ -111,12 +113,26 @@ public class PermGetLocation {
                                 .setNegativeButton(android.R.string.cancel, null)
                                 .show();
                     } else {
+                        myRequestPermission(PERMISSIONS_BACKGROUND_LOCATION);
                         setupLocationUpdates(ctx);
                     }
                 } else {
                     setupLocationUpdates(ctx);
                 }
                 break;
+            case PERMISSIONS_BACKGROUND_LOCATION:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && MyPrefs.getBoolean(PREF_ENABLE_LOCATION_SERVICE, false)) {
+                    if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        new AlertDialog.Builder(ctx)
+                                .setMessage(localized_access_to_location_for_features2)
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    ActivityCompat.requestPermissions((AppCompatActivity) ctx, new String[] { Manifest.permission.ACCESS_BACKGROUND_LOCATION }, requestCode);
+                                })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
+                    }
+                }
         }
     }
 
@@ -129,6 +145,7 @@ public class PermGetLocation {
             case PERMISSIONS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+                        myRequestPermission(PERMISSIONS_BACKGROUND_LOCATION);
                         setupLocationUpdates(ctx);
                     }
                 } else {
@@ -141,6 +158,10 @@ public class PermGetLocation {
                             .show();
                 }
                 break;
+            case PERMISSIONS_BACKGROUND_LOCATION:
+                        setupLocationUpdates(ctx);
+                        break;
+
         }
     }
 

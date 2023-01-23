@@ -68,6 +68,9 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
         btnSendChanges = findViewById(R.id.btnSendChanges);
         vortexTable = getIntent().getStringExtra(KEY_VORTEX_TABLE);
         List<CustomFieldDetailColumnModel> cf_Columns = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns();
+        if (cf_Columns == null){
+            cf_Columns = new ArrayList<>();
+        }
 
         //refresh = getIntent().getBooleanExtra(KEY_REFRESH_CUSTOM_FIELDS, false);
 

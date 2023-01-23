@@ -152,6 +152,7 @@ public class MyGlobals {
 
     // requests for permissions from 3001
     public static final int PERMISSIONS_FINE_LOCATION = 3001;
+    public static final int PERMISSIONS_BACKGROUND_LOCATION = 3003;
 
     //
     public static String[] PERMISSIONS_STORAGE = {

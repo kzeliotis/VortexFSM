@@ -239,6 +239,7 @@ public class MyLocalization {
     public static String localized_workorder_not_available = "";
     public static String localized_file_uploaded = "";
     public static String localized_file_will_be_sent = "";
+    public static String localized_access_to_location_for_features2 = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -471,6 +472,7 @@ public class MyLocalization {
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_gr);
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded_gr);
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent_gr);
+                localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2_gr);
                 break;
 
             case CONST_AR:
@@ -699,6 +701,7 @@ public class MyLocalization {
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_ar);
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded);
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
+                localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2_ar);
 
                 break;
 
@@ -929,6 +932,7 @@ public class MyLocalization {
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available);
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded);
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
+                localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2);
 
                 break;
 
