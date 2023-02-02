@@ -23,6 +23,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_phone;
 import static dc.gtest.vortex.support.MyLocalization.localized_project_description;
 import static dc.gtest.vortex.support.MyLocalization.localized_search_customers;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyLocalization.localized_vat_number;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class SearchCustomersActivity extends BaseDrawerActivity {
@@ -37,6 +38,8 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
     private EditText etSearchCustomersPhone;
     private EditText etSearchCustomersAddress;
     private EditText etSearchCustomersProject;
+    private TextView tvSearchCustomersVATNumber;
+    private EditText etSearchCustomersVATNumber;
     private Button btnSearchCustomers;
 
     @Override
@@ -50,10 +53,13 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
         tvSearchCustomersPhone = findViewById(R.id.tvSearchCustomersPhone);
         tvSearchCustomersAddress = findViewById(R.id.tvSearchCustomersAddress);
         tvSearchCustomersProject = findViewById(R.id.tvSearchCustomersProject);
+        tvSearchCustomersVATNumber = findViewById(R.id.tvSearchCustomersVATNumber);
         etSearchCustomersName = findViewById(R.id.etSearchCustomersName);
         etSearchCustomersPhone = findViewById(R.id.etSearchCustomersPhone);
         etSearchCustomersAddress = findViewById(R.id.etSearchCustomersAddress);
         etSearchCustomersProject = findViewById(R.id.etSearchCustomersProject);
+        etSearchCustomersVATNumber = findViewById(R.id.etSearchCustomersVATNumber);
+
         btnSearchCustomers = findViewById(R.id.btnSearchCustomers);
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
@@ -66,7 +72,8 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
                         etSearchCustomersName.getText().toString(),
                         etSearchCustomersPhone.getText().toString(),
                         etSearchCustomersAddress.getText().toString(),
-                        etSearchCustomersProject.getText().toString()
+                        etSearchCustomersProject.getText().toString(),
+                        etSearchCustomersVATNumber.getText().toString()
                 );
             } else {
                 Toast.makeText(SearchCustomersActivity.this, localized_no_internet_try_later_2_lines, Toast.LENGTH_LONG).show();
@@ -96,11 +103,13 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
         String phoneText = localized_phone + ":";
         String addressText = localized_address + ":";
         String projectDescriptionText = localized_project_description + ":";
+        String VatNumber = localized_vat_number + ":";
 
         tvSearchCustomersName.setText(nameText);
         tvSearchCustomersPhone.setText(phoneText);
         tvSearchCustomersAddress.setText(addressText);
         tvSearchCustomersProject.setText(projectDescriptionText);
+        tvSearchCustomersVATNumber.setText(VatNumber);
         btnSearchCustomers.setText(localized_search_customers);
     }
 }

@@ -85,6 +85,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
                 "  \"Phone\": \"" + params[1] + "\",\n" +
                 "  \"Address\": \"" + params[2] + "\",\n" +
                 "  \"ProjectDescription\": \"" + params[3] + "\",\n" +
+                "  \"VATNumber\": \"" + params[4] + "\",\n" +
                 "  \"CustomerId\": \"" + CustomerId + "\",\n" +
                 "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                 "  \"ProjectId\": \"" + ProjectId + "\"\n" +

@@ -80,9 +80,25 @@
             android:background="@drawable/rounded_edittext_white"/>
 
         <TextView
+            android:id="@+id/tvSearchCustomersVATNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:padding="@dimen/dp_10"
+            android:text="@string/vat_number"/>
+
+        <EditText
+            android:id="@+id/etSearchCustomersVATNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext_white"/>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
+
 
         <Button
             android:id="@+id/btnSearchCustomers"
