@@ -240,6 +240,7 @@ public class MyLocalization {
     public static String localized_file_uploaded = "";
     public static String localized_file_will_be_sent = "";
     public static String localized_access_to_location_for_features2 = "";
+    public static String localized_file_size_limit = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -471,8 +472,9 @@ public class MyLocalization {
                 localized_vortex_tracking_running = ctx.getString(R.string.vortex_location_running_gr);
                 localized_workorder_not_available = ctx.getString(R.string.workOrder_Not_available_gr);
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded_gr);
-                localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent_gr);
-                localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2_gr);
+                localized_file_will_be_sent = ctx.getString(R.string.no_internet_file_will_be_sent_gr);
+                localized_access_to_location_for_features2 = ctx.getString(R.string.access_to_location_for_features2_gr);
+                localized_file_size_limit = ctx.getString(R.string.file_size_limit_gr);
                 break;
 
             case CONST_AR:
@@ -702,6 +704,7 @@ public class MyLocalization {
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded);
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
                 localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2_ar);
+                localized_file_size_limit = ctx.getString(R.string.file_size_limit_ar);
 
                 break;
 
@@ -933,6 +936,7 @@ public class MyLocalization {
                 localized_file_uploaded = ctx.getString(R.string.file_uploaded);
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
                 localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2);
+                localized_file_size_limit = ctx.getString(R.string.file_size_limit);
 
                 break;
 

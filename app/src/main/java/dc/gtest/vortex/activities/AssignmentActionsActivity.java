@@ -56,6 +56,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -141,6 +142,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_commentsSolution;
 import static dc.gtest.vortex.support.MyLocalization.localized_complete_measurements;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_default_actions;
+import static dc.gtest.vortex.support.MyLocalization.localized_file_size_limit;
 import static dc.gtest.vortex.support.MyLocalization.localized_fillComments;
 import static dc.gtest.vortex.support.MyLocalization.localized_fillMandatoryTasks;
 import static dc.gtest.vortex.support.MyLocalization.localized_fillSignature;
@@ -1500,6 +1502,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     boolean transferSuccessful = true;
                     try {
                         in = getContentResolver().openInputStream(attachmentFile);
+                        long sizeLimit = 30000000; //30mb
+                        long selectedFileSize = in.available();
+                        if (selectedFileSize > sizeLimit){
+                            MyDialogs.showOK(AssignmentActionsActivity.this, localized_file_size_limit);
+                            return;
+                        }
                         outputFile.getParentFile().mkdirs();
                         outputFile.createNewFile();
                         out = new FileOutputStream(outputFile, true);
@@ -1551,6 +1559,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     }
 
 
+    @SuppressLint("Range")
     public String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
