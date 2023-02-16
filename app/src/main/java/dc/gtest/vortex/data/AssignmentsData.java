@@ -29,6 +29,8 @@ import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NOTES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 
 public class AssignmentsData {
@@ -151,6 +153,13 @@ public class AssignmentsData {
                     assignmentModel.setPickingList(MyJsonParser.getStringValue(oneObject, "PickingList", ""));
                     assignmentModel.setCommentsSolution(MyJsonParser.getStringValue(oneObject, "Solution", ""));
                     assignmentModel.setNotes(MyJsonParser.getStringValue(oneObject, "Notes", ""));
+
+                    String assignmentId = assignmentModel.getAssignmentId();
+                    if (! MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false)){
+                        MyPrefs.setStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, assignmentModel.getNotes());
+                    }
+
+
                     assignmentModel.setChargedAmount(MyJsonParser.getStringValue(oneObject, "Charge", ""));
                     assignmentModel.setPaidAmount(MyJsonParser.getStringValue(oneObject, "Payment", ""));
                     assignmentModel.setMandatoryTasks(MyJsonParser.getJsonArrayValue(oneObject, "ServiceSteps"));
