@@ -419,6 +419,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             btnToServices.setVisibility(View.GONE);
             btnZones.setVisibility(View.GONE);
             btnInstallations.setVisibility(View.GONE);
+            btnTakePhoto.setVisibility(View.GONE);
+            btnAddAttachment.setVisibility(View.GONE);
         }
 
         setupStatusesSpinner();
