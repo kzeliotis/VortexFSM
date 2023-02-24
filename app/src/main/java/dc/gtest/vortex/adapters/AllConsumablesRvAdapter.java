@@ -21,6 +21,7 @@ import dc.gtest.vortex.R;
 import dc.gtest.vortex.models.AddedConsumableModel;
 import dc.gtest.vortex.models.AllConsumableModel;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 import dc.gtest.vortex.unused.MinMaxFilter;
 
 
@@ -30,12 +31,14 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumable_value;
 import static dc.gtest.vortex.support.MyLocalization.localized_notes_with_colon;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_value_with_colon;
 import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_colon;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
 
 public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumablesRvAdapter.ViewHolder> implements Filterable {
 
@@ -84,8 +87,9 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             final EditText etUsedConsumablesValue = view.findViewById(R.id.etUsedConsumablesValue);
             final EditText etConsumableNotes = view.findViewById(R.id.etConsumableNotes);
 
+            String stock = "";
             if(warehouseProducts){
-                String stock = holder.mItem.getStock().replace(",", ".");
+                stock = holder.mItem.getStock().replace(",", ".");
                 etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
             }
 
@@ -103,16 +107,20 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
                             AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
 
-                            addedConsumableModel.setName(holder.mItem.getConsumableName());
-                            addedConsumableModel.setNotes(etConsumableNotes.getText().toString().trim());
+                            addedConsumableModel.setName(MyUtils.ToJson(holder.mItem.getConsumableName()));
+                            addedConsumableModel.setNotes(MyUtils.ToJson(etConsumableNotes.getText().toString().trim()));
                             addedConsumableModel.setSuggested(etSuggestedConsumablesValue.getText().toString().trim());
                             addedConsumableModel.setUsed(etUsedConsumablesValue.getText().toString().trim());
                             addedConsumableModel.setProductId(holder.mItem.getProductId());
                             String warehouseId = "0";
-                            if(warehouseProducts){warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");}
+                            if(warehouseProducts){
+                                warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
+                                addedConsumableModel.setStock(holder.mItem.getStock().replace(",", "."));
+                            }
                             addedConsumableModel.setWarehouseId(warehouseId);
 
                             CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
+                            MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), CONSUMABLES_TOADD_LIST.toString());
                             ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
   //                            savedConsumable = savedConsumable + "{" +
 //                                    "\"name\":\"" + holder.mItem.getConsumableName() + "\"," +

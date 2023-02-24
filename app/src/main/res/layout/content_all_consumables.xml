@@ -30,6 +30,15 @@
         android:scrollbars="vertical" />
 
     <Button
+        android:id="@+id/btnEditConsumables"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_selection_gr"
+        android:padding="@dimen/dp_10"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/rounded_button_teal_light" />
+
+    <Button
         android:id="@+id/btnSendConsumables"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

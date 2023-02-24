@@ -25,6 +25,7 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_update_available;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
@@ -140,6 +141,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileScrollableProblemDescription = MyJsonParser.getIntValue(oneObject,  "MobileScrollableProblemDescription", 0);
                     MyPrefs.setBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, MobileScrollableProblemDescription == 1);
+
+                    String AzureBlobConnectionString = MyJsonParser.getStringValue(oneObject,  "AzureBlobConnectionString", "");
+                    MyPrefs.setString(PREF_AZURE_CONNECTION_STRING, AzureBlobConnectionString);
 
                     Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);

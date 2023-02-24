@@ -128,7 +128,7 @@ public class MyGlobals {
     public static List<AddedConsumableModel> ADDED_CONSUMABLES_LIST = new ArrayList<>();
     public static List<AddedConsumableModel> CONSUMABLES_TOADD_LIST = new ArrayList<>();
     public static List<AddedConsumableModel> ADDED_CONSUMABLES_LIST_FILTERED = new ArrayList<>();
-
+    public static List<AddedConsumableModel> CONSUMABLES_TOADD_LIST_FILTERED = new ArrayList<>();
     public static List<HAssignmentModel> HISTORY_LIST = new ArrayList<>();
 
     public static List<ManualModel> MANUALS_LIST = new ArrayList<>();
@@ -189,7 +189,7 @@ public class MyGlobals {
     public static final String CONST_IS_FOR_NEW_ASSIGNMENT = "const_is_for_new_assignment";
     public static final String CONST_SINGLE_SELECTION = "const_single_selection";
     public static final String CONST_WAREHOUSE_PRODUCTS = "const_warehouse_products";
-
+    public static final String CONST_EDIT_CONSUMABLES = "const_edit_consumables";
 
     public static final boolean CONST_FINISH_ACTIVITY = true;
     public static final boolean CONST_DO_NOT_FINISH_ACTIVITY = false;

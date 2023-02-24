@@ -1,5 +1,7 @@
 package dc.gtest.vortex.models;
 
+import dc.gtest.vortex.support.MyUtils;
+
 public class AddedConsumableModel {
 
     private String name = "";
@@ -8,6 +10,7 @@ public class AddedConsumableModel {
     private String used = "";
     private int ProductId = 0;
     private String warehouseId = "0";
+    private String stock = "0";
 
     @Override
     public String toString() {
@@ -18,6 +21,7 @@ public class AddedConsumableModel {
                         "  \"suggested\": \"" + suggested + "\",\n" +
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
                         "  \"WarehouseId\": \"" + warehouseId  + "\",\n" +
+                        "  \"Stock\": \"" + stock  + "\",\n" +
                         "  \"used\": \"" + used + "\"\n" +
                         "}";
 
@@ -31,7 +35,7 @@ public class AddedConsumableModel {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = MyUtils.ToJson(name);
     }
 
     public String getNotes() {
@@ -39,7 +43,7 @@ public class AddedConsumableModel {
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = MyUtils.ToJson(notes);
     }
 
     public String getSuggested() {
@@ -72,5 +76,13 @@ public class AddedConsumableModel {
 
     public void setWarehouseId(String WarehouseId) {
         this.warehouseId = WarehouseId;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String Stock) {
+        this.stock = Stock;
     }
 }

@@ -241,7 +241,8 @@ public class MyLocalization {
     public static String localized_file_will_be_sent = "";
     public static String localized_access_to_location_for_features2 = "";
     public static String localized_file_size_limit = "";
-
+    public static String localized_edit_selection = "";
+    public static String localized_consumables_to_send = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -475,6 +476,8 @@ public class MyLocalization {
                 localized_file_will_be_sent = ctx.getString(R.string.no_internet_file_will_be_sent_gr);
                 localized_access_to_location_for_features2 = ctx.getString(R.string.access_to_location_for_features2_gr);
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit_gr);
+                localized_edit_selection = ctx.getString(R.string.edit_selection_gr);
+                localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_gr);
                 break;
 
             case CONST_AR:
@@ -705,7 +708,8 @@ public class MyLocalization {
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
                 localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2_ar);
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit_ar);
-
+                localized_edit_selection = ctx.getString(R.string.edit_selection_ar);
+                localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_ar);
                 break;
 
             default:
@@ -937,7 +941,8 @@ public class MyLocalization {
                 localized_file_will_be_sent =  ctx.getString(R.string.no_internet_file_will_be_sent);
                 localized_access_to_location_for_features2 =  ctx.getString(R.string.access_to_location_for_features2);
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit);
-
+                localized_edit_selection = ctx.getString(R.string.edit_selection);
+                localized_consumables_to_send = ctx.getString(R.string.consumables_to_send);
                 break;
 
 

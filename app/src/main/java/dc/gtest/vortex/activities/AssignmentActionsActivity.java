@@ -164,6 +164,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_zones;
+import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LNG;
@@ -1608,10 +1609,16 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
     private void prepareAttachmentForSending() {
 
-        File file = new File(globalCurrentAttachmentPath);
-        String fileBase64String = encodeFileToBase64(file);
+        String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
 
-        if (fileBase64String.length() == 0){ return;}
+        File file = new File(globalCurrentAttachmentPath);
+        String fileBase64String = "";
+
+        if(conStr.length() == 0){
+            fileBase64String = encodeFileToBase64(file);
+            if (fileBase64String.length() == 0){ return;}
+        }
+
 
         int lastIndex = globalCurrentAttachmentPath.lastIndexOf("/");
         String attachmentFileName = globalCurrentAttachmentPath.substring(lastIndex + 1);
@@ -1622,6 +1629,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 "  \"Filename\": \"" + attachmentFileName + "\",\n" +
                 "  \"Attachment64\": \"" + fileBase64String + "\"\n" +
                 "}";
+
+        if (conStr.length()>0){
+            postBody = assignmentId + "|" + globalCurrentAttachmentPath;
+        }
 
         MyPrefs.setStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey, postBody);
         String PostBodyLog = "";

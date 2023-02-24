@@ -180,4 +180,24 @@ public class MyUtils {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+    public static String ToJson(String raw) {
+        String escaped = raw;
+//        escaped = escaped.replace("\\", "\\\\");
+//        escaped = escaped.replace("\"", "\\\"");
+//        escaped = escaped.replace("\b", "\\b");
+//        escaped = escaped.replace("\f", "\\f");
+//        escaped = escaped.replace("\n", "\\n");
+//        escaped = escaped.replace("\r", "\\r");
+//        escaped = escaped.replace("\t", "\\t");
+        escaped = escaped.replace("\\", " ");
+        escaped = escaped.replace("\"", " ");
+        escaped = escaped.replace("\b", " ");
+        escaped = escaped.replace("\f", " ");
+        escaped = escaped.replace("\n", " ");
+        escaped = escaped.replace("\r", " ");
+        escaped = escaped.replace("\t", " ");
+        // TODO: escape other non-printing characters using uXXXX notation
+        return escaped;
+    }
 }

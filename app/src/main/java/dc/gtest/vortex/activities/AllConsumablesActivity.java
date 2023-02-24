@@ -1,5 +1,6 @@
 package dc.gtest.vortex.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,6 +28,7 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
@@ -53,6 +55,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
 
     private TextView tvAssignmentId;
     private Button btnSendConsumables;
+    private Button btnEditConsumables;
 
     private String assignmentId = "";
 
@@ -68,16 +71,16 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         RecyclerView rvAllConsumables = findViewById(R.id.rvAllConsumables);
         btnSendConsumables = findViewById(R.id.btnSendConsumables);
+        btnEditConsumables = findViewById(R.id.btnEditConsumables);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
 
         AllConsumablesData.generate(assignmentId, WarehouseProducts);
         if(WarehouseProducts){
             allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
-            rvAllConsumables.setAdapter(allConsumablesRvAdapter);
         }else{
             allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
-            rvAllConsumables.setAdapter(allConsumablesRvAdapter);
         }
+        rvAllConsumables.setAdapter(allConsumablesRvAdapter);
 
 
         String RelatedConsumables = "";
@@ -92,17 +95,12 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
             getAllConsumables.execute();
         }
 
-        //if (ALL_CONSUMABLES_LIST.size() == 0) {
-        //if (RelatedConsumables.isEmpty()) {
-
-        //}
-        //}
-
         btnSendConsumables.setOnClickListener(v -> {
 
             if (CONSUMABLES_TOADD_LIST.size() > 0) {
 
                 MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, assignmentId, CONSUMABLES_TOADD_LIST.toString());
+                CONSUMABLES_TOADD_LIST.clear();
                 MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW, assignmentId, ADDED_CONSUMABLES_LIST.toString());
 
                 if (MyUtils.isNetworkAvailable()) {
@@ -113,6 +111,16 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                 }
             } else {
                 MyDialogs.showOK(AllConsumablesActivity.this, localized_select_set_save_consumable);
+            }
+        });
+
+        btnEditConsumables.setOnClickListener(v -> {
+
+            if (CONSUMABLES_TOADD_LIST.size() > 0) {
+                Intent intent = new Intent(AllConsumablesActivity.this, AddedConsumablesActivity.class);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(CONST_EDIT_CONSUMABLES, true);
+                startActivity(intent);
             }
         });
 
@@ -183,6 +191,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                     .setMessage(localized_sure_to_leave)
                     .setPositiveButton(R.string.yes, (dialog, which) -> {
                         dialog.dismiss();
+                        CONSUMABLES_TOADD_LIST.clear();
                         finish();
                     })
                     .setNegativeButton(R.string.no, null)

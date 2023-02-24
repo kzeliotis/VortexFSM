@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.AddedConsumablesRvAdapter;
 import dc.gtest.vortex.data.AddedConsumablesData;
+import dc.gtest.vortex.data.ConsumablesToAddData;
 import dc.gtest.vortex.support.MyCanEdit;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
@@ -25,12 +26,16 @@ import dc.gtest.vortex.support.MySliderMenu;
 
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
+import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
+import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_new_consumable_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables;
+import static dc.gtest.vortex.support.MyLocalization.localized_consumables_to_send;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_used;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
@@ -46,6 +51,7 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
     private TextView tvAssignmentId;
     private TextView tvTableHead;
     private Button btnAddNewConsumable;
+    private boolean edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +60,24 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.content_added_consumables, flBaseContainer, true);
 
+        edit = getIntent().getBooleanExtra(CONST_EDIT_CONSUMABLES, false);
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         tvTableHead = findViewById(R.id.tvTableHead);
         RecyclerView rvAddedConsumables = findViewById(R.id.rvAddedConsumables);
         btnAddNewConsumable = findViewById(R.id.btnAddNewConsumable);
 
-        ADDED_CONSUMABLES_LIST.clear();
-        ADDED_CONSUMABLES_LIST_FILTERED.clear();
-
-        addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(ADDED_CONSUMABLES_LIST, ADDED_CONSUMABLES_LIST_FILTERED);
+        if(edit) {
+            CONSUMABLES_TOADD_LIST.clear();
+            CONSUMABLES_TOADD_LIST_FILTERED.clear();
+            addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,CONSUMABLES_TOADD_LIST, CONSUMABLES_TOADD_LIST_FILTERED, edit);
+            btnAddNewConsumable.setVisibility(View.GONE);
+        } else {
+            ADDED_CONSUMABLES_LIST.clear();
+            ADDED_CONSUMABLES_LIST_FILTERED.clear();
+            addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,ADDED_CONSUMABLES_LIST, ADDED_CONSUMABLES_LIST_FILTERED, edit);
+        }
         rvAddedConsumables.setAdapter(addedConsumablesRvAdapter);
+
 
         btnAddNewConsumable.setOnClickListener(v -> {
             if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
@@ -93,8 +107,13 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
     protected void onResume() {
         super.onResume();
 
-        AddedConsumablesData.generate(SELECTED_ASSIGNMENT.getAssignmentId());
+        if(edit){
+            ConsumablesToAddData.generate(SELECTED_ASSIGNMENT.getAssignmentId());
+        }else{
+            AddedConsumablesData.generate(SELECTED_ASSIGNMENT.getAssignmentId());
+        }
         addedConsumablesRvAdapter.notifyDataSetChanged();
+
 
         if (searchView != null) {
             searchView.setQuery("", false);
@@ -136,6 +155,9 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
     private void updateUiTexts() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(localized_consumables);
+            if(edit){
+                getSupportActionBar().setTitle(localized_consumables_to_send);
+            }
             getSupportActionBar().setSubtitle(localized_user + ": " + MyPrefs.getString(PREF_USER_NAME, ""));
         }
 

@@ -11,7 +11,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 31
         versionCode 5
-        versionName "5.15.03"
+        versionName "5.15.05"
     }
 
     buildTypes {
@@ -76,5 +76,6 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.microsoft.azure.android:azure-storage-android:2.0.0'
 }
 

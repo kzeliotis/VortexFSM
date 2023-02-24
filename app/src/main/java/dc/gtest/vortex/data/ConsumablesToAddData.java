@@ -13,16 +13,17 @@ import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST_FILTERED;
-import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
+import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST_FILTERED;
 
-public class AddedConsumablesData {
+public class ConsumablesToAddData {
 
     public static void generate(String assignmentId) {
 
-        ADDED_CONSUMABLES_LIST.clear();
-        ADDED_CONSUMABLES_LIST_FILTERED.clear();
+        CONSUMABLES_TOADD_LIST.clear();
+        CONSUMABLES_TOADD_LIST_FILTERED.clear();
 
-        String consumables = MyPrefs.getStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW, assignmentId, "");
+        String consumables = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, assignmentId, "");
 
         if (!consumables.isEmpty()) {
             try {
@@ -43,18 +44,17 @@ public class AddedConsumablesData {
                     addedConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", "0"));
                     addedConsumableModel.setWarehouseId(MyJsonParser.getStringValue(oneObject, "WarehouseId", "0"));
 
-                    ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
+                    CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
                 }
 
-                Collections.sort(ADDED_CONSUMABLES_LIST, (a, b) -> a.getName().compareTo(b.getName()));
-
-                ADDED_CONSUMABLES_LIST_FILTERED.addAll(ADDED_CONSUMABLES_LIST);
+                Collections.sort(CONSUMABLES_TOADD_LIST, (a, b) -> a.getName().compareTo(b.getName()));
+                CONSUMABLES_TOADD_LIST_FILTERED.addAll(CONSUMABLES_TOADD_LIST);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        Log.e("myLogs: AddedConsData", "ADDED_CONSUMABLES_LIST:\n" + ADDED_CONSUMABLES_LIST);
+        Log.e("myLogs: AddedConsData", "ADDED_CONSUMABLES_LIST:\n" + CONSUMABLES_TOADD_LIST);
     }
 }

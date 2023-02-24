@@ -428,8 +428,8 @@
     <string name="send_consumable_gr">Αποστολή Δεδομένων</string>
     <string name="send_consumable_ar">إرسال المادة المستهلكة</string>
 
-    <string name="send_consumable_caps">SEND CONSUMABLE</string>
-    <string name="send_consumable_caps_gr">ΑΠΟΣΤΟΛΗ ΑΝΑΛΩΣΙΜΟΥ</string>
+    <string name="send_consumable_caps">SEND CONSUMABLES</string>
+    <string name="send_consumable_caps_gr">ΑΠΟΣΤΟΛΗ ΑΝΑΛΩΣΙΜΩΝ</string>
     <string name="send_consumable_caps_ar">إرسال المادة المستهلكة</string>
 
     <string name="select_consumable">Select consumable</string>
@@ -1265,6 +1265,14 @@
     <string name="file_size_limit">Selected file size must not exceed 30 Mb</string>
     <string name="file_size_limit_gr">Το μέγεθος του επιλεγμένου αρχείου δεν μπορεί να υπερβαίνει τα 30 Mb</string>
     <string name="file_size_limit_ar">Selected file size must not exceed 30 Mb</string>
+
+    <string name="edit_selection">EDIT SELECTION</string>
+    <string name="edit_selection_gr">ΕΠΕΞΕΡΓΑΣΙΑ ΕΠΙΛΕΓΜΕΝΩΝ</string>
+    <string name="edit_selection_ar">EDIT SELECTION</string>
+
+    <string name="consumables_to_send">Consumables to send</string>
+    <string name="consumables_to_send_gr">Αναλώσιμα προς απόστολή</string>
+    <string name="consumables_to_send_ar">Consumables to send</string>
 
 
     <item type="id" name="TAG_ID" />
