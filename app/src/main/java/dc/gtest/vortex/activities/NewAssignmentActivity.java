@@ -284,6 +284,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
                                 "",
                                 "",
                                 "",
+                                "",
                                 ""
                         );
                     }

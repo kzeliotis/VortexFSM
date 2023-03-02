@@ -55,6 +55,7 @@ public class CompaniesRvAdapter extends RecyclerView.Adapter<CompaniesRvAdapter.
                         "",
                         "",
                         "",
+                        "",
                         ""
                 );
             }

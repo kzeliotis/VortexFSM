@@ -63,6 +63,7 @@ public class ProjectsRvAdapter extends RecyclerView.Adapter<ProjectsRvAdapter.Vi
                         "",
                         "",
                         "",
+                        "",
                         ""
                 );
             }
