@@ -33,6 +33,7 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_edit_selection;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_consumable;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_set_save_consumable;
@@ -179,6 +180,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         tvAssignmentId.setText(assignmentIdText);
 
         btnSendConsumables.setText(localized_send_consumable_caps);
+        btnEditConsumables.setText(localized_edit_selection);
     }
 
     @Override
