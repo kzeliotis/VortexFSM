@@ -1502,12 +1502,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     File outputFile = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER + "/" + Filename);
                     InputStream in = null;
                     OutputStream out = null;
+                    long selectedFileSize = 0;
                     boolean transferSuccessful = true;
                     try {
                         in = getContentResolver().openInputStream(attachmentFile);
                         long sizeLimit = 30000000; //30mb
-                        long selectedFileSize = in.available();
-                        if (selectedFileSize > sizeLimit){
+                        selectedFileSize = in.available();
+                        String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
+                        if (selectedFileSize > sizeLimit && conStr.length()==0){
                             MyDialogs.showOK(AssignmentActionsActivity.this, localized_file_size_limit);
                             return;
                         }
@@ -1538,7 +1540,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         globalCurrentAttachmentPath = outputFile.getAbsolutePath(); //movedPhoto.getAbsolutePath();
                         ATTACHMENT_ITEMS.add(globalCurrentAttachmentPath);
                         attachmentsRvAdapter.notifyDataSetChanged();
-                        prepareAttachmentForSending();
+                        prepareAttachmentForSending(selectedFileSize);
                     }
 
                 }
@@ -1607,7 +1609,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
 
-    private void prepareAttachmentForSending() {
+    private void prepareAttachmentForSending(long filesize) {
 
         String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
 
@@ -1631,7 +1633,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 "}";
 
         if (conStr.length()>0){
-            postBody = assignmentId + "|" + globalCurrentAttachmentPath;
+            postBody = assignmentId + "|" + globalCurrentAttachmentPath + "|" + filesize;
         }
 
         MyPrefs.setStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey, postBody);

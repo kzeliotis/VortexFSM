@@ -30,6 +30,7 @@ import dc.gtest.vortex.api.SendUpdatedAttribute;
 import static dc.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
+import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
@@ -113,12 +114,19 @@ public class MySynchronize {
     public static void synchronizeSavedAttachments(Context ctx) {
 
         Map<String, ?> filesToBeSynchronized = ctx.getSharedPreferences(PREF_FILE_ATTACHMENT_FOR_SYNC, MODE_PRIVATE).getAll();
+        String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
 
         for (Map.Entry<String, ?> entry : filesToBeSynchronized.entrySet()) {
             String prefKey = entry.getKey();
 
-            SendAttachment sendAttachment = new SendAttachment(ctx);
-            sendAttachment.execute(prefKey);
+            if(conStr.length()>0){
+                UploadToAzure uploadToAzure = new UploadToAzure(ctx);
+                uploadToAzure.execute(prefKey);
+            } else {
+                SendAttachment sendAttachment = new SendAttachment(ctx);
+                sendAttachment.execute(prefKey);
+            }
+
         }
     }
 
