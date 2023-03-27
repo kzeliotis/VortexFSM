@@ -101,6 +101,11 @@
             android:title="@string/company_website" />
 
         <item
+            android:id="@+id/nav_privacy_policy"
+            android:icon="@drawable/ic_language_black_24dp"
+            android:title="@string/company_website" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/log_out" />

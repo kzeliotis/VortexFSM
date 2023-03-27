@@ -121,6 +121,7 @@ public class MySliderMenu {
             navigationView.getMenu().findItem(R.id.nav_website).setTitle(localized_company_website);
             navigationView.getMenu().findItem(R.id.nav_logout).setTitle(localized_log_out + " - " + userName);
             navigationView.getMenu().findItem(R.id.nav_company_custom_fields).setTitle(localized_company_custom_fields);
+            navigationView.getMenu().findItem(R.id.nav_privacy_policy).setTitle("Privacy Policy");
 
             tvVersion.setText(BuildConfig.VERSION_NAME);
 
@@ -226,6 +227,11 @@ public class MySliderMenu {
                     case R.id.nav_website:
                         Uri website = Uri.parse(item.toString());
                         intent = new Intent(Intent.ACTION_VIEW, website);
+                        break;
+
+                    case R.id.nav_privacy_policy:
+                        Uri privacyPolicyURL = Uri.parse("https://www.vortexsuite.com/en/privacy-policy");
+                        intent = new Intent(Intent.ACTION_VIEW, privacyPolicyURL);
                         break;
 
                     case R.id.nav_logout:
