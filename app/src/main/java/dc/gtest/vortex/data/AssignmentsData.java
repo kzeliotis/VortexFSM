@@ -9,15 +9,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
 import dc.gtest.vortex.activities.LoginActivity;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.models.AssignmentModel;
+import dc.gtest.vortex.models.AttachmentModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyPrefs;
@@ -190,6 +193,25 @@ public class AssignmentsData {
                         ctx.startActivity(intent);
                         return;
                     }
+
+                    JSONArray jArrayAttachments = MyJsonParser.getJsonArrayValue(oneObject, "Attachments");
+                    List<AttachmentModel> AttachmentsList = new ArrayList<>();
+                    for (int a = 0; a < jArrayAttachments.length(); a++){
+                        JSONObject jObjectOneAttachment = jArrayAttachments.getJSONObject(a);
+
+                        AttachmentModel attachmentModel = new AttachmentModel();
+
+                        attachmentModel.setObjectId(MyJsonParser.getStringValue(jObjectOneAttachment, "ObjectId", "0"));
+                        attachmentModel.setObjectType(MyJsonParser.getStringValue(jObjectOneAttachment, "ObjectType", ""));
+                        attachmentModel.setFilename(MyJsonParser.getStringValue(jObjectOneAttachment, "Filename", ""));
+                        attachmentModel.setCloudFileURL(MyJsonParser.getStringValue(jObjectOneAttachment, "CloudFileURL", ""));
+                        attachmentModel.setAttachmentId(MyJsonParser.getStringValue(jObjectOneAttachment, "AttachmentId", "0"));
+                        attachmentModel.setBlobAttachmentId(MyJsonParser.getStringValue(jObjectOneAttachment, "BlobAttachmentId", "0"));
+
+                        AttachmentsList.add(attachmentModel);
+                    }
+
+                    assignmentModel.setAttachments(AttachmentsList);
 
                     ASSIGNMENTS_LIST.add(assignmentModel);
 

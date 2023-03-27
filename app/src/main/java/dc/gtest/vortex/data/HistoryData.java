@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import dc.gtest.vortex.models.AttachmentModel;
 import dc.gtest.vortex.models.HAssignmentModel;
 import dc.gtest.vortex.models.HConsumableModel;
 import dc.gtest.vortex.models.HMeasurementModel;
@@ -94,6 +95,26 @@ public class HistoryData {
                 }
 
                 hAssignmentModel.setHConsumables(hConsumableModelList);
+
+
+                JSONArray jArrayAttachments = MyJsonParser.getJsonArrayValue(oneObject, "Attachments");
+                List<AttachmentModel> hAttachmentsList = new ArrayList<>();
+                for (int a = 0; a < jArrayAttachments.length(); a++){
+                    JSONObject jObjectOneAttachment = jArrayAttachments.getJSONObject(a);
+
+                    AttachmentModel hattachmentModel = new AttachmentModel();
+
+                    hattachmentModel.setObjectId(MyJsonParser.getStringValue(jObjectOneAttachment, "ObjectId", "0"));
+                    hattachmentModel.setObjectType(MyJsonParser.getStringValue(jObjectOneAttachment, "ObjectType", ""));
+                    hattachmentModel.setFilename(MyJsonParser.getStringValue(jObjectOneAttachment, "Filename", ""));
+                    hattachmentModel.setCloudFileURL(MyJsonParser.getStringValue(jObjectOneAttachment, "CloudFileURL", ""));
+                    hattachmentModel.setAttachmentId(MyJsonParser.getStringValue(jObjectOneAttachment, "AttachmentId", "0"));
+                    hattachmentModel.setBlobAttachmentId(MyJsonParser.getStringValue(jObjectOneAttachment, "BlobAttachmentId", "0"));
+
+                    hAttachmentsList.add(hattachmentModel);
+                }
+
+                hAssignmentModel.setHAttachments(hAttachmentsList);
 
 
                 HISTORY_LIST.add(hAssignmentModel);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.FileInputStream;
+import java.net.URI;
 import java.util.UUID;
 import java.io.File;
 
@@ -83,13 +84,16 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                 // Upload text to the blob
                 File source = new File(filePath);
                 blob1.upload(new FileInputStream(source), Long.parseLong(filesize));
+                URI fileuri = blob1.getUri();
+                String fileURL = fileuri.toURL().toString();
                 // Delete the blobs
                 //blob1.deleteIfExists();
 
                 postBody = "{\n" +
-                        "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
+                        "  \"ObjectId\": \"" + assignmentId + "\",\n" +
                         "  \"Filename\": \"" + attachmentFileName + "\",\n" +
                         "  \"CloudFilename\": \"" + cloudBlobName + "\",\n" +
+                        "  \"CloudFileURL\": \"" + fileURL + "\",\n" +
                         "  \"FileSize\": \"" + filesize + "\"\n" +
                         "}";
 

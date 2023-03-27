@@ -133,6 +133,7 @@ import static dc.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
 import static dc.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignmentActions;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_attachments_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_calculate_cost;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_changeStatus;
@@ -254,6 +255,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnTakePhoto;
     private Button btnAddAttachment;
     private Button btnPreviewReport;
+    private Button btnDetAttachments;
     private LinearLayout llPayment;
     private FrameLayout flSignatureImage;
     private Button btnInstallations;
@@ -332,6 +334,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         swUsePt = findViewById(R.id.swUsePt);
         btnOvernight = findViewById(R.id.btnOvernight);
         btnToProducts = findViewById(R.id.btnToProducts);
+        btnDetAttachments = findViewById(R.id.btnDetAttachments);
         btnToConsumables = findViewById(R.id.btnToConsumables);
         btnToServices = findViewById(R.id.btnToServices);
         btnZones = findViewById(R.id.btnZones);
@@ -416,6 +419,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             btnStartWork.setVisibility(View.GONE);
             btnGetCost.setVisibility(View.GONE);
             btnToProducts.setVisibility(View.GONE);
+            btnDetAttachments.setVisibility(View.GONE);
             btnToConsumables.setVisibility(View.GONE);
             btnToServices.setVisibility(View.GONE);
             btnZones.setVisibility(View.GONE);
@@ -563,6 +567,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnStartWork.setOnClickListener(this);
         btnOvernight.setOnClickListener(this);
         btnToProducts.setOnClickListener(this);
+        btnDetAttachments.setOnClickListener(this);
         btnToConsumables.setOnClickListener(this);
         btnToServices.setOnClickListener(this);
         btnZones.setOnClickListener(this);
@@ -698,6 +703,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         tvSolutionTitle.setText(localized_commentsSolution);
         tvInternalNotesTitle.setText(localized_internal_communication);
         btnToProducts.setText(localized_products);
+        btnDetAttachments.setText(localized_attachments_caps);
         btnToConsumables.setText(localized_consumables_caps);
         btnToServices.setText(localized_services);
         btnZones.setText(localized_zones);
@@ -859,8 +865,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         switch (v.getId()) {
 
+            case R.id.btnDetAttachments:
+                intent = new Intent(AssignmentActionsActivity.this, AttachmentsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+
             case R.id.btnPreviewReport:
-                GetReportPreview getReportPreview = new GetReportPreview(AssignmentActionsActivity.this, assignmentId, "", "");
+                GetReportPreview getReportPreview = new GetReportPreview(AssignmentActionsActivity.this, assignmentId, "", "", "", "");
                 getReportPreview.execute();
                 break;
 
@@ -1627,7 +1639,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         String prefKey = assignmentId + "_" + attachmentFileName;
 
         String postBody = "{\n" +
-                "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
+                "  \"ObjectId\": \"" + assignmentId + "\",\n" +
                 "  \"Filename\": \"" + attachmentFileName + "\",\n" +
                 "  \"Attachment64\": \"" + fileBase64String + "\"\n" +
                 "}";

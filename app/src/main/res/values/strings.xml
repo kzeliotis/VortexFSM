@@ -1274,6 +1274,13 @@
     <string name="consumables_to_send_gr">Αναλώσιμα προς απόστολή</string>
     <string name="consumables_to_send_ar">Consumables to send</string>
 
+    <string name="attachments">Attachments</string>
+    <string name="attachments_gr">Επισυναπτόμενα Αρχεία</string>
+    <string name="attachments_ar">Attachments</string>
+
+    <string name="attachments_caps">ATTACHMENTS</string>
+    <string name="attachments_caps_gr">ΕΠΙΣΥΝΑΠΤΟΜΕΝΑ ΑΡΧΕΙΑ</string>
+    <string name="attachments_caps_ar">ATTACHMENTS</string>
 
     <item type="id" name="TAG_ID" />
 

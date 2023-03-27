@@ -94,7 +94,7 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
                     Toast.makeText(ctx, localized_no_pdf_app, Toast.LENGTH_LONG).show();
                 }
             } else if (blobAttachmentId.length() > 0 && !blobAttachmentId.equals("0")){
-                GetReportPreview getReportPreview = new GetReportPreview(ctx, "", blobAttachmentId, file_name);
+                GetReportPreview getReportPreview = new GetReportPreview(ctx, "", blobAttachmentId, file_name, "", "");
                 getReportPreview.execute();
             } else  {
                 if (MyUtils.isNetworkAvailable() ) {

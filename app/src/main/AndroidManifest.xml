@@ -267,6 +267,12 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
+            android:name="dc.gtest.vortex.activities.AttachmentsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/assignment_types"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
             android:name="dc.gtest.vortex.activities.ProjectInstallationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/installations"

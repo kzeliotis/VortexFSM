@@ -2,6 +2,8 @@ package dc.gtest.vortex.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import java.util.List;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.models.HAssignmentModel;
 
+import static dc.gtest.vortex.support.MyLocalization.localized_attachments;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables;
 import static dc.gtest.vortex.support.MyLocalization.localized_customer_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_date;
@@ -30,11 +33,13 @@ public class HistoryRvAdapter extends RecyclerView.Adapter<HistoryRvAdapter.View
     private final List<HAssignmentModel> allItems;
     private List<HAssignmentModel> filteredItems;
     private final boolean subAssignments;
+    private final Context ctx;
 
-    public HistoryRvAdapter(List<HAssignmentModel> allItems, boolean subAssignments) {
+    public HistoryRvAdapter(List<HAssignmentModel> allItems, boolean subAssignments, Context Ctx) {
         this.allItems = allItems;
         filteredItems = allItems;
         this.subAssignments = subAssignments;
+        this.ctx = Ctx;
     }
 
     @NonNull
@@ -67,20 +72,21 @@ public class HistoryRvAdapter extends RecyclerView.Adapter<HistoryRvAdapter.View
         HistoryConsumablesRvAdapter historyConsumablesRvAdapter = new HistoryConsumablesRvAdapter();
         historyConsumablesRvAdapter.setupRecyclerView(holder.rvConsumables, holder.mItem.getHConsumables());
 
+        HistoryAttachmentsRvAdapter historyAttachmentsRvAdapter = new HistoryAttachmentsRvAdapter();
+        historyAttachmentsRvAdapter.setupRecyclerView(holder.rvHAttachments, holder.mItem.getHAttachments(), ctx);
+
         String resourceTitleText = localized_resource + ":";
         holder.tvResourceTitle.setText(resourceTitleText);
 
         boolean ShowProjectHistory = holder.mItem.getProjectHistory();
 
+        String productTitleText;
         if (ShowProjectHistory || subAssignments) {
-            String productTitleText = localized_product + ":";
-            holder.tvProductMainTitle.setText(productTitleText);
+            productTitleText = localized_product + ":";
         }else{
-            String productTitleText = localized_customer_project + ":";
-            holder.tvProductMainTitle.setText(productTitleText);
+            productTitleText = localized_customer_project + ":";
         }
-
-
+        holder.tvProductMainTitle.setText(productTitleText);
 
 
         String serviceTitleText = localized_service + ":";
@@ -94,6 +100,7 @@ public class HistoryRvAdapter extends RecyclerView.Adapter<HistoryRvAdapter.View
 
         holder.tvMeasurementsTitle.setText(localized_measurements);
         holder.tvConsumablesTitle.setText(localized_consumables);
+        holder.tvHAttachments.setText(localized_attachments);
     }
 
     @Override
@@ -119,6 +126,8 @@ public class HistoryRvAdapter extends RecyclerView.Adapter<HistoryRvAdapter.View
         public final RecyclerView rvHistoryMeasurements;
         public final TextView tvConsumablesTitle;
         public final RecyclerView rvConsumables;
+        public final TextView tvHAttachments;
+        public final RecyclerView rvHAttachments;
         public HAssignmentModel mItem;
 
         public ViewHolder(View view) {
@@ -140,6 +149,8 @@ public class HistoryRvAdapter extends RecyclerView.Adapter<HistoryRvAdapter.View
             rvHistoryMeasurements = view.findViewById(R.id.rvHistoryMeasurements);
             tvConsumablesTitle = view.findViewById(R.id.tvConsumablesTitle);
             rvConsumables = view.findViewById(R.id.rvConsumables);
+            tvHAttachments = view.findViewById(R.id.tvHAttachments);
+            rvHAttachments = view.findViewById(R.id.rvHAttachments);
 
         }
     }

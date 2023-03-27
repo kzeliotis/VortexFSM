@@ -92,7 +92,7 @@ public class HistoryActivity extends BaseDrawerActivity {
 //            Toast.makeText(MyApplication.getContext(), localized_no_history, Toast.LENGTH_LONG).show();
 //        }
 
-        historyRvAdapter = new HistoryRvAdapter(HISTORY_LIST, subAssignments);
+        historyRvAdapter = new HistoryRvAdapter(HISTORY_LIST, subAssignments, this);
         rvHistoryList.setAdapter(historyRvAdapter);
 
         assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();

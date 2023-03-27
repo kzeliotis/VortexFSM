@@ -191,4 +191,27 @@
         tools:itemCount="3"
         tools:listitem="@layout/item_history_consumable"/>
 
+    <TextView
+        android:id="@+id/tvHAttachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_marginRight="@dimen/dp_1"
+        android:padding="@dimen/dp_6"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold"
+        android:text="@string/attachments"
+        android:gravity="center"
+        android:background="@color/light_blue_100"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvHAttachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_6"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_history_attachment"/>
+
 </LinearLayout>

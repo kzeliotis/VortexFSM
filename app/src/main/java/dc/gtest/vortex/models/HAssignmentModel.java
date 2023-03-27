@@ -17,6 +17,7 @@ public class HAssignmentModel {
     private boolean ProjectHistory;
     private List<HMeasurementModel> hMeasurements = new ArrayList<>();
     private List<HConsumableModel> hConsumables = new ArrayList<>();
+    private List<AttachmentModel> hAttachments = new ArrayList<>();
 
     @NonNull
     @Override
@@ -32,7 +33,8 @@ public class HAssignmentModel {
                         "  \"solution\": \"" + solution + "\",\n" +
                         "  \"ProjectHistory\": \"" + ProjectHistory + "\",\n" +
                         "  \"hMeasurements\": " + hMeasurements + ",\n" +
-                        "  \"hConsumables\": " + hConsumables + "\n" +
+                        "  \"hConsumables\": " + hConsumables + ",\n" +
+                        "  \"hAttachments\": " + hAttachments + "\n" +
                         "}";
 
         modelToString = modelToString.replace("}]", "}\n  ]");
@@ -118,5 +120,13 @@ public class HAssignmentModel {
 
     public void setHConsumables(List<HConsumableModel> hConsumables) {
         this.hConsumables = hConsumables;
+    }
+
+    public List<AttachmentModel> getHAttachments() {
+        return hAttachments;
+    }
+
+    public void setHAttachments(List<AttachmentModel> hAttachments) {
+        this.hAttachments = hAttachments;
     }
 }

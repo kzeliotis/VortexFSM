@@ -13,6 +13,7 @@ import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
+import static dc.gtest.vortex.api.MyApi.API_GET_ATTACHMENT_URL;
 import static dc.gtest.vortex.api.MyApi.API_GET_MANUAL_FILE;
 import static dc.gtest.vortex.api.MyApi.API_GET_REPORT_PREVIEW;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
@@ -26,14 +27,18 @@ private int responseCode;
 private final String assignmentId;
 private final String blobAttachmentId;
 private final String fileName;
+private final String attachmentId;
+private final String objectType;
 @SuppressLint("StaticFieldLeak")
 private final Context ctx;
 
-public GetReportPreview(Context ctx, String AssignmentId, String BlobAttachmentId, String fileName) {
+public GetReportPreview(Context ctx, String AssignmentId, String BlobAttachmentId, String fileName, String AttachmentId, String ObjectType ) {
         this.ctx = ctx;
         this.assignmentId = AssignmentId;
         this.blobAttachmentId = BlobAttachmentId;
         this.fileName = fileName;
+        this.attachmentId = AttachmentId;
+        this.objectType = ObjectType;
         }
 
 @Override
@@ -44,8 +49,10 @@ protected String doInBackground(String... params) {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String apiUrl = "";
 
-        if (blobAttachmentId.length() > 0){
-            apiUrl= baseHostUrl+ API_GET_MANUAL_FILE + blobAttachmentId + "&fileName=" + fileName ;
+        if (blobAttachmentId.length() > 0 && objectType.length() == 0) {
+            apiUrl = baseHostUrl + API_GET_MANUAL_FILE + blobAttachmentId + "&fileName=" + fileName;
+        } else if (blobAttachmentId.length() > 0 && objectType.length() > 0){
+            apiUrl = baseHostUrl + API_GET_ATTACHMENT_URL + assignmentId + "&AttachmentId=" + attachmentId + "&BlobAttachmentId=" + blobAttachmentId + "&ObjectType=" + objectType;
         } else {
             apiUrl= baseHostUrl+ API_GET_REPORT_PREVIEW + assignmentId;
         }

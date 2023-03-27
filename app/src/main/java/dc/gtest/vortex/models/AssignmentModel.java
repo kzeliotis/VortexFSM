@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AssignmentModel {
 
     private String projectDescription = "";
@@ -49,6 +52,7 @@ public class AssignmentModel {
     private String contract = "";
     private String additionalTechnicians = "";
     private JSONArray mandatoryTasks = new JSONArray();
+    private List<AttachmentModel> attachments = new ArrayList<>();
 
     @NonNull
     @Override
@@ -92,7 +96,8 @@ public class AssignmentModel {
                         "\"additionalTechnicians\": \"" + additionalTechnicians + "\",\n" +
                         "\"ResourceId\": \"" + resourceId + "\",\n" +
                         "\"Contract\": \"" + contract + "\",\n" +
-                        "\"commentsSolution\": \"" + commentsSolution + "\"\n"
+                        "\"commentsSolution\": \"" + commentsSolution + "\",\n" +
+                        "\"Attachments\": " + attachments + "\n"
                 ;
     }
 
@@ -428,6 +433,14 @@ public class AssignmentModel {
 
     public void setContract(String Contract) {
         this.contract = Contract;
+    }
+
+    public List<AttachmentModel> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<AttachmentModel> Attachments) {
+        this.attachments = Attachments;
     }
 
 

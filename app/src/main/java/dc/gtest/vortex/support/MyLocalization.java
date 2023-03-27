@@ -243,6 +243,8 @@ public class MyLocalization {
     public static String localized_file_size_limit = "";
     public static String localized_edit_selection = "";
     public static String localized_consumables_to_send = "";
+    public static String localized_attachments = "";
+    public static String localized_attachments_caps = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -478,6 +480,8 @@ public class MyLocalization {
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit_gr);
                 localized_edit_selection = ctx.getString(R.string.edit_selection_gr);
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_gr);
+                localized_attachments = ctx.getString(R.string.attachments_gr);
+                localized_attachments_caps = ctx.getString(R.string.attachments_caps_gr);
                 break;
 
             case CONST_AR:
@@ -710,6 +714,8 @@ public class MyLocalization {
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit_ar);
                 localized_edit_selection = ctx.getString(R.string.edit_selection_ar);
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_ar);
+                localized_attachments = ctx.getString(R.string.attachments_ar);
+                localized_attachments_caps = ctx.getString(R.string.attachments_caps_ar);
                 break;
 
             default:
@@ -943,6 +949,8 @@ public class MyLocalization {
                 localized_file_size_limit = ctx.getString(R.string.file_size_limit);
                 localized_edit_selection = ctx.getString(R.string.edit_selection);
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send);
+                localized_attachments = ctx.getString(R.string.attachments);
+                localized_attachments_caps = ctx.getString(R.string.attachments_caps);
                 break;
 
 
