@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.api.GetAssignmentIndicators;
 import dc.gtest.vortex.api.GetCustomFields;
 import dc.gtest.vortex.api.GetDefaultTechActions;
 import dc.gtest.vortex.api.GetProductTypes;
@@ -230,8 +231,13 @@ public class LoginActivity extends AppCompatActivity {
         GetCoordsSendingInterval getCoordsSendingInterval = new GetCoordsSendingInterval();
         getCoordsSendingInterval.execute();
 
-        GetStatuses getStatuses = new GetStatuses(this);
-        getStatuses.execute();
+        GetStatuses getStatuses0 = new GetStatuses(this);
+        getStatuses0.execute("0");
+        GetStatuses getStatuses1 = new GetStatuses(this);
+        getStatuses1.execute("1");
+
+        GetAssignmentIndicators getAssignmentIndicators = new GetAssignmentIndicators();
+        getAssignmentIndicators.execute();
 
         //GetShowStartWork getShowStartWork = new GetShowStartWork();
         //getShowStartWork.execute();

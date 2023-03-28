@@ -24,6 +24,10 @@ public class NewAssignmentModel {
     private String assignmentType = "";
     private String assignmentTypeDescription = "";
     private String AssignmentSourceProcedure = "";
+    private String statusCode = "";
+    private String statusDescription = "";
+    private String assignmentIndicatorIds = "";
+    private String assignmentIndicatorsDescription = "";
     private final String AssignmentSource = "Mobile";
 
     @Override
@@ -59,10 +63,13 @@ public class NewAssignmentModel {
                 "  \"PrepayId\": \"\",\n" +
                 "  \"DetType\": \"" + assignmentType + "\",\n" +
                 "  \"DetTypeDescription\": \"" + assignmentTypeDescription + "\",\n" +
+                "  \"StatusCode\": \"" + statusCode + "\",\n" +
+                "  \"StatusDescription\": \"" + statusDescription + "\",\n" +
                 "  \"ERPID\": \"\",\n" +
                 "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                 "  \"AssignmentSource\": \"" + AssignmentSource + "\",\n" +
                 "  \"AssignmentSourceProcedure\": \"" + AssignmentSourceProcedure + "\",\n" +
+                "  \"AssignmentIndicators\": \"" + assignmentIndicatorIds + "\",\n" +
                 "  \"ResourceIds\": \"" + resourceIds + "\"\n" +
                 "}";
     }
@@ -183,6 +190,22 @@ public class NewAssignmentModel {
         this.productDescription = productDescription;
     }
 
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String StatusCode) {
+        this.statusCode = StatusCode;
+    }
+
+    public String getStatusDescription() {
+        return statusDescription;
+    }
+
+    public void setStatusDescription(String StatusDescription) {
+        this.statusDescription = StatusDescription;
+    }
+
     public String getServiceId() {
         return serviceId;
     }
@@ -217,6 +240,23 @@ public class NewAssignmentModel {
 
     public void setAssignmentSourceProcedure(String assignmentSourceProcedure) {
         this.AssignmentSourceProcedure = assignmentSourceProcedure;
+    }
+
+
+    public String getAssignmentIndicatorIds() {
+        return assignmentIndicatorIds;
+    }
+
+    public void setAssignmentIndicatorIds(String AssignmentIndicatorIds) {
+        this.assignmentIndicatorIds = AssignmentIndicatorIds;
+    }
+
+    public String getAssignmentIndicatorsDescription() {
+        return assignmentIndicatorsDescription;
+    }
+
+    public void setAssignmentIndicatorsDescription(String AssignmentIndicatorsDescription) {
+        this.assignmentIndicatorsDescription = AssignmentIndicatorsDescription;
     }
 
 }

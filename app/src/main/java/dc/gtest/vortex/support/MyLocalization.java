@@ -245,6 +245,8 @@ public class MyLocalization {
     public static String localized_consumables_to_send = "";
     public static String localized_attachments = "";
     public static String localized_attachments_caps = "";
+    public static String localized_select_indicator = "";
+    public static String localized_assignment_indicator = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -482,6 +484,8 @@ public class MyLocalization {
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_gr);
                 localized_attachments = ctx.getString(R.string.attachments_gr);
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps_gr);
+                localized_select_indicator = ctx.getString(R.string.select_assignment_indicator_gr);
+                localized_assignment_indicator = ctx.getString(R.string.assignment_indicator_gr);
                 break;
 
             case CONST_AR:
@@ -716,6 +720,8 @@ public class MyLocalization {
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send_ar);
                 localized_attachments = ctx.getString(R.string.attachments_ar);
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps_ar);
+                localized_select_indicator = ctx.getString(R.string.select_assignment_indicator_ar);
+                localized_assignment_indicator = ctx.getString(R.string.assignment_indicator_ar);
                 break;
 
             default:
@@ -951,6 +957,8 @@ public class MyLocalization {
                 localized_consumables_to_send = ctx.getString(R.string.consumables_to_send);
                 localized_attachments = ctx.getString(R.string.attachments);
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps);
+                localized_select_indicator = ctx.getString(R.string.select_assignment_indicator);
+                localized_assignment_indicator = ctx.getString(R.string.assignment_indicator);
                 break;
 
 

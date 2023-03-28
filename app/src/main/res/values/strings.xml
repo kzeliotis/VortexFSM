@@ -1282,6 +1282,14 @@
     <string name="attachments_caps_gr">ΕΠΙΣΥΝΑΠΤΟΜΕΝΑ ΑΡΧΕΙΑ</string>
     <string name="attachments_caps_ar">ATTACHMENTS</string>
 
+    <string name="select_assignment_indicator">Select assignment indicator</string>
+    <string name="select_assignment_indicator_gr">Επιλέξτε χαρακτηρισμό ανάθεσης</string>
+    <string name="select_assignment_indicator_ar">Select assignment indicator</string>
+
+    <string name="assignment_indicator">Assignment indicator</string>
+    <string name="assignment_indicator_gr">Χαρακτηρισμός ανάθεσης</string>
+    <string name="assignment_indicator_ar">Assignment indicator</string>
+
     <item type="id" name="TAG_ID" />
 
 

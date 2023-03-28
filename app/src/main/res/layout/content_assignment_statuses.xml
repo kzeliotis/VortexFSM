@@ -9,12 +9,12 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAssignmentTypes"
+        android:id="@+id/rvAssignmentStatuses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context=".activities.NewAssignmentActivity"
-        tools:listitem="@layout/item_assignment_type"
+        tools:listitem="@layout/item_status"
         android:scrollbars="vertical"/>
 
 </LinearLayout>

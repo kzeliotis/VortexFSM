@@ -84,6 +84,7 @@ public class MyPrefs {
     public static final String PREF_DATA_ALL_CONSUMABLES = "pref_data_all_consumables";
     public static final String PREF_DATA_ALL_WAREHOUSE_CONSUMABLES = "pref_data_all_warehouse_consumables";
     public static final String PREF_DATA_STATUSES = "pref_data_statuses";
+    public static final String PREF_DATA_ALL_STATUSES = "pref_data_statuses";
     public static final String PREF_DATA_ZONES_LIST = "pref_data_zones_list";
     public static final String PREF_DATA_INSTALLATION_ZONES_LIST = "pref_data_installation_zones_list";
     //public static final String PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST = "pref_data_installation_custom_fields_list";
@@ -93,6 +94,7 @@ public class MyPrefs {
     public static final String PREF_DATA_MANUALS = "pref_data_manuals";
     public static final String PREF_DATA_DEFAULT_TECH_ACTIONS = "pref_data_default_tech_actions";
     public static final String PREF_DATA_ASSIGNMENT_TYPES = "pref_data_assignment_types";
+    public static final String PREF_DATA_ASSIGNMENT_INDICATORS = "pref_data_assignment_indicators";
     public static final String PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST = "pref_data_company_custom_fields_list";
 
     // for keeping assignments conditions

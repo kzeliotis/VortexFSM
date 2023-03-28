@@ -44,6 +44,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_new_assignment_caps;
+import static dc.gtest.vortex.support.MyLocalization.localized_assignment_indicator;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_type;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_customer;
@@ -63,16 +64,19 @@ import static dc.gtest.vortex.support.MyLocalization.localized_resources_not_ava
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_assignment_type;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_date_for_availability;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_indicator;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product_from_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_resources;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_service;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_service;
 import static dc.gtest.vortex.support.MyLocalization.localized_set_end_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_set_start_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_start_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_start_time;
+import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_USER_PARTNER_RESOURCES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC;
@@ -88,6 +92,8 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
     private TextView tvNewAssignmentService;
     private TextView tvNewAssignmentResources;
     private TextView tvNewAssignmentType;
+    private TextView tvNewAssignmentStatus;
+    private TextView tvNewAssignmentIndicators;
 
     private TextInputLayout tilNewAssignmentProblem;
     private EditText etNewAssignmentProblem;
@@ -130,6 +136,8 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         tvNewAssignmentService = findViewById(R.id.tvNewAssignmentService);
         tvNewAssignmentResources = findViewById(R.id.tvNewAssignmentResources);
         tvNewAssignmentType = findViewById(R.id.tvNewAssignmentType);
+        tvNewAssignmentStatus = findViewById(R.id.tvNewAssignmentStatus);
+        tvNewAssignmentIndicators = findViewById(R.id.tvNewAssignmentIndicator);
 
         tilNewAssignmentProblem = findViewById(R.id.tilNewAssignmentProblem);
         etNewAssignmentProblem = findViewById(R.id.etNewAssignmentProblem);
@@ -142,7 +150,6 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         tilNewAssignmentEndTime = findViewById(R.id.tilNewAssignmentEndTime);
         etNewAssignmentEndTime = findViewById(R.id.etNewAssignmentEndTime);
 
-
         btnAddNewAssignment = findViewById(R.id.btnAddNewAssignment);
 
         tvNewAssignmentCustomer.setOnClickListener(this);
@@ -151,6 +158,8 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         tvNewAssignmentService.setOnClickListener(this);
         tvNewAssignmentResources.setOnClickListener(this);
         tvNewAssignmentType.setOnClickListener(this);
+        tvNewAssignmentStatus.setOnClickListener(this);
+        tvNewAssignmentIndicators.setOnClickListener(this);
 
 
         etNewAssignmentStartDate.setOnClickListener(this);
@@ -241,6 +250,30 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         } else {
             String AssignmentTypeText = localized_assignment_type + " " + NEW_ASSIGNMENT.getAssignmentTypeDescription();
             tvNewAssignmentType.setText(AssignmentTypeText);
+        }
+
+        if (NEW_ASSIGNMENT.getStatusCode().isEmpty()) {
+            tvNewAssignmentStatus.setText(localized_select_status);
+        } else {
+            String AssignmentTypeText = localized_status + " " + NEW_ASSIGNMENT.getStatusDescription();
+            tvNewAssignmentStatus.setText(AssignmentTypeText);
+        }
+
+        if (NEW_ASSIGNMENT.getAssignmentIndicatorIds().isEmpty()) {
+            tvNewAssignmentIndicators.setText(localized_select_indicator);
+        } else {
+            try{
+                if(NEW_ASSIGNMENT.getAssignmentIndicatorIds().endsWith("  ") || NEW_ASSIGNMENT.getAssignmentIndicatorIds().endsWith(", ")){
+                    NEW_ASSIGNMENT.setAssignmentIndicatorIds(NEW_ASSIGNMENT.getAssignmentIndicatorIds().substring(0, NEW_ASSIGNMENT.getAssignmentIndicatorIds().length() - 2));
+                }
+                if(NEW_ASSIGNMENT.getAssignmentIndicatorsDescription().endsWith("  ") || NEW_ASSIGNMENT.getAssignmentIndicatorsDescription().endsWith(", ")){
+                    NEW_ASSIGNMENT.setAssignmentIndicatorsDescription(NEW_ASSIGNMENT.getAssignmentIndicatorsDescription().substring(0, NEW_ASSIGNMENT.getAssignmentIndicatorsDescription().length() - 2));
+                }
+            } catch (Exception ex){
+                Toast.makeText(this, NEW_ASSIGNMENT.getAssignmentIndicatorIds() + "\n\r" + NEW_ASSIGNMENT.getAssignmentIndicatorsDescription() + "\n\r" + ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            String indicatorsText = localized_assignment_indicator + ": " + NEW_ASSIGNMENT.getAssignmentIndicatorsDescription();
+            tvNewAssignmentIndicators.setText(indicatorsText);
         }
 
         tilNewAssignmentProblem.setHint(localized_problem);       // hint
@@ -355,8 +388,16 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
                 break;
 
+            case R.id.tvNewAssignmentIndicator:
+                intent = new Intent(NewAssignmentActivity.this, AssignmentIndicatorsActivity.class);
+                break;
+
             case R.id.tvNewAssignmentType:
                 intent = new Intent(NewAssignmentActivity.this, AssignmentTypesActivity.class);
+                break;
+
+            case R.id.tvNewAssignmentStatus:
+                intent = new Intent(NewAssignmentActivity.this, StatusesActivity.class);
                 break;
 
             case R.id.etNewAssignmentStartDate:

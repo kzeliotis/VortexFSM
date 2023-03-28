@@ -15,6 +15,7 @@ import dc.gtest.vortex.models.AddedConsumableModel;
 import dc.gtest.vortex.models.AllAttributeModel;
 import dc.gtest.vortex.models.AllConsumableModel;
 import dc.gtest.vortex.models.AllProductModel;
+import dc.gtest.vortex.models.AssignmentIndicatorModel;
 import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.AssignmentTypeModel;
 import dc.gtest.vortex.models.AttributeModel;
@@ -112,6 +113,7 @@ public class MyGlobals {
     public static List<ProductTypeModel> PRODUCT_TYPES_LIST = new ArrayList<>();
 
     public static List<StatusModel> STATUSES_LIST = new ArrayList<>();
+    public static List<StatusModel> ALL_STATUSES_LIST = new ArrayList<>();
 
     public static List<ServiceModel> SERVICES_LIST = new ArrayList<>();
     public static List<ServiceModel> SERVICES_LIST_FILTERED = new ArrayList<>();
@@ -122,6 +124,7 @@ public class MyGlobals {
     public static List<UserPartnerResourceModel> USER_PARTNER_RESOURCE_LIST = new ArrayList<>();
 
     public static List<AssignmentTypeModel> ASSIGNMENT_TYPES_LIST = new ArrayList<>();
+    public static List<AssignmentIndicatorModel> ASSIGNMENT_INDICATORS_LIST = new ArrayList<>();
 
     public static List<MandatoryTaskModel> MANDATORY_TASKS_LIST = new ArrayList<>();
 

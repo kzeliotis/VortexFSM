@@ -8,13 +8,18 @@ import java.util.Collections;
 import dc.gtest.vortex.models.StatusModel;
 import dc.gtest.vortex.support.MyJsonParser;
 
+import static dc.gtest.vortex.support.MyGlobals.ALL_STATUSES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.STATUSES_LIST;
 
 public class StatusesData {
 
-    public static void generate(String statuses) {
+    public static void generate(String statuses, boolean all) {
 
-        STATUSES_LIST.clear();
+        if(all){
+            ALL_STATUSES_LIST.clear();
+        }else{
+            STATUSES_LIST.clear();
+        }
 
         if (!statuses.isEmpty()) {
             try {
@@ -33,10 +38,19 @@ public class StatusesData {
                     statusModel.setIsRollback(MyJsonParser.getIntValue(oneObject, "IsRollback", -1));
                     statusModel.setMandatorySteps(MyJsonParser.getIntValue(oneObject, "MandatorySteps", -1));
 
-                    STATUSES_LIST.add(statusModel);
+                    if(all){
+                        ALL_STATUSES_LIST.add(statusModel);
+                    }else{
+                        STATUSES_LIST.add(statusModel);
+                    }
+
                 }
 
-                Collections.sort(STATUSES_LIST, (a, b) -> a.getStatusDescription().compareTo(b.getStatusDescription()));
+                if(all){
+                    Collections.sort(ALL_STATUSES_LIST, (a, b) -> a.getStatusDescription().compareTo(b.getStatusDescription()));
+                }else{
+                    Collections.sort(STATUSES_LIST, (a, b) -> a.getStatusDescription().compareTo(b.getStatusDescription()));
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

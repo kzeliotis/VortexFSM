@@ -17,7 +17,9 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_STATUSES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_STATUSES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 
 public class GetStatuses extends AsyncTask<String, Void, String > {
 
@@ -28,6 +30,7 @@ public class GetStatuses extends AsyncTask<String, Void, String > {
     private int responseCode;
     private String responseMessage;
     private String responseBody;
+    private boolean all = false;
 
     public GetStatuses(Context ctx) {
         this.ctx = ctx;
@@ -36,8 +39,16 @@ public class GetStatuses extends AsyncTask<String, Void, String > {
     @Override
     protected String doInBackground(String... params) {
 
+        String _all = params[0];
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl + API_GET_STATUSES;
+        if(_all.equals("1")){
+            all = true;
+            apiUrl = baseHostUrl + API_GET_STATUSES + "?All=1&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0");
+        } else {
+            all = false;
+            apiUrl = baseHostUrl + API_GET_STATUSES;
+        }
+
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
@@ -58,14 +69,24 @@ public class GetStatuses extends AsyncTask<String, Void, String > {
        // MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no_body_for_get_request", responseCode, responseMessage, responseBody);
 
         if (responseCode == 200 && responseBody != null && !responseBody.isEmpty()) {
-            MyPrefs.setString(PREF_DATA_STATUSES, responseBody);
-            StatusesData.generate(responseBody);
-
-            Spinner spStatusFilter = ((AppCompatActivity) ctx).findViewById(R.id.spStatusFilter);
-
-            if (spStatusFilter != null) {
-                AssignmentsActivity.setAdapterOnSpinner(ctx, spStatusFilter);
+            if(all) {
+                MyPrefs.setString(PREF_DATA_ALL_STATUSES, responseBody);
+            } else {
+                MyPrefs.setString(PREF_DATA_STATUSES, responseBody);
             }
+
+            StatusesData.generate(responseBody, all);
+
+            if(all){
+
+            } else {
+                Spinner spStatusFilter = ((AppCompatActivity) ctx).findViewById(R.id.spStatusFilter);
+
+                if (spStatusFilter != null) {
+                    AssignmentsActivity.setAdapterOnSpinner(ctx, spStatusFilter);
+                }
+            }
+
         }
     }
 }

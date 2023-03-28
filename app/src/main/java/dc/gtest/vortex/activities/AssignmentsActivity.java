@@ -462,10 +462,11 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
             if (statuses.isEmpty()) {
                 if (MyUtils.isNetworkAvailable()) {
                     GetStatuses getStatuses = new GetStatuses(this);
-                    getStatuses.execute();
+                    getStatuses.execute("0");
+                    //getStatuses.execute("1");
                 }
             } else {
-                StatusesData.generate(statuses);
+                StatusesData.generate(statuses, false);
                 setAdapterOnSpinner(this, spStatusFilter);
             }
         }

@@ -269,7 +269,19 @@
         <activity
             android:name="dc.gtest.vortex.activities.AttachmentsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/assignment_types"
+            android:label="@string/attachments"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="dc.gtest.vortex.activities.StatusesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/status"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="dc.gtest.vortex.activities.AssignmentIndicatorsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/assignment_indicator"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
