@@ -114,7 +114,7 @@ public class AttributesActivity extends BaseDrawerActivity {
         updateUiTexts();
 
         if (MyUtils.isNetworkAvailable()) {
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0");
+            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false);
             getProducts.execute();
         }
     }

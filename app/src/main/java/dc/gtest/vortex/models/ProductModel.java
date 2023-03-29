@@ -13,7 +13,9 @@ public class ProductModel {
     private String typeDescription = "";
     private String identityValue = "";
     private String productAttributesString = "";
+    private String projectInstallationId = "";
     private boolean isNotSynchronized = false; // not server field. Added to mark not synchronized data in red color
+    private boolean isChecked = false;
     private List<AttributeModel> productAttributes = new ArrayList<>();
     private List<MeasurementModel> RemoveFromProjectMandatory = new ArrayList<>();
 
@@ -25,9 +27,11 @@ public class ProductModel {
                         "  \"ProductDescription\": \"" + productDescription + "\",\n" +
                         "  \"InstallationDate\": \"" + installationDate + "\",\n" +
                         "  \"ProjectProductId\": \"" + projectProductId + "\",\n" +
+                        "  \"InstallationId\": \"" + projectInstallationId + "\",\n" +
                         "  \"TypeDescription\": \"" + typeDescription + "\",\n" +
                         "  \"IdentityValue\": \"" + identityValue + "\",\n" +
                         "  \"isNotSynchronized\": \"" + isNotSynchronized + "\",\n" +
+                        "  \"isChecked\": " + isChecked + "\",\n" +
                         "  \"ProductAttributesString\": \"" + productAttributesString + "\",\n" +
                         "  \"ProductAttributeValues\": " + productAttributes + "\",\n" +
                         "  \"RemoveFromProjectMandatory\": " + RemoveFromProjectMandatory + "\n" +
@@ -104,6 +108,22 @@ public class ProductModel {
 
     public void setProductAttributesString(String ProductAttributesString) {
         this.productAttributesString = ProductAttributesString;
+    }
+
+    public String getProjectInstallationId() {
+        return projectInstallationId;
+    }
+
+    public void setProjectInstallationId(String ProjectInstallationId) {
+        this.projectInstallationId = ProjectInstallationId;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
 }

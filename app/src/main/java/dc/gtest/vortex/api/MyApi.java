@@ -96,6 +96,7 @@ class MyApi {
     static final String API_SEND_ZONES_WITH_NO_MEASUREMENTS = "/Vortex.svc/SetZonesWithNoMeasurements?AssignmentId=";
     static final String API_GET_ATTACHMENT_URL = "/Vortex.svc/GetAttachment?ObjectId=";
     static final String API_GET_ASSIGNMENT_INDICATORS = "/Vortex.svc/GetAssignmentIndicators";
+    static final String API_SET_PRODUCTS_TO_INSTALLATION = "/Vortex.svc/SetProjectProductsToProjectInstallation?ProjectInstallationId=";
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;

@@ -10,12 +10,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import dc.gtest.vortex.R;
@@ -24,6 +27,7 @@ import dc.gtest.vortex.activities.AttributesActivity;
 import dc.gtest.vortex.items.MeasurementsListActivity;
 import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyCanEdit;
+import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.activities.ProductsActivity.selectedType;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
@@ -35,6 +39,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
 
 public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.ViewHolder> implements Filterable {
 
@@ -44,11 +49,13 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
 
     private final List<ProductModel> allItems;
     private List<ProductModel> filteredItems;
+    private final int projectInstallationId;
 
-    public ProductsRvAdapter(List<ProductModel> allItems, Context ctx) {
+    public ProductsRvAdapter(List<ProductModel> allItems, Context ctx, int ProjectInstallationId) {
         this.allItems = allItems;
         filteredItems = allItems;
         this.ctx = ctx;
+        this.projectInstallationId = ProjectInstallationId;
     }
 
     @NonNull
@@ -77,6 +84,40 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
             holder.tvItemDetails.setVisibility(View.GONE);
         }
 
+        if (projectInstallationId > 0) {
+            holder.chkSelectToAdd.setVisibility(View.VISIBLE);
+            holder.chkSelectToAdd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                holder.mItem.setChecked(isChecked);
+
+                List<String> ppIds = new ArrayList<>(Arrays.asList(MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, String.valueOf(projectInstallationId), "").split(",")));
+                MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, String.valueOf(projectInstallationId), "");
+
+                if (isChecked){
+                    if(!ppIds.contains(holder.mItem.getProjectProductId())){
+                        ppIds.add(holder.mItem.getProjectProductId());
+                    }
+                } else {
+                    ppIds.remove(holder.mItem.getProjectProductId());
+                }
+
+                String ids = "";
+                for(String id : ppIds){
+                    if(ids.length() > 0){
+                        ids += "," + id;
+                    }else{
+                        ids = id;
+                    }
+                }
+
+                MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, String.valueOf(projectInstallationId), ids);
+
+                return;
+
+            });
+        } else {
+            holder.chkSelectToAdd.setVisibility(View.GONE);
+        }
 
         holder.mView.setOnClickListener(v -> {
 
@@ -133,6 +174,7 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
         public final View mView;
         public final TextView tvItemName;
         public final TextView tvItemDetails;
+        public final CheckBox chkSelectToAdd;
         public ProductModel mItem;
 
         public ViewHolder(View view) {
@@ -140,6 +182,7 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
             mView = view;
             tvItemName = view.findViewById(R.id.tvItemName);
             tvItemDetails = view.findViewById(R.id.tvItemDetails);
+            chkSelectToAdd = view.findViewById(R.id.chkSelectToAdd);
         }
     }
 

@@ -136,7 +136,7 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
                 if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
                     for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
-                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0");
+                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0", false);
                         getProducts.execute();
                     }
                 }

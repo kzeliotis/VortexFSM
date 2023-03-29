@@ -31,6 +31,7 @@ import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 
 public class GetProducts extends AsyncTask<String, Void, String > {
@@ -48,12 +49,14 @@ public class GetProducts extends AsyncTask<String, Void, String > {
     private final String assignmentId;
     private final String projectInstallationId;
     private final boolean hideProgress;
+    private final boolean selectProductsForInstallation;
 
-    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId) {
+    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId, boolean SelectProductForInstallation) {
         this.ctx = ctx;
         this.assignmentId = assignmentId;
         this.projectInstallationId = projectInstallationId;
         this.hideProgress = hideProgress;
+        this.selectProductsForInstallation = SelectProductForInstallation;
     }
 
     @Override
@@ -78,8 +81,10 @@ public class GetProducts extends AsyncTask<String, Void, String > {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String apiUrl = baseHostUrl + API_GET_ASSIGNMENT_PRODUCTS + assignmentId;
 
-        if (!projectInstallationId.equals("0")){
+        if (!projectInstallationId.equals("0") && !selectProductsForInstallation){
             apiUrl += "&ProjectInstallationId=" + projectInstallationId;
+        } else if (selectProductsForInstallation){
+            apiUrl += "&ProjectInstallationId=-1";
         }
 
         try {
@@ -123,8 +128,10 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                 !responseBody.equals("{}")
                 ) {
 
-            if(!projectInstallationId.equals("0")){
+            if(!projectInstallationId.equals("0") && !selectProductsForInstallation) {
                 MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, responseBody);
+            } else if (selectProductsForInstallation) {
+                MyPrefs.setStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, assignmentId, responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, assignmentId, responseBody);
             }

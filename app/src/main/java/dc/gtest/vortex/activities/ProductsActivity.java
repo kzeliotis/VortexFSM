@@ -22,6 +22,7 @@ import dc.gtest.vortex.adapters.MySpinnerAdapter;
 import dc.gtest.vortex.adapters.ProductsRvAdapter;
 import dc.gtest.vortex.api.GetProducts;
 import dc.gtest.vortex.api.GetProductTypes;
+import dc.gtest.vortex.api.SetProductsToInstallation;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.ProductTypesData;
 import dc.gtest.vortex.data.ProductsData;
@@ -32,23 +33,32 @@ import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
+import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_SELECT_PRODUCTS_TO_ADD;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCT_TYPES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_new_product;
+import static dc.gtest.vortex.support.MyLocalization.localized_add_select_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_filter_by_type;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
+import static dc.gtest.vortex.support.MyLocalization.localized_select;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_existing;
+import static dc.gtest.vortex.support.MyLocalization.localized_sure_to_leave;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_PRODUCT_TYPES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class ProductsActivity extends BaseDrawerActivity {
@@ -59,6 +69,7 @@ public class ProductsActivity extends BaseDrawerActivity {
     private TextView tvTypeSpinnerTitle;
     private Spinner spProductTypes;
     private Button btnAddNewProduct;
+    private Button btnAddExistingProduct;
 
     private ProductsRvAdapter productsRvAdapter;
 
@@ -66,6 +77,7 @@ public class ProductsActivity extends BaseDrawerActivity {
     public static String selectedType = "";
     public static String projectInstallationId = "0";
     public static boolean IsInstallation = false;
+    public static boolean selectProducts = false;
 
     private SearchView searchView;
 
@@ -83,6 +95,8 @@ public class ProductsActivity extends BaseDrawerActivity {
         searchText = "";
         selectedType = "";
 
+        selectProducts = getIntent().getBooleanExtra(KEY_SELECT_PRODUCTS_TO_ADD, false);
+
         projectInstallationId = getIntent().getStringExtra(KEY_PROJECT_INSTALLATION_ID);
         if (projectInstallationId != null){
             IsInstallation = true;
@@ -95,6 +109,7 @@ public class ProductsActivity extends BaseDrawerActivity {
         tvTypeSpinnerTitle = findViewById(R.id.tvTypeSpinnerTitle);
         spProductTypes = findViewById(R.id.spProductTypes);
         btnAddNewProduct = findViewById(R.id.btnAddNewProduct);
+        btnAddExistingProduct = findViewById(R.id.btnAddExistingProduct);
         RecyclerView rvAssignmentProducts = findViewById(R.id.rvAssignmentProducts);
 
         setupProductTypesSpinner();
@@ -131,38 +146,75 @@ public class ProductsActivity extends BaseDrawerActivity {
 
         clearFilters();
 
+        if(IsInstallation && !selectProducts){
+            btnAddExistingProduct.setVisibility(View.VISIBLE);
+
+            btnAddExistingProduct.setOnClickListener(v -> {
+                Intent intent = new Intent(ProductsActivity.this, ProductsActivity.class);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_PROJECT_INSTALLATION_ID, SELECTED_INSTALLATION.getProjectInstallationId());
+                intent.putExtra(KEY_SELECT_PRODUCTS_TO_ADD, true);
+                startActivity(intent);
+            });
+
+        } else {
+            btnAddExistingProduct.setVisibility(View.GONE);
+        }
+
+
+
         btnAddNewProduct.setOnClickListener(v -> {
             if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+                if(selectProducts){
+                    String selectedIds = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, projectInstallationId, "");
+                    if (selectedIds.length() > 0){
+                        new AlertDialog.Builder(this)
+                                .setMessage(localized_add_select_products)
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId, selectedIds);
+                                    MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, projectInstallationId);
+                                    SetProductsToInstallation setProductsToInstallation = new SetProductsToInstallation(this, projectInstallationId);
+                                    setProductsToInstallation.execute();
+                                    selectProducts = false;
+                                    finish();
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
 
-                NEW_ATTRIBUTES_LIST.clear();
+                }else{
 
-                new AlertDialog.Builder(this)
-                        .setMessage(localized_choose_from_warehouse)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
-                            intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                            startActivity(intent);
-                        })
-                        .setNegativeButton(R.string.no, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
-                            intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                            startActivity(intent);
-                        })
-                        .show();
+                    NEW_ATTRIBUTES_LIST.clear();
 
-
+                    new AlertDialog.Builder(this)
+                            .setMessage(localized_choose_from_warehouse)
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                dialog.dismiss();
+                                Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                                intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+                                startActivity(intent);
+                            })
+                            .setNegativeButton(R.string.no, (dialog, which) -> {
+                                dialog.dismiss();
+                                Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                                intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+                                startActivity(intent);
+                            })
+                            .show();
+                }
             }
+
+
         });
 
         PRODUCTS_LIST.clear();
 
-        productsRvAdapter = new ProductsRvAdapter(PRODUCTS_LIST, ProductsActivity.this);
+        productsRvAdapter = new ProductsRvAdapter(PRODUCTS_LIST, ProductsActivity.this, selectProducts ? Integer.parseInt(projectInstallationId) : 0);
         rvAssignmentProducts.setAdapter(productsRvAdapter);
     }
 
@@ -178,8 +230,10 @@ public class ProductsActivity extends BaseDrawerActivity {
 
         // do this at onResume to refresh view with new added not synchronized data
         String productsData;
-        if(IsInstallation){
+        if(IsInstallation && !selectProducts) {
             productsData = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, "");
+        } else if (selectProducts) {
+            productsData = MyPrefs.getStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
         } else {
             productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
         }
@@ -194,11 +248,20 @@ public class ProductsActivity extends BaseDrawerActivity {
         productsRvAdapter.notifyDataSetChanged();
 
         if (MyUtils.isNetworkAvailable()) {
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId);
+            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts);
             getProducts.execute();
         }
 
         updateUiTexts();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(selectProducts){
+            MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, projectInstallationId);
+            selectProducts = false;
+        }
+        finish();
     }
 
     @Override
@@ -273,13 +336,18 @@ public class ProductsActivity extends BaseDrawerActivity {
         String filterByType = localized_filter_by_type + ":";
         tvTypeSpinnerTitle.setText(filterByType);
 
-        btnAddNewProduct.setText(localized_add_new_product);
+        if(selectProducts){
+            btnAddNewProduct.setText(localized_select);
+        }else{
+            btnAddNewProduct.setText(localized_add_new_product);
+        }
+        btnAddExistingProduct.setText(localized_select_existing);
     }
 
     private void setupProductTypesSpinner() {
         String productTypes = MyPrefs.getString(PREF_DATA_PRODUCT_TYPES, "");
 
-        if (productTypes.isEmpty()) {
+        if (productTypes.isEmpty() || productTypes.equals("[]")) {
             if (MyUtils.isNetworkAvailable()) {
                 GetProductTypes getProductTypes = new GetProductTypes(this);
                 getProductTypes.execute();

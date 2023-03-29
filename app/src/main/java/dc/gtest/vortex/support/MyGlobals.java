@@ -219,5 +219,6 @@ public class MyGlobals {
     public static final String KEY_REFRESH_CUSTOM_FIELDS = "key_refresh_custom_fields";
     public static final String KEY_VORTEX_TABLE = "key_vortex_table";
     public static final String KEY_ASSIGNMENT_DATE = "key_assignment_date";
+    public static final String KEY_SELECT_PRODUCTS_TO_ADD = "key_select_products_to_add";
 
 }

@@ -36,6 +36,7 @@ public class MyPrefs {
     public static final String PREF_FILE_USED_SERVICES_FOR_SYNC = "pref_file_used_services_for_sync";
 
     public static final String PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC = "pref_file_updated_attributes_for_sync";
+    public static final String PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC = "pref_file_product_to_installation_for_sync";
 
     // data for temp show while no Internet
     public static final String PREF_FILE_MANDATORY_TASKS_FOR_SHOW = "pref_file_mandatory_tasks_for_show";
@@ -69,9 +70,11 @@ public class MyPrefs {
     public static final String PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW = "prf_file_related_warehouse_consumables_for_show";
     public static final String PREF_FILE_RELATED_SERVICES_FOR_SHOW = "pref_file_related_services_for_show";
     public static final String PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_company_custom_fields_data_for_show";
+    public static final String PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW = "pref_file_product_to_installation_for_show";
     // downloaded data
     public static final String PREF_FILE_HISTORY_DATA = "pref_file_history_data";
     public static final String PREF_FILE_PRODUCTS_DATA = "pref_file_products_data";
+    public static final String PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA = "pref_file_no_installation_products_data";
     public static final String PREF_FILE_INSTALLATION_PRODUCTS_DATA = "pref_file_installation_products_data";
     public static final String PREF_FILE_SUBASSIGNMENTS_DATA = "pref_file_products_data";
     public static final String PREF_FILE_INSTALLATION_HISTORY_DATA = "pref_file_installation_history_data";

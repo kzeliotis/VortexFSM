@@ -1286,6 +1286,14 @@
     <string name="select_assignment_indicator_gr">Επιλέξτε χαρακτηρισμό ανάθεσης</string>
     <string name="select_assignment_indicator_ar">Select assignment indicator</string>
 
+    <string name="select_existing">Select existing</string>
+    <string name="select_existing_gr">Επιλογη απο υπαρχοντα</string>
+    <string name="select_existing_ar">Select existing</string>
+
+    <string name="add_selected_products">Do you want to add all selected products to installation?</string>
+    <string name="add_selected_products_gr">Θέλετε να αντιστοιχηθούν τα επιλεγμένα προϊόντα στην εγκατάσταση;</string>
+    <string name="add_selected_products_ar">Do you want to add all selected products to installation?</string>
+
     <string name="assignment_indicator">Assignment indicator</string>
     <string name="assignment_indicator_gr">Χαρακτηρισμός ανάθεσης</string>
     <string name="assignment_indicator_ar">Assignment indicator</string>

@@ -59,7 +59,7 @@ public class ProjectInstallationsData {
                     String prefKey = projectInstallationId;
                     String insallationProducts = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA_FOR_SHOW, prefKey, "");
                     if (insallationProducts.isEmpty() || refresh) {
-                        GetProducts getProducts = new GetProducts(null, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId);
+                        GetProducts getProducts = new GetProducts(null, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, false);
                         getProducts.execute();
                     }
 

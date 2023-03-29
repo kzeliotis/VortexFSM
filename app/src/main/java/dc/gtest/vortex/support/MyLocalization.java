@@ -247,6 +247,8 @@ public class MyLocalization {
     public static String localized_attachments_caps = "";
     public static String localized_select_indicator = "";
     public static String localized_assignment_indicator = "";
+    public static String localized_select_existing = "";
+    public static String localized_add_select_products = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -486,6 +488,8 @@ public class MyLocalization {
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps_gr);
                 localized_select_indicator = ctx.getString(R.string.select_assignment_indicator_gr);
                 localized_assignment_indicator = ctx.getString(R.string.assignment_indicator_gr);
+                localized_select_existing = ctx.getString(R.string.select_existing_gr);
+                localized_add_select_products = ctx.getString(R.string.add_selected_products_gr);
                 break;
 
             case CONST_AR:
@@ -722,6 +726,8 @@ public class MyLocalization {
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps_ar);
                 localized_select_indicator = ctx.getString(R.string.select_assignment_indicator_ar);
                 localized_assignment_indicator = ctx.getString(R.string.assignment_indicator_ar);
+                localized_select_existing = ctx.getString(R.string.select_existing_ar);
+                localized_add_select_products = ctx.getString(R.string.add_selected_products_ar);
                 break;
 
             default:
@@ -959,6 +965,8 @@ public class MyLocalization {
                 localized_attachments_caps = ctx.getString(R.string.attachments_caps);
                 localized_select_indicator = ctx.getString(R.string.select_assignment_indicator);
                 localized_assignment_indicator = ctx.getString(R.string.assignment_indicator);
+                localized_select_existing = ctx.getString(R.string.select_existing);
+                localized_add_select_products = ctx.getString(R.string.add_selected_products);
                 break;
 
 

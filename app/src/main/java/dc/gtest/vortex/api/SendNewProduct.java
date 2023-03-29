@@ -99,7 +99,7 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
             MyPrefs.removeStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey);
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0");
+                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false);
                 getProducts.execute();
 
                 if (MyPrefs.getString(PREF_WAREHOUSEID, "0") != "0") {

@@ -44,6 +44,7 @@ public class ProductsData {
                     productModel.setIdentityValue(MyJsonParser.getStringValue(oneObjectProduct, "IdentityValue", ""));
                     productModel.setNotSynchronized(MyJsonParser.getBooleanValue(oneObjectProduct, "isNotSynchronized", false)); // not server field
                     productModel.setProductAttributesString(MyJsonParser.getStringValue(oneObjectProduct, "ProductAttributesString", ""));
+                    productModel.setProjectInstallationId(MyJsonParser.getStringValue(oneObjectProduct, "InstallationId", "0"));
 
                     JSONArray jArrayProductAttributes = new JSONArray();
                     JSONArray jArrayMandatoryAttributes = new JSONArray();

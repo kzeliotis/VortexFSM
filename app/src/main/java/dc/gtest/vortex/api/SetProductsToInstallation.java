@@ -7,39 +7,48 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
-import static dc.gtest.vortex.api.MyApi.API_DELETE_PRODUCT;
+import static dc.gtest.vortex.api.MyApi.API_DELETE_ZONE;
+import static dc.gtest.vortex.api.MyApi.API_SEND_NEW_PRODUCT;
+import static dc.gtest.vortex.api.MyApi.API_SET_PRODUCTS_TO_INSTALLATION;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyLocalization.localized_data_sent_2_rows;
 import static dc.gtest.vortex.support.MyLocalization.localized_delete_failed;
-import static dc.gtest.vortex.support.MyLocalization.localized_no_permission_delete;
-import static dc.gtest.vortex.support.MyLocalization.localized_product_deleted;
+import static dc.gtest.vortex.support.MyLocalization.localized_failed_to_send_data_saved_for_sync;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_permission_write;
+import static dc.gtest.vortex.support.MyLocalization.localized_zone_deleted;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
 
-public class DeleteProduct extends AsyncTask<String, Void, String > {
+public class SetProductsToInstallation extends AsyncTask<String, Void, String > {
 
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
     @SuppressLint("StaticFieldLeak")
     private final Context ctx;
-    private final String AssignmentId;
 
     @SuppressLint("StaticFieldLeak")
     private ProgressBar mProgressBar;
 
     private int responseCode;
+    private final String projectInstallationId;
 
-    public DeleteProduct(Context ctx, String AssignmentId) {
+    public SetProductsToInstallation(Context ctx, String ProjectInstallationId) {
         this.ctx = ctx;
-        this.AssignmentId = AssignmentId;
+        this.projectInstallationId = ProjectInstallationId;
     }
 
     @Override
@@ -55,10 +64,11 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
         String responseMessage = "";
         String responseBody = "";
 
-        String projectProductId = params[0];
+        //String projectZoneId = params[0];
+        String ppIds = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId, "");
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl + API_DELETE_PRODUCT + projectProductId + "&AssignmentId=" + AssignmentId + "&WarehouseId=" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
+        String apiUrl = baseHostUrl + API_SET_PRODUCTS_TO_INSTALLATION + projectInstallationId + "&ProjectProductIDs=" + ppIds;
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
@@ -85,18 +95,17 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
 
         if (responseBody != null && responseBody.equals("1")) {
 
-            MyDialogs.showOK(ctx, localized_product_deleted);
+            MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId);
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false);
-                getProducts.execute();
+                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId);
+                getZones.execute("0");
             }
-        } else if (responseBody != null && responseBody.equals("2")) {
-
-            MyDialogs.showOK(ctx, localized_no_permission_delete);
 
         } else {
-            MyDialogs.showOK(ctx, localized_delete_failed);
+
+            MyDialogs.showOK(ctx, localized_failed_to_send_data_saved_for_sync+ "\n\n" + this.getClass().getSimpleName());
         }
     }
 }
+
