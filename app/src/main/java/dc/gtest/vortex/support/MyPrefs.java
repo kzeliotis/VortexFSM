@@ -68,6 +68,7 @@ public class MyPrefs {
     public static final String PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_installation_custom_fields_data_for_show";
     public static final String PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW = "prf_file_related_consumables_for_show";
     public static final String PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW = "prf_file_related_warehouse_consumables_for_show";
+    public static final String PREF_FILE_PICKING_LIST_FOR_SHOW = "pref_file_picking_list_for_show";
     public static final String PREF_FILE_RELATED_SERVICES_FOR_SHOW = "pref_file_related_services_for_show";
     public static final String PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_company_custom_fields_data_for_show";
     public static final String PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW = "pref_file_product_to_installation_for_show";

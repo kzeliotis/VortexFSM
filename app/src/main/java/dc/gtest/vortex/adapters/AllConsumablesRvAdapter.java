@@ -6,7 +6,9 @@ import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +34,12 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_FROM_PICKING_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumable_value;
+import static dc.gtest.vortex.support.MyLocalization.localized_notes;
 import static dc.gtest.vortex.support.MyLocalization.localized_notes_with_colon;
+import static dc.gtest.vortex.support.MyLocalization.localized_quantity;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_value_with_colon;
 import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_colon;
@@ -46,11 +51,13 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     private final List<AllConsumableModel> mValues;
     private final CustomFilter mFilter;
     private final boolean warehouseProducts;
+    private final boolean pickingList;
 
-    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx, boolean WarehouseProducts) {
+    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx, boolean WarehouseProducts, boolean PickingList) {
         this.ctx = ctx;
         mValues = items;
         warehouseProducts = WarehouseProducts;
+        pickingList = PickingList;
         mFilter = new CustomFilter(AllConsumablesRvAdapter.this);
     }
 
@@ -65,7 +72,21 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
         holder.mItem = mValues.get(position);
         //holder.tvConsumableName.setText(holder.mItem.getConsumableName());
 
-        if(warehouseProducts){
+        if(!pickingList) {
+            holder.tvAddedPickingNotes.setVisibility(View.GONE);
+            holder.tvQTY.setVisibility(View.GONE);
+            holder.etAddedPickingNotes.setVisibility(View.GONE);
+            holder.etPickingQty.setVisibility(View.GONE);
+        }else{
+            holder.tvChevronConsumable.setVisibility(View.GONE);
+            holder.tvQTY.setText(localized_used_value_with_colon);
+            holder.tvAddedPickingNotes.setText(localized_notes_with_colon);
+            holder.etAddedPickingNotes.setText(holder.mItem.getNotes());
+//            String stock = holder.mItem.getStock().replace(",", ".");
+//            holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+        }
+
+        if(warehouseProducts || pickingList){
             String desc = holder.mItem.getConsumableName();
             String stock = holder.mItem.getStock();
             desc = desc + "\n\r" + "Qty: " + stock;
@@ -74,64 +95,145 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.tvConsumableName.setText(holder.mItem.getConsumableName());
         }
 
-        holder.mView.setOnClickListener(v -> {
-            @SuppressLint("InflateParams")
-            View view = ((Activity)ctx).getLayoutInflater().inflate(R.layout.dialog_consumables, null);
-
-            final TextView tvConsumableValueTitle = view.findViewById(R.id.tvConsumableValueTitle);
-            final TextView tvSuggestedConsumableTitle = view.findViewById(R.id.tvSuggestedConsumableTitle);
-            final TextView tvUsedConsumableTitle = view.findViewById(R.id.tvUsedConsumableTitle);
-            final TextView tvConsumableNotesTitle = view.findViewById(R.id.tvConsumableNotesTitle);
-
-            final EditText etSuggestedConsumablesValue = view.findViewById(R.id.etSuggestedConsumablesValue);
-            final EditText etUsedConsumablesValue = view.findViewById(R.id.etUsedConsumablesValue);
-            final EditText etConsumableNotes = view.findViewById(R.id.etConsumableNotes);
-
-            String stock = "";
-            if(warehouseProducts){
-                stock = holder.mItem.getStock().replace(",", ".");
-                etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+        holder.etAddedPickingNotes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            tvConsumableValueTitle.setText(localized_consumable_value);
-            tvSuggestedConsumableTitle.setText(localized_suggested_value_with_colon);
-            tvUsedConsumableTitle.setText(localized_used_value_with_colon);
-            tvConsumableNotesTitle.setText(localized_notes_with_colon);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            new AlertDialog.Builder(ctx)
-                    .setView(view)
-                    .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
-                    .setPositiveButton(localized_save, (dialog, which) -> {
-                        if (etUsedConsumablesValue != null && etUsedConsumablesValue.getText() != null
-                                && !etUsedConsumablesValue.getText().toString().equals("")) {
+                int productId = holder.mItem.getProductId();
 
-                            AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
+                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
+                    if(m.getProductId() == productId){
+                        SELECTED_FROM_PICKING_LIST.remove(m);
+                    }
+                }
 
-                            addedConsumableModel.setName(MyUtils.ToJson(holder.mItem.getConsumableName()));
-                            addedConsumableModel.setNotes(MyUtils.ToJson(etConsumableNotes.getText().toString().trim()));
-                            addedConsumableModel.setSuggested(etSuggestedConsumablesValue.getText().toString().trim());
-                            addedConsumableModel.setUsed(etUsedConsumablesValue.getText().toString().trim());
-                            addedConsumableModel.setProductId(holder.mItem.getProductId());
-                            String warehouseId = "0";
-                            if(warehouseProducts){
-                                warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
-                                addedConsumableModel.setStock(holder.mItem.getStock().replace(",", "."));
-                            }
-                            addedConsumableModel.setWarehouseId(warehouseId);
+                AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
 
-                            CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
-                            MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), CONSUMABLES_TOADD_LIST.toString());
-                            ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
-  //                            savedConsumable = savedConsumable + "{" +
+                addedConsumableModel.setName(MyUtils.ToJson(holder.mItem.getConsumableName()));
+                addedConsumableModel.setNotes(MyUtils.ToJson(holder.etAddedPickingNotes.getText().toString().trim()));
+                addedConsumableModel.setSuggested(holder.etPickingQty.getText().toString().trim());
+                addedConsumableModel.setUsed(holder.etPickingQty.getText().toString().trim());
+                addedConsumableModel.setProductId(holder.mItem.getProductId());
+                String warehouseId = "0";
+                addedConsumableModel.setWarehouseId(warehouseId);
+                String spit = addedConsumableModel.getUsed().length() == 0 ? "0" : addedConsumableModel.getUsed();
+                if(!spit.equals("0")) {
+                    SELECTED_FROM_PICKING_LIST.add(addedConsumableModel);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        holder.etPickingQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int productId = holder.mItem.getProductId();
+
+                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
+                    if(m.getProductId() == productId){
+                        SELECTED_FROM_PICKING_LIST.remove(m);
+                    }
+                }
+
+                AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
+
+                addedConsumableModel.setName(MyUtils.ToJson(holder.mItem.getConsumableName()));
+                addedConsumableModel.setNotes(MyUtils.ToJson(holder.etAddedPickingNotes.getText().toString().trim()));
+                addedConsumableModel.setSuggested(holder.etPickingQty.getText().toString().trim());
+                addedConsumableModel.setUsed(holder.etPickingQty.getText().toString().trim());
+                addedConsumableModel.setProductId(holder.mItem.getProductId());
+                String warehouseId = "0";
+                addedConsumableModel.setWarehouseId(warehouseId);
+                String spit = addedConsumableModel.getUsed().length() == 0 ? "0" : addedConsumableModel.getUsed();
+                if(!spit.equals("0")) {
+                    SELECTED_FROM_PICKING_LIST.add(addedConsumableModel);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
+        if(!pickingList){
+            holder.mView.setOnClickListener(v -> {
+                @SuppressLint("InflateParams")
+                View view = ((Activity)ctx).getLayoutInflater().inflate(R.layout.dialog_consumables, null);
+
+                final TextView tvConsumableValueTitle = view.findViewById(R.id.tvConsumableValueTitle);
+                final TextView tvSuggestedConsumableTitle = view.findViewById(R.id.tvSuggestedConsumableTitle);
+                final TextView tvUsedConsumableTitle = view.findViewById(R.id.tvUsedConsumableTitle);
+                final TextView tvConsumableNotesTitle = view.findViewById(R.id.tvConsumableNotesTitle);
+
+                final EditText etSuggestedConsumablesValue = view.findViewById(R.id.etSuggestedConsumablesValue);
+                final EditText etUsedConsumablesValue = view.findViewById(R.id.etUsedConsumablesValue);
+                final EditText etConsumableNotes = view.findViewById(R.id.etConsumableNotes);
+
+                String stock = "";
+                if(warehouseProducts){
+                    stock = holder.mItem.getStock().replace(",", ".");
+                    etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+                }
+
+                tvConsumableValueTitle.setText(localized_consumable_value);
+                tvSuggestedConsumableTitle.setText(localized_suggested_value_with_colon);
+                tvUsedConsumableTitle.setText(localized_used_value_with_colon);
+                tvConsumableNotesTitle.setText(localized_notes_with_colon);
+
+                new AlertDialog.Builder(ctx)
+                        .setView(view)
+                        .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(localized_save, (dialog, which) -> {
+                            if (etUsedConsumablesValue != null && etUsedConsumablesValue.getText() != null
+                                    && !etUsedConsumablesValue.getText().toString().equals("")) {
+
+                                AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
+
+                                addedConsumableModel.setName(MyUtils.ToJson(holder.mItem.getConsumableName()));
+                                addedConsumableModel.setNotes(MyUtils.ToJson(etConsumableNotes.getText().toString().trim()));
+                                addedConsumableModel.setSuggested(etSuggestedConsumablesValue.getText().toString().trim());
+                                addedConsumableModel.setUsed(etUsedConsumablesValue.getText().toString().trim());
+                                addedConsumableModel.setProductId(holder.mItem.getProductId());
+                                String warehouseId = "0";
+                                if(warehouseProducts){
+                                    warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
+                                    addedConsumableModel.setStock(holder.mItem.getStock().replace(",", "."));
+                                }
+                                addedConsumableModel.setWarehouseId(warehouseId);
+
+                                CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
+                                MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), CONSUMABLES_TOADD_LIST.toString());
+                                ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
+                                //                            savedConsumable = savedConsumable + "{" +
 //                                    "\"name\":\"" + holder.mItem.getConsumableName() + "\"," +
 //                                    "\"notes\":\"" + etConsumableNotes.getText().toString().trim() + "\"," +
 //                                    "\"suggested\":\"" + etSuggestedConsumablesValue.getText().toString().trim() + "\"," +
 //                                    "\"used\":\"" + etUsedConsumablesValue.getText().toString().trim() + "\""  +
 //                                    "},";
-                        }
-                    })
-                    .show();
-        });
+                            }
+                        })
+                        .show();
+            });
+        }
+
+
+
     }
 
     @Override
@@ -147,12 +249,22 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         final TextView tvConsumableName;
+        final TextView tvAddedPickingNotes;
+        final TextView tvQTY;
+        final TextView tvChevronConsumable;
+        final EditText etAddedPickingNotes;
+        final EditText etPickingQty;
         public AllConsumableModel mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             tvConsumableName = view.findViewById(R.id.tvConsumableName);
+            tvAddedPickingNotes = view.findViewById(R.id.tvAddedPickingNotes);
+            tvQTY = view.findViewById(R.id.tvQTY);
+            etAddedPickingNotes = view.findViewById(R.id.etAddedPickingNotes);
+            etPickingQty = view.findViewById(R.id.etPickingQty);
+            tvChevronConsumable = view.findViewById(R.id.tvChevronConsumable);
         }
     }
 

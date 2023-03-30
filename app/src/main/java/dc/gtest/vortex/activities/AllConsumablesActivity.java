@@ -19,6 +19,7 @@ import dc.gtest.vortex.adapters.AllConsumablesRvAdapter;
 import dc.gtest.vortex.api.GetAllConsumables;
 import dc.gtest.vortex.api.SendConsumables;
 import dc.gtest.vortex.data.AllConsumablesData;
+import dc.gtest.vortex.models.AddedConsumableModel;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
@@ -30,11 +31,16 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_FROM_PICKING;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
+import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_FROM_PICKING_LIST;
+import static dc.gtest.vortex.support.MyLocalization.localized_add_items_question;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_edit_selection;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
+import static dc.gtest.vortex.support.MyLocalization.localized_quantity;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_consumable;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_set_save_consumable;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_consumable_caps;
@@ -74,12 +80,16 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         btnSendConsumables = findViewById(R.id.btnSendConsumables);
         btnEditConsumables = findViewById(R.id.btnEditConsumables);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
+        boolean selectFromPicking = getIntent().getBooleanExtra(CONST_SELECT_FROM_PICKING, false);
+        if(selectFromPicking){btnEditConsumables.setVisibility(View.GONE);}
 
-        AllConsumablesData.generate(assignmentId, WarehouseProducts);
-        if(WarehouseProducts){
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
+        AllConsumablesData.generate(assignmentId, WarehouseProducts, selectFromPicking);
+        if(WarehouseProducts) {
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
+        } else if (selectFromPicking) {
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(PICKING_PRODUCTS_LIST_FILTERED, this, WarehouseProducts, true);
         }else{
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts);
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
         }
         rvAllConsumables.setAdapter(allConsumablesRvAdapter);
 
@@ -92,26 +102,43 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         }
 
         if (RelatedConsumables.isEmpty() || MyUtils.isNetworkAvailable()) {
-            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts);
+            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts, selectFromPicking);
             getAllConsumables.execute();
         }
 
+
         btnSendConsumables.setOnClickListener(v -> {
 
-            if (CONSUMABLES_TOADD_LIST.size() > 0) {
 
-                MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, assignmentId, CONSUMABLES_TOADD_LIST.toString());
-                CONSUMABLES_TOADD_LIST.clear();
-                MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW, assignmentId, ADDED_CONSUMABLES_LIST.toString());
-
-                if (MyUtils.isNetworkAvailable()) {
-                    SendConsumables sendConsumables = new SendConsumables(AllConsumablesActivity.this, assignmentId, CONST_FINISH_ACTIVITY);
-                    sendConsumables.execute();
+            if(selectFromPicking){
+                if(SELECTED_FROM_PICKING_LIST.size() > 0){
+                    String addedItems = "";
+                    for (AddedConsumableModel a : SELECTED_FROM_PICKING_LIST){
+                        if(addedItems.length() > 0){
+                            addedItems += "\r\n" + a.getName() + " - " + localized_quantity + ": " + a.getUsed();
+                        } else {
+                            addedItems = "\r\n" + a.getName() + " - " + localized_quantity + ": " + a.getUsed();
+                        }
+                    }
+                    new AlertDialog.Builder(this)
+                            .setMessage(localized_add_items_question + addedItems)
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                dialog.dismiss();
+                                CONSUMABLES_TOADD_LIST.addAll(SELECTED_FROM_PICKING_LIST);
+                                ADDED_CONSUMABLES_LIST.addAll(SELECTED_FROM_PICKING_LIST);
+                                SELECTED_FROM_PICKING_LIST.clear();
+                                SendSelected();
+                            })
+                            .setNegativeButton(R.string.no, (dialog, which) -> {
+                                dialog.dismiss();
+                                return;
+                            })
+                            .show();
                 } else {
-                    MyDialogs.showOK(AllConsumablesActivity.this, localized_no_internet_data_saved);
+                    MyDialogs.showOK(AllConsumablesActivity.this, localized_select_set_save_consumable);
                 }
             } else {
-                MyDialogs.showOK(AllConsumablesActivity.this, localized_select_set_save_consumable);
+                SendSelected();
             }
         });
 
@@ -140,6 +167,23 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
     }
 
 
+    public void SendSelected(){
+        if (CONSUMABLES_TOADD_LIST.size() > 0) {
+
+            MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, assignmentId, CONSUMABLES_TOADD_LIST.toString());
+            CONSUMABLES_TOADD_LIST.clear();
+            MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW, assignmentId, ADDED_CONSUMABLES_LIST.toString());
+
+            if (MyUtils.isNetworkAvailable()) {
+                SendConsumables sendConsumables = new SendConsumables(AllConsumablesActivity.this, assignmentId, CONST_FINISH_ACTIVITY);
+                sendConsumables.execute();
+            } else {
+                MyDialogs.showOK(AllConsumablesActivity.this, localized_no_internet_data_saved);
+            }
+        } else {
+            MyDialogs.showOK(AllConsumablesActivity.this, localized_select_set_save_consumable);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,6 +238,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                     .setPositiveButton(R.string.yes, (dialog, which) -> {
                         dialog.dismiss();
                         CONSUMABLES_TOADD_LIST.clear();
+                        SELECTED_FROM_PICKING_LIST.clear();
                         finish();
                     })
                     .setNegativeButton(R.string.no, null)

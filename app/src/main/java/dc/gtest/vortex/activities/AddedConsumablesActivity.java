@@ -27,6 +27,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_FROM_PICKING;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST_FILTERED;
@@ -36,6 +37,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables_to_send;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_from_picking;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_used;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
@@ -51,6 +53,7 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
     private TextView tvAssignmentId;
     private TextView tvTableHead;
     private Button btnAddNewConsumable;
+    private Button btnAddFromPicking;
     private boolean edit;
 
     @Override
@@ -65,16 +68,23 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
         tvTableHead = findViewById(R.id.tvTableHead);
         RecyclerView rvAddedConsumables = findViewById(R.id.rvAddedConsumables);
         btnAddNewConsumable = findViewById(R.id.btnAddNewConsumable);
+        btnAddFromPicking = findViewById(R.id.btnAddFromPicking);
 
         if(edit) {
             CONSUMABLES_TOADD_LIST.clear();
             CONSUMABLES_TOADD_LIST_FILTERED.clear();
             addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,CONSUMABLES_TOADD_LIST, CONSUMABLES_TOADD_LIST_FILTERED, edit);
             btnAddNewConsumable.setVisibility(View.GONE);
+            btnAddFromPicking.setVisibility(View.GONE);
         } else {
             ADDED_CONSUMABLES_LIST.clear();
             ADDED_CONSUMABLES_LIST_FILTERED.clear();
             addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,ADDED_CONSUMABLES_LIST, ADDED_CONSUMABLES_LIST_FILTERED, edit);
+            if(SELECTED_ASSIGNMENT.getPickingList().length() > 0){
+                btnAddFromPicking.setVisibility(View.VISIBLE);
+            } else {
+                btnAddFromPicking.setVisibility(View.GONE);
+            }
         }
         rvAddedConsumables.setAdapter(addedConsumablesRvAdapter);
 
@@ -101,6 +111,15 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
             }
 
         });
+
+        btnAddFromPicking.setOnClickListener(v -> {
+            Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+            intent.putExtra(CONST_SELECT_FROM_PICKING, true);
+            startActivity(intent);
+        });
+
     }
 
     @Override
@@ -166,5 +185,6 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
 
         tvTableHead.setText(localized_suggested_used);
         btnAddNewConsumable.setText(localized_add_new_consumable_caps);
+        btnAddFromPicking.setText(localized_select_from_picking);
     }
 }

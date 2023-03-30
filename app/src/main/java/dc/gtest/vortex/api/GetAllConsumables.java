@@ -9,11 +9,13 @@ import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ALL_CONSUMABLES;
+import static dc.gtest.vortex.api.MyApi.API_GET_PICKING_LIST;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_CONSUMABLES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PICKING_LIST_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
@@ -25,16 +27,18 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
     private final AllConsumablesRvAdapter allConsumablesRvAdapter;
     private final String AssignmentId;
     private final boolean warehouseProducts;
+    private final boolean pickingList;
 
     private String apiUrl;
     private int responseCode;
     private String responseMessage;
     private String responseBody;
 
-    public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts) {
+    public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts, boolean PickingList) {
         this.allConsumablesRvAdapter = allConsumablesRvAdapter;
         this.AssignmentId = AssignmentId;
         this.warehouseProducts = warehouseProducts;
+        this.pickingList = PickingList;
     }
 
     @Override
@@ -43,7 +47,11 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String warehouseID = "0";
         if(warehouseProducts){warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");}
-        apiUrl = baseHostUrl + API_GET_ALL_CONSUMABLES + AssignmentId + "&WarehouseId=" + warehouseID;
+        if(pickingList){
+            apiUrl = baseHostUrl + API_GET_PICKING_LIST + AssignmentId;
+        } else {
+            apiUrl = baseHostUrl + API_GET_ALL_CONSUMABLES + AssignmentId + "&WarehouseId=" + warehouseID;
+        }
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
@@ -65,13 +73,15 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
 
         if ( responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ALL_CONSUMABLES, responseBody);
-            if(warehouseProducts){
+            if(warehouseProducts) {
                 MyPrefs.setStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(PREF_WAREHOUSEID, "0"), responseBody);
+            } else if (pickingList) {
+                MyPrefs.setStringWithFileName(PREF_FILE_PICKING_LIST_FOR_SHOW, AssignmentId, responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, AssignmentId, responseBody);
             }
 
-            AllConsumablesData.generate(AssignmentId, warehouseProducts);
+            AllConsumablesData.generate(AssignmentId, warehouseProducts, pickingList);
 
             if (allConsumablesRvAdapter != null) {
                 allConsumablesRvAdapter.notifyDataSetChanged();

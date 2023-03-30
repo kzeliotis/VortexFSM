@@ -8,6 +8,7 @@ import dc.gtest.vortex.data.AllProductsData;
 import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ALL_PRODUCTS;
+import static dc.gtest.vortex.api.MyApi.API_GET_PICKING_LIST;
 import static dc.gtest.vortex.api.MyApi.API_GET_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
@@ -36,7 +37,7 @@ public class GetAllProducts extends AsyncTask<String, Void, String > {
     protected String doInBackground(String... params) {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        if(warehouseProducts){
+        if(warehouseProducts) {
             String warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");
             apiUrl = baseHostUrl + API_GET_WAREHOUSE_PRODUCTS + warehouseID;
         }else {
@@ -63,10 +64,10 @@ public class GetAllProducts extends AsyncTask<String, Void, String > {
 
         if (responseCode == 200 && responseBody != null) {
 
-            if (!warehouseProducts){
-                MyPrefs.setString(PREF_DATA_ALL_PRODUCTS, responseBody);
-            }else{
+            if (warehouseProducts) {
                 MyPrefs.setString(PREF_DATA_WAREHOUSE_PRODUCTS, responseBody);
+            }else{
+                MyPrefs.setString(PREF_DATA_ALL_PRODUCTS, responseBody);
             }
 
             AllProductsData.generate(warehouseProducts);

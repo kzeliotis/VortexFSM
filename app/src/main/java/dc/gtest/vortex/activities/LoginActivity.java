@@ -263,7 +263,7 @@ public class LoginActivity extends AppCompatActivity {
         GetDefaultTechActions getDefaultTechActions = new GetDefaultTechActions();
         getDefaultTechActions.execute();
 
-        GetAllConsumables getAllConsumables = new GetAllConsumables(null, "0", false);
+        GetAllConsumables getAllConsumables = new GetAllConsumables(null, "0", false, false);
         getAllConsumables.execute();
 
         GetServices getServices = new GetServices("0", "0","0", "0");

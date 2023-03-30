@@ -1291,12 +1291,24 @@
     <string name="select_existing_ar">Select existing</string>
 
     <string name="add_selected_products">Do you want to add all selected products to installation?</string>
-    <string name="add_selected_products_gr">Θέλετε να αντιστοιχηθούν τα επιλεγμένα προϊόντα στην εγκατάσταση;</string>
+    <string name="add_selected_products_gr">Θέλετε να εισαχθούν τα επιλεγμένα προϊόντα στην εγκατάσταση;</string>
     <string name="add_selected_products_ar">Do you want to add all selected products to installation?</string>
 
     <string name="assignment_indicator">Assignment indicator</string>
     <string name="assignment_indicator_gr">Χαρακτηρισμός ανάθεσης</string>
     <string name="assignment_indicator_ar">Assignment indicator</string>
+
+    <string name="select_from_picking">SELECT FROM PICKING LIST</string>
+    <string name="select_from_picking_gr">ΕΠΙΛΟΓΗ ΑΠΟ PICKING LIST</string>
+    <string name="select_from_picking_ar">SELECT FROM PICKING LIST</string>
+
+    <string name="quantity">Quantity</string>
+    <string name="quantity_gr">Ποσότητα</string>
+    <string name="quantity_ar">Quantity</string>
+
+    <string name="add_following_items_question">Do you want to add the following items? :</string>
+    <string name="add_following_items_question_gr">Θέλετε να προσθέσετε τα παρακάτω είδη; :</string>
+    <string name="add_following_items_question_ar">Do you want to add the following items? :</string>
 
     <item type="id" name="TAG_ID" />
 

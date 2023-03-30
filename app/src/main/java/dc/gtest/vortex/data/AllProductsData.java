@@ -13,6 +13,8 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_WAREHOUSE_PRODUCTS;
 
@@ -60,7 +62,6 @@ public class AllProductsData {
                     e.printStackTrace();
                 }
             }
-
 
         } else {
             ALL_PRODUCTS_LIST.clear();
