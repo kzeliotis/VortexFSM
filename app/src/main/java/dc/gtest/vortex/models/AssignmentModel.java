@@ -51,6 +51,14 @@ public class AssignmentModel {
     private String resourceId = "";
     private String contract = "";
     private String additionalTechnicians = "";
+
+    private String ProjectLat = "0";
+    private String ProjectLon = "";
+    private String ProjectAddress = "";
+    private String ProjectCity = "";
+    private String DateStart = "";
+    private String DateEnd = "";
+
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
 
@@ -79,6 +87,14 @@ public class AssignmentModel {
                         "\"products\": \"" + products + "\",\n" +
                         "\"assignmentType\": \"" + assignmentType + "\",\n" +
                         "\"customerName\": \"" + customerName + "\",\n" +
+
+                        "\"ProjectLat\": \"" + ProjectLat + "\",\n" +
+                        "\"ProjectLon\": \"" + ProjectLon + "\",\n" +
+                        "\"ProjectAddress\": \"" + ProjectAddress + "\",\n" +
+                        "\"ProjectCity\": \"" + ProjectCity + "\",\n" +
+                        "\"DateStart\": \"" + DateStart + "\",\n" +
+                        "\"DateEnd\": \"" + DateEnd + "\",\n" +
+
                         "\"customerBusiness\": \"" + customerBusiness + "\",\n" +
                         "\"CustomerVatNumber\": \"" + customerVatNumber + "\",\n" +
                         "\"CustomerRevenue\": \"" + customerRevenue + "\",\n" +
@@ -100,6 +116,56 @@ public class AssignmentModel {
                         "\"Attachments\": " + attachments + "\n"
                 ;
     }
+
+    public String getProjectLat() {
+        return ProjectLat;
+    }
+
+    public void setProjectLat(String ProjectLat) {
+        this.ProjectLat = ProjectLat;
+    }
+
+    public String getProjectLon() {
+        return ProjectLon;
+    }
+
+    public void setProjectLon(String ProjectLon) {
+        this.ProjectLon = ProjectLon;
+    }
+
+    public String getProjectAddress() {
+        return ProjectAddress;
+    }
+
+    public void setProjectAddress(String ProjectAddress) {
+        this.ProjectAddress = ProjectAddress;
+    }
+
+    public String getProjectCity() {
+        return ProjectCity;
+    }
+
+    public void setProjectCity(String ProjectCity) {
+        this.ProjectCity = ProjectCity;
+    }
+
+    public String getDateStart() {
+        return DateStart;
+    }
+
+    public void setDateStart(String DateStart) {
+        this.DateStart = DateStart;
+    }
+
+    public String getDateEnd() {
+        return DateEnd;
+    }
+
+    public void setDateEnd(String DateEnd) {
+        this.DateEnd = DateEnd;
+    }
+
+    ///
 
     public String getProjectDescription() {
         return projectDescription;

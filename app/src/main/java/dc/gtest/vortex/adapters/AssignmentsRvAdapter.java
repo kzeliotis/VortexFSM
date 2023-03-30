@@ -27,6 +27,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import static dc.gtest.vortex.activities.AssignmentsActivity.selectedDate;
 import static dc.gtest.vortex.activities.AssignmentsActivity.selectedStatus;
 import static dc.gtest.vortex.activities.AssignmentsActivity.sortedBy;
+import static dc.gtest.vortex.support.MyGlobals.FILTERED_ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DATE;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DISTANCE;
@@ -271,6 +272,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
                 filterResults.values = filteredItems;
                 int result_count = filteredItems.size();
                 if (result_count == 1 && MyPrefs.getBoolean(PREF_PROCESS_ASSIGNMENT_ON_SCAN, false) && codeScanned) {singleAssignmentResult = true;} //
+                FILTERED_ASSIGNMENTS_LIST = filteredItems;
                 return filterResults;
             }
 

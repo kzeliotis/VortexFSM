@@ -45,6 +45,7 @@ public class MyGlobals {
 
     public static AssignmentModel SELECTED_ASSIGNMENT = new AssignmentModel();
     public static List<AssignmentModel> ASSIGNMENTS_LIST = new ArrayList<>();
+    public static List<AssignmentModel> FILTERED_ASSIGNMENTS_LIST = new ArrayList<>();
 
     public static InstallationModel SELECTED_INSTALLATION = new InstallationModel();
     public static ProjectZoneModel SELECTED_INSTALLATION_ZONE = new ProjectZoneModel();

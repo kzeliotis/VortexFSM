@@ -75,6 +75,8 @@ public class AssignmentsData {
                     try {
                         String dateStart = MyJsonParser.getStringValue(oneObject, "DateStart", "");
                         String dateEnd = MyJsonParser.getStringValue(oneObject, "DateEnd", "");
+                        assignmentModel.setDateStart(dateStart);
+                        assignmentModel.setDateEnd(dateEnd);
 
                         String month = dateStart.substring(0, 2);
                         String day = dateStart.substring(3, 5);
@@ -111,6 +113,8 @@ public class AssignmentsData {
 
                     String projectLat = MyJsonParser.getStringValue(oneObject, "ProjectLat", "");
                     String projectLon = MyJsonParser.getStringValue(oneObject, "ProjectLon", "");
+                    assignmentModel.setProjectLat(projectLat);
+                    assignmentModel.setProjectLon(projectLon);
 
                     distance = -1;
 
@@ -156,6 +160,8 @@ public class AssignmentsData {
                     assignmentModel.setPickingList(MyJsonParser.getStringValue(oneObject, "PickingList", ""));
                     assignmentModel.setCommentsSolution(MyJsonParser.getStringValue(oneObject, "Solution", ""));
                     assignmentModel.setNotes(MyJsonParser.getStringValue(oneObject, "Notes", ""));
+                    assignmentModel.setProjectAddress(MyJsonParser.getStringValue(oneObject, "ProjectAddress", ""));
+                    assignmentModel.setProjectCity(MyJsonParser.getStringValue(oneObject, "ProjectCity", ""));
 
                     String assignmentId = assignmentModel.getAssignmentId();
                     if (! MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false)){

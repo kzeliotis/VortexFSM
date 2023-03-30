@@ -36,12 +36,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySwitchLanguage;
 
+import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
+import static dc.gtest.vortex.support.MyGlobals.FILTERED_ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
 
@@ -143,34 +148,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         String assignmentData = MyPrefs.getString(PREF_DATA_ASSIGNMENTS, "");
+        List<AssignmentModel> assignmentsList = FILTERED_ASSIGNMENTS_LIST.size() > 0 ? FILTERED_ASSIGNMENTS_LIST : ASSIGNMENTS_LIST;
 
-        if (!assignmentData.equals("")) {
+        if (assignmentsList.size() > 0) {
 
             try {
-                JSONArray jsonArr = new JSONArray(assignmentData);
+                //JSONArray jsonArr = new JSONArray(assignmentData);
 
-                for (int i = 0; i < jsonArr.length(); i++) {
-                    JSONObject oneObject = jsonArr.getJSONObject(i);
+                for (AssignmentModel am : assignmentsList) {
 
-                    String projectLat = oneObject.getString("ProjectLat");
-                    String projectLon = oneObject.getString("ProjectLon");
+                    String projectLat = am.getProjectLat(); // oneObject.getString("ProjectLat");
+                    String projectLon = am.getProjectLon(); // oneObject.getString("ProjectLon");
 
                     if (!projectLat.equals("") && !projectLon.equals("")) {
                         LatLng markerCord = new LatLng(Double.parseDouble(projectLat), Double.parseDouble(projectLon));
 
                         BitmapDescriptor afLogo = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
-                        String title = oneObject.getString("CustomerName");
+                        String title = am.getCustomerName(); // oneObject.getString("CustomerName");
 
-                        String address = "Address: " + oneObject.getString("ProjectAddress") + ", " + oneObject.getString("ProjectCity");
-                        String phone = "Phone: " + oneObject.getString("ProjectTel");
+                        String address = "Address: " + am.getProjectAddress() + ", " + am.getProjectCity();
+                        String phone = "Phone: " + am.getPhone();
 
-                        String dateStart = oneObject.getString("DateStart");
+                        String dateStart = am.getDateStart();
                         dateStart = dateStart.substring(dateStart.length()-5);
-                        String dateEnd = oneObject.getString("DateEnd");
+                        String dateEnd = am.getDateEnd();
                         dateEnd = dateEnd.substring(dateEnd.length()-5);
                         String assignmentTime = "Time: " + dateStart + " - " + dateEnd;
 
-                        String assignmentType = "Type: " + oneObject.getString("AssignmentType");
+                        String assignmentType = "Type: " + am.getAssignmentType();
 
                         mMap.addMarker(new MarkerOptions()
                                 .position(markerCord)
