@@ -17,7 +17,9 @@ public class ProjectsData {
 
     public static void generate(String ProjectId) {
 
-        PROJECTS_LIST.clear();
+        if(ProjectId.length() == 0){
+            PROJECTS_LIST.clear();
+        }
 
         String projects = SELECTED_COMPANY.getCompanyProjects();
 

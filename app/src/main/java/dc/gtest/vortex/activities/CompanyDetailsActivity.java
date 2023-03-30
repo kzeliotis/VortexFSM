@@ -3,7 +3,12 @@ package dc.gtest.vortex.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
+    private ProjectsRvAdapter projectsRvAdapter;
     private TextView tvCompanyBusinessTitle;
     private TextView tvCompanyBusiness;
     private TextView tvCompanyVatNumber;
@@ -40,6 +46,7 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
     private TextView tvCompanyProjectsTitle;
     private TextView tvCompanyMobile;
     private TextView tvCompanyPhone;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +108,8 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
         ProjectsData.generate("");
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        rvProjects.setAdapter(new ProjectsRvAdapter(PROJECTS_LIST_FILTERED, CompanyDetailsActivity.this, isForNewAssignment));
+        projectsRvAdapter = new ProjectsRvAdapter(PROJECTS_LIST_FILTERED, CompanyDetailsActivity.this, isForNewAssignment);
+        rvProjects.setAdapter(projectsRvAdapter);
     }
 
 
@@ -144,6 +152,12 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (searchView != null) {
+            searchView.setQuery("", false);
+            searchView.setIconified(true);
+        }
+
         updateUiTexts();
     }
 
@@ -151,6 +165,29 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
     public void onBackPressed() {
         SELECTED_COMPANY.clearModel();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem itemSearch = menu.findItem(R.id.action_search);
+        searchView = (SearchView) itemSearch.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                projectsRvAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+        return true;
     }
 
     public void onRadioButtonClicked(View view) {
