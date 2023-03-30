@@ -238,12 +238,12 @@
     <string name="enable_gps_gr">Ενεργοποίηση GPS\n\nΤο GPS σας δείχνει απενεργοποιημένο.\n\nΠαρακαλώ ενεργοποιήστε το GPS προκειμένου να χρησιμοποιήσετε όλες τις λειτουργίες της εφαρμογής.</string>
     <string name="enable_gps_ar">تمكين نظام الخرائط معطلا الرجاء تفعيل نظام الخرائط لاستخدام جميع مميزات التطبيق .</string>
 
-    <string name="access_to_location_for_features">You need to provide access to location to use all features of the app concerning tracking and recording the technician\'s location.</string>
-    <string name="access_to_location_for_features_gr">Η παροχή πρόσβασης στην τοποθεσία σας είναι απαραίτητη προκειμένου να χρησιμοποιήσετε όλες τις λειτουργίες της εφαρμογής που αφορούν την αποστολή και καταγραφή θέσης τεχνικού.</string>
+    <string name="access_to_location_for_features">Vortex collects location data to enable the technician\'s location tracking feature even when the app is not in use. \n\nYou need to provide access to location permissions to use this feature.</string>
+    <string name="access_to_location_for_features_gr">Το Vortex συλλέγει δεδομένα τοποθεσίας για να ενεργοποιήσει τη δυνατότητα αποστολής και καταγραφής θέσης τεχνικού ακόμα και όταν η εφαρμογή δεν χρησιμοποιείται. \n\n Πρέπει να παρέχετε δικαιώματα πρόσβασης τοποθεσίας για να χρησιμοποιήσετε αυτή τη δυνατότητα.</string>
     <string name="access_to_location_for_features_ar">تحتاج إلى توفير الوصول إلى الموقع لاستخدام جميع ميزات التطبيق.</string>
 
-    <string name="access_to_location_for_features2">For optimal and accurate use of the location tracking feature please select \'Allow all the time\' on the Location Permissions menu</string>
-    <string name="access_to_location_for_features2_gr">Για τη σωστή και ακριβή λειτουργία της καταγραφής θέσης τεχνικού παρακαλώ επιλέξτε να υπάρχει πάντα δικαίωμα πρόσβασης τοποθεσίας από την εφαρμογή </string>
+    <string name="access_to_location_for_features2">For optimal and accurate use of the technician\'s tracking feature even when the app is not in use, please select \'Allow all the time\' on the Location Permissions menu</string>
+    <string name="access_to_location_for_features2_gr">Για τη σωστή και ακριβή λειτουργία της καταγραφής θέσης τεχνικού ακόμα και όταν ή εφαρμογή δεν χρησιμοποιείται, παρακαλώ επιλέξτε να υπάρχει πάντα δικαίωμα πρόσβασης τοποθεσίας από την εφαρμογή </string>
     <string name="access_to_location_for_features2_ar">For optimal and accurate tracking please select \'Allow all the time\' on the Location Permissions menu</string>
 
     <string name="access_to_location_for_center">You need to provide access to location to be able to set center of the map at your location</string>

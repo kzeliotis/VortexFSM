@@ -14,7 +14,11 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -104,6 +108,10 @@ public class PermGetLocation {
             case PERMISSIONS_FINE_LOCATION:
                 if (Build.VERSION.SDK_INT > 23) {
                     if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                        TextView tv  = new TextView(this);
+//                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+//                        tv.setText(randomString +"/n"+ Html.fromHtml("<a href=https://play.google.com/store/apps/details?id=com.xxxxxxxxx>Click Here</a>"));
+
                         new AlertDialog.Builder(ctx)
                                 .setMessage(localized_access_to_location_for_features)
                                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
