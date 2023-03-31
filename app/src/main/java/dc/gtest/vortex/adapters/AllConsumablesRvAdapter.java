@@ -103,10 +103,10 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                int productId = holder.mItem.getProductId();
+                int detPickingId = holder.mItem.getDetPickingId();
 
                 for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
-                    if(m.getProductId() == productId){
+                    if(m.getDetPickingId() == detPickingId){
                         SELECTED_FROM_PICKING_LIST.remove(m);
                     }
                 }
@@ -118,6 +118,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                 addedConsumableModel.setSuggested(holder.etPickingQty.getText().toString().trim());
                 addedConsumableModel.setUsed(holder.etPickingQty.getText().toString().trim());
                 addedConsumableModel.setProductId(holder.mItem.getProductId());
+                addedConsumableModel.setDetPickingId(holder.mItem.getDetPickingId());
                 String warehouseId = "0";
                 addedConsumableModel.setWarehouseId(warehouseId);
                 String spit = addedConsumableModel.getUsed().length() == 0 ? "0" : addedConsumableModel.getUsed();
@@ -140,10 +141,11 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int productId = holder.mItem.getProductId();
+
+                int detPickingId = holder.mItem.getDetPickingId();
 
                 for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
-                    if(m.getProductId() == productId){
+                    if(m.getDetPickingId() == detPickingId){
                         SELECTED_FROM_PICKING_LIST.remove(m);
                     }
                 }
@@ -155,6 +157,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                 addedConsumableModel.setSuggested(holder.etPickingQty.getText().toString().trim());
                 addedConsumableModel.setUsed(holder.etPickingQty.getText().toString().trim());
                 addedConsumableModel.setProductId(holder.mItem.getProductId());
+                addedConsumableModel.setDetPickingId(holder.mItem.getDetPickingId());
                 String warehouseId = "0";
                 addedConsumableModel.setWarehouseId(warehouseId);
                 String spit = addedConsumableModel.getUsed().length() == 0 ? "0" : addedConsumableModel.getUsed();

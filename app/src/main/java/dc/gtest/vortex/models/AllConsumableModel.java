@@ -5,6 +5,7 @@ public class AllConsumableModel {
     private String consumableName = "";
     private String notes = "";
     private int ProductId = 0;
+    private int detPickingId = 0;
     private int typeId = -1;
     private String Stock = "";
 
@@ -22,6 +23,14 @@ public class AllConsumableModel {
 
     public void setProductId(int ProductId) {
         this.ProductId = ProductId;
+    }
+
+    public int getDetPickingId() {
+        return detPickingId;
+    }
+
+    public void setDetPickingId(int DetPickingId) {
+        this.detPickingId = DetPickingId;
     }
 
     public String getNotes() {
@@ -51,6 +60,7 @@ public class AllConsumableModel {
                         "  \"ProductDescription\": \"" + consumableName + "\",\n" +
                         "  \"notes\": \"" + notes + "\",\n" +
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
+                        "  \"DetPickingId\": \"" + detPickingId  + "\",\n" +
                         "  \"Stock\": \"" + Stock + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +
                         "}";
