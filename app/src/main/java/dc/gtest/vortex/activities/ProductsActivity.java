@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.MySpinnerAdapter;
@@ -266,7 +271,7 @@ public class ProductsActivity extends BaseDrawerActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_search_scanner, menu);
 
         MenuItem itemSearch = menu.findItem(R.id.action_search);
         searchView = (SearchView) itemSearch.getActionView();
@@ -310,6 +315,51 @@ public class ProductsActivity extends BaseDrawerActivity {
             doSpinnerItemSelected = false;
         }
         spProductTypes.setSelection(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.itemScanner){
+            IntentIntegrator integrator = new IntentIntegrator(ProductsActivity.this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt("Scan");
+            integrator.setCameraId(0);
+            integrator.setBeepEnabled(false);
+            integrator.setBarcodeImageEnabled(false);
+            integrator.setOrientationLocked(true);
+            integrator.initiateScan();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 49374:
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        //ScannedCode = ScannedCode + "|";
+                        //searchView = (SearchView) mSearchMenu.getActionView();
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchView.onActionViewExpanded();
+                                searchView.setIconified(false);
+                                searchView.setQuery(ScannedCode, false);
+                                searchView.clearFocus();
+                            }
+                        }, 200);
+                    }
+                }
+                break;
+        }
     }
 
     public void onRadioButtonClicked(View view) {
