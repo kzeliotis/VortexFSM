@@ -76,7 +76,7 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                 int lastIndex = filePath.lastIndexOf("/");
                 String attachmentFileName = filePath.substring(lastIndex + 1);
                 String _file = filePath.substring(lastIndex + 1);
-                String ext = _file.split("\\.")[1];
+                String ext = _file.substring(_file.lastIndexOf('.') + 1); //_file.split("\\.");
                 String cloudBlobName = String.format("%s_%s.%s.%s", assignmentId, _file.split("\\.")[0], UUID.randomUUID().toString().substring(0,8).replace("-", ""), ext);
                 blob1 = container
                         .getBlockBlobReference(cloudBlobName);
