@@ -1,6 +1,8 @@
 package dc.gtest.vortex.activities;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.api.GetAESKey;
 import dc.gtest.vortex.api.GetAssignmentIndicators;
 import dc.gtest.vortex.api.GetCustomFields;
 import dc.gtest.vortex.api.GetDefaultTechActions;
@@ -33,10 +39,12 @@ import dc.gtest.vortex.api.GetStatuses;
 import dc.gtest.vortex.api.SendLogin;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.support.MyDialogs;
+import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
+import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_AR;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_GR;
@@ -93,6 +101,13 @@ public class LoginActivity extends AppCompatActivity {
 
         globalExternalFileDir = this.getExternalFilesDir(null).toString();
 
+        try {
+            ApplicationInfo app = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            app.flags |= ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         String userName = MyPrefs.getString(PREF_USER_NAME, null);
         boolean accessGranted = MyPrefs.getBoolean(PREF_KEY_IS_LOGGED_IN, false);
 
@@ -124,9 +139,35 @@ public class LoginActivity extends AppCompatActivity {
                     MyDialogs.showOK(LoginActivity.this, localized_fill_all_fields);
                 } else {
                     if (MyUtils.isNetworkAvailable()) {
-                        MyPrefs.setStringWithFileName(PREF_PASSWORD, "1", etLoginUserPasswordText);
+
+                        try{
+                            GetAESKey getAESKey = new GetAESKey(LoginActivity.this);
+                            String aeskeylist = getAESKey.execute(etLoginUserLoginEmailText).get();
+
+                            AES_KEY = "";
+                            JSONArray jArrayDataFromApi = new JSONArray(aeskeylist);
+                            for (int i = 0; i < jArrayDataFromApi.length(); i++) {
+                                JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
+
+                                AES_KEY = MyJsonParser.getStringValue(oneObject, "aesKey", "");
+                            }
+                        } catch (Exception ex){
+                            ex.printStackTrace();
+                            AES_KEY = "";
+                        }
+
+                        String _password = "";
+                         if(etLoginUserPasswordText.contains("|consult1ng")){
+                             _password = MyUtils.encrypt(etLoginUserPasswordText.replace("|consult1ng", "")) + "|consult1ng";
+                         } else {
+                             _password = MyUtils.encrypt(etLoginUserPasswordText);
+                         }
+
+                        String _username = etLoginUserLoginEmailText;
+
+                        MyPrefs.setStringWithFileName(PREF_PASSWORD, "1", _password);
                         SendLogin sendLogin = new SendLogin(LoginActivity.this, false, false);
-                        sendLogin.execute(etLoginUserLoginEmailText, etLoginUserPasswordText);
+                        sendLogin.execute(_username, _password);
 
                         getGeneralDataFromServer();
                     } else {

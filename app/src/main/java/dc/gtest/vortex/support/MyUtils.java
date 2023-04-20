@@ -16,13 +16,29 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Locale;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
+
+import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 
 public class MyUtils {
 
@@ -200,4 +216,61 @@ public class MyUtils {
         // TODO: escape other non-printing characters using uXXXX notation
         return escaped;
     }
+
+    //private static final String AES_KEY = "brFsF6KjzXn3cOzlTBB0zo9ktziYr+LziPIrxj1Vu7ttac+bJHZ0vp7KqIeeO11qPv1AsGKN3TdUx0J04KoybnBMqQb5frhUqb4cWzFcbP1gD7yjH8mPzLArD83CDfjXpkco53WA2VsvZ+UY/PrWXOoe4acFWKyoV7SV/Jfkk/oipC+oB4vrq2eML9V525byIRBmkr2dkUPB8O5OG1o0/jYniP5TBI2Yk3sG7Ds2dKCHJ7qjb7Z+TgBJJUTMbu6D7hppo2cBmQA2epPDdeVlEDiJIzH8dnTBsBEoG3TeMFvlkQytt6C2mgJqeu+4e+Do35j00QFYI417w3li1aa8dA==";
+
+    private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
+    private static final String HASH_ALGORITHM = "MD5";
+
+    private static byte[] getKey(String key) throws Exception {
+        MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
+        byte[] hash = md.digest(key.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = new byte[32];
+        System.arraycopy(hash, 0, keyBytes, 0, 16);
+        System.arraycopy(hash, 0, keyBytes, 15, 16);
+        return keyBytes;
+    }
+
+    public static String encrypt(String input) {
+
+        String result = "";
+
+        if (AES_KEY.length() == 0) {return input;}
+
+        try{
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            SecretKeySpec secretKey = new SecretKeySpec(getKey(AES_KEY), "AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedBytes = cipher.doFinal(input.getBytes());
+            result = new String(java.util.Base64.getEncoder().encode(encryptedBytes), StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result = input;
+        }
+
+        return result;
+
+    }
+
+    public static String decrypt(String input) {
+
+        String result = "";
+        if (AES_KEY.length() == 0) {return input;}
+
+        try{
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            SecretKeySpec secretKey = new SecretKeySpec(getKey(AES_KEY), "AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] decryptedBytes = cipher.doFinal(java.util.Base64.getDecoder().decode(input.getBytes(StandardCharsets.UTF_8)));
+            result = new String(decryptedBytes, StandardCharsets.UTF_8);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            result = input;
+        }
+
+        return result;
+
+    }
+
+
 }

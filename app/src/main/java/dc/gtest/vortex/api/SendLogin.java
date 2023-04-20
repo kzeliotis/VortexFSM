@@ -22,10 +22,12 @@ import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
@@ -80,11 +82,13 @@ public class SendLogin extends AsyncTask<String, Void, String > {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
         apiUrl = baseHostUrl+ "/Vortex.svc/GetUserAuthentication";
+        String ecrypted = AES_KEY.length()>0 ? "1" : "0";
 
         postBody =
                 "{\n" +
                         "  \"username\": \"" + username + "\",\n" +
-                        "  \"password\": \"" + password + "\"\n" +
+                        "  \"password\": \"" + password + "\",\n" +
+                        "  \"Encrypted\": \"" + ecrypted + "\"\n" +
                         "}";
 
 
