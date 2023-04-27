@@ -9,7 +9,7 @@
     <string name="default_device_id">""</string>
 
     <!-- non translatable strings -->
-    <string name="app_name">Vortex</string>
+    <string name="app_name">Vortex FSM</string>
     <string name="data_consulting">DataConsulting Software Solutions ©</string>
     <string name="vortex_mobile">Vortex Mobile</string>
     <string name="logo">logo</string>
