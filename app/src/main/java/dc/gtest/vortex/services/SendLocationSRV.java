@@ -156,6 +156,9 @@ public class SendLocationSRV extends Service {
 
 
         ctx = ASSIGNMENTS_CTX;
+        if(ctx == null){
+            return;
+        }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
 
         //Provides access to the Location Settings API.
