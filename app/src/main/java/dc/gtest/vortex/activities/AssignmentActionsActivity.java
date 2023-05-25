@@ -1441,7 +1441,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             File pickedFile = new File(getRealPathFromURI(selectedImage));
                             File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
                             File movedPhoto = new File(newFileLocation, pickedFile.getName());
-                            copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                            movedPhoto = CopyFile(selectedImage, movedPhoto);
+                            if (movedPhoto == null){return;}
+                            //copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
                             globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
                             PHOTO_ITEMS.add(globalCurrentPhotoPath);
                             photosRecyclerViewAdapter.notifyDataSetChanged();
@@ -1452,7 +1454,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         File pickedFile = new File(getRealPathFromURI(selectedImage));
                         File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
                         File movedPhoto = new File(newFileLocation, pickedFile.getName());
-                        copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                        movedPhoto = CopyFile(selectedImage, movedPhoto);
+                        if (movedPhoto == null){return;}
+                        //copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
                         globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
                         PHOTO_ITEMS.add(globalCurrentPhotoPath);
                         photosRecyclerViewAdapter.notifyDataSetChanged();
@@ -1496,7 +1500,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                             File pickedFile = new File(getRealPathFromURI(selectedImage));
                             File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
                             File movedPhoto = new File(newFileLocation, pickedFile.getName());
-                            copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                            movedPhoto = CopyFile(selectedImage, movedPhoto);
+                            if (movedPhoto == null){return;}
+                            //copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
                             globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
 
                             try {
@@ -1557,9 +1563,6 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         MyDialogs.showOK(AssignmentActionsActivity.this, ex.toString());
                     }
 
-//                    File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER);
-//                    File movedPhoto = new File(newFileLocation, pickedFile.getName());
-//                    copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
                     if (transferSuccessful){
                         globalCurrentAttachmentPath = outputFile.getAbsolutePath(); //movedPhoto.getAbsolutePath();
                         ATTACHMENT_ITEMS.add(globalCurrentAttachmentPath);
@@ -1571,6 +1574,44 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
         }
+    }
+
+    public File CopyFile(Uri attachmentFile, File outputFile){
+        InputStream in = null;
+        OutputStream out = null;
+        long selectedFileSize = 0;
+        boolean transferSuccessful = true;
+        try {
+            in = getContentResolver().openInputStream(attachmentFile);
+            long sizeLimit = 30000000; //30mb
+            selectedFileSize = in.available();
+            //String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
+            if (selectedFileSize > sizeLimit){
+                MyDialogs.showOK(AssignmentActionsActivity.this, localized_file_size_limit);
+                return null;
+            }
+            outputFile.getParentFile().mkdirs();
+            outputFile.createNewFile();
+            out = new FileOutputStream(outputFile, true);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (out != null){
+                out.close();
+            }
+        } catch (Exception ex) {
+            transferSuccessful = false;
+            ex.printStackTrace();
+            MyDialogs.showOK(AssignmentActionsActivity.this, ex.toString());
+            outputFile = null;
+        }
+
+        return outputFile;
     }
 
     public String getRealPathFromURI(Uri uri) {
@@ -1773,6 +1814,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     }
 
 
+    //deprecated
     public static void copyFileOrDirectory(String srcDir, String dstDir) {
 
         try {
@@ -1812,6 +1854,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             source = new FileInputStream(sourceFile).getChannel();
             destination = new FileOutputStream(destFile).getChannel();
             destination.transferFrom(source, 0, source.size());
+        }catch(Exception ex){
+            ex.printStackTrace();
         } finally {
             if (source != null) {
                 source.close();
