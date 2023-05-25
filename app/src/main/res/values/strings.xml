@@ -1310,6 +1310,10 @@
     <string name="add_following_items_question_gr">Θέλετε να προσθέσετε τα παρακάτω είδη; :</string>
     <string name="add_following_items_question_ar">Do you want to add the following items? :</string>
 
+    <string name="mandatory_payment">The workorder\'s minimum payment is %s</string>
+    <string name="mandatory_payment_gr">Η ελάχιστη χρέωση της ανάθεσης είναι %s</string>
+    <string name="mandatory_payment_ar">The workorder\'s minimum payment is %s</string>
+
     <item type="id" name="TAG_ID" />
 
 

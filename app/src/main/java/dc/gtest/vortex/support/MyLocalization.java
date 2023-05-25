@@ -252,7 +252,7 @@ public class MyLocalization {
     public static String localized_select_from_picking = "";
     public static String localized_quantity = "";
     public static String localized_add_items_question = "";
-
+    public static String localized_minimum_payment = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -497,6 +497,7 @@ public class MyLocalization {
                 localized_select_from_picking = ctx.getString(R.string.select_from_picking_gr);
                 localized_quantity = ctx.getString(R.string.quantity_gr);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question_gr);
+                localized_minimum_payment = ctx.getString(R.string.mandatory_payment_gr);
                 break;
 
             case CONST_AR:
@@ -738,6 +739,7 @@ public class MyLocalization {
                 localized_select_from_picking = ctx.getString(R.string.select_from_picking_ar);
                 localized_quantity = ctx.getString(R.string.quantity_ar);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question_ar);
+                localized_minimum_payment = ctx.getString(R.string.mandatory_payment_ar);
                 break;
 
             default:
@@ -980,6 +982,7 @@ public class MyLocalization {
                 localized_select_from_picking = ctx.getString(R.string.select_from_picking);
                 localized_quantity = ctx.getString(R.string.quantity);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question);
+                localized_minimum_payment = ctx.getString(R.string.mandatory_payment);
                 break;
 
 

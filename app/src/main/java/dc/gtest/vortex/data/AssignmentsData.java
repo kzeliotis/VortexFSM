@@ -168,7 +168,6 @@ public class AssignmentsData {
                         MyPrefs.setStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, assignmentModel.getNotes());
                     }
 
-
                     assignmentModel.setChargedAmount(MyJsonParser.getStringValue(oneObject, "Charge", ""));
                     assignmentModel.setPaidAmount(MyJsonParser.getStringValue(oneObject, "Payment", ""));
                     assignmentModel.setMandatoryTasks(MyJsonParser.getJsonArrayValue(oneObject, "ServiceSteps"));
@@ -180,6 +179,7 @@ public class AssignmentsData {
                     assignmentModel.setAdditionalTechnicians(MyJsonParser.getStringValue(oneObject, "AdditionalTechnicians", ""));
                     assignmentModel.setContract(MyJsonParser.getStringValue(oneObject, "Contract", ""));
                     assignmentModel.setProjectInstallationDescription(MyJsonParser.getStringValue(oneObject, "ProjectInstallationDescription", ""));
+                    assignmentModel.setMinimumPayment(MyJsonParser.getStringValue(oneObject, "MinimumPayment", "0"));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

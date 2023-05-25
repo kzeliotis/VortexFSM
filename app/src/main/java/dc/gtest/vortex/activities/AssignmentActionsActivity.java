@@ -150,6 +150,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_fillSignature;
 import static dc.gtest.vortex.support.MyLocalization.localized_installations_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_internal_communication;
 import static dc.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
+import static dc.gtest.vortex.support.MyLocalization.localized_minimum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
 import static dc.gtest.vortex.support.MyLocalization.localized_paid;
@@ -1052,6 +1053,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
                 }
+
+                Double minimumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMinimumPayment().replace(",", "."));
+                String _paid = paidAmount.replace("\n", " ").replace("\r", " ").replace(",", ".");
+                if (_paid.length() == 0 ) {_paid = "0";}
+                Double paid = Double.parseDouble(_paid);
+                if(minimumPayment>0 && minimumPayment>paid){
+                    areAllRequiredFieldsFilled = false;
+                    MyDialogs.showOK(AssignmentActionsActivity.this, String.format(localized_minimum_payment, SELECTED_ASSIGNMENT.getMinimumPayment()));
+                    break;
+                }
+
 
                 FirebaseCrashlytics.getInstance().log("GetSelectedStatusMandatorySteps" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                 int MandatorySteps = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatorySteps();

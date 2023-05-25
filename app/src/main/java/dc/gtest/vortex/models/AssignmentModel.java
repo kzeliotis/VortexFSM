@@ -51,6 +51,7 @@ public class AssignmentModel {
     private String resourceId = "";
     private String contract = "";
     private String additionalTechnicians = "";
+    private String minimumPayment = "";
 
     private String ProjectLat = "0";
     private String ProjectLon = "";
@@ -113,8 +114,17 @@ public class AssignmentModel {
                         "\"ResourceId\": \"" + resourceId + "\",\n" +
                         "\"Contract\": \"" + contract + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\",\n" +
+                        "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
+    }
+
+    public String getMinimumPayment() {
+        return minimumPayment;
+    }
+
+    public void setMinimumPayment(String MinimumPayment) {
+        this.minimumPayment = MinimumPayment;
     }
 
     public String getProjectLat() {
