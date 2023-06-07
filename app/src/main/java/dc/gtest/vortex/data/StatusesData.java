@@ -37,6 +37,7 @@ public class StatusesData {
                     statusModel.setIsPending(MyJsonParser.getIntValue(oneObject, "IsPending", -1));
                     statusModel.setIsRollback(MyJsonParser.getIntValue(oneObject, "IsRollback", -1));
                     statusModel.setMandatorySteps(MyJsonParser.getIntValue(oneObject, "MandatorySteps", -1));
+                    statusModel.setMandatoryMinimumPayment(MyJsonParser.getIntValue(oneObject, "MandatoryMinimumPayment", -1));
 
                     if(all){
                         ALL_STATUSES_LIST.add(statusModel);

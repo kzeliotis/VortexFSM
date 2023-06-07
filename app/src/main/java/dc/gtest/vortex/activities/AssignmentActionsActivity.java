@@ -1054,11 +1054,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
                 }
 
+                int mandatoryMinimumPayment = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatoryMinimumPayment();
                 Double minimumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMinimumPayment().replace(",", "."));
                 String _paid = paidAmount.replace("\n", " ").replace("\r", " ").replace(",", ".");
                 if (_paid.length() == 0 ) {_paid = "0";}
                 Double paid = Double.parseDouble(_paid);
-                if(minimumPayment>0 && minimumPayment>paid){
+                if(minimumPayment>0 && minimumPayment>paid && mandatoryMinimumPayment>0){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, String.format(localized_minimum_payment, SELECTED_ASSIGNMENT.getMinimumPayment()));
                     break;

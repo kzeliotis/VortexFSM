@@ -9,6 +9,7 @@ public class StatusModel {
     private int isPending = -1;
     private int isRollback = -1;
     private int mandatorySteps = -1;
+    private int mandatoryMinimumPayment = -1;
 
     @NonNull
     @Override
@@ -19,6 +20,7 @@ public class StatusModel {
                         "  \"StatusId\": \"" + statusId + "\",\n" +
                         "  \"IsPending\": " + isPending + ",\n" +
                         "  \"MandatorySteps\": " + mandatorySteps + ",\n" +
+                        "  \"MandatoryMinimumPayment\": " + mandatoryMinimumPayment + ",\n" +
                         "  \"IsRollback\": " + isRollback + "\n" +
                         "}";
 
@@ -65,5 +67,13 @@ public class StatusModel {
 
     public void setMandatorySteps(int mandatorySteps) {
         this.mandatorySteps = mandatorySteps;
+    }
+
+    public int getMandatoryMinimumPayment() {
+        return mandatoryMinimumPayment;
+    }
+
+    public void setMandatoryMinimumPayment(int MandatoryMinimumPayment) {
+        this.mandatoryMinimumPayment = MandatoryMinimumPayment;
     }
 }
