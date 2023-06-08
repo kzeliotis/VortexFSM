@@ -1310,9 +1310,17 @@
     <string name="add_following_items_question_gr">Θέλετε να προσθέσετε τα παρακάτω είδη; :</string>
     <string name="add_following_items_question_ar">Do you want to add the following items? :</string>
 
-    <string name="mandatory_payment">The workorder\'s minimum payment is %s</string>
+    <string name="mandatory_payment">The work order\'s minimum payment is %s</string>
     <string name="mandatory_payment_gr">Η ελάχιστη είσπραξη της ανάθεσης είναι %s</string>
-    <string name="mandatory_payment_ar">The workorder\'s minimum payment is %s</string>
+    <string name="mandatory_payment_ar">The work order\'s minimum payment is %s</string>
+
+    <string name="add_sub_assignment">Add Grouped Work Order</string>
+    <string name="add_sub_assignment_gr">ΕΙΣΑΓΩΓΗ ΟΜΑΔΟΠΟΙΗΜΕΝΗΣ ΑΝΑΘΕΣΗΣ</string>
+    <string name="add_sub_assignment_ar">Add Grouped Work Order</string>
+
+    <string name="add_add_group_assignment">Do you want to add grouped work orders for the selected technicians?</string>
+    <string name="add_add_group_assignment_gr">Θέλετε να προστεθούν ομαδοποιημένες αναθέσεις για τους επιλεγμένους τεχνικούς;</string>
+    <string name="add_add_group_assignment_ar">Do you want to add grouped work orders for the selected technicians?</string>
 
     <item type="id" name="TAG_ID" />
 

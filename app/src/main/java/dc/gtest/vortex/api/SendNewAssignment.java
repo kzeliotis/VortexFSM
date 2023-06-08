@@ -139,7 +139,7 @@ public class SendNewAssignment extends AsyncTask<String, Void, String > {
                         Toast.makeText(ctx, ResultNotes, Toast.LENGTH_LONG).show();
                     } else {
                         if (showProgressBar) {
-                            Toast.makeText(ctx, no_internet_message + "\n\n" + this.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(ctx, no_internet_message + "\n\n" + this.getClass().getSimpleName() + "\n\n" + ResultNotes, Toast.LENGTH_LONG).show();
                             ((Activity) ctx).finish();
                         }
                     }

@@ -17,6 +17,17 @@
         android:gravity="center"
         android:layout_marginTop="@dimen/dp_10" />
 
+    <Button
+        android:id="@+id/btnAddSubAssignment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_sub_assignment_gr"
+        android:padding="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@drawable/rounded_button_indigo"
+        android:layout_alignParentBottom="true"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistoryList"
         android:layout_width="match_parent"

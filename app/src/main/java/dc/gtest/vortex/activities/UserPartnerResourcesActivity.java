@@ -1,18 +1,24 @@
 package dc.gtest.vortex.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.UserPartnerResourcesRvAdapter;
 import dc.gtest.vortex.api.GetUserPartnersResources;
+import dc.gtest.vortex.api.SendNewAssignment;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySliderMenu;
@@ -22,16 +28,27 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SINGLE_SELECTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
 import static dc.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_GROUPED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_customer;
+import static dc.gtest.vortex.support.MyLocalization.localized_create_grouped_assignment;
+import static dc.gtest.vortex.support.MyLocalization.localized_existing_customer;
+import static dc.gtest.vortex.support.MyLocalization.localized_new_customer;
+import static dc.gtest.vortex.support.MyLocalization.localized_no;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_resources;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyLocalization.localized_yes;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
+
+    private boolean groupAssignment = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +79,7 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 
         RecyclerView rvUserPartnerResources = findViewById(R.id.rvUserPartnerResources);
         boolean singleSelection = getIntent().getBooleanExtra(CONST_SINGLE_SELECTION, false);
+        groupAssignment = getIntent().getBooleanExtra(KEY_GROUPED_ASSIGNMENT, false);
 
 
         if (singleSelection) {
@@ -71,6 +89,7 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
         }
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
+
         String assDate = getIntent().getStringExtra(KEY_ASSIGNMENT_DATE);
         List<String> rIds = Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", "));
         UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate, rIds);
@@ -93,7 +112,34 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.itemCheck) {
-            finish();
+            if (groupAssignment && NEW_ASSIGNMENT.getResourceIds().length() > 0){
+                new AlertDialog.Builder(UserPartnerResourcesActivity.this)
+                        .setMessage(localized_create_grouped_assignment)
+                        .setNegativeButton(localized_no, (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+
+                        })
+                        .setPositiveButton(localized_yes, (dialog, which) -> {
+                            dialog.dismiss();
+
+                            String prefKey = UUID.randomUUID().toString();
+                            MyPrefs.setStringWithFileName(PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC, prefKey, NEW_ASSIGNMENT.toString());
+
+                            if (MyUtils.isNetworkAvailable()) {
+                                SendNewAssignment sendNewAssignment = new SendNewAssignment(UserPartnerResourcesActivity.this, prefKey, true);
+                                sendNewAssignment.execute(prefKey);
+                            } else {
+                                Toast.makeText(UserPartnerResourcesActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+
+                        })
+                        .show();
+            } else {
+                finish();
+            }
+
         }
 
         return true;

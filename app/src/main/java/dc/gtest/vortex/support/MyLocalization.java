@@ -253,6 +253,8 @@ public class MyLocalization {
     public static String localized_quantity = "";
     public static String localized_add_items_question = "";
     public static String localized_minimum_payment = "";
+    public static String localized_add_subassignment = "";
+    public static String localized_create_grouped_assignment = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -498,6 +500,8 @@ public class MyLocalization {
                 localized_quantity = ctx.getString(R.string.quantity_gr);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question_gr);
                 localized_minimum_payment = ctx.getString(R.string.mandatory_payment_gr);
+                localized_add_subassignment = ctx.getString(R.string.add_sub_assignment_gr);
+                localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment_gr);
                 break;
 
             case CONST_AR:
@@ -740,6 +744,8 @@ public class MyLocalization {
                 localized_quantity = ctx.getString(R.string.quantity_ar);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question_ar);
                 localized_minimum_payment = ctx.getString(R.string.mandatory_payment_ar);
+                localized_add_subassignment = ctx.getString(R.string.add_sub_assignment_ar);
+                localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment_ar);
                 break;
 
             default:
@@ -983,6 +989,8 @@ public class MyLocalization {
                 localized_quantity = ctx.getString(R.string.quantity);
                 localized_add_items_question = ctx.getString(R.string.add_following_items_question);
                 localized_minimum_payment = ctx.getString(R.string.mandatory_payment);
+                localized_add_subassignment = ctx.getString(R.string.add_sub_assignment);
+                localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment);
                 break;
 
 
