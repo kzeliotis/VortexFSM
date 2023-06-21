@@ -1084,7 +1084,7 @@
     <string name="no_sub_assignments_gr">Δεν υπάρχουν υποαναθέσεις</string>
     <string name="no_sub_assignments_ar">لايوجد هناك اي مهام فرعية</string>
 
-    <string name="select_product_from_project">Do you want to select a product from the selected project?</string>
+    <string name="select_product_from_project">Do you want to select a product from the selected site?</string>
     <string name="select_product_from_project_gr">Θέλετε να επιλέξετε προϊόν από το επιλεγμένο σημείο;</string>
     <string name="select_product_from_project_ar">هل تريد تحديد منتج من المشروع المحدد;</string>
 
@@ -1321,6 +1321,10 @@
     <string name="add_add_group_assignment">Do you want to add grouped work orders for the selected technicians?</string>
     <string name="add_add_group_assignment_gr">Θέλετε να προστεθούν ομαδοποιημένες αναθέσεις για τους επιλεγμένους τεχνικούς;</string>
     <string name="add_add_group_assignment_ar">Do you want to add grouped work orders for the selected technicians?</string>
+
+    <string name="select_customer_product">Select Customer and Site Product</string>
+    <string name="select_customer_product_gr">Επιλέξτε πελάτη και προϊόν σημείου</string>
+    <string name="select_customer_product_ar">Select Customer and Site Product</string>
 
     <item type="id" name="TAG_ID" />
 

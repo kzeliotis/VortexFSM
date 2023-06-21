@@ -62,7 +62,7 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
                     customerid = NEW_ASSIGNMENT.getCustomerId();
                 }
                 if (MyUtils.isNetworkAvailable()) {
-                    GetServices getServices = new GetServices("0", holder.mItem.getProjectProductId(), "0", customerid);
+                    GetServices getServices = new GetServices("0", holder.mItem.getProjectProductId(), "0", customerid, false, ctx);
                     getServices.execute();
                 }
                 ((AppCompatActivity) ctx).finish();                                      // finish activity to go back to new assignment

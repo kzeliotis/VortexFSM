@@ -125,6 +125,9 @@ public class MyGlobals {
     public static List<ServiceModel> RELATED_SERVICES_LIST = new ArrayList<>();
     public static List<ServiceModel> RELATED_SERVICES_LIST_FILTERED = new ArrayList<>();
 
+    public static List<ServiceModel> SERVICES_FOR_NEW_ASSIGNMENT_LIST = new ArrayList<>();
+    public static List<ServiceModel> SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED = new ArrayList<>();
+
     public static List<UserPartnerResourceModel> USER_PARTNER_RESOURCE_LIST = new ArrayList<>();
 
     public static List<AssignmentTypeModel> ASSIGNMENT_TYPES_LIST = new ArrayList<>();

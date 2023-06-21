@@ -74,6 +74,7 @@ class MyApi {
     static final String API_GET_CUSTOMER_PROJECTS = "/Vortex.svc/GetCustomerProjects?CustomerId=";
     static final String API_GET_USER_PARTNER_RESOURCES = "/Vortex.svc/GetUserPartnerResources?Username=";
     static final String API_GET_SERVICES = "/Vortex.svc/GetServices?AssignmentId=";
+    static final String API_GET_SERVICES_FOR_ASSIGNMENT = "/Vortex.svc/GetServicesForAssignment?CustomerId=";
     static final String API_GET_HISTORY_ASSIGNMENTS = "/Vortex.svc/GetHistoryAssignments?AssignmentId=";
     static final String API_GET_ASSIGNMENT_PRODUCTS = "/Vortex.svc/GetProjectProductsByAssignmentId?AssignmentId=";
     static final String API_DELETE_PRODUCT = "/Vortex.svc/DeleteProduct?ProjectProductId=";

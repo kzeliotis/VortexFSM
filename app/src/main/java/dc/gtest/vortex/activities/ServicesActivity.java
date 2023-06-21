@@ -20,10 +20,13 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCTID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
+import static dc.gtest.vortex.support.MyGlobals.SERVICES_FOR_NEW_ASSIGNMENT_LIST;
+import static dc.gtest.vortex.support.MyGlobals.SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SERVICES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyLocalization.localized_services;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+import static dc.gtest.vortex.support.MyPrefs.getInt;
 
 public class ServicesActivity extends BaseDrawerActivity {
 
@@ -38,20 +41,35 @@ public class ServicesActivity extends BaseDrawerActivity {
         String ProjectProductId = getIntent().getStringExtra(KEY_PROJECT_PRODUCT_ID);
         String ProductId = getIntent().getStringExtra(KEY_PRODUCTID);
         String CustomerId = getIntent().getStringExtra(KEY_CUSTOMERID);
-        if (SERVICES_LIST_FILTERED.size() == 0){
+        boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
+
+        if (isForNewAssignment){
+            SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.clear();
             if (MyUtils.isNetworkAvailable()) {
-                GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId);
+                GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this);
                 getServices.execute();
             }
+        } else {
+            if (SERVICES_LIST_FILTERED.size() == 0){
+                if (MyUtils.isNetworkAvailable()) {
+                    GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this);
+                    getServices.execute();
+                }
+            }
         }
+
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.content_services, flBaseContainer, true);
 
         RecyclerView rvServices = findViewById(R.id.rvServices);
 
-        boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        servicesRvAdapter = new ServicesRvAdapter(SERVICES_LIST_FILTERED, ServicesActivity.this, isForNewAssignment);
+        if(isForNewAssignment){
+            servicesRvAdapter = new ServicesRvAdapter(SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED, ServicesActivity.this, isForNewAssignment);
+        }else{
+            servicesRvAdapter = new ServicesRvAdapter(SERVICES_LIST_FILTERED, ServicesActivity.this, isForNewAssignment);
+        }
+
         rvServices.setAdapter(servicesRvAdapter);
     }
 

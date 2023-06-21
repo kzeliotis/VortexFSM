@@ -63,6 +63,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_resources;
 import static dc.gtest.vortex.support.MyLocalization.localized_resources_not_available;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_assignment_type;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_customer_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_date_for_availability;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_indicator;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product;
@@ -365,10 +366,16 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
                     customerid = NEW_ASSIGNMENT.getCustomerId();
                 }
 
-                intent = new Intent(NewAssignmentActivity.this, ServicesActivity.class);
-                intent.putExtra(KEY_PROJECT_PRODUCT_ID, projectproductId);
-                intent.putExtra(KEY_PRODUCTID, productId);
-                intent.putExtra(KEY_CUSTOMERID, customerid);
+                if(NEW_ASSIGNMENT.getCustomerId().isEmpty() || ((projectproductId.equals("0") || projectproductId.isEmpty()) && (productId.equals("0") || NEW_ASSIGNMENT.getProductId().isEmpty()))){
+                    Toast.makeText(this, localized_select_customer_product, Toast.LENGTH_LONG).show();
+                } else {
+                    intent = new Intent(NewAssignmentActivity.this, ServicesActivity.class);
+                    intent.putExtra(KEY_PROJECT_PRODUCT_ID, projectproductId);
+                    intent.putExtra(KEY_PRODUCTID, productId);
+                    intent.putExtra(KEY_CUSTOMERID, customerid);
+                    intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                }
+
                 break;
 
             case R.id.tvNewAssignmentResources:

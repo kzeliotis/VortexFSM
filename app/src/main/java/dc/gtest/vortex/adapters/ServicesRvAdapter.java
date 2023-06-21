@@ -17,6 +17,8 @@ import dc.gtest.vortex.R;
 import dc.gtest.vortex.models.ServiceModel;
 
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.SERVICES_FOR_NEW_ASSIGNMENT_LIST;
+import static dc.gtest.vortex.support.MyGlobals.SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SERVICES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SERVICES_LIST_FILTERED;
 
@@ -93,21 +95,42 @@ public class ServicesRvAdapter extends RecyclerView.Adapter<ServicesRvAdapter.Vi
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             SERVICES_LIST_FILTERED.clear();
+            SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.clear();
             final FilterResults results = new FilterResults();
 
-            if (constraint.length() == 0) {
-                SERVICES_LIST_FILTERED.addAll(SERVICES_LIST);
-            } else {
-                final String filterPattern = constraint.toString().toLowerCase().trim();
-                for (final ServiceModel mWords : SERVICES_LIST) {
-                    if (mWords.toString().toLowerCase().contains(filterPattern)) {
-                        SERVICES_LIST_FILTERED.add(mWords);
+            if(isForNewAssignment){
+                if (constraint.length() == 0) {
+                    SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.addAll(SERVICES_FOR_NEW_ASSIGNMENT_LIST);
+                } else {
+                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (final ServiceModel mWords : SERVICES_FOR_NEW_ASSIGNMENT_LIST) {
+                        if (mWords.toString().toLowerCase().contains(filterPattern)) {
+                            SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.add(mWords);
+                        }
                     }
                 }
+
+                results.values = SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED;
+                results.count = SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.size();
+            }else{
+                if (constraint.length() == 0) {
+                    SERVICES_LIST_FILTERED.addAll(SERVICES_LIST);
+                } else {
+                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (final ServiceModel mWords : SERVICES_LIST) {
+                        if (mWords.toString().toLowerCase().contains(filterPattern)) {
+                            SERVICES_LIST_FILTERED.add(mWords);
+                        }
+                    }
+                }
+
+                results.values = SERVICES_LIST_FILTERED;
+                results.count = SERVICES_LIST_FILTERED.size();
             }
 
-            results.values = SERVICES_LIST_FILTERED;
-            results.count = SERVICES_LIST_FILTERED.size();
+
+
+
             return results;
         }
 
