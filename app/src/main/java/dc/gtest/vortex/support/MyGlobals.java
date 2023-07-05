@@ -172,7 +172,6 @@ public class MyGlobals {
     };
 
     // global variables
-    public static String AES_KEY = "";
     public static String globalSelectedProductId;
     public static String globalCurrentPhotoPath;
     public static String globalCurrentAttachmentPath;

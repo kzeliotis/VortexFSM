@@ -46,6 +46,7 @@ public class SetProductsToInstallation extends AsyncTask<String, Void, String > 
     private int responseCode;
     private final String projectInstallationId;
 
+
     public SetProductsToInstallation(Context ctx, String ProjectInstallationId) {
         this.ctx = ctx;
         this.projectInstallationId = ProjectInstallationId;
@@ -66,9 +67,15 @@ public class SetProductsToInstallation extends AsyncTask<String, Void, String > 
 
         //String projectZoneId = params[0];
         String ppIds = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId, "");
+        String projectZoneId = "0";
+        if (ppIds.contains("|")){
+            int index = ppIds.indexOf("|");
+            projectZoneId = ppIds.substring(index+1);
+            ppIds = ppIds.substring(0, index);
+        }
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl + API_SET_PRODUCTS_TO_INSTALLATION + projectInstallationId + "&ProjectProductIDs=" + ppIds;
+        String apiUrl = baseHostUrl + API_SET_PRODUCTS_TO_INSTALLATION + projectInstallationId + "&ProjectProductIDs=" + ppIds + "&ProjectZoneId=" + projectZoneId ;
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
@@ -97,10 +104,10 @@ public class SetProductsToInstallation extends AsyncTask<String, Void, String > 
 
             MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId);
 
-            if (MyUtils.isNetworkAvailable()) {
-                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId);
-                getZones.execute("0");
-            }
+//            if (MyUtils.isNetworkAvailable()) {
+//                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId);
+//                getZones.execute("0");
+//            }
 
         } else {
 

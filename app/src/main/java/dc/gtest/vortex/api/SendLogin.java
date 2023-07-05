@@ -27,12 +27,12 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
-import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
 import static dc.gtest.vortex.support.MyLocalization.localized_user_is_inactive;
 import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
+import static dc.gtest.vortex.support.MyPrefs.PREF_AES_KEY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
@@ -82,6 +82,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
         apiUrl = baseHostUrl+ "/Vortex.svc/GetUserAuthentication";
+        String AES_KEY = MyPrefs.getString(PREF_AES_KEY, "");
         String ecrypted = AES_KEY.length()>0 ? "1" : "0";
 
         postBody =

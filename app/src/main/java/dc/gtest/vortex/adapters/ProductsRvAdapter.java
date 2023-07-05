@@ -119,50 +119,53 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
             holder.chkSelectToAdd.setVisibility(View.GONE);
         }
 
-        holder.mView.setOnClickListener(v -> {
+        if (projectInstallationId == 0) {
+            holder.mView.setOnClickListener(v -> {
 
-            ctx.getSharedPreferences("ProjectProductId", MODE_PRIVATE).edit().putString("projectProductId", holder.mItem.getProjectProductId()).apply();
+                ctx.getSharedPreferences("ProjectProductId", MODE_PRIVATE).edit().putString("projectProductId", holder.mItem.getProjectProductId()).apply();
 
-            SELECTED_PRODUCT = holder.mItem;
+                SELECTED_PRODUCT = holder.mItem;
 
-            globalSelectedProductId = holder.mItem.getProjectProductId();
+                globalSelectedProductId = holder.mItem.getProjectProductId();
 
-            new AlertDialog.Builder(ctx)
-                    .setNeutralButton(localized_attributes, (dialog, which) -> {
-                        dialog.dismiss();
-
-                        Intent intent = new Intent(ctx, AttributesActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        ctx.startActivity(intent);
-                    })
-                    .setPositiveButton(localized_measurements, (dialog, which) -> {
-                        dialog.dismiss();
-                        Intent intent = new Intent(ctx, MeasurementsListActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        ctx.startActivity(intent);
-                    })
-                    .show();
-        });
-
-        holder.mView.setOnLongClickListener(v -> {
-            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
                 new AlertDialog.Builder(ctx)
-                        .setMessage(localized_to_delete_product)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        .setNeutralButton(localized_attributes, (dialog, which) -> {
                             dialog.dismiss();
-                            SELECTED_PRODUCT = holder.mItem;
-                            if(CheckMandatoryAttributes()){
-                                DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                deleteProduct.execute(holder.mItem.getProjectProductId());
-                            }
 
+                            Intent intent = new Intent(ctx, AttributesActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            ctx.startActivity(intent);
                         })
-                        .setNegativeButton(R.string.cancel, null)
+                        .setPositiveButton(localized_measurements, (dialog, which) -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(ctx, MeasurementsListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            ctx.startActivity(intent);
+                        })
                         .show();
-            }
+            });
 
-            return true;
-        });
+            holder.mView.setOnLongClickListener(v -> {
+                if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+                    new AlertDialog.Builder(ctx)
+                            .setMessage(localized_to_delete_product)
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                dialog.dismiss();
+                                SELECTED_PRODUCT = holder.mItem;
+                                if(CheckMandatoryAttributes()){
+                                    DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
+                                    deleteProduct.execute(holder.mItem.getProjectProductId());
+                                }
+
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
+
+                return true;
+            });
+        }
+
     }
 
     @Override

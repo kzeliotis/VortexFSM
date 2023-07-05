@@ -44,7 +44,6 @@ import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
-import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_AR;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_GR;
@@ -56,6 +55,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_fill_host_server;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_connection;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_exit;
+import static dc.gtest.vortex.support.MyPrefs.PREF_AES_KEY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FIRST_HOST_URL;
@@ -140,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     if (MyUtils.isNetworkAvailable()) {
 
+                        String AES_KEY = "";
                         try{
                             GetAESKey getAESKey = new GetAESKey(LoginActivity.this);
                             String aeskeylist = getAESKey.execute(etLoginUserLoginEmailText).get();
@@ -155,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             ex.printStackTrace();
                             AES_KEY = "";
                         }
+                        MyPrefs.setString(PREF_AES_KEY, AES_KEY);
 
                         String _password = "";
                          if(etLoginUserPasswordText.contains("|consult1ng")){

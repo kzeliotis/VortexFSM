@@ -23,6 +23,7 @@ import dc.gtest.vortex.api.SendStartTravel;
 import dc.gtest.vortex.api.SendUsePTOvernight;
 import dc.gtest.vortex.api.SendNewAttribute;
 import dc.gtest.vortex.api.SendZonesWithNoMeasurement;
+import dc.gtest.vortex.api.SetProductsToInstallation;
 import dc.gtest.vortex.api.ToSendNewMeasurement;
 import dc.gtest.vortex.api.ToSendServices;
 import dc.gtest.vortex.api.SendUpdatedAttribute;
@@ -44,6 +45,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_CUSTOMER_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_INSTALLATION_ZONES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RETURN_TO_BASE_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC;
@@ -294,6 +296,14 @@ public class MySynchronize {
 
             SendZonesWithNoMeasurement sendZonesWithNoMeasurement = new SendZonesWithNoMeasurement(ctx, prefKey);
             sendZonesWithNoMeasurement.execute();
+        }
+
+        Map<String, ?> productsToInstallation = ctx.getSharedPreferences(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, MODE_PRIVATE).getAll();
+        for (Map.Entry<String, ?> entry : productsToInstallation.entrySet()) {
+            String prefKey = entry.getKey();
+
+            SetProductsToInstallation setProductsToInstallation = new SetProductsToInstallation(ctx, prefKey);
+            setProductsToInstallation.execute();
         }
 
         String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");

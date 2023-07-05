@@ -1326,6 +1326,10 @@
     <string name="select_customer_product_gr">Επιλέξτε πελάτη και προϊόν σημείου</string>
     <string name="select_customer_product_ar">Select Customer and Site Product</string>
 
+    <string name="select_zone">Select zone</string>
+    <string name="select_zone_gr">Επιλογή Ζώνης</string>
+    <string name="select_zone_ar">Select zone</string>
+
     <item type="id" name="TAG_ID" />
 
 

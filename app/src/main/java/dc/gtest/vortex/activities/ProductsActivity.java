@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 
@@ -22,15 +23,23 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.MySpinnerAdapter;
 import dc.gtest.vortex.adapters.ProductsRvAdapter;
 import dc.gtest.vortex.api.GetProducts;
 import dc.gtest.vortex.api.GetProductTypes;
+import dc.gtest.vortex.api.GetZones;
 import dc.gtest.vortex.api.SetProductsToInstallation;
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.data.InstallationZonesData;
 import dc.gtest.vortex.data.ProductTypesData;
 import dc.gtest.vortex.data.ProductsData;
+import dc.gtest.vortex.data.ZonesData;
+import dc.gtest.vortex.models.ProjectZoneModel;
+import dc.gtest.vortex.models.ZoneModel;
 import dc.gtest.vortex.support.MyCanEdit;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
@@ -39,6 +48,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
+import static dc.gtest.vortex.support.MyGlobals.INSTALLATION_ZONES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_SELECT_PRODUCTS_TO_ADD;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
@@ -46,6 +56,7 @@ import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCT_TYPES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
+import static dc.gtest.vortex.support.MyGlobals.ZONES_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_new_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_select_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
@@ -60,10 +71,12 @@ import static dc.gtest.vortex.support.MyLocalization.localized_sure_to_leave;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_PRODUCT_TYPES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class ProductsActivity extends BaseDrawerActivity {
@@ -73,14 +86,17 @@ public class ProductsActivity extends BaseDrawerActivity {
     private TextView tvAssignmentId;
     private TextView tvTypeSpinnerTitle;
     private Spinner spProductTypes;
+    private Spinner spZones;
     private Button btnAddNewProduct;
     private Button btnAddExistingProduct;
+    private CardView crdZones;
 
     private ProductsRvAdapter productsRvAdapter;
 
     public static String searchText = "";
     public static String selectedType = "";
     public static String projectInstallationId = "0";
+    public static String selectZoneId = "";
     public static boolean IsInstallation = false;
     public static boolean selectProducts = false;
 
@@ -113,8 +129,13 @@ public class ProductsActivity extends BaseDrawerActivity {
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         tvTypeSpinnerTitle = findViewById(R.id.tvTypeSpinnerTitle);
         spProductTypes = findViewById(R.id.spProductTypes);
+        spZones = findViewById(R.id.spZones);
         btnAddNewProduct = findViewById(R.id.btnAddNewProduct);
         btnAddExistingProduct = findViewById(R.id.btnAddExistingProduct);
+        crdZones = findViewById(R.id.crdvZones);
+        if(!selectProducts){
+            crdZones.setVisibility(View.GONE);
+        }
         RecyclerView rvAssignmentProducts = findViewById(R.id.rvAssignmentProducts);
 
         setupProductTypesSpinner();
@@ -149,6 +170,32 @@ public class ProductsActivity extends BaseDrawerActivity {
             }
         });
 
+        if(selectProducts){
+            setupZonesSpinner(this);
+            spZones.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    if(position == 0) {
+                        selectZoneId = "0";
+                    } else {
+                        selectZoneId = "0";
+                        String selection = spZones.getSelectedItem().toString();
+                        if(selection.contains("|")){
+                            int index = selection.indexOf("|");
+                            selectZoneId = selection.substring(0, index).replace("ID: ", "").trim();
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
+
+
         clearFilters();
 
         if(IsInstallation && !selectProducts){
@@ -177,7 +224,7 @@ public class ProductsActivity extends BaseDrawerActivity {
                                 .setMessage(localized_add_select_products)
                                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                                     dialog.dismiss();
-                                    MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId, selectedIds);
+                                    MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC, projectInstallationId, selectedIds + "|" + selectZoneId);
                                     MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, projectInstallationId);
                                     SetProductsToInstallation setProductsToInstallation = new SetProductsToInstallation(this, projectInstallationId);
                                     setProductsToInstallation.execute();
@@ -419,4 +466,58 @@ public class ProductsActivity extends BaseDrawerActivity {
 
         spProductTypes.setAdapter(new MySpinnerAdapter(ctx, productTypesArray));
     }
+
+    private void setupZonesSpinner(Context ctx) {
+
+        String pjZones = MyPrefs.getStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW,  SELECTED_ASSIGNMENT.getAssignmentId(), "");
+        if(pjZones.isEmpty()){
+            try{
+                String result = "";
+                GetZones getZones = new GetZones(this, null, false, "0");
+                result = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ZonesData.generate(false);
+
+        String InstZones = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW,  SELECTED_INSTALLATION.getProjectInstallationId(), "");
+        if(InstZones.isEmpty()){
+            try{
+                String result = "";
+                GetZones getZones = new GetZones(this, null, false, SELECTED_INSTALLATION.getProjectInstallationId());
+                result = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        InstallationZonesData.generate(false);
+
+        String[] ZonesArray = new String[INSTALLATION_ZONES_LIST.size() + ZONES_LIST.size() + 1];
+
+        ZonesArray[0] = "-";
+        int i = 1;
+        for (ZoneModel zm : ZONES_LIST){
+            if (zm.getProjectInstallationId().isEmpty() || zm.getProjectInstallationId().equals("0")){
+                String zoneid = zm.getZoneId();
+                String zoneDescription = zm.getZoneName();
+                ZonesArray[i] = "ID: " + zoneid + "| " +zoneDescription;
+                i+=1;
+            }
+        }
+
+        for (ProjectZoneModel zm : INSTALLATION_ZONES_LIST){
+            String zoneid = zm.getZoneId();
+            String zoneDescription = zm.getZoneName();
+            ZonesArray[i] = "ID: " + zoneid + "| " + zoneDescription;
+            i+=1;
+        }
+
+        spZones.setAdapter(new MySpinnerAdapter(ctx, ZonesArray));
+        spZones.setSelection(0);
+
+    }
+
+
+
 }

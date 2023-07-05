@@ -23,7 +23,7 @@ import static dc.gtest.vortex.api.MyApi.API_GET_MOBILE_SETTINGS;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
-import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
+
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_update_available;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;

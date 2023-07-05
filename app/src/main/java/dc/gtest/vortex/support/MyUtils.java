@@ -38,7 +38,6 @@ import javax.crypto.spec.SecretKeySpec;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
 
-import static dc.gtest.vortex.support.MyGlobals.AES_KEY;
 
 public class MyUtils {
 
@@ -235,6 +234,8 @@ public class MyUtils {
 
         String result = "";
 
+        String AES_KEY = MyPrefs.getString(MyPrefs.PREF_AES_KEY, "");
+
         if (AES_KEY.length() == 0) {return input;}
 
         try{
@@ -255,6 +256,7 @@ public class MyUtils {
     public static String decrypt(String input) {
 
         String result = "";
+        String AES_KEY = MyPrefs.getString(MyPrefs.PREF_AES_KEY, "");
         if (AES_KEY.length() == 0) {return input;}
 
         try{
