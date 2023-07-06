@@ -180,6 +180,8 @@ public class AssignmentsData {
                     assignmentModel.setContract(MyJsonParser.getStringValue(oneObject, "Contract", ""));
                     assignmentModel.setProjectInstallationDescription(MyJsonParser.getStringValue(oneObject, "ProjectInstallationDescription", ""));
                     assignmentModel.setMinimumPayment(MyJsonParser.getStringValue(oneObject, "MinimumPayment", "0"));
+                    boolean lockStatusChange = MyJsonParser.getBooleanValue(oneObject,"LockStatusChange", false);
+                    assignmentModel.setLockStatusChange(lockStatusChange ? "1" : "0");
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

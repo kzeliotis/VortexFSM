@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             MyUtils.hideKeypad(etLoginUserPassword);
 
             if (MyPrefs.getString(PREF_BASE_HOST_URL, "").isEmpty()) {
+                //MyPrefs.setString(PREF_BASE_HOST_URL, "https://vortex.techtiqbms.com:9856");
                 Toast toast = Toast.makeText(LoginActivity.this, localized_fill_host_server, Toast.LENGTH_SHORT);
                 toast.setGravity(TOP, 0, 0);
                 toast.show();

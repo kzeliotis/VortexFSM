@@ -83,13 +83,13 @@ public class SendLogin extends AsyncTask<String, Void, String > {
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
         apiUrl = baseHostUrl+ "/Vortex.svc/GetUserAuthentication";
         String AES_KEY = MyPrefs.getString(PREF_AES_KEY, "");
-        String ecrypted = AES_KEY.length()>0 ? "1" : "0";
+        String encrypted = AES_KEY.length()>0 ? "1" : "0";
 
         postBody =
                 "{\n" +
                         "  \"username\": \"" + username + "\",\n" +
                         "  \"password\": \"" + password + "\",\n" +
-                        "  \"Encrypted\": \"" + ecrypted + "\"\n" +
+                        "  \"Encrypted\": \"" + encrypted + "\"\n" +
                         "}";
 
 

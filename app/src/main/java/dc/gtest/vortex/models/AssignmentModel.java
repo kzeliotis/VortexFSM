@@ -59,6 +59,7 @@ public class AssignmentModel {
     private String ProjectCity = "";
     private String DateStart = "";
     private String DateEnd = "";
+    private String LockStatusChange = "";
 
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
@@ -114,9 +115,19 @@ public class AssignmentModel {
                         "\"ResourceId\": \"" + resourceId + "\",\n" +
                         "\"Contract\": \"" + contract + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\",\n" +
+                        "\"LockStatusChange\": \"" + LockStatusChange + "\",\n" +
                         "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
+    }
+
+
+    public String getLockStatusChange() {
+        return LockStatusChange;
+    }
+
+    public void setLockStatusChange(String LockStatusChange) {
+        this.LockStatusChange = LockStatusChange;
     }
 
     public String getMinimumPayment() {

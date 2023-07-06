@@ -523,6 +523,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             flSignatureImage.setBackgroundResource(R.drawable.rounded_layout_blue);
         }
 
+        if (SELECTED_ASSIGNMENT.getLockStatusChange().equals("1")){
+            spStatus.setEnabled(false);
+        }
+
         swUsePt.setChecked(MyPrefs.getBooleanWithFileName(PREF_FILE_IS_PT_STARTED, assignmentId, false));
 
         swUsePt.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -961,6 +965,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 btnStartWork.setEnabled(true);
 //                swUsePt.setEnabled(false);
                 spStatus.setEnabled(true);
+                if (SELECTED_ASSIGNMENT.getLockStatusChange().equals("1")){
+                    spStatus.setEnabled(false);
+                }
                 etCommentsSolution.setEnabled(true);
                 etNotes.setEnabled(true);
                 tvInternalNotesTitle.setEnabled(true);
