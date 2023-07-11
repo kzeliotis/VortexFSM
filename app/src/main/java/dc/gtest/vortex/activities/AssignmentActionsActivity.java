@@ -88,6 +88,7 @@ import dc.gtest.vortex.api.SendZonesWithNoMeasurement;
 import dc.gtest.vortex.data.MandatoryTasksData;
 import dc.gtest.vortex.data.ZonesData;
 import dc.gtest.vortex.items.ServicesListActivity;
+import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.CheckInCheckOutModel;
 import dc.gtest.vortex.models.UsePTOvernightModel;
 import dc.gtest.vortex.models.ZoneModel;
@@ -103,6 +104,7 @@ import dc.gtest.vortex.support.MySynchronize;
 import dc.gtest.vortex.support.MyUtils;
 import dc.gtest.vortex.support.TakeUploadPhoto;
 
+import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static dc.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
@@ -152,6 +154,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_internal_communic
 import static dc.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
 import static dc.gtest.vortex.support.MyLocalization.localized_minimum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_multiple_checkin_allowed;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
 import static dc.gtest.vortex.support.MyLocalization.localized_paid;
 import static dc.gtest.vortex.support.MyLocalization.localized_preview_report;
@@ -166,6 +169,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_zones;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_LAT;
@@ -953,6 +957,25 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 break;
 
             case R.id.btnCheckIn:
+
+                if(!MyPrefs.getBoolean(PREF_ALLOW_MULTIPLE_CHECK_INS, true)){
+                    String workorders = "";
+                    for (AssignmentModel a: ASSIGNMENTS_LIST){
+
+                        if (a.getAssignmentId() != SELECTED_ASSIGNMENT.getAssignmentId() &&
+                                MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, a.getAssignmentId(), false) &&
+                                !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, a.getAssignmentId(), false))
+                        {
+                            workorders += "\r\n" + a.getAssignmentId();
+                        }
+                    }
+                    if (workorders.length()>0){
+                        MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_multiple_checkin_allowed + "\r\n" + workorders);
+                        break;
+                    }
+                }
+
+
                 MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, true);
 
                 btnCheckIn.setEnabled(false);
@@ -1151,6 +1174,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
 
                 }
+
 
 
                 FirebaseCrashlytics.getInstance().log("areAllRequiredFieldsFilled" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));

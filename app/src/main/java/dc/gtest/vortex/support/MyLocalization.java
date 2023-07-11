@@ -257,6 +257,7 @@ public class MyLocalization {
     public static String localized_create_grouped_assignment = "";
     public static String localized_select_customer_product = "";
     public static String localized_select_zone = "";
+    public static String localized_no_multiple_checkin_allowed = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -506,6 +507,7 @@ public class MyLocalization {
                 localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment_gr);
                 localized_select_customer_product = ctx.getString(R.string.select_customer_product_gr);
                 localized_select_zone = ctx.getString(R.string.select_zone_gr);
+                localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_gr);
                 break;
 
             case CONST_AR:
@@ -752,6 +754,8 @@ public class MyLocalization {
                 localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment_ar);
                 localized_select_customer_product = ctx.getString(R.string.select_customer_product_ar);
                 localized_select_zone = ctx.getString(R.string.select_zone_ar);
+                localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_ar);
+
                 break;
 
             default:
@@ -999,6 +1003,8 @@ public class MyLocalization {
                 localized_create_grouped_assignment = ctx.getString(R.string.add_add_group_assignment);
                 localized_select_customer_product = ctx.getString(R.string.select_customer_product);
                 localized_select_zone = ctx.getString(R.string.select_zone);
+                localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed);
+
                 break;
 
 

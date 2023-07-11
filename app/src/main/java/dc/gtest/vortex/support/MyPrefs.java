@@ -143,6 +143,7 @@ public class MyPrefs {
     public static final String PREF_API_CONNECTION_TIMEOUT = "pref_api_connection_timeout";
     public static final String PREF_GPS_PRIORITY = "pref_GPS_priority";
     public static final String PREF_PROCESS_ASSIGNMENT_ON_SCAN = "pref_process_assignment_on_scan";
+    public static final String PREF_ALLOW_MULTIPLE_CHECK_INS = "pref_allow_multiple_check_ins";
 
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";
     public static final String PREF_START_WORK_TIME = "start_work_time";

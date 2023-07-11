@@ -24,6 +24,7 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_update_available;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
@@ -41,6 +42,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_MANDATORY_TASKS_COMMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 
 
 public class GetMobileSettings extends AsyncTask<String, Void, String > {
@@ -64,7 +66,7 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
     protected String doInBackground(String... params) {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl + API_GET_MOBILE_SETTINGS;
+        apiUrl = baseHostUrl + API_GET_MOBILE_SETTINGS + MyPrefs.getString(PREF_USERID, "0");
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
@@ -153,6 +155,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     Integer MobileApiConnectionTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiConnectionTimeout", 15);
                     MyPrefs.setInt(PREF_API_CONNECTION_TIMEOUT, MobileApiConnectionTimeout);
+
+                    Integer AllowParallelCheckInsFromMobile = MyJsonParser.getIntValue(oneObject,  "AllowParallelCheckInsFromMobile", 1);
+                    MyPrefs.setBoolean(PREF_ALLOW_MULTIPLE_CHECK_INS, AllowParallelCheckInsFromMobile == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

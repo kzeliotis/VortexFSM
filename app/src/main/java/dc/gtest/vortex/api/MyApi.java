@@ -45,7 +45,7 @@ class MyApi {
     static final String API_VERIFY_IMEI_INTERNAL_URL = "http://192.168.1.199/CompanyService/CompanyService.svc/VerifyImei?imei=";
     static final String API_GET_ASSIGNMENTS = "/Vortex.svc/GetAssignments?UserName=";
     static final String API_GET_STATUSES = "/Vortex.svc/GetStatus";
-    static final String API_GET_MOBILE_SETTINGS = "/Vortex.svc/GetMobileSettings";
+    static final String API_GET_MOBILE_SETTINGS = "/Vortex.svc/GetMobileSettings?UserId=";
     static final String API_SEARCH_CUSTOMERS = "/Vortex.svc/GetLiveCustomers";
     static final String API_GET_ALL_PRODUCTS = "/Vortex.svc/GetProducts";
     static final String API_GET_WAREHOUSE_PRODUCTS = "/Vortex.svc/GetWarehouseProducts?WarehouseId=";

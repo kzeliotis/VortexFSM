@@ -1330,6 +1330,10 @@
     <string name="select_zone_gr">Επιλογή Ζώνης</string>
     <string name="select_zone_ar">Select zone</string>
 
+    <string name="no_multiple_checkIn_allowed">No multiple Check Ins allowed. \n\n Please Check out from any pending work orders</string>
+    <string name="no_multiple_checkIn_allowed_gr">Δεν επιτρέπονται πολλαπλά Check In. \n\n Παρακαλώ κάντε Check Out στις εκκρεμείς αναθέσεις σας</string>
+    <string name="no_multiple_checkIn_allowed_ar">No multiple Check Ins allowed. \n\n Please Check out from any pending work orders</string>
+
     <item type="id" name="TAG_ID" />
 
 
