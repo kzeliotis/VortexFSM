@@ -47,6 +47,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
 import dc.gtest.vortex.support.PermGetLocation;
 
+import static dc.gtest.vortex.support.MyGlobals.ALL_STATUSES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DATE;
@@ -62,6 +63,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_select_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_selected_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_exit;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_STATUSES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_STATUSES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
@@ -457,27 +459,27 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         }
 
         private void setupStatusesSpinner () {
-            String statuses = MyPrefs.getString(PREF_DATA_STATUSES, "");
+            String statuses = MyPrefs.getString(PREF_DATA_ALL_STATUSES, "");
 
             if (statuses.isEmpty()) {
                 if (MyUtils.isNetworkAvailable()) {
                     GetStatuses getStatuses = new GetStatuses(this);
-                    getStatuses.execute("0");
-                    //getStatuses.execute("1");
+                    //getStatuses.execute("0");
+                    getStatuses.execute("1");
                 }
             } else {
-                StatusesData.generate(statuses, false);
+                StatusesData.generate(statuses, true);
                 setAdapterOnSpinner(this, spStatusFilter);
             }
         }
 
         public static void setAdapterOnSpinner (Context ctx, Spinner spStatusFilter){
 
-            String[] statusesArray = new String[STATUSES_LIST.size() + 1];
+            String[] statusesArray = new String[ALL_STATUSES_LIST.size() + 1];
             statusesArray[0] = localized_select_status + ":";
 
-            for (int i = 0; i < STATUSES_LIST.size(); i++) {
-                statusesArray[i + 1] = STATUSES_LIST.get(i).getStatusDescription().toUpperCase();
+            for (int i = 0; i < ALL_STATUSES_LIST.size(); i++) {
+                statusesArray[i + 1] = ALL_STATUSES_LIST.get(i).getStatusDescription().toUpperCase();
             }
 
             int oldPosition = spStatusFilter.getSelectedItemPosition();

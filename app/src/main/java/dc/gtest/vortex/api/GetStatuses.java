@@ -78,13 +78,13 @@ public class GetStatuses extends AsyncTask<String, Void, String > {
             StatusesData.generate(responseBody, all);
 
             if(all){
-
-            } else {
                 Spinner spStatusFilter = ((AppCompatActivity) ctx).findViewById(R.id.spStatusFilter);
 
                 if (spStatusFilter != null) {
                     AssignmentsActivity.setAdapterOnSpinner(ctx, spStatusFilter);
                 }
+            } else {
+
             }
 
         }
