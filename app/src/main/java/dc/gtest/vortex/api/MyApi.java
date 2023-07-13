@@ -1,11 +1,15 @@
 package dc.gtest.vortex.api;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -30,6 +34,7 @@ import javax.security.cert.X509Certificate;
 import dc.gtest.vortex.BuildConfig;
 import dc.gtest.vortex.support.MyPrefs;
 
+import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
@@ -401,5 +406,53 @@ class MyApi {
 
         return textValue;
     }
+
+//
+//     if (apiUrl.toUpperCase().contains("HTTPS")){
+//        HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection)url.openConnection();
+//        httpURLConnection.setReadTimeout(60000);
+//        httpURLConnection.setConnectTimeout(conn_timeout);
+//        httpURLConnection.setRequestMethod("POST");
+
+
+    public static String downloadFile(String fileUrl, String destinationPath, Context ctx) {
+        try {
+            URL url = new URL(fileUrl);
+            HttpsURLConnection connection = httpsUrlConnection(url);
+            File outputFile = new File(ctx.getExternalFilesDir(null) + File.separator + destinationPath);
+            // Set up SSL certificate verification bypass if needed
+            //connection.setSSLSocketFactory(TrustManagerHelper.getTrustAllSSLSocketFactory());
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                int contentLength = connection.getContentLength();
+
+                InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+                FileOutputStream outputStream = new FileOutputStream(outputFile);
+
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                int totalBytesRead = 0;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+                    // Optionally update progress here based on totalBytesRead and contentLength
+                }
+
+                outputStream.flush();
+                outputStream.close();
+                inputStream.close();
+            }
+
+            connection.disconnect();
+            destinationPath = outputFile.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            destinationPath = e.getMessage();
+        }
+
+        return destinationPath;
+    }
+
 
 }
