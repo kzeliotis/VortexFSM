@@ -1334,6 +1334,11 @@
     <string name="no_multiple_checkIn_allowed_gr">Δεν επιτρέπονται πολλαπλά Check In. \n\n Παρακαλώ κάντε Check Out στις εκκρεμείς αναθέσεις σας</string>
     <string name="no_multiple_checkIn_allowed_ar">No multiple Check Ins allowed. \n\n Please Check out from any pending work orders</string>
 
+
+    <string name="zone">Zone</string>
+    <string name="zone_gr">Ζώνη</string>
+    <string name="zone_ar">Zone</string>
+
     <item type="id" name="TAG_ID" />
 
 

@@ -15,6 +15,7 @@ import dc.gtest.vortex.support.MyJsonParser;
 import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
+import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class ProductsData {
 
@@ -43,7 +44,9 @@ public class ProductsData {
                     productModel.setTypeDescription(MyJsonParser.getStringValue(oneObjectProduct, "TypeDescription", ""));
                     productModel.setIdentityValue(MyJsonParser.getStringValue(oneObjectProduct, "IdentityValue", ""));
                     productModel.setNotSynchronized(MyJsonParser.getBooleanValue(oneObjectProduct, "isNotSynchronized", false)); // not server field
-                    productModel.setProductAttributesString(MyJsonParser.getStringValue(oneObjectProduct, "ProductAttributesString", ""));
+                    String attributeString = MyJsonParser.getStringValue(oneObjectProduct, "ProductAttributesString", "");
+                    attributeString = attributeString.replace("{Zone}", localized_zone);
+                    productModel.setProductAttributesString(attributeString);
                     productModel.setProjectInstallationId(MyJsonParser.getStringValue(oneObjectProduct, "InstallationId", "0"));
 
                     JSONArray jArrayProductAttributes = new JSONArray();
