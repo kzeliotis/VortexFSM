@@ -144,7 +144,8 @@ public class MyPrefs {
     public static final String PREF_GPS_PRIORITY = "pref_GPS_priority";
     public static final String PREF_PROCESS_ASSIGNMENT_ON_SCAN = "pref_process_assignment_on_scan";
     public static final String PREF_ALLOW_MULTIPLE_CHECK_INS = "pref_allow_multiple_check_ins";
-
+    public static final String PREF_SHOW_CHARGE_FIELD = "pref_show_charge_field";
+    public static final String PREF_SHOW_PAYMENT_FILED = "pref_show_payment_field";
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";
     public static final String PREF_START_WORK_TIME = "start_work_time";
     public static final String PREF_CHECK_IN_TIME = "check_in_time";

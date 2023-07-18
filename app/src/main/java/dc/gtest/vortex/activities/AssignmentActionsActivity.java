@@ -157,6 +157,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_
 import static dc.gtest.vortex.support.MyLocalization.localized_no_multiple_checkin_allowed;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
 import static dc.gtest.vortex.support.MyLocalization.localized_paid;
+import static dc.gtest.vortex.support.MyLocalization.localized_phone;
 import static dc.gtest.vortex.support.MyLocalization.localized_preview_report;
 import static dc.gtest.vortex.support.MyLocalization.localized_problem;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
@@ -213,8 +214,10 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PAYMENT_FILED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_USE_PT_OVERNIGHT_BUTTONS;
@@ -457,6 +460,21 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         mandatoryTasksRvAdapter = new MandatoryTasksRvAdapter(MANDATORY_TASKS_LIST, AssignmentActionsActivity.this, assignmentId, localized_select_measurement);
         rvMandatoryTasks.setAdapter(mandatoryTasksRvAdapter);
+
+        boolean showCharge = MyPrefs.getBoolean(PREF_SHOW_CHARGE_FIELD, true);
+        boolean showPayment = MyPrefs.getBoolean(PREF_SHOW_PAYMENT_FILED, true);
+        if(!showCharge){
+            tvChargedAmountTitle.setVisibility(View.GONE);
+            etChargedAmount.setVisibility(View.GONE);
+        }
+        if(!showPayment){
+            tvPaidAmountTitle.setVisibility(View.GONE);
+            etPaidAmount.setVisibility(View.GONE);
+        }
+        if(!showCharge && !showPayment){
+            llPayment.setVisibility(View.GONE);
+        }
+
 
 
         if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false) &&

@@ -37,9 +37,11 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_MANDATORY_TASKS_COMMENTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PAYMENT_FILED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
@@ -158,6 +160,13 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     Integer AllowParallelCheckInsFromMobile = MyJsonParser.getIntValue(oneObject,  "AllowParallelCheckInsFromMobile", 1);
                     MyPrefs.setBoolean(PREF_ALLOW_MULTIPLE_CHECK_INS, AllowParallelCheckInsFromMobile == 1);
+
+                    Integer ShowChargeFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowChargeFieldInMobile", 1);
+                    MyPrefs.setBoolean(PREF_SHOW_CHARGE_FIELD, ShowChargeFieldInMobile == 1);
+
+                    Integer ShowCollectionFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowCollectionFieldInMobile", 1);
+
+                    MyPrefs.setBoolean(PREF_SHOW_PAYMENT_FILED, ShowCollectionFieldInMobile == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");
