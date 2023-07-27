@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "dc.gtest.vortex",
+  "variantName": "processArsenDebugResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 5,
+      "versionName": "5.14.08",
+      "outputFile": "vortex_arsenDebug_5.14.08.apk"
+    }
+  ]
+}
