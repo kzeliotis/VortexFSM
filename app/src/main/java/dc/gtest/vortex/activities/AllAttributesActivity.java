@@ -62,7 +62,6 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AllAttributesActivity extends BaseDrawerActivity {
-
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
     private AllAttributesRvAdapter allAttributesRvAdapter;
@@ -171,9 +170,9 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                         String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
 
                         if (productsData.length() > 0) {
-                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
+                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel + "]";
                         } else {
-                            productsData = "[" + productModel.toString() + "]";
+                            productsData = "[" + productModel + "]";
                         }
 
                         MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
@@ -256,18 +255,16 @@ public class AllAttributesActivity extends BaseDrawerActivity {
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 49374:
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                if (result != null) {
-                    if (result.getContents() != null) {
-                        String ScannedCode = result.getContents();
-                        // assignmentsRvAdapter.getFilter().filter(ScannedCode);
-                        //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
-                        attributeValueforScan.setText(ScannedCode);
-                    }
+        if (requestCode == 49374) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (result != null) {
+                if (result.getContents() != null) {
+                    String ScannedCode = result.getContents();
+                    // assignmentsRvAdapter.getFilter().filter(ScannedCode);
+                    //Toast.makeText(this,  ScannedCode, Toast.LENGTH_LONG).show();
+                    attributeValueforScan.setText(ScannedCode);
                 }
-                break;
+            }
         }
     }
 

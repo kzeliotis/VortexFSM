@@ -33,7 +33,6 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 public class ApiUrlSettingsActivity extends BaseCoordinatorActivity {
 
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
-
     private TextView tvHostUrlTitle;
     private RadioGroup radioGroup;
 

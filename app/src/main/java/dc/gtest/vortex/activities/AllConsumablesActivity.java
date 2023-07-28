@@ -56,7 +56,6 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 public class AllConsumablesActivity extends BaseDrawerActivity {
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
-
     private AllConsumablesRvAdapter allConsumablesRvAdapter;
     private SearchView searchView;
 
@@ -131,7 +130,6 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                             })
                             .setNegativeButton(R.string.no, (dialog, which) -> {
                                 dialog.dismiss();
-                                return;
                             })
                             .show();
                 } else {

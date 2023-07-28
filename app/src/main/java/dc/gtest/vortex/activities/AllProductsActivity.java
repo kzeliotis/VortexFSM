@@ -34,7 +34,6 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 public class AllProductsActivity extends BaseDrawerActivity {
 
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
-
     private AllProductsRvAdapter allProductsRvAdapter;
     private SearchView searchView;
 
