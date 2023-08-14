@@ -1339,6 +1339,10 @@
     <string name="zone_gr">Ζώνη</string>
     <string name="zone_ar">Zone</string>
 
+    <string name="no_consumables_from_picking_added">No consumables have been added from the picking list</string>
+    <string name="no_consumables_from_picking_added_gr">Δεν έχετε προσθέσει αναλώσιμα από το picking list</string>
+    <string name="no_consumables_from_picking_added_ar">No consumables have been added from the picking list</string>
+
     <item type="id" name="TAG_ID" />
 
 

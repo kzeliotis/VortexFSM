@@ -40,6 +40,9 @@ import static dc.gtest.vortex.support.MyLocalization.localized_consumables_to_se
 import static dc.gtest.vortex.support.MyLocalization.localized_select_from_picking;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_used;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_LIST;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_WAREHOUSE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
@@ -68,6 +71,9 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
         RecyclerView rvAddedConsumables = findViewById(R.id.rvAddedConsumables);
         btnAddNewConsumable = findViewById(R.id.btnAddNewConsumable);
         btnAddFromPicking = findViewById(R.id.btnAddFromPicking);
+        boolean consumablesFromList = MyPrefs.getBoolean(PREF_ADD_CONSUMABLE_FROM_LIST, true);
+        boolean consumablesFromWareHouse = MyPrefs.getBoolean(PREF_ADD_CONSUMABLE_FROM_WAREHOUSE, true);
+        boolean consumablesFromPicking = MyPrefs.getBoolean(PREF_ADD_CONSUMABLE_FROM_PICKING, true);
 
         if(edit) {
             CONSUMABLES_TOADD_LIST.clear();
@@ -79,35 +85,53 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
             ADDED_CONSUMABLES_LIST.clear();
             ADDED_CONSUMABLES_LIST_FILTERED.clear();
             addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,ADDED_CONSUMABLES_LIST, ADDED_CONSUMABLES_LIST_FILTERED, edit);
-            if(SELECTED_ASSIGNMENT.getPickingList().length() > 0){
+            if(SELECTED_ASSIGNMENT.getPickingList().length() > 0 && consumablesFromPicking){
                 btnAddFromPicking.setVisibility(View.VISIBLE);
             } else {
                 btnAddFromPicking.setVisibility(View.GONE);
+            }
+
+            if (!consumablesFromList && !consumablesFromWareHouse){
+                btnAddNewConsumable.setVisibility(View.GONE);
             }
         }
         rvAddedConsumables.setAdapter(addedConsumablesRvAdapter);
 
 
         btnAddNewConsumable.setOnClickListener(v -> {
-            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
-                new AlertDialog.Builder(this)
-                        .setMessage(localized_choose_from_warehouse)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
-                            startActivity(intent);
-                        })
-                        .setNegativeButton(R.string.no, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
-                            startActivity(intent);
-                        })
-                        .show();
+
+            if (consumablesFromList && consumablesFromWareHouse){
+                if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+                    new AlertDialog.Builder(this)
+                            .setMessage(localized_choose_from_warehouse)
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                dialog.dismiss();
+                                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                                startActivity(intent);
+                            })
+                            .setNegativeButton(R.string.no, (dialog, which) -> {
+                                dialog.dismiss();
+                                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                                startActivity(intent);
+                            })
+                            .show();
+                }
+            } else if (consumablesFromList && !consumablesFromWareHouse){
+                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                startActivity(intent);
+            } else if (!consumablesFromList && consumablesFromWareHouse){
+                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                startActivity(intent);
             }
+
 
         });
 

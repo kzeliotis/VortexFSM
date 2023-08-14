@@ -153,6 +153,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_installations_cap
 import static dc.gtest.vortex.support.MyLocalization.localized_internal_communication;
 import static dc.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
 import static dc.gtest.vortex.support.MyLocalization.localized_minimum_payment;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_added_consumables_from_picking;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_multiple_checkin_allowed;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
@@ -170,6 +171,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_zones;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
@@ -187,6 +189,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHARGED_AMOUNT_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING_SENT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
@@ -1100,6 +1103,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 if (!isSigned && MandatorySignature && !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, false)){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillSignature);
+                }
+
+                if(SELECTED_ASSIGNMENT.getPickingList().length() > 0 &&
+                        !MyPrefs.getBooleanWithFileName(PREF_FILE_CONSUMABLES_FROM_PICKING_SENT, assignmentId, false) &&
+                        MyPrefs.getBoolean(PREF_ADD_CONSUMABLE_FROM_PICKING, true)){
+                    areAllRequiredFieldsFilled = false;
+                    MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_added_consumables_from_picking);
+                    break;
                 }
 
                 int mandatoryMinimumPayment = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatoryMinimumPayment();

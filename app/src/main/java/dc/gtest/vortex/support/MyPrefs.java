@@ -112,7 +112,7 @@ public class MyPrefs {
     public static final String PREF_FILE_IS_OVERNIGHT = "pref_file_is_overnight";
     public static final String PREF_FILE_HAS_RETURNED_TO_BASE = "pref_file_has_returned_to_base";
     public static final String PREF_FILE_IS_SCANNED = "pref_file_is_scanned";
-
+    public static final String PREF_FILE_CONSUMABLES_FROM_PICKING_SENT = "pref_file_consumables_from_picking_sent";
     public static final String PREF_KEY_IS_LOGGED_IN = "pref_key_is_logged_in";
     public static final String PREF_KEY_SELECTED_LANGUAGE = "pref_key_selected_language";
 
@@ -145,6 +145,11 @@ public class MyPrefs {
     public static final String PREF_PROCESS_ASSIGNMENT_ON_SCAN = "pref_process_assignment_on_scan";
     public static final String PREF_ALLOW_MULTIPLE_CHECK_INS = "pref_allow_multiple_check_ins";
     public static final String PREF_SHOW_CHARGE_FIELD = "pref_show_charge_field";
+    public static final String PREF_ADD_CONSUMABLE_FROM_LIST = "pref_add_consumable_from_list";
+    public static final String PREF_ADD_CONSUMABLE_FROM_WAREHOUSE = "pref_add_consumable_from_warehouse";
+    public static final String PREF_ADD_CONSUMABLE_FROM_PICKING = "pref_add_consumable_from_picking";
+    public static final String PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING = "pref_qty_limit_consumable_from_picking";
+    public static final String PREF_MANDATORY_CONSUMABLES_FROM_PICKING = "pref_mandatory_consumables_from_picking";
     public static final String PREF_SHOW_PAYMENT_FILED = "pref_show_payment_field";
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";
     public static final String PREF_START_WORK_TIME = "start_work_time";

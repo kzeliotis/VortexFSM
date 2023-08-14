@@ -259,6 +259,7 @@ public class MyLocalization {
     public static String localized_select_zone = "";
     public static String localized_no_multiple_checkin_allowed = "";
     public static String localized_zone = "";
+    public static String localized_no_added_consumables_from_picking = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -510,6 +511,7 @@ public class MyLocalization {
                 localized_select_zone = ctx.getString(R.string.select_zone_gr);
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_gr);
                 localized_zone = ctx.getString(R.string.zone_gr);
+                localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added_gr);
                 break;
 
             case CONST_AR:
@@ -758,6 +760,7 @@ public class MyLocalization {
                 localized_select_zone = ctx.getString(R.string.select_zone_ar);
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_ar);
                 localized_zone = ctx.getString(R.string.zone_ar);
+                localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added_ar);
 
                 break;
 
@@ -1008,6 +1011,7 @@ public class MyLocalization {
                 localized_select_zone = ctx.getString(R.string.select_zone);
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed);
                 localized_zone = ctx.getString(R.string.zone);
+                localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added);
 
                 break;
 

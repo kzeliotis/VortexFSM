@@ -10,8 +10,8 @@ android {
         applicationId "dc.gtest.vortex"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 8
-        versionName "6.01.13"
+        versionCode 114
+        versionName "6.01.14"
     }
 
     buildTypes {
@@ -49,6 +49,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'dc.gtest.vortex'
 }
 
 dependencies {

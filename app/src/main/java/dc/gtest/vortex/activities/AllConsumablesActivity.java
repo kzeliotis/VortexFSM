@@ -35,6 +35,7 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_FROM_PICKING;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_FROM_PICKING_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_items_question;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
@@ -49,8 +50,10 @@ import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING_SENT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class AllConsumablesActivity extends BaseDrawerActivity {
@@ -126,6 +129,9 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                                 CONSUMABLES_TOADD_LIST.addAll(SELECTED_FROM_PICKING_LIST);
                                 ADDED_CONSUMABLES_LIST.addAll(SELECTED_FROM_PICKING_LIST);
                                 SELECTED_FROM_PICKING_LIST.clear();
+                                if (CONSUMABLES_TOADD_LIST.size() > 0 && MyPrefs.getBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, false)) {
+                                    MyPrefs.setBooleanWithFileName(PREF_FILE_CONSUMABLES_FROM_PICKING_SENT, SELECTED_ASSIGNMENT.getAssignmentId(), true);
+                                }
                                 SendSelected();
                             })
                             .setNegativeButton(R.string.no, (dialog, which) -> {

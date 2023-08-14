@@ -24,6 +24,9 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_update_available;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_LIST;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_WAREHOUSE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
@@ -33,8 +36,10 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
@@ -149,24 +154,44 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     String AzureBlobConnectionString = MyJsonParser.getStringValue(oneObject,  "AzureBlobConnectionString", "");
                     MyPrefs.setString(PREF_AZURE_CONNECTION_STRING, AzureBlobConnectionString);
 
-                    Integer MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
+                    int MobileRefreshLocationEvery = MyJsonParser.getIntValue(oneObject,  "MobileRefreshLocationEvery", 30);
                     MyPrefs.setInt(PREF_LOCATION_REFRESH_INTERVAL, MobileRefreshLocationEvery);
 
-                    Integer MobileGPSPriority = MyJsonParser.getIntValue(oneObject,  "MobileGPSPriority", 3);
+                    int MobileGPSPriority = MyJsonParser.getIntValue(oneObject,  "MobileGPSPriority", 3);
                     MyPrefs.setInt(PREF_GPS_PRIORITY, MobileGPSPriority);
 
-                    Integer MobileApiConnectionTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiConnectionTimeout", 15);
+                    int MobileApiConnectionTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiConnectionTimeout", 15);
                     MyPrefs.setInt(PREF_API_CONNECTION_TIMEOUT, MobileApiConnectionTimeout);
 
-                    Integer AllowParallelCheckInsFromMobile = MyJsonParser.getIntValue(oneObject,  "AllowParallelCheckInsFromMobile", 1);
+                    int AllowParallelCheckInsFromMobile = MyJsonParser.getIntValue(oneObject,  "AllowParallelCheckInsFromMobile", 1);
                     MyPrefs.setBoolean(PREF_ALLOW_MULTIPLE_CHECK_INS, AllowParallelCheckInsFromMobile == 1);
 
-                    Integer ShowChargeFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowChargeFieldInMobile", 1);
+                    int ShowChargeFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowChargeFieldInMobile", 1);
                     MyPrefs.setBoolean(PREF_SHOW_CHARGE_FIELD, ShowChargeFieldInMobile == 1);
 
-                    Integer ShowCollectionFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowCollectionFieldInMobile", 1);
+                    int ShowCollectionFieldInMobile = MyJsonParser.getIntValue(oneObject,  "ShowCollectionFieldInMobile", 1);
 
                     MyPrefs.setBoolean(PREF_SHOW_PAYMENT_FILED, ShowCollectionFieldInMobile == 1);
+
+                    int AddConsumablesFromListMobile = MyJsonParser.getIntValue(oneObject,  "AddConsumablesFromListMobile", 1);
+
+                    MyPrefs.setBoolean(PREF_ADD_CONSUMABLE_FROM_LIST, AddConsumablesFromListMobile == 1);
+
+                    int AddConsumableFromWarehouseMobile = MyJsonParser.getIntValue(oneObject,  "AddConsumableFromWarehouseMobile", 1);
+
+                    MyPrefs.setBoolean(PREF_ADD_CONSUMABLE_FROM_WAREHOUSE, AddConsumableFromWarehouseMobile == 1);
+
+                    int AddConsumableFromPickingMobile = MyJsonParser.getIntValue(oneObject,  "AddConsumableFromPickingMobile", 1);
+
+                    MyPrefs.setBoolean(PREF_ADD_CONSUMABLE_FROM_PICKING, AddConsumableFromPickingMobile == 1);
+
+                    int QtyLimitOnConsumablesFromPicking = MyJsonParser.getIntValue(oneObject,  "QtyLimitOnConsumablesFromPicking", 0);
+
+                    MyPrefs.setBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, QtyLimitOnConsumablesFromPicking == 1);
+
+                    int MandatoryComsumableFromPicking = MyJsonParser.getIntValue(oneObject,  "MandatoryComsumableFromPicking", 0);
+
+                    MyPrefs.setBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, MandatoryComsumableFromPicking == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");
