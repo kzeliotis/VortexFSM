@@ -1,18 +1,20 @@
 {
-  "version": 2,
+  "version": 3,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
   "applicationId": "dc.gtest.vortex",
-  "variantName": "processArsenReleaseResources",
+  "variantName": "arsenRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
+      "attributes": [],
       "versionCode": 8,
       "versionName": "6.01.13",
       "outputFile": "vortex_arsenRelease_6.01.13.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }

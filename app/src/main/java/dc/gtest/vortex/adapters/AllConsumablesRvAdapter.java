@@ -44,6 +44,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_suggested_value_with_colon;
 import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_colon;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
 
 public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumablesRvAdapter.ViewHolder> implements Filterable {
 
@@ -82,8 +83,10 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.tvQTY.setText(localized_used_value_with_colon);
             holder.tvAddedPickingNotes.setText(localized_notes_with_colon);
             holder.etAddedPickingNotes.setText(holder.mItem.getNotes());
-//            String stock = holder.mItem.getStock().replace(",", ".");
-//            holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+            if(MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
+                String stock = holder.mItem.getStock().replace(",", ".");
+                holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+            }
         }
 
         if(warehouseProducts || pickingList){
