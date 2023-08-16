@@ -1779,6 +1779,20 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     }
 
     private void setupStatusesSpinner() {
+
+        if (STATUSES_LIST.isEmpty()) {
+            if (MyUtils.isNetworkAvailable()) {
+                GetStatuses getStatuses = new GetStatuses(this);
+                //getStatuses.execute("0");
+                try{
+                    String r = getStatuses.execute("0").get();
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+
         String[] statusesArray = new String[STATUSES_LIST.size()];
 
         Log.e(LOG_TAG, "========================== STATUSES_LIST:\n" + STATUSES_LIST);
