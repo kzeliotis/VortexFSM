@@ -202,7 +202,9 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                     filteredItems = allItems;
                 } else if (!filterPattern.isEmpty() && selectedType.isEmpty()) {  // 1 0
                     for (final ProductModel mWords : allItems) {
-                        if (mWords.getProductDescription().toLowerCase().contains(filterPattern) || mWords.getIdentityValue().toLowerCase().contains(filterPattern)) {
+                        if (mWords.getProductDescription().toLowerCase().contains(filterPattern) ||
+                                mWords.getIdentityValue().toLowerCase().contains(filterPattern) ||
+                                mWords.getProductAttributesString().toLowerCase().contains(filterPattern)) {
                             filteredList.add(mWords);
                         }
                     }
@@ -220,7 +222,9 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
 
                 } else {
                     for (final ProductModel mWords : allItems) {
-                        if ( ( mWords.getProductDescription().toLowerCase().contains(filterPattern) || mWords.getIdentityValue().toLowerCase().contains(filterPattern) )
+                        if ( ( mWords.getProductDescription().toLowerCase().contains(filterPattern) ||
+                                mWords.getIdentityValue().toLowerCase().contains(filterPattern) ||
+                                mWords.getProductAttributesString().toLowerCase().contains(filterPattern))
                                 && mWords.getTypeDescription().toLowerCase().equals(selectedType)) {  // 1 1
                             filteredList.add(mWords);
                         }
