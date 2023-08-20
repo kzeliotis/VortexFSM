@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -18,20 +20,24 @@ import java.util.Date;
 import java.util.List;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.models.AssignmentModel;
+import dc.gtest.vortex.models.AttributeModel;
 import dc.gtest.vortex.models.ResourceLeaveModel;
 import dc.gtest.vortex.models.UserPartnerResourceModel;
 
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.USER_PARTNER_RESOURCE_LIST;
 
-public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPartnerResourcesRvAdapter.ViewHolder> {
+public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPartnerResourcesRvAdapter.ViewHolder> implements Filterable {
 
     private final Context ctx;
     private final List<UserPartnerResourceModel> mValues;
     private final boolean isForNewAssignment;
     private final boolean singleSelection;
+    private boolean filtering;
     private final String assignmentDate;
     private final List<String> rIDs;
+    private List<UserPartnerResourceModel> filteredItems;
 
     public UserPartnerResourcesRvAdapter(List<UserPartnerResourceModel> items, Context ctx, boolean isForNewAssignment, boolean singleSelection, String AssignmentDate, List<String> rIDs) {
         this.ctx = ctx;
@@ -40,6 +46,8 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
         this.assignmentDate =AssignmentDate;
         this.rIDs = rIDs;
         mValues = items;
+        filteredItems = items;
+        filtering = false;
         NEW_ASSIGNMENT.setResourceIds("");
         NEW_ASSIGNMENT.setResourceNames("");
     }
@@ -57,7 +65,7 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        holder.mItem = filteredItems.get(position);
         holder.tvItemName.setText(holder.mItem.getResourceName());
 
         try{
@@ -79,37 +87,51 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
 
             holder.mItem.setChecked(isChecked);
 
+            for (UserPartnerResourceModel rs : mValues){
+                if (rs.getResourceId().equals(holder.mItem.getResourceId())){
+                    rs.setChecked(isChecked);
+                    break;
+                }
+            }
+
             String selectedResourcesIds = "";
             String selectedResourcesNames = "";
 
-            if (isChecked){
-                if (singleSelection) {
-                    NEW_ASSIGNMENT.setResourceIds(holder.mItem.getResourceId());
-                    NEW_ASSIGNMENT.setResourceNames(holder.mItem.getResourceName());
-                } else {
-                    String resourceIDs = NEW_ASSIGNMENT.getResourceIds() + holder.mItem.getResourceId() + ", ";
-                    String resourceNames = NEW_ASSIGNMENT.getResourceNames() + holder.mItem.getResourceName() + ", ";
-                    NEW_ASSIGNMENT.setResourceIds(resourceIDs);
-                    NEW_ASSIGNMENT.setResourceNames(resourceNames);
-                }
-            } else {
-                List<String> rIds_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", ")));
-                List<String> rNs_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceNames().split(", ")));
-                NEW_ASSIGNMENT.setResourceIds("");
-                NEW_ASSIGNMENT.setResourceNames("");
-                if (rIds_.contains(holder.mItem.getResourceId())){
-                    rIds_.remove(holder.mItem.getResourceId());
-                    rNs_.remove(holder.mItem.getResourceName());
-                    for (String id : rIds_)
-                    {
-                        NEW_ASSIGNMENT.setResourceIds(NEW_ASSIGNMENT.getResourceIds() + id + ", ");
+            if(!filtering){
+                if (isChecked){
+                    if (singleSelection) {
+                        NEW_ASSIGNMENT.setResourceIds(holder.mItem.getResourceId());
+                        NEW_ASSIGNMENT.setResourceNames(holder.mItem.getResourceName());
+                    } else {
+                        List<String> rIds_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", ")));
+                        if(!rIds_.contains(holder.mItem.getResourceId())){
+                            String resourceIDs = NEW_ASSIGNMENT.getResourceIds() + holder.mItem.getResourceId() + ", ";
+                            String resourceNames = NEW_ASSIGNMENT.getResourceNames() + holder.mItem.getResourceName() + ", ";
+                            NEW_ASSIGNMENT.setResourceIds(resourceIDs);
+                            NEW_ASSIGNMENT.setResourceNames(resourceNames);
+                        }
                     }
-                    for (String name : rNs_)
-                    {
-                        NEW_ASSIGNMENT.setResourceNames(NEW_ASSIGNMENT.getResourceNames() + name + ", ");
+                } else {
+                    List<String> rIds_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", ")));
+                    List<String> rNs_ = new ArrayList<>(Arrays.asList(NEW_ASSIGNMENT.getResourceNames().split(", ")));
+                    NEW_ASSIGNMENT.setResourceIds("");
+                    NEW_ASSIGNMENT.setResourceNames("");
+                    if (rIds_.contains(holder.mItem.getResourceId())){
+                        rIds_.remove(holder.mItem.getResourceId());
+                        rNs_.remove(holder.mItem.getResourceName());
+                        for (String id : rIds_)
+                        {
+                            NEW_ASSIGNMENT.setResourceIds(NEW_ASSIGNMENT.getResourceIds() + id + ", ");
+                        }
+                        for (String name : rNs_)
+                        {
+                            NEW_ASSIGNMENT.setResourceNames(NEW_ASSIGNMENT.getResourceNames() + name + ", ");
+                        }
                     }
                 }
             }
+
+
 
 //            try{
 //                if(NEW_ASSIGNMENT.getResourceIds().endsWith("  ") || NEW_ASSIGNMENT.getResourceIds().endsWith(", ")){
@@ -134,7 +156,13 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
         if (!singleSelection) {
             String r_id = holder.mItem.getResourceId();
             holder.chkBox.setChecked(rIDs.contains(r_id));
+            if (!rIDs.contains(r_id) && holder.mItem.isChecked()){
+                filtering = true;
+                holder.chkBox.setChecked(holder.mItem.isChecked());
+                filtering = false;
+            }
         }
+
     }
 
     private boolean filterResourceLeaves(String resourceId, String assDate) throws ParseException {
@@ -162,7 +190,7 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return filteredItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -178,5 +206,44 @@ public class UserPartnerResourcesRvAdapter extends RecyclerView.Adapter<UserPart
             chkBox = view.findViewById(R.id.chkBox);
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                if (constraint.length() == 0) {
+                    filteredItems = mValues;
+                } else {
+                    List<UserPartnerResourceModel> filteredList = new ArrayList<>();
+
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+
+                    for (UserPartnerResourceModel mWords : mValues) {
+                        if (mWords.getResourceName().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(mWords);
+                        }
+                    }
+
+                    filteredItems = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredItems;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+//                filteredItems = (ArrayList<TopicModel>) filterResults.values;
+                notifyDataSetChanged();
+
+
+            }
+        };
+    }
+
+
 
 }

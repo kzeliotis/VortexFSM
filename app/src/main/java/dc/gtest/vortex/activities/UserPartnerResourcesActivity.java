@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +50,9 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 //    private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
     private boolean groupAssignment = false;
+    private SearchView searchView;
 
+    private UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +95,7 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
 
         String assDate = getIntent().getStringExtra(KEY_ASSIGNMENT_DATE);
         List<String> rIds = Arrays.asList(NEW_ASSIGNMENT.getResourceIds().split(", "));
-        UserPartnerResourcesRvAdapter userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate, rIds);
+        userPartnerResourcesRvAdapter = new UserPartnerResourcesRvAdapter(USER_PARTNER_RESOURCE_LIST, UserPartnerResourcesActivity.this, isForNewAssignment, singleSelection, assDate, rIds);
         rvUserPartnerResources.setAdapter(userPartnerResourcesRvAdapter);
     }
 
@@ -105,6 +108,26 @@ public class UserPartnerResourcesActivity extends BaseDrawerActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_check, menu);
+
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem itemSearch = menu.findItem(R.id.action_search);
+        searchView = (SearchView) itemSearch.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                userPartnerResourcesRvAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+
         return true;
     }
 
