@@ -102,6 +102,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
             responseBody = bundle.getString(MY_API_RESPONSE_BODY);
 
         } catch (Exception e) {
+            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, e.getMessage(), responseBody);
             e.printStackTrace();
         }
 
