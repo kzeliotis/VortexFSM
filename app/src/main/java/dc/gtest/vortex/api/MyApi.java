@@ -32,6 +32,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.security.cert.X509Certificate;
 
 import dc.gtest.vortex.BuildConfig;
+import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
@@ -285,6 +286,7 @@ class MyApi {
 
 
         } catch (Exception e) {
+            MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody, 0, e.getMessage(), "");
             e.printStackTrace();
         }
 
