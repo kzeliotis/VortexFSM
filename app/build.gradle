@@ -4,14 +4,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "dc.gtest.vortex"
         minSdkVersion 26
-        targetSdkVersion 31
-        versionCode 60115
-        versionName "6.01.15"
+        targetSdkVersion 33
+        versionCode 60116
+        versionName "6.01.16"
     }
 
     buildTypes {

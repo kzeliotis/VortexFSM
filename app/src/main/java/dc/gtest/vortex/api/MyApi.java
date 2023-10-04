@@ -35,7 +35,6 @@ import dc.gtest.vortex.BuildConfig;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
-import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
@@ -106,6 +105,9 @@ class MyApi {
     static final String API_GET_ASSIGNMENT_INDICATORS = "/Vortex.svc/GetAssignmentIndicators";
     static final String API_SET_PRODUCTS_TO_INSTALLATION = "/Vortex.svc/SetProjectProductsToProjectInstallation?ProjectInstallationId=";
     static final String API_GET_AES_KEY = "/Vortex.svc/GetAESKey?username=";
+
+
+
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;
