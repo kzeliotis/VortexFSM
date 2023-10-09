@@ -213,6 +213,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMEN
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
@@ -1107,7 +1108,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 if(SELECTED_ASSIGNMENT.getPickingList().length() > 0 &&
                         !MyPrefs.getBooleanWithFileName(PREF_FILE_CONSUMABLES_FROM_PICKING_SENT, assignmentId, false) &&
-                        MyPrefs.getBoolean(PREF_ADD_CONSUMABLE_FROM_PICKING, true)){
+                        MyPrefs.getBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, true)){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_added_consumables_from_picking);
                     break;
