@@ -216,6 +216,20 @@ public class MyUtils {
         return escaped;
     }
 
+    public static String escapeJsonString(String input) {
+        String escaped = input;
+        escaped = escaped.replace("\\", "\\\\");
+        escaped = escaped.replace("\"", "\\\"");
+        escaped = escaped.replace("\b", "\\b");
+        escaped = escaped.replace("\f", "\\f");
+        escaped = escaped.replace("\n", "\\n");
+        escaped = escaped.replace("\r", "\\r");
+        escaped = escaped.replace("\t", "\\t");
+        // TODO: escape other non-printing characters using uXXXX notation
+        return escaped;
+
+    }
+
     //private static final String AES_KEY = "brFsF6KjzXn3cOzlTBB0zo9ktziYr+LziPIrxj1Vu7ttac+bJHZ0vp7KqIeeO11qPv1AsGKN3TdUx0J04KoybnBMqQb5frhUqb4cWzFcbP1gD7yjH8mPzLArD83CDfjXpkco53WA2VsvZ+UY/PrWXOoe4acFWKyoV7SV/Jfkk/oipC+oB4vrq2eML9V525byIRBmkr2dkUPB8O5OG1o0/jYniP5TBI2Yk3sG7Ds2dKCHJ7qjb7Z+TgBJJUTMbu6D7hppo2cBmQA2epPDdeVlEDiJIzH8dnTBsBEoG3TeMFvlkQytt6C2mgJqeu+4e+Do35j00QFYI417w3li1aa8dA==";
 
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding";

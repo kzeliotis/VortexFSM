@@ -109,7 +109,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
             if (isForNewAssignment) {
                 NEW_ASSIGNMENT.setProductId(holder.mItem.getProductId());
                 NEW_ASSIGNMENT.setProjectProductId("");
-                NEW_ASSIGNMENT.setProductDescription(holder.mItem.getProductDescription());
+                NEW_ASSIGNMENT.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
                 String customerid = "0";
                 if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
                     customerid = NEW_ASSIGNMENT.getCustomerId();
@@ -151,10 +151,11 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                                 String newProductJsonString =
                                         "{\n" +
                                                 "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
-                                                "  \"newProductName\": \"" + holder.mItem.getProductDescription() + "\",\n" +
+                                                "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
                                                 "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
                                                 "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
                                                 "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
+                                                "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
                                                 "  \"Attributes\": {\n" +
                                                 "    " + savedAttributes + "\n" +
                                                 "  }\n" +
@@ -171,7 +172,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
 
                                 ProductModel productModel = new ProductModel();
                                 productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
-                                productModel.setProductDescription(holder.mItem.getProductDescription());
+                                productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
                                 productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
                                 productModel.setNotSynchronized(true);
 
