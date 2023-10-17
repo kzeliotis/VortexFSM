@@ -2,6 +2,7 @@ package dc.gtest.vortex.support;
 
 import android.Manifest;
 import android.content.Context;
+import android.os.Build;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -169,6 +170,13 @@ public class MyGlobals {
     public static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public static String[] PERMISSIONS_STORAGE_NEW = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_VIDEO
     };
 
     // global variables

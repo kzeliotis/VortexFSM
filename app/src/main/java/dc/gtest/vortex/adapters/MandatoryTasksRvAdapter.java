@@ -12,6 +12,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SwitchCompat;
+
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
+import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE_NEW;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
@@ -271,9 +274,10 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             Activity activity = (Activity) ctx;
             new AlertDialog.Builder(ctx)
                     .setNeutralButton("Gallery", (dialog, which) -> {
-                        int permission = ContextCompat.checkSelfPermission(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                        int permission = ContextCompat.checkSelfPermission(ctx, tiramisu ? Manifest.permission.READ_MEDIA_IMAGES: Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         if (permission != PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO);
+                            ActivityCompat.requestPermissions(activity, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO);
                         } else {
                             AssignmentActionsActivity.pickMandatoryPhotoFromStorage(activity);
                         }

@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
@@ -118,6 +119,7 @@ import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_MANDATORY_
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_ASSIGNMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
+import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE_NEW;
 import static dc.gtest.vortex.support.MyGlobals.PICKFILE_RESULT_CODE;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
@@ -943,9 +945,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 new AlertDialog.Builder(this)
                         .setNeutralButton("Gallery",(dialog, which) -> {
-                            int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                            int permission = ContextCompat.checkSelfPermission(this, tiramisu ? Manifest.permission.READ_MEDIA_IMAGES: Manifest.permission.WRITE_EXTERNAL_STORAGE);
                             if (permission != PackageManager.PERMISSION_GRANTED){
-                                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO);
+                                ActivityCompat.requestPermissions(this, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO);
                             } else {
                                 pickAssignmentPhotoFromStorage(this);
                             }
@@ -963,9 +966,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case R.id.btnAddAttachment:
 
-                int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                int permission = ContextCompat.checkSelfPermission(this, tiramisu ? Manifest.permission.READ_MEDIA_VIDEO : Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (permission != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, PICKFILE_RESULT_CODE);
+                    ActivityCompat.requestPermissions(this, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, PICKFILE_RESULT_CODE);
                 } else {
                     pickFileFromStorage(this);
                 }
