@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -72,6 +73,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         //holder.tvConsumableName.setText(holder.mItem.getConsumableName());
+        Double stock_d = -666.0;
 
         if(!pickingList) {
             holder.tvAddedPickingNotes.setVisibility(View.GONE);
@@ -84,15 +86,31 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.tvAddedPickingNotes.setText(localized_notes_with_colon);
             holder.etAddedPickingNotes.setText(holder.mItem.getNotes());
             if(MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
+                Integer detPickingId = holder.mItem.getDetPickingId();
+                Double addedStock = 0.0;
+                for (AddedConsumableModel am : ADDED_CONSUMABLES_LIST) {
+                    if(detPickingId == am.getDetPickingId()){
+                        addedStock += Double.parseDouble(am.getUsed().replace(",", "."));
+                    }
+                }
                 String stock = holder.mItem.getStock().replace(",", ".");
-                holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
+                stock_d = Double.parseDouble(stock);
+                stock_d -= addedStock;
+                if(stock_d <= 0){
+                    holder.llItemsRvNameChevron.setEnabled(false);
+                    holder.tvConsumableName.setEnabled(false);
+                    holder.etAddedPickingNotes.setEnabled(false);
+                    holder.etPickingQty.setEnabled(false);
+                }
+                holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, stock_d)});
             }
         }
 
         if(warehouseProducts || pickingList){
             String desc = holder.mItem.getConsumableName();
             String stock = holder.mItem.getStock();
-            desc = desc + "\n\r" + "Qty: " + stock;
+            String stock_s = stock_d.toString().replace(",", ".");
+            desc = desc + "\n\r" + "Qty: " + (stock_s.equals("-666.0") ? stock : stock_s);
             holder.tvConsumableName.setText(desc);
         }else{
             holder.tvConsumableName.setText(holder.mItem.getConsumableName());
@@ -260,6 +278,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
         final TextView tvChevronConsumable;
         final EditText etAddedPickingNotes;
         final EditText etPickingQty;
+        final LinearLayout llItemsRvNameChevron;
         public AllConsumableModel mItem;
 
         public ViewHolder(View view) {
@@ -271,6 +290,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             etAddedPickingNotes = view.findViewById(R.id.etAddedPickingNotes);
             etPickingQty = view.findViewById(R.id.etPickingQty);
             tvChevronConsumable = view.findViewById(R.id.tvChevronConsumable);
+            llItemsRvNameChevron = view.findViewById(R.id.llItemsRvNameChevron);
         }
     }
 

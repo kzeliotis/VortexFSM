@@ -42,6 +42,7 @@ public class AddedConsumablesData {
                     addedConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
                     addedConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", "0"));
                     addedConsumableModel.setWarehouseId(MyJsonParser.getStringValue(oneObject, "WarehouseId", "0"));
+                    addedConsumableModel.setDetPickingId(MyJsonParser.getIntValue(oneObject, "DetPickingId", 0));
 
                     ADDED_CONSUMABLES_LIST.add(addedConsumableModel);
                 }
