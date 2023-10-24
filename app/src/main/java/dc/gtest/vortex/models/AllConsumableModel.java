@@ -8,6 +8,7 @@ public class AllConsumableModel {
     private int detPickingId = 0;
     private int typeId = -1;
     private String Stock = "";
+    private String used = "";
 
     public String getConsumableName() {
         return consumableName;
@@ -53,6 +54,10 @@ public class AllConsumableModel {
 
     public void setStock(String Stock) { this.Stock = Stock; }
 
+    public String getUsed() { return used;}
+
+    public void setUsed(String Used) { this.used = Used; }
+
     @Override
     public String toString() {
         String modelToString =
@@ -62,6 +67,7 @@ public class AllConsumableModel {
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
                         "  \"DetPickingId\": \"" + detPickingId  + "\",\n" +
                         "  \"Stock\": \"" + Stock + "\",\n" +
+                        "  \"Used\": \"" + used + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +
                         "}";
 

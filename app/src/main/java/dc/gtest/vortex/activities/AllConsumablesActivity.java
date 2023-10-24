@@ -20,6 +20,7 @@ import dc.gtest.vortex.api.GetAllConsumables;
 import dc.gtest.vortex.api.SendConsumables;
 import dc.gtest.vortex.data.AllConsumablesData;
 import dc.gtest.vortex.models.AddedConsumableModel;
+import dc.gtest.vortex.models.AllConsumableModel;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
@@ -54,7 +55,11 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllConsumablesActivity extends BaseDrawerActivity {
 
@@ -89,7 +94,26 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         if(WarehouseProducts) {
             allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
         } else if (selectFromPicking) {
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(PICKING_PRODUCTS_LIST_FILTERED, this, WarehouseProducts, true);
+            List<AllConsumableModel> pickList = new ArrayList<AllConsumableModel>();
+            pickList.addAll(PICKING_PRODUCTS_LIST_FILTERED);
+
+            if(MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
+                for (AllConsumableModel itm : pickList){
+                    int detPickingId = itm.getDetPickingId();
+                    double addedStock = 0.0;
+                    for (AddedConsumableModel am : ADDED_CONSUMABLES_LIST) {
+                        if(detPickingId == am.getDetPickingId()){
+                            addedStock += Double.parseDouble(am.getUsed().replace(",", "."));
+                        }
+                    }
+                    String stock = itm.getStock().replace(",", ".");
+                    double stock_d = Double.parseDouble(stock);
+                    stock_d -= addedStock;
+                    itm.setStock(String.valueOf(stock_d));
+                }
+            }
+
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(pickList, this, WarehouseProducts, true);
         }else{
             allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
         }

@@ -18,6 +18,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import dc.gtest.vortex.R;
@@ -73,7 +74,7 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         //holder.tvConsumableName.setText(holder.mItem.getConsumableName());
-        Double stock_d = -666.0;
+        //Double stock_d = -666.0;
 
         if(!pickingList) {
             holder.tvAddedPickingNotes.setVisibility(View.GONE);
@@ -86,16 +87,16 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.tvAddedPickingNotes.setText(localized_notes_with_colon);
             holder.etAddedPickingNotes.setText(holder.mItem.getNotes());
             if(MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
-                Integer detPickingId = holder.mItem.getDetPickingId();
-                Double addedStock = 0.0;
-                for (AddedConsumableModel am : ADDED_CONSUMABLES_LIST) {
-                    if(detPickingId == am.getDetPickingId()){
-                        addedStock += Double.parseDouble(am.getUsed().replace(",", "."));
-                    }
-                }
+//                int detPickingId = holder.mItem.getDetPickingId();
+//                double addedStock = 0.0;
+//                for (AddedConsumableModel am : ADDED_CONSUMABLES_LIST) {
+//                    if(detPickingId == am.getDetPickingId()){
+//                        addedStock += Double.parseDouble(am.getUsed().replace(",", "."));
+//                    }
+//                }
                 String stock = holder.mItem.getStock().replace(",", ".");
-                stock_d = Double.parseDouble(stock);
-                stock_d -= addedStock;
+                double stock_d = Double.parseDouble(stock);
+//                stock_d -= addedStock;
                 if(stock_d <= 0){
                     holder.llItemsRvNameChevron.setEnabled(false);
                     holder.tvConsumableName.setEnabled(false);
@@ -104,13 +105,14 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                 }
                 holder.etPickingQty.setFilters(new InputFilter[]{new MinMaxFilter(0.0, stock_d)});
             }
+            holder.etPickingQty.setText(holder.mItem.getUsed());
         }
 
         if(warehouseProducts || pickingList){
             String desc = holder.mItem.getConsumableName();
             String stock = holder.mItem.getStock();
-            String stock_s = stock_d.toString().replace(",", ".");
-            desc = desc + "\n\r" + "Qty: " + (stock_s.equals("-666.0") ? stock : stock_s);
+            //String stock_s = stock_d.toString().replace(",", ".");
+            desc = desc + "\n\r" + "Qty: " + stock;
             holder.tvConsumableName.setText(desc);
         }else{
             holder.tvConsumableName.setText(holder.mItem.getConsumableName());
@@ -126,11 +128,15 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
                 int detPickingId = holder.mItem.getDetPickingId();
 
-                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
-                    if(m.getDetPickingId() == detPickingId){
-                        SELECTED_FROM_PICKING_LIST.remove(m);
-                    }
-                }
+                holder.mItem.setNotes(s.toString().replace("\n", " ").replace("\r", " "));
+
+                SELECTED_FROM_PICKING_LIST.removeIf(acm -> acm.getDetPickingId() == detPickingId);
+
+//                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
+//                    if(m.getDetPickingId() == detPickingId){
+//                        SELECTED_FROM_PICKING_LIST.remove(m);
+//                    }
+//                }
 
                 AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
 
@@ -165,11 +171,15 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
                 int detPickingId = holder.mItem.getDetPickingId();
 
-                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
-                    if(m.getDetPickingId() == detPickingId){
-                        SELECTED_FROM_PICKING_LIST.remove(m);
-                    }
-                }
+                holder.mItem.setUsed(s.toString().replace("\n", " ").replace("\r", " "));
+
+                SELECTED_FROM_PICKING_LIST.removeIf(acm -> acm.getDetPickingId() == detPickingId);
+
+//                for(AddedConsumableModel m : SELECTED_FROM_PICKING_LIST){
+//                    if(m.getDetPickingId() == detPickingId){
+//                        SELECTED_FROM_PICKING_LIST.remove(m);
+//                    }
+//                }
 
                 AddedConsumableModel addedConsumableModel = new AddedConsumableModel();
 
