@@ -103,24 +103,31 @@ public class SendLocationSRV extends Service {
 
         if(intent.getAction().equals("Start")){
 
-            String NOTIFICATION_CHANNEL_ID = createNotificationChannel("dc.gtest.vortex", "Vortex Location service");
+            try {
+                String NOTIFICATION_CHANNEL_ID = createNotificationChannel("dc.gtest.vortex", "Vortex Location service");
 
-            Intent notificationIntent = new Intent(this, ASSIGNMENTS_CTX.getClass());
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            int requestID = (int) System.currentTimeMillis();
-            PendingIntent pendingIntent = PendingIntent.getActivity(this,requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+                Intent notificationIntent = new Intent(this, ASSIGNMENTS_CTX.getClass());
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                int requestID = (int) System.currentTimeMillis();
+                PendingIntent pendingIntent = PendingIntent.getActivity(this,requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-            Notification notification = notificationBuilder.setOngoing(true)
-                    .setContentTitle("Vortex")
-                    .setContentText(localized_vortex_tracking_running)
-                    //.setPriority(NotificationManager.IMPORTANCE_DEFAULT)
-                    .setCategory(Notification.CATEGORY_NAVIGATION)
-                    .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    //.setOngoing(true)
-                    .build();
-            startForeground(666, notification);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+                Notification notification = notificationBuilder.setOngoing(true)
+                        .setContentTitle("Vortex")
+                        .setContentText(localized_vortex_tracking_running)
+                        //.setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+                        .setCategory(Notification.CATEGORY_NAVIGATION)
+                        .setContentIntent(pendingIntent)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        //.setOngoing(true)
+                        .build();
+                startForeground(666, notification);
+            }catch (Exception ex){
+                ex.printStackTrace();
+                MyLogs.showFullLog("myLogs: " + "SendLocationSRV", "", "Start", 0, ex.getMessage(), "");
+            }
+
+
 
 //            NotificationChannel nc = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Vortex Location Service", NotificationManager.IMPORTANCE_DEFAULT);
 //            NotificationManager nm = getSystemService(NotificationManager.class);
@@ -128,9 +135,15 @@ public class SendLocationSRV extends Service {
 
         }
         else if (intent.getAction().equals("Stop")){
-            stopLocationUpdates();
-            stopForeground(true);
-            stopSelfResult(startId);
+            try {
+                stopLocationUpdates();
+                stopForeground(true);
+                stopSelfResult(startId);
+            }catch (Exception ex){
+                ex.printStackTrace();
+                MyLogs.showFullLog("myLogs: " + "SendLocationSRV", "", "Stop", 0, ex.getMessage(), "");
+            }
+
         }
 
 
