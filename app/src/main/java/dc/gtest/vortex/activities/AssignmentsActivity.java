@@ -218,7 +218,18 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
     protected void onDestroy() {
         super.onDestroy();
 
-        permGetLocation.stopLocationUpdates();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    permGetLocation.stopLocationUpdates();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 9000L);
+
+
     }
 
     @Override
@@ -362,10 +373,8 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         @Override
         public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
         @NonNull int[] grantResults){
-            switch (requestCode) {
-                case PERMISSIONS_FINE_LOCATION:
-                    permGetLocation.myPermissionsResult(requestCode, permissions, grantResults);
-                    break;
+            if (requestCode == PERMISSIONS_FINE_LOCATION) {
+                permGetLocation.myPermissionsResult(requestCode, permissions, grantResults);
             }
         }
 

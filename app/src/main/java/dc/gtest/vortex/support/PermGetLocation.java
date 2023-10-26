@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -177,31 +178,28 @@ public class PermGetLocation {
 
         Log.e(LOG_TAG, "PermGetLocation ------------------------ onActivityResult requestCode: " + requestCode);
 
-        switch (requestCode) {
+        // Check for the integer request code originally supplied to startResolutionForResult().
+        if (requestCode == OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS) {
+            switch (resultCode) {
+                case RESULT_OK:
 
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS:
-                switch (resultCode) {
-                    case RESULT_OK:
+                    Log.e(LOG_TAG, "User agreed to make required location settings changes.");
 
-                        Log.e(LOG_TAG, "User agreed to make required location settings changes.");
+                    break;
+                case RESULT_CANCELED:
 
-                        break;
-                    case RESULT_CANCELED:
+                    Log.e(LOG_TAG, "User chose not to make required location settings changes.");
 
-                        Log.e(LOG_TAG, "User chose not to make required location settings changes.");
+                    new AlertDialog.Builder(ctx)
+                            .setMessage(localized_turn_on_location)
+                            .setPositiveButton(R.string.ok, (dialog, which) -> {
+                                dialog.dismiss();
+                                ctx.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            })
+                            .show();
 
-                        new AlertDialog.Builder(ctx)
-                                .setMessage(localized_turn_on_location)
-                                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    ctx.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                })
-                                .show();
-
-                        break;
-                }
-                break;
+                    break;
+            }
         }
     }
 
@@ -210,10 +208,16 @@ public class PermGetLocation {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && MyPrefs.getBoolean(PREF_ENABLE_LOCATION_SERVICE, false)) {
             //Context context = getApplicationContext();
-            ASSIGNMENTS_CTX = ctx;
-            Intent srv = new Intent(ASSIGNMENTS_CTX, SendLocationSRV.class); // Build the intent for the service
-            srv.setAction("Start");
-            ASSIGNMENTS_CTX.startForegroundService(srv);
+            try {
+                ASSIGNMENTS_CTX = ctx;
+                Intent srv = new Intent(ASSIGNMENTS_CTX, SendLocationSRV.class); // Build the intent for the service
+                srv.setAction("Start");
+                ASSIGNMENTS_CTX.startForegroundService(srv);
+            }catch (Exception ex){
+                ex.printStackTrace();
+                MyLogs.showFullLog("myLogs: " + "startForegroundService", "", "Start", 0, ex.getMessage(), "");
+            }
+
             return;
         }
 
