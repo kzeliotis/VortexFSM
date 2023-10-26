@@ -1088,9 +1088,9 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
                 FirebaseCrashlytics.getInstance().log("GetSelectedStatus" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
-                String selectedStatusId = "0";
+                int selectedStatusIsPending = 1;
                 try {
-                    selectedStatusId = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getStatusId();
+                    selectedStatusIsPending = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getIsPending();
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (MyUtils.isNetworkAvailable()) {
@@ -1099,7 +1099,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     }
                 }
 
-                if (selectedStatusId.equals("0")) {
+                if (selectedStatusIsPending == 1) {
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_changeStatus);
                 }
