@@ -2,7 +2,7 @@ package dc.gtest.vortex.models;
 
 import org.json.JSONArray;
 
-public class MandatoryTaskModel {
+public class MandatoryTaskModel implements Cloneable {
 
     private String stepSequence = "";
     private String stepDescription = "";
@@ -167,6 +167,8 @@ public class MandatoryTaskModel {
         this.stepId = StepId;
     }
 
-
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 }

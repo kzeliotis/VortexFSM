@@ -91,12 +91,14 @@ import dc.gtest.vortex.data.ZonesData;
 import dc.gtest.vortex.items.ServicesListActivity;
 import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.CheckInCheckOutModel;
+import dc.gtest.vortex.models.MandatoryTaskModel;
 import dc.gtest.vortex.models.UsePTOvernightModel;
 import dc.gtest.vortex.models.ZoneModel;
 import dc.gtest.vortex.support.CaptureSignature;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyImages;
+import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
@@ -678,7 +680,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         }
         MyPrefs.setStringWithFileName(PREF_FILE_CHARGED_AMOUNT_FOR_SHOW, assignmentId, etChargedAmount.getText().toString().trim());
         MyPrefs.setStringWithFileName(PREF_FILE_PAID_AMOUNT_FOR_SHOW, assignmentId, etPaidAmount.getText().toString().trim());
-        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SHOW, assignmentId, MANDATORY_TASKS_LIST.toString());
+
+        List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, false);
+
+        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SHOW, assignmentId, mtasks.toString());
         MyPrefs.setStringWithFileName(PREF_FILE_SIGNATURENAME, assignmentId, tvSignatureName.getText().toString().trim());
         if(resetStatus){
             MyPrefs.setStringWithFileName(PREF_FILE_SELECTED_STATUS, assignmentId, "");
@@ -774,7 +779,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             case R.id.tvMandatoryTasksTitle:
                 boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
                 if(isCheckedOut){
-                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MANDATORY_TASKS_LIST.toString());
+
+                    List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST,true);
+
+                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
 
                     SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                     sendMandatoryTasks.execute(assignmentId, "true");
@@ -945,7 +953,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 new AlertDialog.Builder(this)
                         .setNeutralButton("Gallery",(dialog, which) -> {
-                            boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                            boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
                             int permission = ContextCompat.checkSelfPermission(this, tiramisu ? Manifest.permission.READ_MEDIA_IMAGES: Manifest.permission.WRITE_EXTERNAL_STORAGE);
                             if (permission != PackageManager.PERMISSION_GRANTED){
                                 ActivityCompat.requestPermissions(this, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO);
@@ -966,7 +974,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case R.id.btnAddAttachment:
 
-                boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
                 int permission = ContextCompat.checkSelfPermission(this, tiramisu ? Manifest.permission.READ_MEDIA_VIDEO : Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (permission != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(this, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, PICKFILE_RESULT_CODE);
@@ -1317,7 +1325,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                     updateStatusData();
 
-                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MANDATORY_TASKS_LIST.toString());
+                    List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, true);
+                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
 
@@ -1790,7 +1799,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 GetStatuses getStatuses = new GetStatuses(this);
                 //getStatuses.execute("0");
                 try{
-                    String r = getStatuses.execute("0").get();
+                    String r = getStatuses.execute("0", "Refresh").get();
+                    r = r;
                 } catch (Exception ex){
                     ex.printStackTrace();
                 }
@@ -1838,6 +1848,54 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         }
 
         return "-1";
+    }
+
+    public List<MandatoryTaskModel> getMandatoryListEscaped(List<MandatoryTaskModel> mandatoryTasks, boolean delete){
+
+        List<MandatoryTaskModel> mtasks = new ArrayList<>();
+        for (MandatoryTaskModel item : mandatoryTasks) {
+            try {
+                mtasks.add((MandatoryTaskModel) item.clone());
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // escape invalid json characters
+        try {
+            for (MandatoryTaskModel mt : mtasks){
+                if(delete){
+                    mt.setStepDescription(MyUtils.ToJson(mt.getStepDescription()));
+                    mt.setMeasurableAttribute(MyUtils.ToJson(mt.getMeasurableAttribute()));
+                }else{
+                    mt.setStepDescription(MyUtils.escapeJsonString(mt.getStepDescription()));
+                    mt.setMeasurableAttribute(MyUtils.escapeJsonString(mt.getMeasurableAttribute()));
+                }
+
+                JSONArray defaultV = mt.getServiceStepDefaultValues();
+                JSONArray newDefV = new JSONArray();
+                for (int dv = 0; dv < defaultV.length(); dv++){
+                    JSONObject dvObj = defaultV.getJSONObject(dv);
+                    if(delete){
+                        dvObj.put("MeasurableAttributeDefaultValue", MyUtils.ToJson(MyJsonParser.getStringValue(dvObj, "MeasurableAttributeDefaultValue", "")));
+                        dvObj.put("MeasureableAttribute", MyUtils.ToJson(MyJsonParser.getStringValue(dvObj, "MeasureableAttribute", "")));
+                    }else{
+                        dvObj.put("MeasurableAttributeDefaultValue", MyUtils.escapeJsonString(MyJsonParser.getStringValue(dvObj, "MeasurableAttributeDefaultValue", "")));
+                        dvObj.put("MeasureableAttribute", MyUtils.escapeJsonString(MyJsonParser.getStringValue(dvObj, "MeasureableAttribute", "")));
+                    }
+
+                    newDefV.put(dvObj);
+                }
+                mt.setServiceStepDefaultValues(newDefV);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            mtasks.clear();
+            mtasks.addAll(mandatoryTasks);
+        }
+
+        return mtasks;
+
     }
 
     private void updateStatusData() {

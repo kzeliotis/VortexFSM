@@ -218,6 +218,18 @@ public class MyUtils {
 
     public static String escapeJsonString(String input) {
         String escaped = input;
+
+        if(escaped.contains("\\\\")
+          || escaped.contains("\\\"")
+          || escaped.contains("\\\"")
+          || escaped.contains("\\b")
+          || escaped.contains("\\f")
+          || escaped.contains("\\n")
+          || escaped.contains("\\t")
+        ){
+            return escaped;
+        }
+
         escaped = escaped.replace("\\", "\\\\");
         escaped = escaped.replace("\"", "\\\"");
         escaped = escaped.replace("\b", "\\b");

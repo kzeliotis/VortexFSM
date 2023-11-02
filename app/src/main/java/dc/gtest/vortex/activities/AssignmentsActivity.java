@@ -126,7 +126,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         ivSortByDistance.setOnClickListener(this);
         ivClearFilters.setOnClickListener(this);
 
-        setupStatusesSpinner();
+        //setupStatusesSpinner();
         spStatusFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

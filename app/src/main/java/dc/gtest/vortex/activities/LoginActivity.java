@@ -261,11 +261,10 @@ public class LoginActivity extends AppCompatActivity {
 
             String language = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
 
-            switch (language) {
-                case CONST_GR: languageMenu.setIcon(R.drawable.gr);
-                    break;
-                default: languageMenu.setIcon(R.drawable.gb);
-                    break;
+            if (language.equals(CONST_GR)) {
+                languageMenu.setIcon(R.drawable.gr);
+            } else {
+                languageMenu.setIcon(R.drawable.gb);
             }
         }
     }
@@ -275,10 +274,10 @@ public class LoginActivity extends AppCompatActivity {
         GetCoordsSendingInterval getCoordsSendingInterval = new GetCoordsSendingInterval();
         getCoordsSendingInterval.execute();
 
-        GetStatuses getStatuses0 = new GetStatuses(this);
-        getStatuses0.execute("0");
-        GetStatuses getStatuses1 = new GetStatuses(this);
-        getStatuses1.execute("1");
+//        GetStatuses getStatuses0 = new GetStatuses(this);
+//        getStatuses0.execute("0");
+//        GetStatuses getStatuses1 = new GetStatuses(this);
+//        getStatuses1.execute("1");
 
         GetAssignmentIndicators getAssignmentIndicators = new GetAssignmentIndicators();
         getAssignmentIndicators.execute();
