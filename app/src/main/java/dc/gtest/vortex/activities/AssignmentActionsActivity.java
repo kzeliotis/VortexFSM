@@ -1096,9 +1096,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
                 FirebaseCrashlytics.getInstance().log("GetSelectedStatus" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
-                int selectedStatusIsPending = 1;
+
+                String selectedStatusId = "0";
                 try {
-                    selectedStatusIsPending = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getIsPending();
+                    selectedStatusId = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getStatusId();
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (MyUtils.isNetworkAvailable()) {
@@ -1107,10 +1108,26 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     }
                 }
 
-                if (selectedStatusIsPending == 1) {
+                if (selectedStatusId.equals("0")) {
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_changeStatus);
                 }
+
+//                int selectedStatusIsPending = 1;
+//                try {
+//                    selectedStatusIsPending = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getIsPending();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    if (MyUtils.isNetworkAvailable()) {
+//                        GetStatuses getStatuses = new GetStatuses(this);
+//                        getStatuses.execute();
+//                    }
+//                }
+//
+//                if (selectedStatusIsPending == 1) {
+//                    areAllRequiredFieldsFilled = false;
+//                    MyDialogs.showOK(AssignmentActionsActivity.this, localized_changeStatus);
+//                }
 
                 boolean MandatorySignature = MyPrefs.getBoolean(PREF_MANDATORY_SIGNATURE, false);
                 if (!isSigned && MandatorySignature && !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_SCANNED, assignmentId, false)){
