@@ -126,7 +126,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         ivSortByDistance.setOnClickListener(this);
         ivClearFilters.setOnClickListener(this);
 
-        //setupStatusesSpinner();
+        setupStatusesSpinner();
         spStatusFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -470,7 +470,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         private void setupStatusesSpinner () {
             String statuses = MyPrefs.getString(PREF_DATA_ALL_STATUSES, "");
 
-            if (statuses.isEmpty()) {
+            if (statuses.isEmpty() || MyUtils.isNetworkAvailable()) {
                 if (MyUtils.isNetworkAvailable()) {
                     GetStatuses getStatuses = new GetStatuses(this);
                     //getStatuses.execute("0");
