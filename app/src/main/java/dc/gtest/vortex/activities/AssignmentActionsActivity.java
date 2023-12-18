@@ -1161,11 +1161,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     FirebaseCrashlytics.getInstance().log("CheckMandatoryTasks" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     for (int i = 0; i < MANDATORY_TASKS_LIST.size(); i++) {
 
-                        if (!MANDATORY_TASKS_LIST.get(i).getStepDescription().isEmpty() &&
+                        if ((!MANDATORY_TASKS_LIST.get(i).getStepDescription().isEmpty() &&
                                 !MANDATORY_TASKS_LIST.get(i).getIsOptional().equals("1") &&
-                                MANDATORY_TASKS_LIST.get(i).getMeasurementValue().isEmpty() ||
-                                MANDATORY_TASKS_LIST.get(i).getRequiresPhoto().equals("1") &&
-                                        MANDATORY_TASKS_LIST.get(i).getStepPhoto().isEmpty()) {
+                                MANDATORY_TASKS_LIST.get(i).getMeasurementValue().isEmpty()) ||
+                                (MANDATORY_TASKS_LIST.get(i).getRequiresPhoto().equals("1") &&
+                                        MANDATORY_TASKS_LIST.get(i).getStepPhoto().isEmpty()&&
+                                        !MANDATORY_TASKS_LIST.get(i).getIsOptional().equals("1"))) {
 
                             areAllRequiredFieldsFilled = false;
                             MyDialogs.showOK(AssignmentActionsActivity.this, localized_fillMandatoryTasks);

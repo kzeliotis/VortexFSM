@@ -39,7 +39,7 @@ public class MandatoryTaskModel implements Cloneable {
                         "    \"MeasureableAttribute\": \"" + measurableAttribute + "\",\n" +
                         "    \"HasMeasurement\": \"" + hasMeasurement + "\",\n" +
                         "    \"IsDateTime\": \"" + isDateTime + "\",\n" +
-                        "    \"isOptional\": \"" + isOptional + "\",\n" +
+                        "    \"IsOptional\": \"" + isOptional + "\",\n" +
                         "    \"RequiresPhoto\": \"" + requiresPhoto + "\",\n" +
                         "    \"StepPhotoPath\": \"" + stepPhotoPath + "\",\n" +
                         "    \"ProductId\": \"" + ProductId + "\",\n" +
