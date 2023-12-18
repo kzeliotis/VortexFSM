@@ -63,6 +63,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -92,6 +93,7 @@ import dc.gtest.vortex.items.ServicesListActivity;
 import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.CheckInCheckOutModel;
 import dc.gtest.vortex.models.MandatoryTaskModel;
+import dc.gtest.vortex.models.StatusModel;
 import dc.gtest.vortex.models.UsePTOvernightModel;
 import dc.gtest.vortex.models.ZoneModel;
 import dc.gtest.vortex.support.CaptureSignature;
@@ -1825,21 +1827,32 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             }
         }
 
-
-        String[] statusesArray = new String[STATUSES_LIST.size()];
+        String[] cs = SELECTED_ASSIGNMENT.getCorrelatedStatuses().split(";");
+        List<String> correlatedStatuses = cs.length>0 ? Arrays.asList(cs) : new ArrayList<String>();
+        List<StatusModel> statuses = new ArrayList<StatusModel>();
 
         Log.e(LOG_TAG, "========================== STATUSES_LIST:\n" + STATUSES_LIST);
 
         for (int i = 0; i < STATUSES_LIST.size(); i++) {
-            statusesArray[i] = STATUSES_LIST.get(i).getStatusDescription().toUpperCase();
+            String statusCode = STATUSES_LIST.get(i).getStatusId();
+            if(correlatedStatuses.size()>0 && !correlatedStatuses.contains(statusCode)){
+                continue;
+            }
+            statuses.add(STATUSES_LIST.get(i));
+        }
+
+        String[] statusesArray = new String[statuses.size()];
+
+        for (int i = 0; i < statuses.size(); i++) {
+            statusesArray[i] = statuses.get(i).getStatusDescription().toUpperCase();
         }
 
         spStatus.setEnabled(false);
         spStatus.setAdapter(new MySpinnerAdapter(this, statusesArray));
 
-        for (int i = 0; i < STATUSES_LIST.size(); i++) {
+        for (int i = 0; i < statuses.size(); i++) {
             if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false)){
-                if (STATUSES_LIST.get(i).getStatusId().equals(SELECTED_ASSIGNMENT.getStatusId())) {
+                if (statuses.get(i).getStatusId().equals(SELECTED_ASSIGNMENT.getStatusId())) {
                     spStatus.setSelection(i);
                 }
             } else {
@@ -1849,7 +1862,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 } else {
                     statusToSelect = SELECTED_ASSIGNMENT.getProposedCheckOutStatus();
                 }
-                if (STATUSES_LIST.get(i).getStatusId().equals(statusToSelect)) {
+                if (statuses.get(i).getStatusId().equals(statusToSelect)) {
                     spStatus.setSelection(i);
                 }
             }

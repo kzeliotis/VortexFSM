@@ -60,6 +60,7 @@ public class AssignmentModel {
     private String DateStart = "";
     private String DateEnd = "";
     private String LockStatusChange = "";
+    private String correlatedStatuses = "";
 
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
@@ -116,6 +117,7 @@ public class AssignmentModel {
                         "\"Contract\": \"" + contract + "\",\n" +
                         "\"commentsSolution\": \"" + commentsSolution + "\",\n" +
                         "\"LockStatusChange\": \"" + LockStatusChange + "\",\n" +
+                        "\"CorrelatedStatuses\": \"" + correlatedStatuses + "\",\n" +
                         "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
@@ -530,5 +532,12 @@ public class AssignmentModel {
         this.attachments = Attachments;
     }
 
+    public String getCorrelatedStatuses() {
+        return correlatedStatuses;
+    }
+
+    public void setCorrelatedStatuses(String CorrelatedStatuses) {
+        this.correlatedStatuses = CorrelatedStatuses;
+    }
 
 }
