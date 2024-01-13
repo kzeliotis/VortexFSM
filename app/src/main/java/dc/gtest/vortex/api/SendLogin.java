@@ -102,7 +102,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
             responseBody = bundle.getString(MY_API_RESPONSE_BODY);
 
         } catch (Exception e) {
-            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, e.getMessage(), responseBody);
+            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "Login attempt user " + username, responseCode, e.getMessage(), responseBody);
             e.printStackTrace();
         }
 
@@ -115,7 +115,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
     @Override
     protected void onPostExecute(String responseBody) {
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "Login user " + username, responseCode, responseMessage, responseBody);
 
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);

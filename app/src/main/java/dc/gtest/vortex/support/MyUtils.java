@@ -3,10 +3,13 @@ package dc.gtest.vortex.support;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Display;
 import android.view.Gravity;
@@ -15,7 +18,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -37,6 +44,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
+
+import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 
 
 public class MyUtils {
@@ -298,6 +307,88 @@ public class MyUtils {
 
         return result;
 
+    }
+
+
+    public static String Base64ToFile(Context ctx, String base64String, String fileName, String assignmentId, String filePath) {
+        //String base64String = "yourBase64EncodedString"; // Replace with your actual Base64 string\\\
+        if (base64String.length() == 0){
+            return "";
+        }
+
+        if(!assignmentId.equals("0"))
+        {
+            filePath = ctx.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
+        } // Replace with the desired output file path
+        else
+        {
+            filePath = ctx.getExternalFilesDir(null) + "/manuals";
+        }
+
+        File path = new File(filePath);
+
+        if (!path.exists()) {
+            MyUtils.checkMakeDir(path);
+        }
+
+        filePath += "/" + fileName;
+
+        try {
+            // Decode Base64 string to bytes
+            byte[] decodedBytes = Base64.getDecoder().decode(base64String);
+
+            // Write bytes to file
+            writeBytesToFile(decodedBytes, filePath);
+
+            if(assignmentId.equals("0")){
+                Uri fileURI;
+                File _file = new File(filePath);
+
+                if (Build.VERSION.SDK_INT >= 24) {
+                    fileURI = FileProvider.getUriForFile(ctx, ctx.getPackageName(), _file);
+                } else {
+                    fileURI = Uri.fromFile(_file);
+                }
+
+                //Log.e(LOG_TAG, "---------------------- fileURI: " + fileURI);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(fileURI, "application/pdf");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                ctx.startActivity(intent);
+            }else{
+                Intent myIntent = new Intent(Intent.ACTION_VIEW);
+                File pickedFile = new File(filePath);
+                if (pickedFile.exists()){
+                    Uri contentUri = FileProvider.getUriForFile(ctx, ctx.getPackageName(), pickedFile);
+                    String mimeType = "application/pdf";
+                    try{
+                        mimeType = ctx.getContentResolver().getType(contentUri);
+                    }catch (Exception ex){
+                    }
+                    myIntent.setDataAndType(contentUri, mimeType);
+                    myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Intent j = Intent.createChooser(myIntent, "Choose an application to open with:");
+                    j.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ctx.startActivity(myIntent);
+                }
+            }
+
+            //System.out.println("File successfully created at: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+
+
+    private static void writeBytesToFile(byte[] bytes, String filePath) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(bytes);
+        }
     }
 
 

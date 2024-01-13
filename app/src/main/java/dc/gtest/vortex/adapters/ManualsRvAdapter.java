@@ -63,13 +63,14 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
         holder.mView.setOnClickListener(v -> {
 
             int lastIndexUrl = holder.mItem.getManualUrl().lastIndexOf("/");
-            String manualFileNameFromUrl = holder.mItem.getManualUrl().substring(lastIndexUrl + 1);
+            String manualFileNameFromUrl = holder.mItem.getfileName();   //holder.mItem.getManualUrl().substring(lastIndexUrl + 1);
             manualFileNameFromUrl = manualFileNameFromUrl.replace(" ", "_");
 
             File file = new File(ctx.getExternalFilesDir("/manuals") + "/" + manualFileNameFromUrl);
 
             String blobAttachmentId = holder.mItem.getblobAttachmentId();
             String file_name = holder.mItem.getManualName();
+            String procedureId = holder.mItem.getManualId();
 
             if (file.exists()) {
                 try {
@@ -93,8 +94,9 @@ public class ManualsRvAdapter extends RecyclerView.Adapter<ManualsRvAdapter.View
 
                     Toast.makeText(ctx, localized_no_pdf_app, Toast.LENGTH_LONG).show();
                 }
-            } else if (blobAttachmentId.length() > 0 && !blobAttachmentId.equals("0")){
-                GetReportPreview getReportPreview = new GetReportPreview(ctx, "", blobAttachmentId, file_name, "", "");
+            } else if (procedureId.length() > 0 && !procedureId.equals("0")){
+                if(blobAttachmentId.length() == 0){blobAttachmentId = "0";}
+                GetReportPreview getReportPreview = new GetReportPreview(ctx, "0", blobAttachmentId, file_name, procedureId, "Procedures");
                 getReportPreview.execute();
             } else  {
                 if (MyUtils.isNetworkAvailable() ) {

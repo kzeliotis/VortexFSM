@@ -97,7 +97,11 @@ public class AssignmentAttachmentsRvAdapter extends RecyclerView.Adapter<Assignm
                 File pickedFile = new File(holder.mItem);
                 if (pickedFile.exists()){
                     Uri contentUri = FileProvider.getUriForFile(ctx, ctx.getPackageName(), pickedFile);
-                    myIntent.setDataAndType(contentUri, "application/pdf");
+                    String mimeType = "application/pdf";
+                    try{
+                        mimeType = ctx.getContentResolver().getType(contentUri);
+                    }catch (Exception ex){
+                    }
                     myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     Intent j = Intent.createChooser(myIntent, "Choose an application to open with:");
                     j.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

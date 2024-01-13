@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ATTACHMENT_URL;
 import static dc.gtest.vortex.api.MyApi.API_GET_MANUAL_FILE;
@@ -51,7 +55,7 @@ protected String doInBackground(String... params) {
 
         if (blobAttachmentId.length() > 0 && objectType.length() == 0) {
             apiUrl = baseHostUrl + API_GET_MANUAL_FILE + blobAttachmentId + "&fileName=" + fileName;
-        } else if (blobAttachmentId.length() > 0 && objectType.length() > 0){
+        } else if (objectType.length() > 0){
             apiUrl = baseHostUrl + API_GET_ATTACHMENT_URL + assignmentId + "&AttachmentId=" + attachmentId + "&BlobAttachmentId=" + blobAttachmentId + "&ObjectType=" + objectType;
         } else {
             apiUrl= baseHostUrl+ API_GET_REPORT_PREVIEW + assignmentId;
@@ -82,15 +86,21 @@ protected void onPostExecute(String responseBody) {
 
         try
         {
-            responseBody = responseBody.replaceAll("\\\\", "");
-            responseBody = responseBody.replace("\"", "");
-            Uri uri = Uri.parse(responseBody);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Bundle b = new Bundle();
-            b.putBoolean("new_window", true); //sets new window
-            intent.putExtras(b);
-            ctx.startActivity(intent);
+
+            JSONObject att = new JSONObject(responseBody);
+            String fileName = MyJsonParser.getStringValue(att, "Filename", "");
+            String file64 = MyJsonParser.getStringValue(att, "Attachment64", "");
+            MyUtils.Base64ToFile(ctx,file64, fileName, assignmentId, "");
+
+//            responseBody = responseBody.replaceAll("\\\\", "");
+//            responseBody = responseBody.replace("\"", "");
+//            Uri uri = Uri.parse(responseBody);
+//            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Bundle b = new Bundle();
+//            b.putBoolean("new_window", true); //sets new window
+//            intent.putExtras(b);
+//            ctx.startActivity(intent);
         } catch (Exception ex) {
             if (responseBody.contains("<div id=\"content\">")){
                 responseBody = responseBody.split("<div id=\"content\">")[1];
