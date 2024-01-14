@@ -169,10 +169,15 @@ public class LoginActivity extends AppCompatActivity {
                         String _username = etLoginUserLoginEmailText;
 
                         MyPrefs.setStringWithFileName(PREF_PASSWORD, "1", _password);
-                        SendLogin sendLogin = new SendLogin(LoginActivity.this, false, false);
-                        sendLogin.execute(_username, _password);
+                        try {
+                            SendLogin sendLogin = new SendLogin(LoginActivity.this, false, false);
+                            String result = sendLogin.execute(_username, _password).get();
+                            getGeneralDataFromServer();
+                        }catch (Exception ex){
 
-                        getGeneralDataFromServer();
+                        }
+
+
                     } else {
                         Toast.makeText(MyApplication.getContext(), localized_no_internet_connection, Toast.LENGTH_LONG).show();
                     }

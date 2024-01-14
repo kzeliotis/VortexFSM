@@ -173,6 +173,7 @@ public class MyPrefs {
     public static final String PREF_CURRENT_LAT = "current_lat";
     public static final String PREF_CURRENT_LNG = "current_lng";
     public static final String PREF_USER_NAME = "user_name";
+
     public static final String PREF_SELECTED_CUSTOMER_ID = "selected_customer_id";
     public static final String PREF_WAREHOUSEID = "pref_warehouseid";
     public static final String PREF_USERID = "pref_userid";

@@ -39,6 +39,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
 
 public class SendLogin extends AsyncTask<String, Void, String > {

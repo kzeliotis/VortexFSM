@@ -51,12 +51,14 @@ public class AttachmentsRvAdapter extends RecyclerView.Adapter<AttachmentsRvAdap
             String ObjectType = holder.mItem.getObjectType();
             String assignmentId = holder.mItem.getObjectId();
             String blobAttachmentId = holder.mItem.getBlobAttachmentId();
+            String filename = holder.mItem.getFilename();
+            if(blobAttachmentId.length()==0){blobAttachmentId = "0";}
             if(CloudFileURL.length()>0) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(CloudFileURL));
                 ctx.startActivity(i);
             } else {
-                GetReportPreview getReportPreview = new GetReportPreview(ctx, assignmentId, blobAttachmentId, "", AttachmentId, ObjectType);
+                GetReportPreview getReportPreview = new GetReportPreview(ctx, assignmentId, blobAttachmentId, filename, AttachmentId, ObjectType);
                 getReportPreview.execute();
             }
         });

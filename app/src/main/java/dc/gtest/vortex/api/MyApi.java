@@ -34,10 +34,12 @@ import javax.security.cert.X509Certificate;
 import dc.gtest.vortex.BuildConfig;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 class MyApi {
 
@@ -186,6 +188,10 @@ class MyApi {
                 } else {
                     httpURLConnection.setRequestProperty("Content-type","application/json; charset=UTF-8");
                 }
+                httpURLConnection.setRequestProperty("VortexFSM","f035gbl00033eedfpsycrencewe3225fcvf09");
+                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey")){
+                    httpURLConnection.setRequestProperty("UserName", "GetUserAuthentication");
+                }
 
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
@@ -316,6 +322,10 @@ class MyApi {
                     httpURLConnection.setRequestProperty("Authorization", "consult1ng|" + Version);
                 }else{
                     httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+                }
+                httpURLConnection.setRequestProperty("VortexFSM","f035gbl00033eedfpsycrencewe3225fcvf09");
+                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey")){
+                    httpURLConnection.setRequestProperty("UserName", "GetUserAuthentication");
                 }
                 httpURLConnection.setDoInput(true);
 
