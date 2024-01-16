@@ -73,6 +73,10 @@ protected String doInBackground(String... params) {
         e.printStackTrace();
         }
 
+        if (responseBody.length() > 500){
+            responseBody = responseBody.substring(0, 498);
+        }
+
         MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no body for get request", responseCode, responseMessage, responseBody);
 
         return responseBody;

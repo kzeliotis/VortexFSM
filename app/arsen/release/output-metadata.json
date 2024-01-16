@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 60121,
-      "versionName": "6.01.21",
-      "outputFile": "vortex_arsenRelease_6.01.21.apk"
+      "versionCode": 60201,
+      "versionName": "6.02.01",
+      "outputFile": "vortex_arsenRelease_6.02.01.apk"
     }
   ],
   "elementType": "File"
