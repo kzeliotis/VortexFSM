@@ -73,16 +73,17 @@ protected String doInBackground(String... params) {
         e.printStackTrace();
         }
 
+        String responsebodylog = "";
         if (responseBody.length() > 500){
             if(responseBody.contains("Filename")){
                 int index = responseBody.indexOf("Filename");
-                if (index>0){responseBody = responseBody.substring(index, responseBody.length() - 1);} else {responseBody = responseBody.substring(0, 498);}
+                if (index>0){responsebodylog = responseBody.substring(index, responseBody.length() - 1);} else {responsebodylog = responseBody.substring(0, 498);}
             }else{
-                responseBody = responseBody.substring(0, 498);
+                responsebodylog = responseBody.substring(0, 498);
             }
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no body for get request", responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no body for get request", responseCode, responseMessage, responsebodylog);
 
         return responseBody;
         }
