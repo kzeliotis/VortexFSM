@@ -158,6 +158,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_fillSignature;
 import static dc.gtest.vortex.support.MyLocalization.localized_installations_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_internal_communication;
 import static dc.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
+import static dc.gtest.vortex.support.MyLocalization.localized_maximum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_minimum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_added_consumables_from_picking;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
@@ -1101,7 +1102,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 String selectedStatusId = "0";
                 try {
-                    selectedStatusId = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getStatusId();
+                    selectedStatusId = SELECTED_ASSIGNMENT.getCorrelatedStatusesList().get(spStatus.getSelectedItemPosition()).getStatusId();
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (MyUtils.isNetworkAvailable()) {
@@ -1145,20 +1146,33 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     break;
                 }
 
-                int mandatoryMinimumPayment = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatoryMinimumPayment();
+                int mandatoryMinimumPayment = SELECTED_ASSIGNMENT.getCorrelatedStatusesList().get(spStatus.getSelectedItemPosition()).getMandatoryMinimumPayment();
                 Double minimumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMinimumPayment().replace(",", "."));
+                Double maximumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMaximumPayment().replace(",", "."));
                 String _paid = paidAmount.replace("\n", " ").replace("\r", " ").replace(",", ".");
                 if (_paid.length() == 0 ) {_paid = "0";}
                 Double paid = Double.parseDouble(_paid);
+                String msg = "";
                 if(minimumPayment>0 && minimumPayment>paid && mandatoryMinimumPayment>0){
                     areAllRequiredFieldsFilled = false;
-                    MyDialogs.showOK(AssignmentActionsActivity.this, String.format(localized_minimum_payment, SELECTED_ASSIGNMENT.getMinimumPayment()));
+                    msg = String.format(localized_minimum_payment, SELECTED_ASSIGNMENT.getMinimumPayment());
+                }
+                if(maximumPayment>0 && maximumPayment<paid && mandatoryMinimumPayment>0){
+                    areAllRequiredFieldsFilled = false;
+                    if (msg.length()>0){
+                        msg += "\n\r" + String.format(localized_maximum_payment, SELECTED_ASSIGNMENT.getMaximumPayment());
+                    }else{
+                        msg += String.format(localized_maximum_payment, SELECTED_ASSIGNMENT.getMaximumPayment());
+                    }
+                }
+                if(!areAllRequiredFieldsFilled && msg.length()>0){
+                    MyDialogs.showOK(AssignmentActionsActivity.this, msg);
                     break;
                 }
 
 
                 FirebaseCrashlytics.getInstance().log("GetSelectedStatusMandatorySteps" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
-                int MandatorySteps = STATUSES_LIST.get(spStatus.getSelectedItemPosition()).getMandatorySteps();
+                int MandatorySteps = SELECTED_ASSIGNMENT.getCorrelatedStatusesList().get(spStatus.getSelectedItemPosition()).getMandatorySteps();
                 if (MandatorySteps != 0){
                     FirebaseCrashlytics.getInstance().log("CheckMandatoryTasks" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     for (int i = 0; i < MANDATORY_TASKS_LIST.size(); i++) {
@@ -1840,6 +1854,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             }
             statuses.add(STATUSES_LIST.get(i));
         }
+
+        SELECTED_ASSIGNMENT.setCorrelatedStatusesList(statuses);
 
         String[] statusesArray = new String[statuses.size()];
 

@@ -1314,6 +1314,10 @@
     <string name="mandatory_payment_gr">Η ελάχιστη είσπραξη της ανάθεσης είναι %s</string>
     <string name="mandatory_payment_ar">The work order\'s minimum payment is %s</string>
 
+    <string name="maximumPayment_payment">The work order\'s maximum payment is %s</string>
+    <string name="maximumPayment_payment_gr">Η μέγιστη είσπραξη της ανάθεσης είναι %s</string>
+    <string name="maximumPayment_payment_ar">The work order\'s maximum payment is %s</string>
+
     <string name="add_sub_assignment">Add Grouped Work Order</string>
     <string name="add_sub_assignment_gr">ΕΙΣΑΓΩΓΗ ΟΜΑΔΟΠΟΙΗΜΕΝΗΣ ΑΝΑΘΕΣΗΣ</string>
     <string name="add_sub_assignment_ar">Add Grouped Work Order</string>

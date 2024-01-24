@@ -52,7 +52,7 @@ public class AssignmentModel {
     private String contract = "";
     private String additionalTechnicians = "";
     private String minimumPayment = "";
-
+    private String maximumPayment = "";
     private String ProjectLat = "0";
     private String ProjectLon = "";
     private String ProjectAddress = "";
@@ -64,6 +64,7 @@ public class AssignmentModel {
 
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
+    private List<StatusModel> correlatedStatusesList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -119,6 +120,8 @@ public class AssignmentModel {
                         "\"LockStatusChange\": \"" + LockStatusChange + "\",\n" +
                         "\"CorrelatedStatuses\": \"" + correlatedStatuses + "\",\n" +
                         "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
+                        "\"MaximumPayment\": \"" + maximumPayment + "\",\n" +
+                        "\"CorrelatedStatusesList\": \"" + correlatedStatusesList + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
     }
@@ -138,6 +141,14 @@ public class AssignmentModel {
 
     public void setMinimumPayment(String MinimumPayment) {
         this.minimumPayment = MinimumPayment;
+    }
+
+    public String getMaximumPayment() {
+        return maximumPayment;
+    }
+
+    public void setMaximumPayment(String MaximumPayment) {
+        this.maximumPayment = MaximumPayment;
     }
 
     public String getProjectLat() {
@@ -538,6 +549,14 @@ public class AssignmentModel {
 
     public void setCorrelatedStatuses(String CorrelatedStatuses) {
         this.correlatedStatuses = CorrelatedStatuses;
+    }
+
+    public List<StatusModel> getCorrelatedStatusesList() {
+        return correlatedStatusesList;
+    }
+
+    public void setCorrelatedStatusesList(List<StatusModel> CorrelatedStatusesList) {
+        this.correlatedStatusesList = CorrelatedStatusesList;
     }
 
 }
