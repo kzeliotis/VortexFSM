@@ -627,7 +627,7 @@
     <string name="service_description_gr">Υπηρεσία</string>
     <string name="service_description_ar">وصف الخدمة</string>
 
-    <string name="project_description">Project Description</string>
+    <string name="project_description">Site Description</string>
     <string name="project_description_gr">Σημείο</string>
     <string name="project_description_ar">وصف المشروع</string>
 
@@ -723,7 +723,7 @@
     <string name="company_details_gr">Λεπτομέρειες</string>
     <string name="company_details_ar">تفاصيل الشركة</string>
 
-    <string name="company_projects_with_colon">Company Projects:</string>
+    <string name="company_projects_with_colon">Company Sites:</string>
     <string name="company_projects_with_colon_gr">Σημεία:</string>
     <string name="company_projects_with_colon_ar">مشاريع الشركة:</string>
 
@@ -951,11 +951,11 @@
     <string name="choose_customer_gr">Επιλέξτε πελάτη</string>
     <string name="choose_customer_ar">اختيار العميل</string>
 
-    <string name="select_project">Select project</string>
+    <string name="select_project">Select Site</string>
     <string name="select_project_gr">Επιλέξτε σημείο</string>
     <string name="select_project_ar">اختيار المشروع</string>
 
-    <string name="project">Project</string>
+    <string name="project">Site</string>
     <string name="project_gr">Σημείο</string>
     <string name="project_ar">المشروع</string>
 
@@ -1008,7 +1008,7 @@
     <string name="custom_fields_gr_caps">ΠΑΡΑΜΕΤΡΙΚΑ ΠΕΔΙΑ</string>
     <string name="custom_fields_ar_caps">تخصيص الحقول</string>
 
-    <string name="customer_project">Customer - Project</string>
+    <string name="customer_project">Customer - Site</string>
     <string name="customer_project_gr">Πελάτης - Σημείο</string>
     <string name="customer_project_ar">عميل- مشروع</string>
 
@@ -1016,7 +1016,7 @@
     <string name="fill_signature_gr">Η υπογραφή του πελάτη ειναι υποχρεωτική</string>
     <string name="fill_signature_ar">توقيع العميل إلزامي</string>
 
-    <string name="project_history">PROJECT HISTORY</string>
+    <string name="project_history">SITE HISTORY</string>
     <string name="project_history_gr">ΙΣΤΟΡΙΚΟ ΣΗΜΕΙΟΥ</string>
     <string name="project_history_ar">السجل التاريخي للمشروع</string>
 
@@ -1048,7 +1048,7 @@
     <string name="choose_from_warehouse_gr">Θέλετε να επιλέξετε είδος από την αποθήκη τεχνικού?</string>
     <string name="choose_from_warehouse_ar">هل تريد اختيار عنصر من المستودع الفني?</string>
 
-    <string name="ask_to_install_product">Do you want to install the selected product to Project</string>
+    <string name="ask_to_install_product">Do you want to install the selected product to the Site</string>
     <string name="ask_to_install_product_gr">Θέλετε να εγκαταστήσετε το επιλεγμένο προϊόν στο σημείο</string>
     <string name="ask_to_install_product_ar">هل تريد تثبيت المنتج المحدد على المشروع</string>
 
@@ -1346,6 +1346,18 @@
     <string name="no_consumables_from_picking_added">No consumables have been added from the picking list</string>
     <string name="no_consumables_from_picking_added_gr">Δεν έχετε προσθέσει αναλώσιμα από το picking list</string>
     <string name="no_consumables_from_picking_added_ar">No consumables have been added from the picking list</string>
+
+    <string name="select_master_project">Select Project</string>
+    <string name="select_master_project_gr">Επιλέξτε Έργο</string>
+    <string name="select_master_project_ar">Select Project</string>
+
+    <string name="master_projects">Projects</string>
+    <string name="master_projects_gr">Έργα</string>
+    <string name="master_projects_ar">Projects</string>
+
+    <string name="master_project">Project</string>
+    <string name="master_project_gr">Έργο</string>
+    <string name="master_project_ar">Project</string>
 
     <item type="id" name="TAG_ID" />
 

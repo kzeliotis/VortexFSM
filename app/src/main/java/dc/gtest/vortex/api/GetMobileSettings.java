@@ -42,6 +42,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_ALL_MASTER_PROJECTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
@@ -192,6 +193,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MandatoryComsumableFromPicking = MyJsonParser.getIntValue(oneObject,  "MandatoryComsumableFromPicking", 0);
 
                     MyPrefs.setBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, MandatoryComsumableFromPicking == 1);
+
+                    int ShowAllMasterProjectsOnNewAssignment = MyJsonParser.getIntValue(oneObject, "ShowAllMasterProjectsOnNewAssignment", 0);
+
+                    MyPrefs.setBoolean(PREF_SHOW_ALL_MASTER_PROJECTS, ShowAllMasterProjectsOnNewAssignment == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

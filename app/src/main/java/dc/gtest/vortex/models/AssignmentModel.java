@@ -61,7 +61,7 @@ public class AssignmentModel {
     private String DateEnd = "";
     private String LockStatusChange = "";
     private String correlatedStatuses = "";
-
+    private String masterProjectId = "";
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
     private List<StatusModel> correlatedStatusesList = new ArrayList<>();
@@ -121,6 +121,7 @@ public class AssignmentModel {
                         "\"CorrelatedStatuses\": \"" + correlatedStatuses + "\",\n" +
                         "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
                         "\"MaximumPayment\": \"" + maximumPayment + "\",\n" +
+                        "\"MasterProjectId\": \"" + masterProjectId + "\",\n" +
                         "\"CorrelatedStatusesList\": \"" + correlatedStatusesList + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
@@ -557,6 +558,15 @@ public class AssignmentModel {
 
     public void setCorrelatedStatusesList(List<StatusModel> CorrelatedStatusesList) {
         this.correlatedStatusesList = CorrelatedStatusesList;
+    }
+
+
+    public String getMasterProjectId() {
+        return masterProjectId;
+    }
+
+    public void setMasterProjectId(String MasterProjectId) {
+        this.masterProjectId = MasterProjectId;
     }
 
 }

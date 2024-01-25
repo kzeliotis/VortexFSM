@@ -29,7 +29,8 @@ public class NewAssignmentModel {
     private String assignmentIndicatorIds = "";
     private String assignmentIndicatorsDescription = "";
     private final String AssignmentSource = "Mobile";
-
+    private String masterProjectId = "";
+    private String masterProjectDescription = "";
     @Override
     public String toString() {
 
@@ -59,19 +60,38 @@ public class NewAssignmentModel {
                 "  \"RecurEvery\": \"0\",\n" +
                 "  \"AdditionalResourceId\": \"\",\n" +
                 "  \"ProjectMobilePointId\": \"\",\n" +
-                "  \"MasterProjectId\": \"\",\n" +
+                "  \"MasterProjectId\": \"" + masterProjectId + "\",\n" +
                 "  \"PrepayId\": \"\",\n" +
                 "  \"DetType\": \"" + assignmentType + "\",\n" +
                 "  \"DetTypeDescription\": \"" + assignmentTypeDescription + "\",\n" +
                 "  \"StatusCode\": \"" + statusCode + "\",\n" +
                 "  \"StatusDescription\": \"" + statusDescription + "\",\n" +
                 "  \"ERPID\": \"\",\n" +
+                "  \"MasterProjectDescription\": \"" + masterProjectDescription + "\",\n" +
                 "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                 "  \"AssignmentSource\": \"" + AssignmentSource + "\",\n" +
                 "  \"AssignmentSourceProcedure\": \"" + AssignmentSourceProcedure + "\",\n" +
                 "  \"AssignmentIndicators\": \"" + assignmentIndicatorIds + "\",\n" +
                 "  \"ResourceIds\": \"" + resourceIds + "\"\n" +
                 "}";
+    }
+
+
+
+    public String getMasterProjectId() {
+        return masterProjectId;
+    }
+
+    public void setMasterProjectId(String MasterProjectId) {
+        this.masterProjectId = MasterProjectId;
+    }
+
+    public String getMasterProjectDescription() {
+        return masterProjectDescription;
+    }
+
+    public void setMasterProjectDescription(String MasterProjectDescription) {
+        this.masterProjectDescription = MasterProjectDescription;
     }
 
     public String getCustomerId() {

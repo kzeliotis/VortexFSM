@@ -97,6 +97,16 @@
             android:textSize="@dimen/sp_16"
             android:textColor="@color/grey_900"/>
 
+        <TextView
+            android:id="@+id/tvNewAssignmentMasterProject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/select_master_project"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/grey_900"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilNewAssignmentProblem"
             android:layout_width="match_parent"

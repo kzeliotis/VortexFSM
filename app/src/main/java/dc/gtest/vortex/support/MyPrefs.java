@@ -101,6 +101,7 @@ public class MyPrefs {
     public static final String PREF_DATA_ASSIGNMENT_TYPES = "pref_data_assignment_types";
     public static final String PREF_DATA_ASSIGNMENT_INDICATORS = "pref_data_assignment_indicators";
     public static final String PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST = "pref_data_company_custom_fields_list";
+    public static final String PREF_DATA_MASTER_PROJECTS = "pref_master_projects";
 
     // for keeping assignments conditions
     public static final String PREF_FILE_IS_TRAVEL_STARTED = "pref_file_is_travel_started";
@@ -134,7 +135,7 @@ public class MyPrefs {
     public static final String PREF_DOWNLOAD_ALL_DATA = "pref_download_all_data";
     public static final String PREF_SCROLLABLE_PROBLEM_DESCRIPTION = "pref_scrollable_problem_description";
     public static final String PREF_AZURE_CONNECTION_STRING = "pref_azure_connection_string";
-
+    public static final String PREF_SHOW_ALL_MASTER_PROJECTS = "pref_show_all_master_projects";
     public static final String PREF_MANDATORY_SIGNATURE = "pref_mandatory_signaure";
     public static final String PREF_SHOW_MANDATORY_TASKS_COMMENTS = "pref_show_mandatory_tasks_comments";
     public static final String PREF_HIDE_INTERNAL_NOTES = "pref_hide_internal_notes";

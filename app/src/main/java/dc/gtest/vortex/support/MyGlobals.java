@@ -27,6 +27,7 @@ import dc.gtest.vortex.models.HAssignmentModel;
 import dc.gtest.vortex.models.InstallationModel;
 import dc.gtest.vortex.models.MandatoryTaskModel;
 import dc.gtest.vortex.models.ManualModel;
+import dc.gtest.vortex.models.MasterProjectModel;
 import dc.gtest.vortex.models.NewAssignmentModel;
 import dc.gtest.vortex.models.ProductMeasurementModel;
 import dc.gtest.vortex.models.ProductModel;
@@ -133,7 +134,8 @@ public class MyGlobals {
 
     public static List<AssignmentTypeModel> ASSIGNMENT_TYPES_LIST = new ArrayList<>();
     public static List<AssignmentIndicatorModel> ASSIGNMENT_INDICATORS_LIST = new ArrayList<>();
-
+    public static List<MasterProjectModel> MASTER_PROJECTS_LIST = new ArrayList<>();
+    public static List<MasterProjectModel> MASTER_PROJECTS_LIST_FILTERED = new ArrayList<>();
     public static List<MandatoryTaskModel> MANDATORY_TASKS_LIST = new ArrayList<>();
 
     public static List<AddedConsumableModel> ADDED_CONSUMABLES_LIST = new ArrayList<>();

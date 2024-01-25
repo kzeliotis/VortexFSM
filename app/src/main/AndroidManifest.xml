@@ -334,6 +334,12 @@
             tools:replace="android:screenOrientation"
             android:stateNotNeeded="true"/>
 
+        <activity
+            android:name="dc.gtest.vortex.activities.MasterProjectsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/master_projects"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name="dc.gtest.vortex.services.SendLocationSRV"
             android:foregroundServiceType="location"

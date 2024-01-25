@@ -52,6 +52,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_describe_problem;
 import static dc.gtest.vortex.support.MyLocalization.localized_end_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_end_time;
 import static dc.gtest.vortex.support.MyLocalization.localized_existing_customer;
+import static dc.gtest.vortex.support.MyLocalization.localized_master_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_assignment;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_customer;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
@@ -66,6 +67,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_select_assignment
 import static dc.gtest.vortex.support.MyLocalization.localized_select_customer_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_date_for_availability;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_indicator;
+import static dc.gtest.vortex.support.MyLocalization.localized_select_master_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product_from_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_project;
@@ -95,6 +97,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
     private TextView tvNewAssignmentType;
     private TextView tvNewAssignmentStatus;
     private TextView tvNewAssignmentIndicators;
+    private TextView tvNewAssignmentMasterProject;
 
     private TextInputLayout tilNewAssignmentProblem;
     private EditText etNewAssignmentProblem;
@@ -139,6 +142,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         tvNewAssignmentType = findViewById(R.id.tvNewAssignmentType);
         tvNewAssignmentStatus = findViewById(R.id.tvNewAssignmentStatus);
         tvNewAssignmentIndicators = findViewById(R.id.tvNewAssignmentIndicator);
+        tvNewAssignmentMasterProject = findViewById(R.id.tvNewAssignmentMasterProject);
 
         tilNewAssignmentProblem = findViewById(R.id.tilNewAssignmentProblem);
         etNewAssignmentProblem = findViewById(R.id.etNewAssignmentProblem);
@@ -161,6 +165,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         tvNewAssignmentType.setOnClickListener(this);
         tvNewAssignmentStatus.setOnClickListener(this);
         tvNewAssignmentIndicators.setOnClickListener(this);
+        tvNewAssignmentMasterProject.setOnClickListener(this);
 
 
         etNewAssignmentStartDate.setOnClickListener(this);
@@ -251,6 +256,13 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         } else {
             String AssignmentTypeText = localized_assignment_type + " " + NEW_ASSIGNMENT.getAssignmentTypeDescription();
             tvNewAssignmentType.setText(AssignmentTypeText);
+        }
+
+        if (NEW_ASSIGNMENT.getMasterProjectId().isEmpty()) {
+            tvNewAssignmentMasterProject.setText(localized_select_master_project);
+        } else {
+            String masterProjectText = localized_master_project + ": " + NEW_ASSIGNMENT.getMasterProjectDescription();
+            tvNewAssignmentMasterProject.setText(masterProjectText);
         }
 
         if (NEW_ASSIGNMENT.getStatusCode().isEmpty()) {
@@ -402,6 +414,14 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             case R.id.tvNewAssignmentType:
                 intent = new Intent(NewAssignmentActivity.this, AssignmentTypesActivity.class);
                 break;
+
+            case R.id.tvNewAssignmentMasterProject:
+                if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
+                    customerid = NEW_ASSIGNMENT.getCustomerId();
+                    intent = new Intent(NewAssignmentActivity.this, MasterProjectsActivity.class);
+                    intent.putExtra(KEY_CUSTOMERID, customerid);
+                    break;
+                }
 
             case R.id.tvNewAssignmentStatus:
                 intent = new Intent(NewAssignmentActivity.this, StatusesActivity.class);

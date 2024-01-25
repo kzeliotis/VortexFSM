@@ -261,6 +261,9 @@ public class MyLocalization {
     public static String localized_no_multiple_checkin_allowed = "";
     public static String localized_zone = "";
     public static String localized_no_added_consumables_from_picking = "";
+    public static String localized_select_master_project = "";
+    public static String localized_master_projects = "";
+    public static String localized_master_project = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -514,6 +517,9 @@ public class MyLocalization {
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_gr);
                 localized_zone = ctx.getString(R.string.zone_gr);
                 localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added_gr);
+                localized_select_master_project = ctx.getString(R.string.select_master_project_gr);
+                localized_master_projects = ctx.getString(R.string.master_projects_gr);
+                localized_master_project = ctx.getString(R.string.master_project_gr);
                 break;
 
             case CONST_AR:
@@ -764,7 +770,9 @@ public class MyLocalization {
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed_ar);
                 localized_zone = ctx.getString(R.string.zone_ar);
                 localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added_ar);
-
+                localized_select_master_project = ctx.getString(R.string.select_master_project_ar);
+                localized_master_projects = ctx.getString(R.string.master_projects_ar);
+                localized_master_project = ctx.getString(R.string.master_project_ar);
                 break;
 
             default:
@@ -1016,7 +1024,9 @@ public class MyLocalization {
                 localized_no_multiple_checkin_allowed = ctx.getString(R.string.no_multiple_checkIn_allowed);
                 localized_zone = ctx.getString(R.string.zone);
                 localized_no_added_consumables_from_picking = ctx.getString(R.string.no_consumables_from_picking_added);
-
+                localized_select_master_project = ctx.getString(R.string.select_master_project);
+                localized_master_projects = ctx.getString(R.string.master_projects);
+                localized_master_project = ctx.getString(R.string.master_project);
                 break;
 
 
