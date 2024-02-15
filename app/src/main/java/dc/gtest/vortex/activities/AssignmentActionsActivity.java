@@ -1842,7 +1842,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         }
 
         String[] cs = SELECTED_ASSIGNMENT.getCorrelatedStatuses().split(";");
-        List<String> correlatedStatuses = cs.length>0 ? Arrays.asList(cs) : new ArrayList<String>();
+        List<String> correlatedStatuses = cs.length>0 && !cs[0].equals("") ? Arrays.asList(cs) : new ArrayList<String>();
         List<StatusModel> statuses = new ArrayList<StatusModel>();
 
         Log.e(LOG_TAG, "========================== STATUSES_LIST:\n" + STATUSES_LIST);
