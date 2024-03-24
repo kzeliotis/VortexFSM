@@ -58,7 +58,50 @@
     </androidx.cardview.widget.CardView>
 
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llExpandCollapse"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        style="?android:attr/buttonBarStyle" >
 
+        <Button
+            android:id="@+id/btnExpandAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="85"
+            android:layout_marginTop="10dp"
+            android:text="@string/expand_all_gr"
+            android:textColor="@color/grey_800"
+            android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_1"
+            android:paddingRight="@dimen/dp_1"
+            android:background="@drawable/rounded_button_brown"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+
+        <Button
+            android:id="@+id/btnCollapseAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="75"
+            android:layout_marginTop="10dp"
+            android:text="@string/collapse_all_gr"
+            android:textColor="@color/grey_800"
+            android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_1"
+            android:paddingRight="@dimen/dp_1"
+            android:background="@drawable/rounded_button_brown"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView

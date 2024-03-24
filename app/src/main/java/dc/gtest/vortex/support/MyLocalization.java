@@ -264,6 +264,8 @@ public class MyLocalization {
     public static String localized_select_master_project = "";
     public static String localized_master_projects = "";
     public static String localized_master_project = "";
+    public static String localized_expand_all = "";
+    public static String localized_collapse_all = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -520,6 +522,8 @@ public class MyLocalization {
                 localized_select_master_project = ctx.getString(R.string.select_master_project_gr);
                 localized_master_projects = ctx.getString(R.string.master_projects_gr);
                 localized_master_project = ctx.getString(R.string.master_project_gr);
+                localized_expand_all = ctx.getString(R.string.expand_all_gr);
+                localized_collapse_all = ctx.getString(R.string.collapse_all_gr);
                 break;
 
             case CONST_AR:
@@ -773,6 +777,8 @@ public class MyLocalization {
                 localized_select_master_project = ctx.getString(R.string.select_master_project_ar);
                 localized_master_projects = ctx.getString(R.string.master_projects_ar);
                 localized_master_project = ctx.getString(R.string.master_project_ar);
+                localized_expand_all = ctx.getString(R.string.expand_all_ar);
+                localized_collapse_all = ctx.getString(R.string.collapse_all_ar);
                 break;
 
             default:
@@ -1027,6 +1033,8 @@ public class MyLocalization {
                 localized_select_master_project = ctx.getString(R.string.select_master_project);
                 localized_master_projects = ctx.getString(R.string.master_projects);
                 localized_master_project = ctx.getString(R.string.master_project);
+                localized_expand_all = ctx.getString(R.string.expand_all);
+                localized_collapse_all = ctx.getString(R.string.collapse_all);
                 break;
 
 

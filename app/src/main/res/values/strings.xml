@@ -1359,6 +1359,14 @@
     <string name="master_project_gr">Έργο</string>
     <string name="master_project_ar">Project</string>
 
+    <string name="expand_all">expand all</string>
+    <string name="expand_all_gr">αναπτυξη ολων</string>
+    <string name="expand_all_ar">expand all</string>
+
+    <string name="collapse_all">collapse all</string>
+    <string name="collapse_all_gr">συμπτυξη όλων</string>
+    <string name="collapse_all_ar">collapse all</string>
+
     <item type="id" name="TAG_ID" />
 
 

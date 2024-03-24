@@ -605,6 +605,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnStartWork.setOnClickListener(this);
         btnOvernight.setOnClickListener(this);
         btnToProducts.setOnClickListener(this);
+        btnToProducts.setOnLongClickListener(this);
         btnDetAttachments.setOnClickListener(this);
         btnToConsumables.setOnClickListener(this);
         btnToServices.setOnClickListener(this);
@@ -778,6 +779,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 intentInstallations.putExtra(KEY_REFRESH_INSTALLATIONS,  true);
                 startActivity(intentInstallations);
                 break;
+            case R.id.btnToProducts:
+                //intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
+                intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
 
             case R.id.tvMandatoryTasksTitle:
                 boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
@@ -922,6 +929,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case R.id.btnToProducts:
                 intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
+                //intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;

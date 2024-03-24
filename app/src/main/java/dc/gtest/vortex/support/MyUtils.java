@@ -20,9 +20,14 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.amrdeveloper.treeview.TreeNode;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -44,6 +49,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.models.ProductModel;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_ATTACHMENTS_FOLDER;
 
@@ -391,5 +397,41 @@ public class MyUtils {
         }
     }
 
+    public static Object cloneObject(Object original) {
+        try {
+            // Create a new instance of the original object's class
+            Object clone = original.getClass().newInstance();
+
+            // Get all fields of the original object's class, including private ones
+            Field[] fields = original.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                // Set the accessible flag to true to access private fields
+                field.setAccessible(true);
+                // Copy the value from the original object's field to the clone object's field
+                field.set(clone, field.get(original));
+            }
+
+            return clone;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static TreeNode cloneTreeNode(TreeNode originalNode) {
+        try {
+
+            // Invoke the constructor to create a new instance of TreeNode
+            TreeNode clonedNode = new TreeNode(originalNode.getValue(), 0);
+            clonedNode.setExpanded(originalNode.isExpanded());
+            clonedNode.setSelected(originalNode.isSelected());
+
+            return clonedNode;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }
+    }
 
 }

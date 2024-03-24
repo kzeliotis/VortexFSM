@@ -16,6 +16,7 @@ public class ProductModel {
     private String projectInstallationId = "";
     private boolean isNotSynchronized = false; // not server field. Added to mark not synchronized data in red color
     private boolean isChecked = false;
+    private String masterId = "";
     private List<AttributeModel> productAttributes = new ArrayList<>();
     private List<MeasurementModel> RemoveFromProjectMandatory = new ArrayList<>();
 
@@ -33,6 +34,7 @@ public class ProductModel {
                         "  \"isNotSynchronized\": \"" + isNotSynchronized + "\",\n" +
                         "  \"isChecked\": " + isChecked + "\",\n" +
                         "  \"ProductAttributesString\": \"" + productAttributesString + "\",\n" +
+                        "  \"MasterId\": \"" + masterId + "\",\n" +
                         "  \"ProductAttributeValues\": " + productAttributes + "\",\n" +
                         "  \"RemoveFromProjectMandatory\": " + RemoveFromProjectMandatory + "\n" +
                         "}";
@@ -48,6 +50,14 @@ public class ProductModel {
 
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
+    }
+
+    public String getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(String MasterId) {
+        this.masterId = MasterId;
     }
 
     public String getInstallationDate() {

@@ -340,6 +340,12 @@
             android:label="@string/master_projects"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="dc.gtest.vortex.activities.ProductTreeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/products"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <service
             android:name="dc.gtest.vortex.services.SendLocationSRV"
             android:foregroundServiceType="location"

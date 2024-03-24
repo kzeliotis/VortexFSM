@@ -1,11 +1,16 @@
 package dc.gtest.vortex.data;
 
+import com.amrdeveloper.treeview.TreeNode;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import dc.gtest.vortex.models.AttributeModel;
 import dc.gtest.vortex.models.MeasurementModel;
@@ -15,6 +20,7 @@ import dc.gtest.vortex.support.MyJsonParser;
 import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class ProductsData {
@@ -48,6 +54,7 @@ public class ProductsData {
                     attributeString = attributeString.replace("{Zone}", localized_zone);
                     productModel.setProductAttributesString(attributeString);
                     productModel.setProjectInstallationId(MyJsonParser.getStringValue(oneObjectProduct, "InstallationId", "0"));
+                    productModel.setMasterId(MyJsonParser.getStringValue(oneObjectProduct, "MasterId", "0"));
 
                     JSONArray jArrayProductAttributes = new JSONArray();
                     JSONArray jArrayMandatoryAttributes = new JSONArray();
@@ -128,9 +135,93 @@ public class ProductsData {
 
                 Collections.sort(PRODUCTS_LIST, (a, b) -> a.getProductDescription().compareTo(b.getProductDescription()));
 
+                try {
+                    generateTree(PRODUCTS_LIST);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
+
+
+    public static void generateTree(List<ProductModel> products) {
+
+        PRODUCTS_TREE_LIST.clear();
+
+        List<TreeNode> roots = new ArrayList<>();
+        List<TreeNode> allNodes = new ArrayList<>();
+        Map<Integer, Integer> parentIndexMap = new HashMap<>();
+        List<ProductModel> inserted = new ArrayList<>();
+
+        int cycle = 1;
+        while (products.size() != inserted.size()){
+            for (ProductModel pm : products){
+
+                if(inserted.contains(pm)){continue;}
+
+                //int ProjectProductId = Integer.parseInt(pm.getProjectProductId());
+                int MasterId = Integer.parseInt(pm.getMasterId());
+                if(cycle == 1 && MasterId > 0){continue;}
+                List<ProductModel> pmlist = new ArrayList<>();
+                pmlist.add(pm);
+                addNodesToList(pmlist, allNodes, inserted, roots, parentIndexMap, products);
+            }
+
+            cycle += 1;
+
+        }
+
+        for (TreeNode tn : allNodes){
+            if(tn.getLevel() > 0){
+                tn.setSelected(false);
+            }
+        }
+
+        PRODUCTS_TREE_LIST.addAll(allNodes);
+
+    }
+
+
+    public static void addNodesToList(List<ProductModel> pmList, List<TreeNode> allNodes, List<ProductModel> inserted,
+                                List<TreeNode> roots, Map<Integer, Integer> parentIndexMap, List<ProductModel> AllProducts){
+
+        for (ProductModel pm : pmList){
+
+            if(inserted.contains(pm)){continue;}
+            int ProjectProductId = Integer.parseInt(pm.getProjectProductId());
+            int MasterId = Integer.parseInt(pm.getMasterId());
+
+            TreeNode treeNode = new TreeNode(pm, 0);
+
+            treeNode.setSelected(true);
+
+            Integer index = parentIndexMap.get(MasterId);
+            if (index == null && MasterId > 0) {
+                //pm = null;
+                continue;
+            }
+
+            if (index != null) {
+                allNodes.get(index).addChild(treeNode);
+            } else {
+                roots.add(treeNode);
+            }
+            inserted.add(pm);
+            allNodes.add(treeNode);
+            parentIndexMap.put(ProjectProductId, allNodes.size() - 1);
+
+            List<ProductModel> childPms = AllProducts.stream().filter(obj -> obj.getMasterId().equals(String.valueOf(ProjectProductId))).collect(Collectors.toList());
+
+            addNodesToList(childPms, allNodes, inserted, roots, parentIndexMap, AllProducts);
+
+        }
+
+    }
+
+
 }

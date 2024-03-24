@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Build;
 import android.widget.EditText;
 
+import com.amrdeveloper.treeview.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,6 +62,8 @@ public class MyGlobals {
 
     public static ProductModel SELECTED_PRODUCT = new ProductModel();
     public static List<ProductModel> PRODUCTS_LIST = new ArrayList<>();
+    public static List<TreeNode> PRODUCTS_TREE_LIST = new ArrayList<>();
+    public static List<TreeNode> PRODUCTS_TREE_LIST_SAVED_STATE = new ArrayList<>();
 
     public static List<AllProductModel> ALL_PRODUCTS_LIST = new ArrayList<>();
     public static List<AllProductModel> ALL_PRODUCTS_LIST_FILTERED = new ArrayList<>();

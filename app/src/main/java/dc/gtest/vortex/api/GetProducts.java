@@ -15,6 +15,7 @@ import android.widget.Toast;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.ProductsActivity;
 import dc.gtest.vortex.adapters.AttributesRvAdapter;
+import dc.gtest.vortex.adapters.ProductTreeRvAdapter;
 import dc.gtest.vortex.adapters.ProductsRvAdapter;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.ProductsData;
@@ -146,22 +147,45 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
         if (rvAssignmentProducts != null) {
 
-            ProductsRvAdapter productsRvAdapter = (ProductsRvAdapter) rvAssignmentProducts.getAdapter();
+            RecyclerView.Adapter adapter = rvAssignmentProducts.getAdapter();
 
-            if (productsRvAdapter != null) {
-                if (responseBody != null) {
-                    ProductsData.generate(responseBody);
+            if (adapter instanceof ProductsRvAdapter){
+                ProductsRvAdapter productsRvAdapter = (ProductsRvAdapter) rvAssignmentProducts.getAdapter();
 
-                    if (PRODUCTS_LIST.size() == 0) {
-                        Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                if (productsRvAdapter != null) {
+                    if (responseBody != null) {
+                        ProductsData.generate(responseBody);
+
+                        if (PRODUCTS_LIST.size() == 0) {
+                            Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
+
+                        productsRvAdapter.notifyDataSetChanged();
+                        productsRvAdapter.getFilter().filter(ProductsActivity.searchText);
                     }
+                }
+            } else if (adapter instanceof ProductTreeRvAdapter) {
+                ProductTreeRvAdapter productsRvAdapter = (ProductTreeRvAdapter) rvAssignmentProducts.getAdapter();
 
-                    productsRvAdapter.notifyDataSetChanged();
-                    productsRvAdapter.getFilter().filter(ProductsActivity.searchText);
+                if (productsRvAdapter != null) {
+                    if (responseBody != null) {
+                        ProductsData.generate(responseBody);
+
+                        if (PRODUCTS_LIST.size() == 0) {
+                            Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
+
+                        productsRvAdapter.notifyDataSetChanged();
+                        productsRvAdapter.getFilter().filter(ProductsActivity.searchText);
+                    }
                 }
             }
+
+
         }
 
         if (!projectInstallationId.equals(0)) {
