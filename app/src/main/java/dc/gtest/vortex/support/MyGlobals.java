@@ -231,6 +231,7 @@ public class MyGlobals {
     public static final String KEY_PRODUCT_ATTRIBUTES = "key_product_attributes";
     public static final String KEY_PARENT_ACTIVITY = "key_parent_activity";
     public static final String KEY_PROJECT_PRODUCT_ID = "key_project_product_id";
+    public static final String KEY_REPLACE_PROJECT_PRODUCT_ID = "key_replace_project_product_id";
     public static final String KEY_WAREHOUSE_ID = "key_warehouse_id";
     public static final String KEY_PRODUCT_ID = "key_product_id";
     public static final String KEY_PROJECT_INSTALLATION_ID = "key_project_installation_id";

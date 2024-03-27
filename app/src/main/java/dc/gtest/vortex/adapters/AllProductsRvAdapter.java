@@ -40,6 +40,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
@@ -59,12 +60,17 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
     private final boolean isForNewAssignment;
     private final String projectInstallationId;
 
+    private final String replaceProjectProductId;
 
-    public AllProductsRvAdapter(List<AllProductModel> items, Context ctx, boolean isForNewAssignment, boolean warehouseProducts, String projectInstallationId) {
+
+    public AllProductsRvAdapter(List<AllProductModel> items, Context ctx, boolean isForNewAssignment,
+                                boolean warehouseProducts, String projectInstallationId,
+                                String replaceProjectProductId) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         this.warehouseProducts = warehouseProducts;
         this.projectInstallationId = projectInstallationId;
+        this.replaceProjectProductId = replaceProjectProductId;
         mValues = items;
         mFilter = new CustomFilter(AllProductsRvAdapter.this);
     }
@@ -138,6 +144,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                     intent.putExtra(KEY_WAREHOUSE_ID, WarehouseId);
                     intent.putExtra(KEY_PRODUCT_ID, holder.mItem.getProductId());
                     intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+                    intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, replaceProjectProductId);
                     ctx.startActivity(intent);
                     ((AppCompatActivity) ctx).finish(); // finish activity to go to ProductsActivity when going back from AllAttributesActivity
 
@@ -153,6 +160,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                                                 "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
                                                 "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
                                                 "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
+                                                "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
                                                 "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
                                                 "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
                                                 "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +

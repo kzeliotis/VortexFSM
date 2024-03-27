@@ -43,6 +43,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
@@ -76,6 +77,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
     private String parentActivity;
     private String warehouseID;
     private String projectInstallationId = "0";
+    private String replaceProjectProductId = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,10 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         parentActivity = getIntent().getStringExtra(KEY_PARENT_ACTIVITY);
         warehouseID = getIntent().getStringExtra(KEY_WAREHOUSE_ID);
         productId = getIntent().getStringExtra(KEY_PRODUCT_ID);
+        replaceProjectProductId = getIntent().getStringExtra(KEY_REPLACE_PROJECT_PRODUCT_ID);
+        if (replaceProjectProductId == null){
+            replaceProjectProductId = "0";
+        }
         projectInstallationId = getIntent().getStringExtra(KEY_PROJECT_INSTALLATION_ID);
         if (projectInstallationId == null) {projectInstallationId = "0";}
 
@@ -149,6 +155,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                                         "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
 //                                        "  \"newProductName\": \"" + newProductName + "\",\n" +
                                         "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
+                                        "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
                                         "  \"ProjectProductId\": \"0\",\n" +
                                         "  \"ProductId\": \"" + productId + "\",\n" +
                                         "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +

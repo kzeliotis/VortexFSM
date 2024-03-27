@@ -11,6 +11,7 @@ public class AssignmentModel {
 
     private String projectDescription = "";
     private String productDescription = "";
+    private String projectProductId = "";
     private String serviceDescription = "";
     private String startDateTime = "";
     private String startDate = "";
@@ -72,6 +73,7 @@ public class AssignmentModel {
         return
                 "\"projectDescription\": \"" + projectDescription + "\",\n" +
                         "\"productDescription\": \"" + productDescription + "\",\n" +
+                        "\"projectProductId\": \"" + projectProductId + "\",\n" +
                         "\"serviceDescription\": \"" + serviceDescription + "\",\n" +
                         "\"startDateTime\": \"" + startDateTime + "\",\n" +
                         "\"startDate\": \"" + startDate + "\",\n" +
@@ -135,6 +137,15 @@ public class AssignmentModel {
     public void setLockStatusChange(String LockStatusChange) {
         this.LockStatusChange = LockStatusChange;
     }
+
+    public String getprojectProductId() {
+        return projectProductId;
+    }
+
+    public void setprojectProductId(String projectProductId) {
+        this.projectProductId = projectProductId;
+    }
+
 
     public String getMinimumPayment() {
         return minimumPayment;

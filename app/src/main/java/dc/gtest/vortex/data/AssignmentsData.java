@@ -162,6 +162,7 @@ public class AssignmentsData {
                     assignmentModel.setNotes(MyJsonParser.getStringValue(oneObject, "Notes", ""));
                     assignmentModel.setProjectAddress(MyJsonParser.getStringValue(oneObject, "ProjectAddress", ""));
                     assignmentModel.setProjectCity(MyJsonParser.getStringValue(oneObject, "ProjectCity", ""));
+                    assignmentModel.setprojectProductId(MyJsonParser.getStringValue(oneObject,"ProjectProductId", "0"));
 
                     String assignmentId = assignmentModel.getAssignmentId();
                     if (! MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false)){

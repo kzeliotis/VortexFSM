@@ -25,6 +25,7 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST_FILT
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
@@ -55,15 +56,21 @@ public class AllProductsActivity extends BaseDrawerActivity {
             projectInstallationId = "0";
         }
 
+        String replaceProjectProductId = getIntent().getStringExtra(KEY_REPLACE_PROJECT_PRODUCT_ID);
+        if (replaceProjectProductId == null){
+            replaceProjectProductId = "0";
+        }
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
 
         AllProductsData.generate(WarehouseProducts);
         if (WarehouseProducts) {
-            allProductsRvAdapter = new AllProductsRvAdapter(ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED, this, isForNewAssignment, WarehouseProducts, projectInstallationId);
+            allProductsRvAdapter = new AllProductsRvAdapter(ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId);
         } else {
-            allProductsRvAdapter = new AllProductsRvAdapter(ALL_PRODUCTS_LIST_FILTERED, this, isForNewAssignment, WarehouseProducts, projectInstallationId);
+            allProductsRvAdapter = new AllProductsRvAdapter(ALL_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId);
         }
 
         rvAllProducts.setAdapter(allProductsRvAdapter);

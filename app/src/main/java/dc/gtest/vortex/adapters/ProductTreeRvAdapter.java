@@ -47,7 +47,10 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_delete;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_replace;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
@@ -90,6 +93,7 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
         layoutParams.leftMargin = padding;
         holder.itemView.setLayoutParams(layoutParams);
+
         //holder.llItemsRvNameChevron.setPadding(padding, holder.llItemsRvNameChevron.getPaddingTop(), holder.llItemsRvNameChevron.getPaddingRight(), holder.llItemsRvNameChevron.getPaddingBottom());
         //holder.itemView.setPadding(padding, holder.itemView.getPaddingTop(), holder.itemView.getPaddingRight(), holder.itemView.getPaddingBottom());
 
@@ -108,6 +112,12 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
             holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.red_700));
         } else {
             holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.grey_900));
+        }
+
+        if (holder.mItem.getProjectProductId().equals(SELECTED_ASSIGNMENT.getprojectProductId())){
+            holder.itemView.setBackgroundResource(R.drawable.rounded_layout_purple);
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.rounded_layout_blue);
         }
 
         String attributesString = holder.mItem.getProductAttributesString();
@@ -207,19 +217,35 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
 
             holder.mView.setOnLongClickListener(v -> {
                 if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
-                    new AlertDialog.Builder(ctx)
-                            .setMessage(localized_to_delete_product)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                dialog.dismiss();
-                                SELECTED_PRODUCT = holder.mItem;
-                                if(CheckMandatoryAttributes()){
-                                    DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                    deleteProduct.execute(holder.mItem.getProjectProductId());
-                                }
 
+                    String replaceProjectProductId = holder.mItem.getProjectProductId();
+
+                    new AlertDialog.Builder(ctx)
+                            .setNeutralButton(localized_replace, (dialog, which) -> {
+                                dialog.dismiss();
+                                new AlertDialog.Builder(ctx)
+                                        .setMessage(localized_choose_from_warehouse)
+                                        .setPositiveButton(R.string.yes, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId))
+                                        .setNegativeButton(R.string.no, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId))
+                                        .show();
                             })
-                            .setNegativeButton(R.string.cancel, null)
+                            .setPositiveButton(localized_delete, (dialog, which) -> {
+                                dialog.dismiss();
+                                new AlertDialog.Builder(ctx)
+                                        .setMessage(localized_to_delete_product)
+                                        .setPositiveButton(R.string.yes, (dialog1, which1) -> {
+                                            dialog1.dismiss();
+                                            SELECTED_PRODUCT = holder.mItem;
+                                            if(CheckMandatoryAttributes()){
+                                                DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
+                                                deleteProduct.execute(holder.mItem.getProjectProductId());
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show();
+                            })
                             .show();
+
                 }
 
                 return true;

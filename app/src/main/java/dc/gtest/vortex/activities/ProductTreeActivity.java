@@ -54,6 +54,7 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.INSTALLATION_ZONES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_SELECT_PRODUCTS_TO_ADD;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
@@ -68,6 +69,8 @@ import static dc.gtest.vortex.support.MyLocalization.localized_add_select_produc
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_collapse_all;
+import static dc.gtest.vortex.support.MyLocalization.localized_expand_all;
 import static dc.gtest.vortex.support.MyLocalization.localized_filter_by_type;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
@@ -277,26 +280,10 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
                 }else{
 
-                    NEW_ATTRIBUTES_LIST.clear();
-
                     new AlertDialog.Builder(this)
                             .setMessage(localized_choose_from_warehouse)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                dialog.dismiss();
-                                Intent intent = new Intent(ProductTreeActivity.this, AllProductsActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
-                                intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                                startActivity(intent);
-                            })
-                            .setNegativeButton(R.string.no, (dialog, which) -> {
-                                dialog.dismiss();
-                                Intent intent = new Intent(ProductTreeActivity.this, AllProductsActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
-                                intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                                startActivity(intent);
-                            })
+                            .setPositiveButton(R.string.yes, (dialog, which) -> startAllProductsActivity(true, "0"))
+                            .setNegativeButton(R.string.no, (dialog, which) -> startAllProductsActivity(false, "0"))
                             .show();
                 }
             }
@@ -309,6 +296,16 @@ public class ProductTreeActivity extends BaseDrawerActivity {
         productsRvAdapter = new ProductTreeRvAdapter(PRODUCTS_TREE_LIST, ProductTreeActivity.this, selectProducts ? Integer.parseInt(projectInstallationId) : 0);
         rvAssignmentProducts.setAdapter(productsRvAdapter);
         productsRvAdapter.getFilter().filter("");
+    }
+
+    public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId) {
+        NEW_ATTRIBUTES_LIST.clear();
+        Intent intent = new Intent(ProductTreeActivity.this, AllProductsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(CONST_WAREHOUSE_PRODUCTS, warehouseProducts);
+        intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, ReplaceProjectProductId);
+        intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+        startActivity(intent);
     }
 
     @Override
@@ -496,6 +493,8 @@ public class ProductTreeActivity extends BaseDrawerActivity {
             btnAddNewProduct.setText(localized_add_new_product);
         }
         btnAddExistingProduct.setText(localized_select_existing);
+        btnExpandAll.setText(localized_expand_all);
+        btnCollapseAll.setText(localized_collapse_all);
     }
 
     private void setupProductTypesSpinner() {

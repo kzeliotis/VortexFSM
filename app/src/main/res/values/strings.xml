@@ -1367,6 +1367,11 @@
     <string name="collapse_all_gr">συμπτυξη όλων</string>
     <string name="collapse_all_ar">collapse all</string>
 
+    <string name="replace">Replace</string>
+    <string name="replace_gr">Αντικατάσταση</string>
+    <string name="replace_ar">Replace</string>
+
+
     <item type="id" name="TAG_ID" />
 
 
