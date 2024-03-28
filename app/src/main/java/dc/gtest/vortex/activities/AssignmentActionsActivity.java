@@ -125,6 +125,7 @@ import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_MANDATORY_
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE_NEW;
 import static dc.gtest.vortex.support.MyGlobals.PICKFILE_RESULT_CODE;
+import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST_SAVED_STATE;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO;
@@ -704,6 +705,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     @Override
     public void onBackPressed(){
         resetStatus = true;
+        PRODUCTS_TREE_LIST_SAVED_STATE.clear();
         finish();
     }
 

@@ -38,6 +38,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Locale;
 
 import javax.crypto.BadPaddingException;
@@ -432,6 +433,18 @@ public class MyUtils {
             return null;
 
         }
+    }
+
+
+    public static List<String> GetNodeAndParents(TreeNode node, List<String> parents){
+
+        TreeNode nodeparent = node.getParent();
+        if (nodeparent != null){
+            parents.add(((ProductModel)nodeparent.getValue()).getProjectProductId());
+            parents = GetNodeAndParents(nodeparent, parents);
+        }
+
+        return parents;
     }
 
 }

@@ -103,6 +103,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
     private CardView crdZones;
 
     private ProductTreeRvAdapter productsRvAdapter;
+    private RecyclerView rvAssignmentProducts;
 
     public static String searchText = "";
     public static String selectedType = "";
@@ -153,7 +154,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
         if(!selectProducts){
             crdZones.setVisibility(View.GONE);
         }
-        RecyclerView rvAssignmentProducts = findViewById(R.id.rvAssignmentProducts);
+        rvAssignmentProducts = findViewById(R.id.rvAssignmentProducts);
 
         setupProductTypesSpinner();
         spProductTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -296,6 +297,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
         productsRvAdapter = new ProductTreeRvAdapter(PRODUCTS_TREE_LIST, ProductTreeActivity.this, selectProducts ? Integer.parseInt(projectInstallationId) : 0);
         rvAssignmentProducts.setAdapter(productsRvAdapter);
         productsRvAdapter.getFilter().filter("");
+
     }
 
     public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId) {
@@ -337,27 +339,15 @@ public class ProductTreeActivity extends BaseDrawerActivity {
             Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG).show();
         }
 
-        if(PRODUCTS_TREE_LIST_SAVED_STATE.size()>0){
-            for (TreeNode tn : PRODUCTS_TREE_LIST){
-                TreeNode selectedNode = PRODUCTS_TREE_LIST_SAVED_STATE.stream()
-                        .filter(obj -> ((ProductModel)obj.getValue()).getProjectProductId().equals(((ProductModel)tn.getValue()).getProjectProductId()))
-                        .findFirst()
-                        .orElse(null);
-                if(selectedNode != null){
-                    tn.setExpanded(selectedNode.isExpanded());
-                    tn.setSelected(selectedNode.isSelected());
-                }
-            }
-        }
-
-
 
         productsRvAdapter.notifyDataSetChanged();
+
 
         if (MyUtils.isNetworkAvailable()) {
             GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts);
             getProducts.execute();
         }
+
 
         updateUiTexts();
     }
@@ -368,7 +358,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
             MyPrefs.removeStringWithFileName(PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW, projectInstallationId);
             selectProducts = false;
         }
-        PRODUCTS_TREE_LIST_SAVED_STATE.clear();
+
         finish();
     }
 

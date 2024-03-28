@@ -12,6 +12,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.amrdeveloper.treeview.TreeNode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.ProductsActivity;
 import dc.gtest.vortex.adapters.AttributesRvAdapter;
@@ -19,8 +25,10 @@ import dc.gtest.vortex.adapters.ProductTreeRvAdapter;
 import dc.gtest.vortex.adapters.ProductsRvAdapter;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.ProductsData;
+import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ASSIGNMENT_PRODUCTS;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
@@ -28,6 +36,9 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST;
+import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST_SAVED_STATE;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
@@ -179,13 +190,47 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                             toast.show();
                         }
 
+                        //restore expand/collapse state else focus assignment product on view
+                        if(PRODUCTS_TREE_LIST_SAVED_STATE.size()>0){
+                            for (TreeNode tn : PRODUCTS_TREE_LIST){
+                                TreeNode selectedNode = PRODUCTS_TREE_LIST_SAVED_STATE.stream()
+                                        .filter(obj -> ((ProductModel)obj.getValue()).getProjectProductId().equals(((ProductModel)tn.getValue()).getProjectProductId()))
+                                        .findFirst()
+                                        .orElse(null);
+                                if(selectedNode != null){
+                                    tn.setExpanded(selectedNode.isExpanded());
+                                    tn.setSelected(selectedNode.isSelected());
+                                }
+                            }
+                        } else {
+                            TreeNode assignmentProductNode = PRODUCTS_TREE_LIST.stream()
+                                    .filter(obj -> ((ProductModel)obj.getValue()).getProjectProductId().equals(SELECTED_ASSIGNMENT.getprojectProductId()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (assignmentProductNode != null){
+                                List<String> parents = new ArrayList<>();
+                                parents = MyUtils.GetNodeAndParents(assignmentProductNode, parents);
+                                for(TreeNode treenode : PRODUCTS_TREE_LIST){
+                                    if(parents.contains(((ProductModel) treenode.getValue()).getProjectProductId())){
+                                        treenode.setSelected(true);
+                                        treenode.setExpanded(true);
+                                    } else if (treenode == assignmentProductNode){
+                                        treenode.setSelected(true);
+                                    }
+                                }
+
+                                List<TreeNode> visibleNodes = PRODUCTS_TREE_LIST.stream().filter(TreeNode::isSelected).collect(Collectors.toList());
+                                int index = visibleNodes.indexOf(assignmentProductNode);
+                                rvAssignmentProducts.smoothScrollToPosition(index);
+
+                            }
+                        }
+
                         productsRvAdapter.notifyDataSetChanged();
                         productsRvAdapter.getFilter().filter(ProductsActivity.searchText);
                     }
                 }
             }
-
-
         }
 
         if (!projectInstallationId.equals(0)) {
