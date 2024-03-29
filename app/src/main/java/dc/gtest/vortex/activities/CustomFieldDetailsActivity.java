@@ -26,11 +26,13 @@ import static dc.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_EMPTY_DETAILS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD_DETAIL;
+import static dc.gtest.vortex.support.MyGlobals._rvCustomFieldDetails;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_record;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CUSTOM_FIELD_DETAILS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
 
 
 public class CustomFieldDetailsActivity extends BaseDrawerActivity implements View.OnClickListener {
@@ -49,7 +51,7 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.content_custom_field_details, flBaseContainer, true);
 
-        RecyclerView rvCustomFieldDetails = findViewById(R.id.rvCustomFieldDetails);
+        _rvCustomFieldDetails = findViewById(R.id.rvCustomFieldDetails);
 
         CUSTOM_FIELD_DETAILS_LIST = SELECTED_CUSTOM_FIELD.getCustomFieldDetails();
         CUSTOM_FIELD_DETAILS_LIST_FILTERED.clear();
@@ -66,32 +68,30 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
 
         customFieldDetailsRvAdapter = new CustomFieldDetailsRvAdapter(CUSTOM_FIELD_DETAILS_LIST_FILTERED, this, SELECTED_CUSTOM_FIELD.getObjectTable());
 
-        rvCustomFieldDetails.setAdapter(customFieldDetailsRvAdapter);
+        _rvCustomFieldDetails.setAdapter(customFieldDetailsRvAdapter);
 
     }
 
     @Override
     public void onClick(View v){
 
-        switch (v.getId()){
-
-            case R.id.btnAddRecord:
-                String vortexTable = SELECTED_CUSTOM_FIELD.getObjectTable();
-                String customFieldId = SELECTED_CUSTOM_FIELD.getCustomFieldId();
+        if (v.getId() == R.id.btnAddRecord) {
+            String vortexTable = SELECTED_CUSTOM_FIELD.getObjectTable();
+            String customFieldId = SELECTED_CUSTOM_FIELD.getCustomFieldId();
 
 
-                if (MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, "").length() > 0) {
-                    CUSTOM_FIELD_EMPTY_DETAILS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, ""), new TypeToken<HashMap<String, CustomFieldDetailModel>>(){}.getType());
-                }
+            if (MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, "").length() > 0) {
+                CUSTOM_FIELD_EMPTY_DETAILS_MAP = new Gson().fromJson(MyPrefs.getStringWithFileName(PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS, vortexTable, ""), new TypeToken<HashMap<String, CustomFieldDetailModel>>() {
+                }.getType());
+            }
 
-                SELECTED_CUSTOM_FIELD_DETAIL = CUSTOM_FIELD_EMPTY_DETAILS_MAP.get(customFieldId);
-                SELECTED_CUSTOM_FIELD_DETAIL.setVortexTableId(SELECTED_CUSTOM_FIELD.getObjectTableId());
+            SELECTED_CUSTOM_FIELD_DETAIL = CUSTOM_FIELD_EMPTY_DETAILS_MAP.get(customFieldId);
+            SELECTED_CUSTOM_FIELD_DETAIL.setVortexTableId(SELECTED_CUSTOM_FIELD.getObjectTableId());
 
-                Intent intent = new Intent(CustomFieldDetailsActivity.this, CustomFieldDetailsEditActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(KEY_VORTEX_TABLE, vortexTable);
-                startActivity(intent);
-                break;
+            Intent intent = new Intent(CustomFieldDetailsActivity.this, CustomFieldDetailsEditActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(KEY_VORTEX_TABLE, vortexTable);
+            startActivity(intent);
         }
 
 
@@ -110,6 +110,16 @@ public class CustomFieldDetailsActivity extends BaseDrawerActivity implements Vi
 
         customFieldDetailsRvAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        SELECTED_CUSTOM_FIELD_DETAIL = null;
+        _rvCustomFieldDetails = null;
+
+        finish();
     }
 
     @Override

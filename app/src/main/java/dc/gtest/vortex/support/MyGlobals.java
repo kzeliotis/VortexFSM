@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Build;
 import android.widget.EditText;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.amrdeveloper.treeview.TreeNode;
 
 import java.util.ArrayList;
@@ -44,6 +46,9 @@ import dc.gtest.vortex.models.ZoneProductModel;
 import dc.gtest.vortex.models.MeasurementModel;
 
 public class MyGlobals {
+
+    public static RecyclerView _rvCustomFieldDetails = null;
+
     // Data lists
     public static NewAssignmentModel NEW_ASSIGNMENT = new NewAssignmentModel();
 

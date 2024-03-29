@@ -1371,6 +1371,9 @@
     <string name="replace_gr">Αντικατάσταση</string>
     <string name="replace_ar">Replace</string>
 
+    <string name="det_custom_fields">Assignment Custom Fields</string>
+    <string name="det_custom_fields_gr">Παραμετρικά πεδία Ανάθεσης</string>
+    <string name="det_custom_fields_ar">Assignment Custom Fields</string>
 
     <item type="id" name="TAG_ID" />
 

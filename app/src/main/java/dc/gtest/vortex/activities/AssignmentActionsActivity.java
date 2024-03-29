@@ -115,8 +115,10 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static dc.gtest.vortex.support.MyGlobals.CONST_DO_NOT_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REFRESH_CUSTOM_FIELDS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REFRESH_INSTALLATIONS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REFRESH_ZONES;
+import static dc.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_TASKS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_ASSIGNMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_MANDATORY_TASK_PHOTO;
@@ -151,6 +153,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_clickToSign;
 import static dc.gtest.vortex.support.MyLocalization.localized_commentsSolution;
 import static dc.gtest.vortex.support.MyLocalization.localized_complete_measurements;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables_caps;
+import static dc.gtest.vortex.support.MyLocalization.localized_custom_fields_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_default_actions;
 import static dc.gtest.vortex.support.MyLocalization.localized_file_size_limit;
 import static dc.gtest.vortex.support.MyLocalization.localized_fillComments;
@@ -274,6 +277,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnZones;
     private Button btnTakePhoto;
     private Button btnAddAttachment;
+    private Button btnCustomFields;
     private Button btnPreviewReport;
     private Button btnDetAttachments;
     private LinearLayout llPayment;
@@ -373,6 +377,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnPreviewReport = findViewById(R.id.btnPreviewReport);
         tvSendReport = findViewById(R.id.tvSendReport);
         chkSendReportFile = findViewById(R.id.chkSendReport);
+        btnCustomFields = findViewById(R.id.btnCustomFields);
 
         if (MyPrefs.getBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, false)){
 
@@ -446,6 +451,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             btnInstallations.setVisibility(View.GONE);
             btnTakePhoto.setVisibility(View.GONE);
             btnAddAttachment.setVisibility(View.GONE);
+            btnCustomFields.setVisibility(View.GONE);
         }
 
         setupStatusesSpinner();
@@ -619,6 +625,8 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnInstallations.setOnClickListener(this);
         btnInstallations.setOnLongClickListener(this);
         btnPreviewReport.setOnClickListener(this);
+        btnCustomFields.setOnClickListener(this);
+        btnCustomFields.setOnLongClickListener(this);
 
         tvMandatoryTasksTitle.setOnLongClickListener(this);
         //etCommentsSolution.setOnLongClickListener(this);
@@ -755,6 +763,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnInstallations.setText(localized_installations_caps);
         btnPreviewReport.setText(localized_preview_report);
         tvSendReport.setText(localized_send_report);
+        btnCustomFields.setText(localized_custom_fields_caps);
 
     }
 
@@ -802,6 +811,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 //                    MandatoryTasksData.generate(true);
 //                    rvMandatoryTasks.getAdapter().notifyDataSetChanged();
                 }
+                break;
+
+            case R.id.btnCustomFields:
+                intent = new Intent(AssignmentActionsActivity.this, CustomFieldsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_VORTEX_TABLE, "Det");
+                intent.putExtra(KEY_REFRESH_CUSTOM_FIELDS, true);
+                startActivity(intent);
                 break;
 
             case R.id.tvInternalNotesTitle:
@@ -959,6 +976,13 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 //btnZones.setOnLongClickListener(this);
                 intent = new Intent(AssignmentActionsActivity.this, ProjectInstallationActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+
+            case R.id.btnCustomFields:
+                intent = new Intent(AssignmentActionsActivity.this, CustomFieldsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_VORTEX_TABLE, "Det");
                 startActivity(intent);
                 break;
 

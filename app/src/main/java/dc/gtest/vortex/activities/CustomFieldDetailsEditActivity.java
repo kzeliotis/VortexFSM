@@ -1,5 +1,6 @@
 package dc.gtest.vortex.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_to_send_data;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_yes;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+import static dc.gtest.vortex.support.MyPrefs.getInt;
 
 public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implements View.OnClickListener {
 
@@ -67,6 +69,7 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
         tvActionDescription = findViewById(R.id.tvActionDescription);
         btnSendChanges = findViewById(R.id.btnSendChanges);
         vortexTable = getIntent().getStringExtra(KEY_VORTEX_TABLE);
+
         List<CustomFieldDetailColumnModel> cf_Columns = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns();
         if (cf_Columns == null){
             cf_Columns = new ArrayList<>();
@@ -86,6 +89,10 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
 
             case "Company":
                 vortexTableId = "1";
+                break;
+
+            case "Det":
+                vortexTableId = SELECTED_ASSIGNMENT.getAssignmentId();
                 break;
         }
 
@@ -111,59 +118,53 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
     public void onClick(View v) {
 
         //Intent intent;
-        switch (v.getId()) {
+        if (v.getId() == R.id.btnSendChanges) {
+            new AlertDialog.Builder(this)
+                    .setMessage(localized_to_send_data)
+                    .setNegativeButton(localized_no, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton(localized_yes, (dialog, which) -> {
+                        dialog.dismiss();
+                        String prefKey = UUID.randomUUID().toString() + "_" + vortexTableId + "_" + vortexTable;
 
-            case R.id.btnSendChanges:
+                        List<CustomFieldModel> cfList = new ArrayList<>();
 
-                new AlertDialog.Builder(this)
-                        .setMessage(localized_to_send_data)
-                        .setNegativeButton(localized_no, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .setPositiveButton(localized_yes, (dialog, which) -> {
-                            dialog.dismiss();
-                            String prefKey = UUID.randomUUID().toString() + "_" + vortexTableId + "_" + vortexTable;
+                        cfList.addAll(CUSTOM_FIELDS_LIST);
 
-                            List<CustomFieldModel> cfList = new ArrayList<>();
+                        String gamo_details = "";
 
-                            cfList.addAll(CUSTOM_FIELDS_LIST);
+                        for (int i = 0; i < cfList.size(); i++) {
 
-                            String gamo_details = "";
+                            cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
+                            List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
+                            cfList.get(i).setCustomFieldDetails(emptyDetails);
 
-                            for (int i = 0; i < cfList.size(); i++){
-
-                                cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
-                                List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
-                                cfList.get(i).setCustomFieldDetails(emptyDetails);
-
-                                if(cfList.get(i).getCustomFieldId().equals(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldId())){
-                                    List<CustomFieldDetailModel> editedDetails = new ArrayList<>();
-                                    SELECTED_CUSTOM_FIELD_DETAIL.setIsEdited(true);
-                                    gamo_details = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldDetailsString();
-                                    SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString("");
-                                    editedDetails.add(SELECTED_CUSTOM_FIELD_DETAIL);
-                                    cfList.get(i).setCustomFieldDetails(editedDetails);
-                                }
+                            if (cfList.get(i).getCustomFieldId().equals(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldId())) {
+                                List<CustomFieldDetailModel> editedDetails = new ArrayList<>();
+                                SELECTED_CUSTOM_FIELD_DETAIL.setIsEdited(true);
+                                gamo_details = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldDetailsString();
+                                SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString("");
+                                editedDetails.add(SELECTED_CUSTOM_FIELD_DETAIL);
+                                cfList.get(i).setCustomFieldDetails(editedDetails);
                             }
+                        }
 
 
-                            MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
+                        MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
 
-                            SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString(gamo_details);
+                        SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString(gamo_details);
 
-                            if (MyUtils.isNetworkAvailable()) {
-                                SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldDetailsEditActivity.this, prefKey, true, vortexTable);
-                                sendCustomFields.execute(prefKey);
-                            } else {
-                                Toast.makeText(CustomFieldDetailsEditActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
-                                finish();
-                            }
+                        if (MyUtils.isNetworkAvailable()) {
+                            SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldDetailsEditActivity.this, prefKey, true, vortexTable);
+                            sendCustomFields.execute(prefKey);
+                        } else {
+                            Toast.makeText(CustomFieldDetailsEditActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                            finish();
+                        }
 
-                        })
-                        .show();
-
-                break;
-
+                    })
+                    .show();
         }
     }
 

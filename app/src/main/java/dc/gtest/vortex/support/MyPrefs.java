@@ -46,7 +46,9 @@ public class MyPrefs {
     public static final String PREF_FILE_INSTALLATIONS_CF_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_installations_cf_default_values_data_for_show";
     public static final String PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_installations_cf_details_default_values_data_for_show";
     public static final String PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_company_cf_default_values_data_for_show";
+    public static final String PREF_FILE_DET_CF_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_det_cf_default_values_data_for_show";
     public static final String PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_company_cf_details_default_values_data_for_show";
+    public static final String PREF_FILE_DET_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_det_cf_details_default_values_data_for_show";
     public static final String PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS = "pref_file_custom_field_empty_details";
     public static final String PREF_FILE_NEW_ZONE_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_new_zone_custom_fields_data_for_show";
     public static final String PREF_FILE_INSTALLATION_PRODUCTS_DATA_FOR_SHOW = "pref_file_installation_products_data_for_show";
@@ -72,6 +74,7 @@ public class MyPrefs {
     public static final String PREF_FILE_RELATED_SERVICES_FOR_SHOW = "pref_file_related_services_for_show";
     public static final String PREF_FILE_NEW_ASSIGNMENT_SERVICES_FOR_SHOW = "pref_file_new_assignment_services_for_show";
     public static final String PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_company_custom_fields_data_for_show";
+    public static final String PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_det_custom_fields_data_for_show";
     public static final String PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW = "pref_file_product_to_installation_for_show";
     // downloaded data
     public static final String PREF_FILE_HISTORY_DATA = "pref_file_history_data";

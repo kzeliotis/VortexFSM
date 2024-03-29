@@ -33,6 +33,7 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 import static dc.gtest.vortex.support.MyLocalization.localized_company_custom_fields;
 import static dc.gtest.vortex.support.MyLocalization.localized_custom_fields;
+import static dc.gtest.vortex.support.MyLocalization.localized_det_custom_fields;
 import static dc.gtest.vortex.support.MyLocalization.localized_no;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
@@ -42,6 +43,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_to_send_data;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_yes;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static dc.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
@@ -88,6 +90,10 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
             case "Company":
                 vortexTableId = "1";
                 break;
+
+            case "Det":
+                vortexTableId = SELECTED_ASSIGNMENT.getAssignmentId();
+                break;
         }
 
 
@@ -113,6 +119,9 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
             case "Company":
                 customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW, "1", "");
                 break;
+            case "Det":
+                customFields = MyPrefs.getStringWithFileName(PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+                break;
         }
 
 
@@ -134,47 +143,41 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
     public void onClick(View v) {
 
         //Intent intent;
-        switch (v.getId()) {
+        if (v.getId() == R.id.btnSendChanges) {
+            new AlertDialog.Builder(this)
+                    .setMessage(localized_to_send_data)
+                    .setNegativeButton(localized_no, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton(localized_yes, (dialog, which) -> {
+                        dialog.dismiss();
+                        String prefKey = UUID.randomUUID().toString() + "_" + vortexTableId + "_" + vortexTable;
 
-            case R.id.btnSendChanges:
+                        List<CustomFieldModel> cfList = new ArrayList<>();
 
-                new AlertDialog.Builder(this)
-                        .setMessage(localized_to_send_data)
-                        .setNegativeButton(localized_no, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .setPositiveButton(localized_yes, (dialog, which) -> {
-                            dialog.dismiss();
-                            String prefKey = UUID.randomUUID().toString() + "_" + vortexTableId + "_" + vortexTable;
+                        cfList.addAll(CUSTOM_FIELDS_LIST);
 
-                            List<CustomFieldModel> cfList = new ArrayList<>();
-
-                            cfList.addAll(CUSTOM_FIELDS_LIST);
-
-                            for (int i = 0; i < cfList.size(); i++){
-                                cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
-                                List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
-                                cfList.get(i).setCustomFieldDetails(emptyDetails);
+                        for (int i = 0; i < cfList.size(); i++) {
+                            cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
+                            List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
+                            cfList.get(i).setCustomFieldDetails(emptyDetails);
 //                                for (int d = 0; d < cfList.get(i).getCustomFieldDetails().size(); d++){
 //                                    cfList.get(i).getCustomFieldDetails().get(d).setCustomFieldDetailsString("");
 //                                }
-                            }
+                        }
 
-                            MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
+                        MyPrefs.setStringWithFileName(MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC, prefKey, cfList.toString());
 
-                            if (MyUtils.isNetworkAvailable()) {
-                                SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldsActivity.this, prefKey, true, vortexTable);
-                                sendCustomFields.execute(prefKey);
-                            } else {
-                                Toast.makeText(CustomFieldsActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
-                                finish();
-                            }
+                        if (MyUtils.isNetworkAvailable()) {
+                            SendCustomFields sendCustomFields = new SendCustomFields(CustomFieldsActivity.this, prefKey, true, vortexTable);
+                            sendCustomFields.execute(prefKey);
+                        } else {
+                            Toast.makeText(CustomFieldsActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                            finish();
+                        }
 
-                        })
-                        .show();
-
-                break;
-
+                    })
+                    .show();
         }
     }
 
@@ -219,6 +222,9 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
                 break;
             case "Company":
                 tvObjectDescription.setText(localized_company_custom_fields);
+                break;
+            case "Det":
+                tvObjectDescription.setText(localized_det_custom_fields + "-" + SELECTED_ASSIGNMENT.getAssignmentId());
                 break;
         }
 

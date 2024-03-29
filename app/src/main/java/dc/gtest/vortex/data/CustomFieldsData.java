@@ -26,6 +26,9 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DEFAULT_VALUE
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELD_EMPTY_DETAILS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATIONS_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_CUSTOM_FIELDS_DATA_FOR_SHOW;
@@ -50,6 +53,14 @@ public class CustomFieldsData {
 
             case "Company":
                 customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, ""); //MyPrefs.getString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, "");
+
+//                if (customFields.isEmpty()||refresh) {
+//                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
+//                }
+                break;
+
+            case "Det":
+                customFields = MyPrefs.getStringWithFileName(PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, ""); //MyPrefs.getString(PREF_DATA_COMPANY_CUSTOM_FIELDS_LIST, "");
 
 //                if (customFields.isEmpty()||refresh) {
 //                    customFields = MyPrefs.getStringWithFileName(PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW,  vortexTableId, "");
@@ -106,6 +117,9 @@ public class CustomFieldsData {
                             case "Company":
                                 MyPrefs.setStringWithFileName(PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", defaultValuesList.toString());
                                 break;
+                            case "Det":
+                                MyPrefs.setStringWithFileName(PREF_FILE_DET_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", defaultValuesList.toString());
+                                break;
                         }
 
                         continue;
@@ -125,6 +139,7 @@ public class CustomFieldsData {
 
                     if(customFieldModel.getCustomFieldDataType().equals("MasterDetail")){
                         String CustomFieldDetails = MyJsonParser.getStringValue(oneObject, "CustomFieldDetails", "");
+                        if(CustomFieldDetails.length() == 0){continue;}
                         JSONArray cfDetails = new JSONArray(CustomFieldDetails);
                         CustomFieldDetailModel cfDetail;
                         List<CustomFieldDetailModel> cfDetailList = new ArrayList<>();
@@ -182,6 +197,9 @@ public class CustomFieldsData {
                                                 break;
                                             case "Company":
                                                 MyPrefs.setStringWithFileName(PREF_FILE_COMPANY_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", columnDefaultValues.toString());
+                                                break;
+                                            case "Det":
+                                                MyPrefs.setStringWithFileName(PREF_FILE_DET_CF_DETAILS_DEFAULT_VALUES_DATA_FOR_SHOW, "0", columnDefaultValues.toString());
                                                 break;
                                         }
 

@@ -34,11 +34,14 @@ import java.util.List;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.CustomFieldDetailsActivity;
 import dc.gtest.vortex.models.CustomFieldModel;
+import dc.gtest.vortex.support.MyCanEdit;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.support.MyGlobals.CUSTOM_FIELDS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_CUSTOM_FIELD;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 
 public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAdapter.ViewHolder> {
 
@@ -83,6 +86,7 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 //        if(NEW_INSTALLATION_ZONE.getZoneId().equals("-1")) {
 //            IsNewZone = true;
 //        }
+
 
         String DataType = holder.mItem.getCustomFieldDataType();
         boolean IsDateTime = false;
@@ -245,6 +249,9 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
                     case "Company":
                         cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_COMPANY_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
                         break;
+                    case "Det":
+                        cfdvValues = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_DET_CF_DEFAULT_VALUES_DATA_FOR_SHOW, "0", "");
+                        break;
                 }
 
                 JSONArray jArrayDefaultValues = new JSONArray(cfdvValues);
@@ -324,19 +331,26 @@ public class CustomFieldsRvAdapter extends RecyclerView.Adapter<CustomFieldsRvAd
 
 
         // setup enabled / disabled
-        if (holder.mItem.getEditable()) {
+        boolean disableEditing = false;
+        if(vortexTable.equals("Det")){
+            boolean isCheckedIn = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, SELECTED_ASSIGNMENT.getAssignmentId(), false);
+            disableEditing = !isCheckedIn;
+        }
+
+        if (holder.mItem.getEditable() && !disableEditing) {
             holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.light_blue_50));
             holder.swCustomFieldBool.setEnabled(true);
             //holder.etCustomFieldValue.setEnabled(true);
             holder.etCustomFieldValue.setInputType(InputType.TYPE_CLASS_TEXT);
             holder.spCustomFieldDV.setEnabled(true);
-
+            holder.tvToCustomFieldDetails.setEnabled(true);
         } else {
             holder.llCustomFieldContent.setBackgroundColor(ContextCompat.getColor(ctx, R.color.grey_300));
             holder.swCustomFieldBool.setEnabled(false);
             //holder.etCustomFieldValue.setEnabled(false);
             holder.etCustomFieldValue.setInputType(InputType.TYPE_NULL);
             holder.spCustomFieldDV.setEnabled(false);
+            holder.tvToCustomFieldDetails.setEnabled(false);
         }
     }
 
