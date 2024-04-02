@@ -169,7 +169,7 @@ public class AttributesActivity extends BaseDrawerActivity {
 
         // TODO improve synchronize
         if (id == R.id.itemSynchronize) {
-            new MySynchronize(this).mySynchronize();
+            new MySynchronize(this).mySynchronize(true);
         }
 
         return true;

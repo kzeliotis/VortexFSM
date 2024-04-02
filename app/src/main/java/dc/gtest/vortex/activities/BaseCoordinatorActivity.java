@@ -50,7 +50,7 @@ public class BaseCoordinatorActivity extends AppCompatActivity {
                 return true;
 
             case R.id.itemSynchronize:
-                new MySynchronize(this).mySynchronize();
+                new MySynchronize(this).mySynchronize(true);
                 return true;
 
         }

@@ -171,7 +171,7 @@ class MyApi {
 
             if (apiUrl.toUpperCase().contains("HTTPS")){
                 HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection)url.openConnection();
-                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setReadTimeout(120000);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("POST");
 
@@ -233,7 +233,7 @@ class MyApi {
                 httpURLConnection.disconnect();
             } else {
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setReadTimeout(120000);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("POST");
 

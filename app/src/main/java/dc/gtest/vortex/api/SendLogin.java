@@ -22,6 +22,7 @@ import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MySynchronize;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
@@ -161,8 +162,12 @@ public class SendLogin extends AsyncTask<String, Void, String > {
                         }
 
                     } else if (reSync) {
+
+                        new MySynchronize(ctx).mySynchronize(false);
+
                         GetAssignments getAssignments = new GetAssignments(ctx, downloadAllData);
                         getAssignments.execute();
+
                     } else {
 
                         MyPrefs.setBoolean(PREF_KEY_IS_LOGGED_IN, true);

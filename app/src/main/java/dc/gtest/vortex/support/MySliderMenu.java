@@ -204,7 +204,7 @@ public class MySliderMenu {
                         break;
 
                     case R.id.nav_synchronize:
-                        new MySynchronize(ctx).mySynchronize();
+                        new MySynchronize(ctx).mySynchronize(true);
                         break;
 
                     case R.id.nav_send_email:

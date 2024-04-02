@@ -47,6 +47,7 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.support.MyGlobals.CONST_AR;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_GR;
+import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_START_UP;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyGlobals.globalExternalFileDir;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
@@ -119,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, AssignmentsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(KEY_DOWNLOAD_ALL_DATA, true);
+            intent.putExtra(KEY_AFTER_START_UP, true);
             startActivity(intent);
             finish();
         }

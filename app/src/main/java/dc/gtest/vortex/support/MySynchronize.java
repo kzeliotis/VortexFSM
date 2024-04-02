@@ -68,7 +68,7 @@ public class MySynchronize {
         this.ctx = ctx;
     }
 
-    public void mySynchronize() {
+    public void mySynchronize(boolean login) {
 
         String result = "Success";
 
@@ -91,7 +91,7 @@ public class MySynchronize {
                 synchronizeSavedAttachments(ctx);
             }
 
-            synchronizeSavedData();
+            synchronizeSavedData(login);
 
         } else {
             MyDialogs.showOK(ctx, localized_no_internet_try_later_2_lines);
@@ -132,7 +132,7 @@ public class MySynchronize {
         }
     }
 
-    private void synchronizeSavedData() {
+    private void synchronizeSavedData(boolean login) {
 
         Map<String, ?> startTravelDataForSync = ctx.getSharedPreferences(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, MODE_PRIVATE).getAll();
         for (Map.Entry<String, ?> entry : startTravelDataForSync.entrySet()) {
@@ -306,11 +306,14 @@ public class MySynchronize {
             setProductsToInstallation.execute();
         }
 
-        String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
-        String username = MyPrefs.getString(PREF_USER_NAME, "");
+        if (login){
+            String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
+            String username = MyPrefs.getString(PREF_USER_NAME, "");
 
-        SendLogin sendLogin = new SendLogin(ctx, true, true);
-        sendLogin.execute(username, password);
+            SendLogin sendLogin = new SendLogin(ctx, true, true);
+            sendLogin.execute(username, password);
+        }
+
 
     }
 }

@@ -53,6 +53,7 @@ import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DATE;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SORTED_BY_DISTANCE;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
+import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_START_UP;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
@@ -183,8 +184,9 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
 
         if (MyUtils.isNetworkAvailable()) {
             boolean afterLogIn = getIntent().getBooleanExtra(KEY_AFTER_LOGIN, false);
+            boolean startUp = getIntent().getBooleanExtra(KEY_AFTER_START_UP, false);
             boolean downloadAllData = getIntent().getBooleanExtra(KEY_DOWNLOAD_ALL_DATA, true);
-            if (!afterLogIn) {
+            if (startUp) {
                 String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
                 String username = MyPrefs.getString(PREF_USER_NAME, "");
                 SendLogin sendLogin = new SendLogin(AssignmentsActivity.this, true, downloadAllData);

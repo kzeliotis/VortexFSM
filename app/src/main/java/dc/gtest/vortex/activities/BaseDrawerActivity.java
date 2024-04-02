@@ -48,7 +48,7 @@ public class BaseDrawerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.itemSynchronize:
-                new MySynchronize(this).mySynchronize();
+                new MySynchronize(this).mySynchronize(true);
                 return true;
         }
 

@@ -243,6 +243,7 @@ public class MyGlobals {
     public static final String KEY_REFRESH_ZONES = "key_refresh_zones";
     public static final String KEY_REFRESH_INSTALLATIONS = "key_refresh_installations";
     public static final String KEY_AFTER_LOGIN = "key_after_login";
+    public static final String KEY_AFTER_START_UP = "key_after_start_up";
     public static final String KEY_PRODUCTID = "key_productId";
     public static final String KEY_CUSTOMERID = "key_customerId";
     public static final String KEY_GROUPED_ASSIGNMENT = "key_grouped_assignment";
