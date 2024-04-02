@@ -308,6 +308,7 @@ public class MySynchronize {
 
         String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
         String username = MyPrefs.getString(PREF_USER_NAME, "");
+
         SendLogin sendLogin = new SendLogin(ctx, true, true);
         sendLogin.execute(username, password);
 

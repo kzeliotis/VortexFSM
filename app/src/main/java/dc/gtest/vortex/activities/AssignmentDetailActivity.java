@@ -195,7 +195,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         }
 
         if(singleAssignmentResult){
-            if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false) == false){
+            if (!MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false)){
                 fabStartTravel.performClick();
             }
             fabAssignmentDetails.performClick();
@@ -449,7 +449,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
                 checkInCheckOutModel.setStartLng(MyPrefs.getString(PREF_CURRENT_LNG, ""));
                 checkInCheckOutModel.setUserId(MyPrefs.getString(PREF_USERID, ""));
 
-                Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
+                Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel);
 
                 MyPrefs.setStringWithFileName(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
 
@@ -465,6 +465,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
             case R.id.fabAssignmentDetails:
                 intent = new Intent(AssignmentDetailActivity.this, AssignmentActionsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //if(singleAssignmentResult){intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);}
                 startActivity(intent);
                 break;
 
@@ -500,47 +501,45 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
 
     @Override
     public boolean onLongClick(View v) {
-        switch (v.getId()) {
-            case R.id.fabStartTravel:
-                new AlertDialog.Builder(AssignmentDetailActivity.this)
-                        .setMessage(localized_cancel_start_travel)
-                        .setPositiveButton(R.string.yes, (dialog, which) -> {
-                            dialog.dismiss();
-                            fabStartTravel.setOnLongClickListener(null);
-                            fabStartTravel.setOnClickListener(AssignmentDetailActivity.this);
+        if (v.getId() == R.id.fabStartTravel) {
+            new AlertDialog.Builder(AssignmentDetailActivity.this)
+                    .setMessage(localized_cancel_start_travel)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        dialog.dismiss();
+                        fabStartTravel.setOnLongClickListener(null);
+                        fabStartTravel.setOnClickListener(AssignmentDetailActivity.this);
 
-                            fabChangeResource.setOnClickListener(AssignmentDetailActivity.this);
-                            fabChangeResource.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
+                        fabChangeResource.setOnClickListener(AssignmentDetailActivity.this);
+                        fabChangeResource.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
 
-                            fabStartTravel.setBackgroundTintList(ColorStateList.valueOf(
-                                    ContextCompat.getColor(AssignmentDetailActivity.this, R.color.colorPrimary)));
+                        fabStartTravel.setBackgroundTintList(ColorStateList.valueOf(
+                                ContextCompat.getColor(AssignmentDetailActivity.this, R.color.colorPrimary)));
 
-                            MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false);
+                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false);
 
-                            String assignmentData = MyPrefs.getString(PREF_DATA_ASSIGNMENTS, "");
+                        String assignmentData = MyPrefs.getString(PREF_DATA_ASSIGNMENTS, "");
 
-                            if (!assignmentData.equals("")) {
-                                try {
-                                    JSONArray jsonArr = new JSONArray(assignmentData);
+                        if (!assignmentData.equals("")) {
+                            try {
+                                JSONArray jsonArr = new JSONArray(assignmentData);
 
-                                    for (int i = 0; i < jsonArr.length(); i++) {
-                                        JSONObject oneObject = jsonArr.getJSONObject(i);
-                                        String assignmentId = oneObject.getString("AssignmentId");
-                                        String masterAssignment = oneObject.getString("MasterAssignment");
+                                for (int i = 0; i < jsonArr.length(); i++) {
+                                    JSONObject oneObject = jsonArr.getJSONObject(i);
+                                    String assignmentId = oneObject.getString("AssignmentId");
+                                    String masterAssignment = oneObject.getString("MasterAssignment");
 
-                                        if (!masterAssignment.equals("") && masterAssignment.equals(SELECTED_ASSIGNMENT.getMasterAssignment())) {
-                                            MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false);
-                                        }
+                                    if (!masterAssignment.equals("") && masterAssignment.equals(SELECTED_ASSIGNMENT.getMasterAssignment())) {
+                                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, false);
                                     }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        })
-                        .setNegativeButton(R.string.no, null)
-                        .show();
-                break;
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
         }
 
         return true;

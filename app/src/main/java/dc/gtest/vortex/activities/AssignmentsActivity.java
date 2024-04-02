@@ -210,6 +210,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
 //        calendarView.updateCalendar(CALENDAR_EVENTS);
 //        assignmentsRvAdapter = new AssignmentsRvAdapter(ASSIGNMENTS_LIST_FILTERED, AssignmentsActivity.this);
 //        rvAssignments.setAdapter(assignmentsRvAdapter);
+        assignmentsRvAdapter.notifyDataSetChanged();
 
         assignmentsRvAdapter.getFilter().filter(searchedText);
     }

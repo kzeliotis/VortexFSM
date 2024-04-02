@@ -65,7 +65,13 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
 
     @Override
      public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = filteredItems.get(position);
+
+        try {
+            holder.mItem = filteredItems.get(position);
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return;
+        }
 
         holder.tvProjectDescription.setText(holder.mItem.getProjectDescription());
         holder.tvCustomerName.setText(holder.mItem.getCustomerName());

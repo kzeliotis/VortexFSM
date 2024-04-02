@@ -293,6 +293,9 @@ class MyApi {
 
 
         } catch (Exception e) {
+            if (apiUrl.contains("GetUserAuthentication")) {
+                postBody = "Login failed attempt " + MyPrefs.getString(PREF_USER_NAME, "-");
+            }
             MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody, 0, e.getMessage(), "");
             e.printStackTrace();
         }
