@@ -41,7 +41,8 @@ android {
     // added during execution.
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "vortex_${variant.name}_${variant.versionName}.apk"
+            //outputFileName = "vortex_${variant.name}_${variant.versionName}.apk"
+            outputFileName = "vortex_${variant.versionName}.apk"
         }
     }
 
