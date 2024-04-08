@@ -212,7 +212,7 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                                         dialog.dismiss();
                                         Uri uri = Uri.parse(CurrentApkVersionURL + "vortex_" + CurrentApkVersion + ".apk");
                                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                                         Bundle b = new Bundle();
                                         b.putBoolean("new_window", true); //sets new window
                                         intent.putExtras(b);
