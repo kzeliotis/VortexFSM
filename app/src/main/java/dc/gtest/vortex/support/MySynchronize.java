@@ -134,6 +134,14 @@ public class MySynchronize {
 
     private void synchronizeSavedData(boolean login) {
 
+        if (login){
+            String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
+            String username = MyPrefs.getString(PREF_USER_NAME, "");
+
+            SendLogin sendLogin = new SendLogin(ctx, true, true);
+            sendLogin.execute(username, password);
+        }
+
         Map<String, ?> startTravelDataForSync = ctx.getSharedPreferences(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, MODE_PRIVATE).getAll();
         for (Map.Entry<String, ?> entry : startTravelDataForSync.entrySet()) {
             String prefKey = entry.getKey();
@@ -306,13 +314,7 @@ public class MySynchronize {
             setProductsToInstallation.execute();
         }
 
-        if (login){
-            String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
-            String username = MyPrefs.getString(PREF_USER_NAME, "");
 
-            SendLogin sendLogin = new SendLogin(ctx, true, true);
-            sendLogin.execute(username, password);
-        }
 
 
     }
