@@ -49,7 +49,7 @@ public class SearchProductsActivity extends BaseDrawerActivity {
 
         tvProject.setText(SELECTED_PROJECT.getProjectDescription());
 
-        ProductsData.generate(SELECTED_PROJECT.getProjectProducts(), 0);
+        ProductsData.generate(SELECTED_PROJECT.getProjectProducts());
 
         if (PRODUCTS_LIST.size() == 0) {
             Toast toast = Toast.makeText(this, localized_no_product, Toast.LENGTH_LONG);

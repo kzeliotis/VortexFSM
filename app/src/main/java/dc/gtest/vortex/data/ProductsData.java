@@ -25,7 +25,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class ProductsData {
 
-    public static void generate(String products, int projectInstallationId) {
+    public static void generate(String products) {
 
         if (!products.equals("")) {
             try {
@@ -136,9 +136,7 @@ public class ProductsData {
                 Collections.sort(PRODUCTS_LIST, (a, b) -> a.getProductDescription().compareTo(b.getProductDescription()));
 
                 try {
-                    if(projectInstallationId == 0) {
-                        generateTree(PRODUCTS_LIST, projectInstallationId);
-                    }
+                   generateTree(PRODUCTS_LIST);
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -151,7 +149,7 @@ public class ProductsData {
     }
 
 
-    public static void generateTree(List<ProductModel> products, int projectInstallationId) {
+    public static void generateTree(List<ProductModel> products) {
 
         PRODUCTS_TREE_LIST.clear();
 
@@ -162,16 +160,22 @@ public class ProductsData {
 
         int cycle = 1;
         while (products.size() != inserted.size()){
+
+            if(cycle > 10000){
+                PRODUCTS_TREE_LIST.clear();
+                return;
+            }
+
             for (ProductModel pm : products){
 
                 if(inserted.contains(pm)){continue;}
 
                 //int ProjectProductId = Integer.parseInt(pm.getProjectProductId());
                 int MasterId = Integer.parseInt(pm.getMasterId());
-                if(cycle == 1 && MasterId > 0 && projectInstallationId != MasterId){continue;}
+                if(cycle == 1 && MasterId > 0){continue;}
                 List<ProductModel> pmlist = new ArrayList<>();
                 pmlist.add(pm);
-                addNodesToList(pmlist, allNodes, inserted, roots, parentIndexMap, products, projectInstallationId);
+                addNodesToList(pmlist, allNodes, inserted, roots, parentIndexMap, products);
             }
 
             cycle += 1;
@@ -190,7 +194,7 @@ public class ProductsData {
 
 
     public static void addNodesToList(List<ProductModel> pmList, List<TreeNode> allNodes, List<ProductModel> inserted,
-                                List<TreeNode> roots, Map<Integer, Integer> parentIndexMap, List<ProductModel> AllProducts, int projectInstallationId){
+                                List<TreeNode> roots, Map<Integer, Integer> parentIndexMap, List<ProductModel> AllProducts){
 
         for (ProductModel pm : pmList){
 
@@ -203,9 +207,10 @@ public class ProductsData {
             treeNode.setSelected(true);
 
             Integer index = parentIndexMap.get(MasterId);
-            if (index == null && MasterId > 0 && projectInstallationId != MasterId) {
-                //pm = null;
-                continue;
+            if (index == null && MasterId > 0) {
+                if(AllProducts.stream().filter(obj -> obj.getProjectProductId().equals(String.valueOf(MasterId))).collect(Collectors.toList()).size() > 0){
+                    continue;
+                }
             }
 
             if (index != null) {
@@ -219,7 +224,7 @@ public class ProductsData {
 
             List<ProductModel> childPms = AllProducts.stream().filter(obj -> obj.getMasterId().equals(String.valueOf(ProjectProductId))).collect(Collectors.toList());
 
-            addNodesToList(childPms, allNodes, inserted, roots, parentIndexMap, AllProducts, projectInstallationId);
+            addNodesToList(childPms, allNodes, inserted, roots, parentIndexMap, AllProducts);
 
         }
 

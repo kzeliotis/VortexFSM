@@ -295,7 +295,7 @@ public class ProductsActivity extends BaseDrawerActivity {
 
         Log.e(LOG_TAG, "==================== productsData: " + productsData);
 
-        ProductsData.generate(productsData, Integer.parseInt(projectInstallationId));
+        ProductsData.generate(productsData);
         if (PRODUCTS_LIST.size() == 0) {
             Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG).show();
         }

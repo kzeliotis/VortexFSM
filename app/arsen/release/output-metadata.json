@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 60301,
-      "versionName": "6.03.01",
-      "outputFile": "vortex_6.03.01.apk"
+      "versionCode": 60303,
+      "versionName": "6.03.03",
+      "outputFile": "vortex_6.03.03.apk"
     }
   ],
   "elementType": "File"
