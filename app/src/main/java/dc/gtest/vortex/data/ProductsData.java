@@ -25,7 +25,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class ProductsData {
 
-    public static void generate(String products) {
+    public static void generate(String products, int projectInstallationId) {
 
         if (!products.equals("")) {
             try {
@@ -136,7 +136,9 @@ public class ProductsData {
                 Collections.sort(PRODUCTS_LIST, (a, b) -> a.getProductDescription().compareTo(b.getProductDescription()));
 
                 try {
-                    generateTree(PRODUCTS_LIST);
+                    if(projectInstallationId == 0) {
+                        generateTree(PRODUCTS_LIST, projectInstallationId);
+                    }
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -149,7 +151,7 @@ public class ProductsData {
     }
 
 
-    public static void generateTree(List<ProductModel> products) {
+    public static void generateTree(List<ProductModel> products, int projectInstallationId) {
 
         PRODUCTS_TREE_LIST.clear();
 
@@ -166,10 +168,10 @@ public class ProductsData {
 
                 //int ProjectProductId = Integer.parseInt(pm.getProjectProductId());
                 int MasterId = Integer.parseInt(pm.getMasterId());
-                if(cycle == 1 && MasterId > 0){continue;}
+                if(cycle == 1 && MasterId > 0 && projectInstallationId != MasterId){continue;}
                 List<ProductModel> pmlist = new ArrayList<>();
                 pmlist.add(pm);
-                addNodesToList(pmlist, allNodes, inserted, roots, parentIndexMap, products);
+                addNodesToList(pmlist, allNodes, inserted, roots, parentIndexMap, products, projectInstallationId);
             }
 
             cycle += 1;
@@ -188,7 +190,7 @@ public class ProductsData {
 
 
     public static void addNodesToList(List<ProductModel> pmList, List<TreeNode> allNodes, List<ProductModel> inserted,
-                                List<TreeNode> roots, Map<Integer, Integer> parentIndexMap, List<ProductModel> AllProducts){
+                                List<TreeNode> roots, Map<Integer, Integer> parentIndexMap, List<ProductModel> AllProducts, int projectInstallationId){
 
         for (ProductModel pm : pmList){
 
@@ -201,7 +203,7 @@ public class ProductsData {
             treeNode.setSelected(true);
 
             Integer index = parentIndexMap.get(MasterId);
-            if (index == null && MasterId > 0) {
+            if (index == null && MasterId > 0 && projectInstallationId != MasterId) {
                 //pm = null;
                 continue;
             }
@@ -217,7 +219,7 @@ public class ProductsData {
 
             List<ProductModel> childPms = AllProducts.stream().filter(obj -> obj.getMasterId().equals(String.valueOf(ProjectProductId))).collect(Collectors.toList());
 
-            addNodesToList(childPms, allNodes, inserted, roots, parentIndexMap, AllProducts);
+            addNodesToList(childPms, allNodes, inserted, roots, parentIndexMap, AllProducts, projectInstallationId);
 
         }
 

@@ -165,7 +165,7 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
                 if (productsRvAdapter != null) {
                     if (responseBody != null) {
-                        ProductsData.generate(responseBody);
+                        ProductsData.generate(responseBody, Integer.parseInt(projectInstallationId));
 
                         if (PRODUCTS_LIST.size() == 0) {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
@@ -182,7 +182,7 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
                 if (productsRvAdapter != null) {
                     if (responseBody != null) {
-                        ProductsData.generate(responseBody);
+                        ProductsData.generate(responseBody, Integer.parseInt(projectInstallationId));
 
                         if (PRODUCTS_LIST.size() == 0) {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
@@ -252,7 +252,7 @@ public class GetProducts extends AsyncTask<String, Void, String > {
             if (attributesRvAdapter != null) {
 
                 if (responseBody != null) {
-                    ProductsData.generate(responseBody);
+                    ProductsData.generate(responseBody, Integer.parseInt(projectInstallationId));
 
                     for (int i = 0; i < PRODUCTS_LIST.size(); i++) {
                         if (PRODUCTS_LIST.get(i).getProjectProductId().equalsIgnoreCase(globalSelectedProductId)) {
