@@ -30,12 +30,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dc.gtest.vortex.R;
@@ -47,6 +49,8 @@ import dc.gtest.vortex.support.MySwitchLanguage;
 import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.FILTERED_ASSIGNMENTS_LIST;
+import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
 
@@ -73,6 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String language;
     private String accessToLocation;
     private String someFeatures;
+    private List<LatLng> _markerPositions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +89,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         changeTextLanguage();
 
         // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+//        if (mGoogleApiClient == null) {
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .addApi(LocationServices.API)
+//                    .build();
+//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frAllDataMap);
@@ -99,32 +104,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+        //mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(30000);
-        mLocationRequest.setFastestInterval(100);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        mLocationRequest = new LocationRequest();
+//        mLocationRequest.setInterval(30000);
+//        mLocationRequest.setFastestInterval(100);
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+//        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -149,6 +154,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         String assignmentData = MyPrefs.getString(PREF_DATA_ASSIGNMENTS, "");
         List<AssignmentModel> assignmentsList = FILTERED_ASSIGNMENTS_LIST.size() > 0 ? FILTERED_ASSIGNMENTS_LIST : ASSIGNMENTS_LIST;
+        _markerPositions = new ArrayList<>();
+        String cLat = MyPrefs.getString(PREF_CURRENT_LAT, "");
+        String cLon = MyPrefs.getString(PREF_CURRENT_LNG, "");
+        if(!cLat.isEmpty() && !cLon.isEmpty()){
+            _markerPositions.add(new LatLng(Double.parseDouble(cLat), Double.parseDouble(cLon)));
+        }
 
         if (assignmentsList.size() > 0) {
 
@@ -162,6 +173,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     if (!projectLat.equals("") && !projectLon.equals("")) {
                         LatLng markerCord = new LatLng(Double.parseDouble(projectLat), Double.parseDouble(projectLon));
+
+                        _markerPositions.add(markerCord);
 
                         BitmapDescriptor afLogo = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
                         String title = am.getCustomerName(); // oneObject.getString("CustomerName");
@@ -215,6 +228,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         });
                     }
                 }
+
+                zoomToFitMarkers();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -238,6 +254,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
         }
     }
+
+    private void zoomToFitMarkers() {
+        if (_markerPositions == null || _markerPositions.isEmpty()) {
+            return;
+        }
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng position : _markerPositions) {
+            builder.include(position);
+        }
+
+        LatLngBounds bounds = builder.build();
+        int padding = 400; // offset from edges of the map in pixels
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+    }
+
 
     private void showMessageOKCancel(DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(MapsActivity.this)
