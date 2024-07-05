@@ -88,6 +88,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
                 "  \"VATNumber\": \"" + params[4] + "\",\n" +
                 "  \"CustomerId\": \"" + CustomerId + "\",\n" +
                 "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
+                "  \"ExcludeFromAssignments\": \"" + (!ProjectId.isEmpty() && isForNewAssignment ? "1" : "0") + "\",\n" +
                 "  \"ProjectId\": \"" + ProjectId + "\"\n" +
                 "}";
 
