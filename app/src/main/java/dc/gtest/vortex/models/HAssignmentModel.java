@@ -14,6 +14,7 @@ public class HAssignmentModel {
     private String service;
     private String problem;
     private String solution;
+    private String proposedCheckOutStatus;
     private boolean ProjectHistory;
     private List<HMeasurementModel> hMeasurements = new ArrayList<>();
     private List<HConsumableModel> hConsumables = new ArrayList<>();
@@ -31,6 +32,7 @@ public class HAssignmentModel {
                         "  \"service\": \"" + service + "\",\n" +
                         "  \"problem\": \"" + problem + "\",\n" +
                         "  \"solution\": \"" + solution + "\",\n" +
+                        "  \"ProposedCheckOutStatus\": \"" + proposedCheckOutStatus + "\",\n" +
                         "  \"ProjectHistory\": \"" + ProjectHistory + "\",\n" +
                         "  \"hMeasurements\": " + hMeasurements + ",\n" +
                         "  \"hConsumables\": " + hConsumables + ",\n" +
@@ -40,6 +42,14 @@ public class HAssignmentModel {
         modelToString = modelToString.replace("}]", "}\n  ]");
 
         return modelToString;
+    }
+
+    public String getProposedCheckOutStatus() {
+        return proposedCheckOutStatus;
+    }
+
+    public void setProposedCheckOutStatus(String ProposedCheckOutStatus) {
+        this.proposedCheckOutStatus = ProposedCheckOutStatus;
     }
 
     public String getDateStart() {

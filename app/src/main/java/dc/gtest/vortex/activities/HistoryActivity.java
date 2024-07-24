@@ -39,9 +39,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_history;
 import static dc.gtest.vortex.support.MyLocalization.localized_subAssignments;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_HISTORY_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_HISTORY_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_TRAVEL_STARTED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SUBASSIGNMENTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
@@ -106,7 +108,13 @@ public class HistoryActivity extends BaseDrawerActivity implements View.OnClickL
 //            Toast.makeText(MyApplication.getContext(), localized_no_history, Toast.LENGTH_LONG).show();
 //        }
 
-        historyRvAdapter = new HistoryRvAdapter(HISTORY_LIST, subAssignments, this);
+        boolean isMaster = false;
+        if(MyPrefs.getBoolean(PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS, false)
+                && SELECTED_ASSIGNMENT.getAssignmentId().equals(SELECTED_ASSIGNMENT.getMasterAssignment())
+                && MyPrefs.getBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED,SELECTED_ASSIGNMENT.getAssignmentId(), false)){
+            isMaster = true;
+        }
+        historyRvAdapter = new HistoryRvAdapter(HISTORY_LIST, subAssignments, isMaster, this);
         rvHistoryList.setAdapter(historyRvAdapter);
 
         assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();

@@ -62,18 +62,6 @@
             android:layout_marginTop="@dimen/dp_16"
             style="?android:attr/buttonBarStyle">
 
-            <!--<Button-->
-            <!--android:id="@+id/btnStartTravel"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:padding="@dimen/dp_6"-->
-            <!--android:background="@drawable/rounded_button_grey"-->
-            <!--android:text="@string/start_travel"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:drawableStart="@drawable/ic_forward_black_24dp"-->
-            <!--android:drawableLeft="@drawable/ic_forward_black_24dp" />-->
-
             <Button
                 android:enabled="false"
                 android:id="@+id/btnCheckIn"

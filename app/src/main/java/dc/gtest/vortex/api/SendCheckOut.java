@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.AssignmentsActivity;
+import dc.gtest.vortex.activities.HistoryActivity;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
@@ -148,7 +149,7 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
 
             MyPrefs.clearOneAssignmentData(assignmentId);
             MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
-            if(btnCheckOut != null) { // "If" added because pressing sync from the AssignmentActivity would return null and the app would crash
+            if(btnCheckOut != null && spStatus != null) { // "If" added because pressing sync from the AssignmentActivity would return null and the app would crash
                 btnCheckOut.setEnabled(false);
                 spStatus.setEnabled(false);
                 etCommentsSolution.setEnabled(false);
@@ -191,11 +192,13 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
                     Toast.makeText(ctx, localized_successfully_checked_out, Toast.LENGTH_LONG).show();
                 }
 
-                activity.finishAffinity();
-                Intent intent = new Intent(activity, AssignmentsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
-                ctx.startActivity(intent);
+                if(!(activity instanceof HistoryActivity)){
+                    activity.finishAffinity();
+                    Intent intent = new Intent(activity, AssignmentsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
+                    ctx.startActivity(intent);
+                }
             }
         } else {
             if (showProgressAndToast) {

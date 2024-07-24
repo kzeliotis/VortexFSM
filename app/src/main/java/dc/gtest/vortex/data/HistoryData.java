@@ -38,10 +38,8 @@ public class HistoryData {
                 hAssignmentModel.setService(MyJsonParser.getStringValue(oneObject, "Service", ""));
                 hAssignmentModel.setProblem(MyJsonParser.getStringValue(oneObject, "Problem", ""));
                 hAssignmentModel.setSolution(MyJsonParser.getStringValue(oneObject, "Solution", ""));
+                hAssignmentModel.setProposedCheckOutStatus(MyJsonParser.getStringValue(oneObject, "ProposedCheckOutStatus", "1"));
                 hAssignmentModel.setProjectHistory(MyJsonParser.getBooleanValue(oneObject, "ProjectHistory", true));
-
-
-
 
                 JSONArray jArrayMeasurements = MyJsonParser.getJsonArrayValue(oneObject, "HMeasurements");
 
