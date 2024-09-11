@@ -69,7 +69,7 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
 
     @Override
     protected void onPostExecute(String responseBody) {
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no_body_for_get_request", responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no_body_for_get_request", responseCode, responseMessage, ""); //response body too long
 
         if ( responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ALL_CONSUMABLES, responseBody);
