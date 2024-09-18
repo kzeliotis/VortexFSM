@@ -204,6 +204,8 @@ public class MyGlobals {
     public static boolean singleAssignmentResult = false;
     public static boolean codeScanned = false;
     public static EditText attributeValueforScan;
+    public static AllAttributeModel selectedAllAttribute;
+    public static AttributeModel selectedAttribute;
 
     // static constants, texts, numbers, etc.
     public static final String CONST_EN = "en";

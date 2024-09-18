@@ -39,6 +39,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.attributeValueforScan;
+import static dc.gtest.vortex.support.MyGlobals.selectedAttribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_attribute_value;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
@@ -88,6 +89,9 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
         holder.mView.setOnClickListener(v -> {
 
             if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+
+                selectedAttribute = holder.mItem;
+
                 try {
                     JSONArray jArrayDefaultValues = holder.mItem.getAttributeDefaultValues();
 
@@ -136,14 +140,14 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                     if (spDialog.getSelectedItemPosition() != 0) {
 
                                         // saving old value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + holder.mItem.getProjectProductId(),
-                                                holder.mItem.getValueId(), holder.mItem.getAttributeValue());
+                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + selectedAttribute.getProjectProductId(),
+                                                selectedAttribute.getValueId(), selectedAttribute.getAttributeValue());
 
                                         // saving new value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + holder.mItem.getProjectProductId(),
-                                                holder.mItem.getValueId(), spDialog.getSelectedItem().toString());
+                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + selectedAttribute.getProjectProductId(),
+                                                selectedAttribute.getValueId(), spDialog.getSelectedItem().toString());
 
-                                        holder.tvAttributeOldValue.setText(holder.mItem.getAttributeValue());
+                                        holder.tvAttributeOldValue.setText(selectedAttribute.getAttributeValue());
 
                                         holder.tvAttributeValue.setText(spDialog.getSelectedItem().toString());
 
@@ -152,16 +156,16 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                         String newValue = spDialog.getSelectedItem().toString();
                                         newValue = escapeUrlCharacters(newValue);
                                         // In old version attribute new value was encoded by URLEncoder. Check if it is need.
-                                        String urlSuffix = "ProjectProductId=" + holder.mItem.getProjectProductId() +
-                                                "&AttributeId=" + holder.mItem.getAttributeId() +
+                                        String urlSuffix = "ProjectProductId=" + selectedAttribute.getProjectProductId() +
+                                                "&AttributeId=" + selectedAttribute.getAttributeId() +
                                                 "&Value=" + newValue +
                                                 "&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") +
-                                                "&ValueId=" + holder.mItem.getValueId();
+                                                "&ValueId=" + selectedAttribute.getValueId();
 
                                         MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
 
                                         if (MyUtils.isNetworkAvailable()) {
-                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
+                                            SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, selectedAttribute.getProjectProductId(), selectedAttribute.getValueId());
                                             sendUpdatedAttribute.execute(prefKey);
                                         } else {
                                             Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
@@ -199,14 +203,14 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                 if (attributeValueforScan != null && attributeValueforScan.getText() != null && !attributeValueforScan.getText().toString().trim().isEmpty()) {
 
                                     // saving old value
-                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + holder.mItem.getProjectProductId(),
-                                            holder.mItem.getValueId(), holder.mItem.getAttributeValue());
+                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + selectedAttribute.getProjectProductId(),
+                                            selectedAttribute.getValueId(), selectedAttribute.getAttributeValue());
 
                                     // saving new value
-                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + holder.mItem.getProjectProductId(),
-                                            holder.mItem.getValueId(),attributeValueforScan.getText().toString().trim());
+                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + selectedAttribute.getProjectProductId(),
+                                            selectedAttribute.getValueId(),attributeValueforScan.getText().toString().trim());
 
-                                    holder.tvAttributeOldValue.setText(holder.mItem.getAttributeValue());
+                                    holder.tvAttributeOldValue.setText(selectedAttribute.getAttributeValue());
 
                                     holder.tvAttributeValue.setText(attributeValueforScan.getText().toString().trim());
 
@@ -215,16 +219,16 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                     String newValue = attributeValueforScan.getText().toString().trim();
                                     newValue = escapeUrlCharacters(newValue);
                                     // In old version attribute new value was encoded by URLEncoder. Check if it is need.
-                                    String urlSuffix = "ProjectProductId=" + holder.mItem.getProjectProductId() +
-                                            "&AttributeId=" + holder.mItem.getAttributeId() +
+                                    String urlSuffix = "ProjectProductId=" + selectedAttribute.getProjectProductId() +
+                                            "&AttributeId=" + selectedAttribute.getAttributeId() +
                                             "&Value=" + newValue +
                                             "&UserId=" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") +
-                                            "&ValueId=" + holder.mItem.getValueId();
+                                            "&ValueId=" + selectedAttribute.getValueId();
 
                                     MyPrefs.setStringWithFileName(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, prefKey, urlSuffix);
 
                                     if (MyUtils.isNetworkAvailable()) {
-                                        SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, holder.mItem.getProjectProductId(), holder.mItem.getValueId());
+                                        SendUpdatedAttribute sendUpdatedAttribute = new SendUpdatedAttribute(ctx, selectedAttribute.getProjectProductId(), selectedAttribute.getValueId());
                                         sendUpdatedAttribute.execute(prefKey);
                                     } else {
                                         Toast.makeText(ctx, localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();

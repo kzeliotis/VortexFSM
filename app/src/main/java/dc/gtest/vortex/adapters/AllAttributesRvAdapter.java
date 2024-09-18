@@ -35,6 +35,7 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.attributeValueforScan;
+import static dc.gtest.vortex.support.MyGlobals.selectedAllAttribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_attribute_value;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
@@ -68,6 +69,9 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
         holder.mView.setOnClickListener(v -> {
 
             try {
+
+                selectedAllAttribute = holder.mItem;
+
                 JSONArray jArrayDefaultValues = holder.mItem.getAttributeDefaultValues();
 
                 if (jArrayDefaultValues.length() > 0) {
@@ -104,13 +108,13 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                                 if (spDialog.getSelectedItemPosition() != 0) {
 
                                     // this is used to send to server
-                                    savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
+                                    savedAttributes = savedAttributes + "\"" + selectedAllAttribute.getAttributeDescription() +
                                             "\": \"" + spDialog.getSelectedItem().toString() + "\",\n";
 
                                     // this is used to update offline data
                                     AttributeModel attributeModel = new AttributeModel();
-                                    attributeModel.setAttributeId(holder.mItem.getAttributeId());
-                                    attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+                                    attributeModel.setAttributeId(selectedAllAttribute.getAttributeId());
+                                    attributeModel.setAttributeDescription(selectedAllAttribute.getAttributeDescription());
                                     attributeModel.setAttributeValue(spDialog.getSelectedItem().toString());
                                     NEW_ATTRIBUTES_LIST.add(attributeModel);
                                 }
@@ -156,13 +160,13 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                                     && !attributeValueforScan.getText().toString().equals("")) {
 
                                 // this is used to send to server
-                                savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
+                                savedAttributes = savedAttributes + "\"" + selectedAllAttribute.getAttributeDescription() +
                                         "\": \"" + attributeValueforScan.getText().toString() + "\",\n";
 
                                 // this is used to update offline data
                                 AttributeModel attributeModel = new AttributeModel();
-                                attributeModel.setAttributeId(holder.mItem.getAttributeId());
-                                attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+                                attributeModel.setAttributeId(selectedAllAttribute.getAttributeId());
+                                attributeModel.setAttributeDescription(selectedAllAttribute.getAttributeDescription());
                                 attributeModel.setAttributeValue(attributeValueforScan.getText().toString());
                                 NEW_ATTRIBUTES_LIST.add(attributeModel);
                             }
