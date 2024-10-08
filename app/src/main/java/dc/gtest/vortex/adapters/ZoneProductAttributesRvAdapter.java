@@ -1,7 +1,16 @@
 package dc.gtest.vortex.adapters;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -20,15 +31,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.activities.AssignmentActionsActivity;
+import dc.gtest.vortex.activities.ZoneProductsActivity;
 import dc.gtest.vortex.models.MeasurableAttributeModel;
 import dc.gtest.vortex.models.ProductMeasurementModel;
+import dc.gtest.vortex.support.MyImages;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
+import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
+import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE_NEW;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCT_MEASUREMENTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.ValueSelected;
 import static dc.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
+import static dc.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
+import static dc.gtest.vortex.support.MyGlobals.globalProductMeasurementPosition;
+import static dc.gtest.vortex.support.MyGlobals.mandatoryStepPhoto;
+import static dc.gtest.vortex.support.MyGlobals.selectedProjectProductMeasurableAttributeId;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
@@ -259,22 +283,72 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                 }
 
             });
+        }
 
-           // holder.spZoneProductAttributes.setOnTouchListener((parent, event) -> {
-            //    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-           //         ValueSelected = true;
-           //     }
-            //    return false;
-           // });
+        // setup take photo
+        holder.ivTakePhoto.setOnClickListener(v -> {
+            globalProductMeasurementPosition = holder.getBindingAdapterPosition();
+            selectedProjectProductMeasurableAttributeId = Integer.parseInt(holder.mItem.getProjectProductMeasurableAttributeId());
+            Activity activity = (Activity) ctx;
+            new AlertDialog.Builder(ctx)
+                    .setNeutralButton("Gallery", (dialog, which) -> {
+                        boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
+                        int permission = ContextCompat.checkSelfPermission(ctx, tiramisu ? Manifest.permission.READ_MEDIA_IMAGES: Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        if (permission != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(activity, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO);
+                        } else {
+                            ZoneProductsActivity.pickMeasurementPhotoFromStorage(activity);
+                        }
+                    })
+                    .setPositiveButton("Camera", (dialog, which) -> {
+                        if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.CAMERA)
+                                == PackageManager.PERMISSION_DENIED) {
+                            mandatoryStepPhoto = true;
+                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_FOR_MANDATORY_PHOTO);
+                        } else {
+                            ZoneProductsActivity.takeMeasurementPhotoWithCamera(ctx);
+                        }
+                    })
+                    .show();
+        });
+
+        // setup remove image
+        holder.ivRemove.setOnClickListener(v -> {
+            MyUtils.deleteFile(holder.mItem.getMeasurementPhotoPath());
+            holder.mItem.setMeasurementPhotoPath("");
+            holder.mItem.setMeasurementPhoto("");
+            globalCurrentPhotoPath = "";
+
+            holder.ivTaskPhoto.setImageDrawable(null);
+            holder.ivRemove.setVisibility(View.GONE);
+        });
+
+        if (holder.mItem.getEnableMeasurementPhoto().equals("1")) {
+            holder.llMandatoryPhoto.setVisibility(View.VISIBLE);
+        } else {
+            holder.llMandatoryPhoto.setVisibility(View.GONE);
+        }
+
+        if (!holder.mItem.getMeasurementPhoto().isEmpty()) {
+            new MyImages.SetImageFromPath(holder.ivTaskPhoto).execute(holder.mItem.getMeasurementPhotoPath(), "64", "64");
+            holder.ivRemove.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivTaskPhoto.setImageDrawable(null);
+            holder.ivRemove.setVisibility(View.GONE);
         }
 
         if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false) &&
                 !MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false)) {
             holder.etZoneProductAttribute.setEnabled(true);
             holder.spZoneProductAttributes.setEnabled(true);
+            holder.ivTakePhoto.setEnabled(true);
+            holder.ivTakePhoto.setImageResource(R.drawable.ic_add_a_photo_blue_24dp);
         } else {
             holder.etZoneProductAttribute.setEnabled(false);
             holder.spZoneProductAttributes.setEnabled(false);
+            holder.ivRemove.setVisibility(View.GONE);
+            holder.ivTakePhoto.setEnabled(false);
+            holder.ivTakePhoto.setImageResource(R.drawable.ic_add_a_photo_grey_24dp);
         }
     }
 
@@ -288,6 +362,10 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
         final TextView tvZoneAttributeName;
         final EditText etZoneProductAttribute;
         final Spinner spZoneProductAttributes;
+        final LinearLayout llMandatoryPhoto;
+        final ImageView ivTaskPhoto;
+        final ImageView ivRemove;
+        final ImageView ivTakePhoto;
         public MeasurableAttributeModel mItem;
 
         public ViewHolder(View view) {
@@ -296,6 +374,10 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
             tvZoneAttributeName = view.findViewById(R.id.tvZoneAttributeName);
             etZoneProductAttribute = view.findViewById(R.id.etZoneProductAttribute);
             spZoneProductAttributes = view.findViewById(R.id.spZoneProductAttributes);
+            llMandatoryPhoto = view.findViewById(R.id.llMandatoryPhoto);
+            ivTaskPhoto = view.findViewById(R.id.ivTaskPhoto);
+            ivRemove = view.findViewById(R.id.ivRemove);
+            ivTakePhoto = view.findViewById(R.id.ivTakePhoto);
         }
     }
 }

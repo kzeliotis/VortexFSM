@@ -1,6 +1,11 @@
 package dc.gtest.vortex.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.view.GravityCompat;
@@ -9,6 +14,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.app.AlertDialog;
+
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +31,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,23 +44,44 @@ import dc.gtest.vortex.adapters.ZoneProductsRvAdapter;
 import dc.gtest.vortex.api.GetZoneProducts;
 import dc.gtest.vortex.api.SendProductMeasurements;
 import dc.gtest.vortex.data.ZoneProductsData;
+import dc.gtest.vortex.models.MeasurableAttributeModel;
 import dc.gtest.vortex.models.ProductMeasurementModel;
+import dc.gtest.vortex.models.ZoneProductModel;
 import dc.gtest.vortex.support.MyCanEdit;
+import dc.gtest.vortex.support.MyDialogs;
+import dc.gtest.vortex.support.MyImages;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
+import dc.gtest.vortex.support.TakeUploadPhoto;
 
+import static dc.gtest.vortex.support.MyGlobals.CONST_ASSIGNMENT_PHOTOS_FOLDER;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_MANDATORY_TASK_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_PICK_MEASUREMENT_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_TAKE_MEASUREMENT_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.PICKFILE_RESULT_CODE;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCT_MEASUREMENTS_LIST;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MEASUREMENT_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_ASSIGNMENT_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MEASUREMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.ValueSelected;
 import static dc.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_PRODUCTS_LIST_FILTERED;
+import static dc.gtest.vortex.support.MyGlobals.globalCurrentPhotoPath;
+import static dc.gtest.vortex.support.MyGlobals.globalProductMeasurementPosition;
 import static dc.gtest.vortex.support.MyGlobals.resendZoneMeasurements;
+import static dc.gtest.vortex.support.MyGlobals.selectedProjectProductMeasurableAttributeId;
 import static dc.gtest.vortex.support.MyLocalization.localized_ask_send_zone_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_file_size_limit;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
 import static dc.gtest.vortex.support.MyLocalization.localized_nothing_is_changed;
@@ -292,18 +324,6 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 49374:
-
-//                final Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        searchView.onActionViewExpanded();
-//                        searchView.setIconified(false);
-//                        searchView.setQuery("666777", false);
-//                        searchView.clearFocus();
-//                    }
-//                }, 1000);
-
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 if (result != null) {
                     if (result.getContents() != null) {
@@ -323,9 +343,112 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
                     }
                 }
                 break;
+
+            case OTHER_APP_RESULT_TAKE_MEASUREMENT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (selectedProjectProductMeasurableAttributeId > 0) {
+                        try {
+                            getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhotoPath(globalCurrentPhotoPath);
+                            getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhoto(MyImages.getImageBase64String(ZoneProductsActivity.this, globalCurrentPhotoPath, true));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+//                        Log.e(LOG_TAG, "----------------onActivityResult MANDATORY_TASKS_LIST: \n" + MANDATORY_TASKS_LIST);
+
+                        zoneProductsRvAdapter.notifyDataSetChanged();
+                    }
+                }
+                break;
+
+            case OTHER_APP_RESULT_PICK_MEASUREMENT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        if (selectedProjectProductMeasurableAttributeId > 0) {
+                            Uri selectedImage = data.getData();
+                            File pickedFile = new File(getRealPathFromURI(selectedImage));
+                            String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+                            File newFileLocation = new File(this.getExternalFilesDir(null) + File.separator + assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER);
+                            File movedPhoto = new File(newFileLocation, pickedFile.getName());
+                            movedPhoto = CopyFile(selectedImage, movedPhoto);
+                            if (movedPhoto == null){return;}
+                            //copyFileOrDirectory(pickedFile.getAbsolutePath(), newFileLocation.getAbsolutePath());
+                            globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
+
+                            try {
+                                getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhotoPath(globalCurrentPhotoPath);
+                                getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhoto(MyImages.getImageBase64String(ZoneProductsActivity.this, globalCurrentPhotoPath, false));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+//                        Log.e(LOG_TAG, "----------------onActivityResult MANDATORY_TASKS_LIST: \n" + MANDATORY_TASKS_LIST);
+
+                            zoneProductsRvAdapter.notifyDataSetChanged();
+                        }
+
+                    }
+
+
+                }
+
+
+                break;
         }
     }
 
+
+    public String getRealPathFromURI(Uri uri) {
+        String path = "";
+        if (getContentResolver() != null) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(idx);
+                cursor.close();
+            }
+        }
+        return path;
+    }
+
+    public File CopyFile(Uri attachmentFile, File outputFile){
+        InputStream in = null;
+        OutputStream out = null;
+        long selectedFileSize = 0;
+        boolean transferSuccessful = true;
+        try {
+            in = getContentResolver().openInputStream(attachmentFile);
+            long sizeLimit = 30000000; //30mb
+            selectedFileSize = in.available();
+            //String conStr = MyPrefs.getString(PREF_AZURE_CONNECTION_STRING, "");
+            if (selectedFileSize > sizeLimit){
+                MyDialogs.showOK(ZoneProductsActivity.this, localized_file_size_limit);
+                return null;
+            }
+            outputFile.getParentFile().mkdirs();
+            outputFile.createNewFile();
+            out = new FileOutputStream(outputFile, true);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (out != null){
+                out.close();
+            }
+        } catch (Exception ex) {
+            transferSuccessful = false;
+            ex.printStackTrace();
+            MyDialogs.showOK(ZoneProductsActivity.this, ex.toString());
+            outputFile = null;
+        }
+
+        return outputFile;
+    }
 
     public void onRadioButtonClicked(View view) {
         MyLocalization.saveNewLanguage(this, view);
@@ -342,15 +465,32 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
         btnSendZoneProduct.setText(localized_send_data_caps);
     }
 
+    public MeasurableAttributeModel getMeasuraleAttributeById (List<ZoneProductModel> zpList, String projectProductMeasurableAttributeId){
+
+        for (ZoneProductModel pmm : zpList) {
+
+            List<MeasurableAttributeModel> measurements = pmm.getMeasurableAttributeModel();
+
+            for (MeasurableAttributeModel measurement : measurements) {
+                if (measurement.getProjectProductMeasurableAttributeId().equals(projectProductMeasurableAttributeId)) {
+                    return measurement;
+                }
+            }
+        }
+
+        return null;
+
+    }
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, SELECTED_ASSIGNMENT.getAssignmentId(), false);
-            if(!isCheckedOut) {
+            if (!isCheckedOut) {
                 new AlertDialog.Builder(this)
                         .setMessage(localized_ask_send_zone_measurements)
                         .setPositiveButton(R.string.yes, (dialog, which) -> {
@@ -368,15 +508,30 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
 
         }
     }
-//    public static void hideKeyboard(Activity activity) {
-//        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        //Find the currently focused view, so we can grab the correct window token from it.
-//        View view = activity.getCurrentFocus();
-//        //If no view currently has focus, create a new one, just so we can grab a window token from it
-//        if (view == null) {
-//            view = new View(activity);
-//        }
-//        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == REQUEST_CAMERA_FOR_MEASUREMENT_PHOTO) {
+                takeMeasurementPhotoWithCamera(this);
+            } else if (requestCode == REQUEST_EXTERNAL_STORAGE_FOR_MEASUREMENT_PHOTO) {
+                pickMeasurementPhotoFromStorage(this);
+            }
+        }
+    }
+
+    public static void pickMeasurementPhotoFromStorage(Activity activity) {
+        globalCurrentPhotoPath = null;
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickPhoto.setType("image/*");
+        activity.startActivityForResult(pickPhoto, OTHER_APP_RESULT_PICK_MEASUREMENT_PHOTO);
+    }
+
+
+    public static void takeMeasurementPhotoWithCamera(Context ctx) {
+        String photoFolderName = SELECTED_ASSIGNMENT.getAssignmentId() + CONST_ASSIGNMENT_PHOTOS_FOLDER;
+        new TakeUploadPhoto(ctx).dispatchTakePictureIntent(OTHER_APP_RESULT_TAKE_MEASUREMENT_PHOTO, photoFolderName);
+    }
 
 }

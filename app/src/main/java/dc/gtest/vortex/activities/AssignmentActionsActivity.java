@@ -2019,17 +2019,6 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 pickFileFromStorage(this);
             }
         }
-     /*   } else {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (mandatoryStepPhoto) {
-                    mandatoryStepPhoto = false;
-                    String photoFolderName = assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER;
-                    new TakeUploadPhoto(AssignmentActionsActivity.this).dispatchTakePictureIntent(OTHER_APP_RESULT_TAKE_MANDATORY_TASK_PHOTO, photoFolderName);
-                } else {
-                    String photoFolderName = assignmentId + CONST_ASSIGNMENT_PHOTOS_FOLDER;
-                    new TakeUploadPhoto(AssignmentActionsActivity.this).dispatchTakePictureIntent(OTHER_APP_RESULT_TAKE_ASSIGNMENT_PHOTO, photoFolderName);
-                }
-            }*/
     }
 
 

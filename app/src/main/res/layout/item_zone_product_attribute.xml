@@ -39,4 +39,43 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_14" />
 
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/llMandatoryPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="@dimen/dp_6">
+
+        <ImageView
+            android:id="@+id/ivTaskPhoto"
+            android:layout_width="@dimen/dp_64"
+            android:layout_height="@dimen/dp_64"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/photos" />
+
+        <ImageView
+            android:id="@+id/ivRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_16"
+            android:src="@drawable/ic_close_red_24dp"
+            android:contentDescription="@string/delete" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/ivTakePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_16"
+            android:src="@drawable/ic_add_a_photo_blue_24dp"
+            android:contentDescription="@string/image" />
+
+    </LinearLayout>
+
 </LinearLayout>

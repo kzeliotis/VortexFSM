@@ -9,6 +9,7 @@ public class ProductMeasurementModel {
     private String value = "";
     private String ProjectZoneId = "";
 
+
     public String getAssignmentId() {
         return assignmentId;
     }
@@ -56,6 +57,9 @@ public class ProductMeasurementModel {
     public void setProjectZoneId(String ProjectZoneId) {
         this.ProjectZoneId = ProjectZoneId;
     }
+
+
+
 
     // This is sent to server, do not change key names
     @Override

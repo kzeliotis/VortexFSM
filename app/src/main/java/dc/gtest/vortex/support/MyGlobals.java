@@ -172,6 +172,10 @@ public class MyGlobals {
     public static final int REQUEST_CAMERA_FOR_ASSIGNMENT_PHOTO = 2008;
     public static final int REQUEST_CAMERA_FOR_MANDATORY_PHOTO = 2009;
     public static final int PICKFILE_RESULT_CODE = 2010;
+    public static final int REQUEST_EXTERNAL_STORAGE_FOR_MEASUREMENT_PHOTO = 2011;
+    public static final int REQUEST_CAMERA_FOR_MEASUREMENT_PHOTO = 2012;
+    public static final int OTHER_APP_RESULT_PICK_MEASUREMENT_PHOTO = 2013;
+    public static final int OTHER_APP_RESULT_TAKE_MEASUREMENT_PHOTO = 2014;
 
     // requests for permissions from 3001
     public static final int PERMISSIONS_FINE_LOCATION = 3001;
@@ -198,6 +202,8 @@ public class MyGlobals {
     public static String globalExternalFileDir = "";
 
     public static int globalMandatoryTaskPosition = -1;
+    public static int globalProductMeasurementPosition = -1;
+    public static int selectedProjectProductMeasurableAttributeId = 0;
     public static boolean ValueSelected;
     public static boolean mandatoryStepPhoto = false;
     public static boolean resendZoneMeasurements;

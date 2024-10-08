@@ -270,7 +270,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
 
         // setup take photo
         holder.ivTakePhoto.setOnClickListener(v -> {
-            globalMandatoryTaskPosition = holder.getAdapterPosition();
+            globalMandatoryTaskPosition = holder.getBindingAdapterPosition();
             Activity activity = (Activity) ctx;
             new AlertDialog.Builder(ctx)
                     .setNeutralButton("Gallery", (dialog, which) -> {
