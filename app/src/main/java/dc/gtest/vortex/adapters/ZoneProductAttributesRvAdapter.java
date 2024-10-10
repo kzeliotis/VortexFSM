@@ -43,7 +43,9 @@ import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE;
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_STORAGE_NEW;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCT_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MANDATORY_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_CAMERA_FOR_MEASUREMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO;
+import static dc.gtest.vortex.support.MyGlobals.REQUEST_EXTERNAL_STORAGE_FOR_MEASUREMENT_PHOTO;
 import static dc.gtest.vortex.support.MyGlobals.ValueSelected;
 import static dc.gtest.vortex.support.MyGlobals.ZONES_WITH_MEASUREMENTS_MAP;
 import static dc.gtest.vortex.support.MyGlobals.ZONE_MEASUREMENTS_MAP;
@@ -121,6 +123,8 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                     productMeasurementModel.setMeasurableAttributeId(holder.mItem.getAttributeId());
                     productMeasurementModel.setDefaultValueId("-1");
                     productMeasurementModel.setValue(holder.etZoneProductAttribute.getText().toString());
+                    productMeasurementModel.setMeasurementPhotoPath(holder.mItem.getMeasurementPhotoPath());
+                    productMeasurementModel.setMeasurementPhoto(holder.mItem.getMeasurementPhoto());
 
                     boolean isExists = false;
 
@@ -229,6 +233,8 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                         productMeasurementModel.setDefaultValueId(holder.mItem.getAttributeDefaultModel().get(position).getDefaultValueId());
                         productMeasurementModel.setValue(holder.mItem.getAttributeDefaultModel().get(position).getDefaultValueName());
                         productMeasurementModel.setProjectZoneId("");
+                        productMeasurementModel.setMeasurementPhotoPath(holder.mItem.getMeasurementPhotoPath());
+                        productMeasurementModel.setMeasurementPhoto(holder.mItem.getMeasurementPhoto());
 
                         boolean isExists = false;
 
@@ -295,7 +301,7 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                         boolean tiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? true : false;
                         int permission = ContextCompat.checkSelfPermission(ctx, tiramisu ? Manifest.permission.READ_MEDIA_IMAGES: Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         if (permission != PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(activity, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_MANDATORY_PHOTO);
+                            ActivityCompat.requestPermissions(activity, tiramisu ? PERMISSIONS_STORAGE_NEW : PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE_FOR_MEASUREMENT_PHOTO);
                         } else {
                             ZoneProductsActivity.pickMeasurementPhotoFromStorage(activity);
                         }
@@ -304,7 +310,7 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
                         if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_DENIED) {
                             mandatoryStepPhoto = true;
-                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_FOR_MANDATORY_PHOTO);
+                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_FOR_MEASUREMENT_PHOTO);
                         } else {
                             ZoneProductsActivity.takeMeasurementPhotoWithCamera(ctx);
                         }
@@ -329,7 +335,7 @@ public class ZoneProductAttributesRvAdapter extends RecyclerView.Adapter<ZonePro
             holder.llMandatoryPhoto.setVisibility(View.GONE);
         }
 
-        if (!holder.mItem.getMeasurementPhoto().isEmpty()) {
+        if (!holder.mItem.getMeasurementPhotoPath().isEmpty()) {
             new MyImages.SetImageFromPath(holder.ivTaskPhoto).execute(holder.mItem.getMeasurementPhotoPath(), "64", "64");
             holder.ivRemove.setVisibility(View.VISIBLE);
         } else {

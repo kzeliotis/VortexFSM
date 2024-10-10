@@ -97,6 +97,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCT_MEASUREMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROJECT_ID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class ZoneProductsActivity extends BaseDrawerActivity{
@@ -348,8 +349,7 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
                 if (resultCode == RESULT_OK) {
                     if (selectedProjectProductMeasurableAttributeId > 0) {
                         try {
-                            getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhotoPath(globalCurrentPhotoPath);
-                            getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhoto(MyImages.getImageBase64String(ZoneProductsActivity.this, globalCurrentPhotoPath, true));
+                            insertPhotoToDatasource(false);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -376,8 +376,7 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
                             globalCurrentPhotoPath = movedPhoto.getAbsolutePath();
 
                             try {
-                                getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhotoPath(globalCurrentPhotoPath);
-                                getMeasuraleAttributeById(ZONE_PRODUCTS_LIST, String.valueOf(selectedProjectProductMeasurableAttributeId)).setMeasurementPhoto(MyImages.getImageBase64String(ZoneProductsActivity.this, globalCurrentPhotoPath, false));
+                                insertPhotoToDatasource(true);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -465,22 +464,6 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
         btnSendZoneProduct.setText(localized_send_data_caps);
     }
 
-    public MeasurableAttributeModel getMeasuraleAttributeById (List<ZoneProductModel> zpList, String projectProductMeasurableAttributeId){
-
-        for (ZoneProductModel pmm : zpList) {
-
-            List<MeasurableAttributeModel> measurements = pmm.getMeasurableAttributeModel();
-
-            for (MeasurableAttributeModel measurement : measurements) {
-                if (measurement.getProjectProductMeasurableAttributeId().equals(projectProductMeasurableAttributeId)) {
-                    return measurement;
-                }
-            }
-        }
-
-        return null;
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -532,6 +515,87 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
     public static void takeMeasurementPhotoWithCamera(Context ctx) {
         String photoFolderName = SELECTED_ASSIGNMENT.getAssignmentId() + CONST_ASSIGNMENT_PHOTOS_FOLDER;
         new TakeUploadPhoto(ctx).dispatchTakePictureIntent(OTHER_APP_RESULT_TAKE_MEASUREMENT_PHOTO, photoFolderName);
+    }
+
+    public void insertPhotoToDatasource(boolean fromGallery){
+
+        ProductMeasurementModel productMeasurementModel = new ProductMeasurementModel();
+        String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+
+        for (ZoneProductModel pmm : ZONE_PRODUCTS_LIST_FILTERED) {
+            List<MeasurableAttributeModel> measurements = pmm.getMeasurableAttributeModel();
+            for (MeasurableAttributeModel measurement : measurements) {
+                if (measurement.getProjectProductMeasurableAttributeId().equals(String.valueOf(selectedProjectProductMeasurableAttributeId))) {
+                    productMeasurementModel.setAssignmentId(assignmentId);
+                    productMeasurementModel.setZoneProductId(pmm.getZoneProductId());
+                    productMeasurementModel.setMeasurableAttributeId(measurement.getAttributeId());
+                    productMeasurementModel.setDefaultValueId("-1");
+                    productMeasurementModel.setValue(measurement.getAttributeDefaultModel().get(0).getDefaultValueName());
+                    productMeasurementModel.setMeasurementPhotoPath(globalCurrentPhotoPath);
+
+
+                    measurement.setMeasurementPhotoPath(globalCurrentPhotoPath);
+
+                    boolean isExists = false;
+
+                    if(ZONE_MEASUREMENTS_MAP.containsKey(prefKey)){
+                        PRODUCT_MEASUREMENTS_LIST = ZONE_MEASUREMENTS_MAP.get(prefKey);
+                    } else{
+                        PRODUCT_MEASUREMENTS_LIST.clear();
+                    }
+
+                    String measurementPhoto = MyImages.getImageBase64String(ZoneProductsActivity.this, globalCurrentPhotoPath, fromGallery);
+
+                    for (int i = 0; i < PRODUCT_MEASUREMENTS_LIST.size(); i++) {
+                        if (PRODUCT_MEASUREMENTS_LIST.get(i).getZoneProductId().equals(pmm.getZoneProductId()) &&
+                                PRODUCT_MEASUREMENTS_LIST.get(i).getMeasurableAttributeId().equals(measurement.getAttributeId()))
+                        {
+                            PRODUCT_MEASUREMENTS_LIST.get(i).setValue(productMeasurementModel.getValue());
+                            PRODUCT_MEASUREMENTS_LIST.get(i).setMeasurementPhoto(measurementPhoto);
+                            PRODUCT_MEASUREMENTS_LIST.get(i).setMeasurementPhotoPath(globalCurrentPhotoPath);
+                            isExists = true;
+                        }
+                    }
+
+                    if (!isExists) {
+                        productMeasurementModel.setMeasurementPhoto(measurementPhoto);
+                        PRODUCT_MEASUREMENTS_LIST.add(productMeasurementModel);
+                    }
+
+                    ZONE_MEASUREMENTS_MAP.remove(prefKey);
+                    ZONE_MEASUREMENTS_MAP.put(prefKey, PRODUCT_MEASUREMENTS_LIST);
+
+                    boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
+                    if (sendZoneMeasurements){
+                        List<String> zoneIds = new ArrayList<>();
+                        if (ZONES_WITH_MEASUREMENTS_MAP.containsKey(assignmentId)) {
+                            zoneIds = ZONES_WITH_MEASUREMENTS_MAP.get(assignmentId);
+                        }
+                        String zone_id = prefKey.split("_")[1];
+                        if(!zoneIds.contains(zone_id)){
+                            zoneIds.add(zone_id);
+                        }
+                        ZONES_WITH_MEASUREMENTS_MAP.put(assignmentId, zoneIds); //keeping record of all zones that have measurements for mandatorymeasurementsservice
+
+                        MyPrefs.setStringWithFileName(PREF_FILE_ZONES_WITH_MEASUREMENTS, prefKey, new Gson().toJson(ZONES_WITH_MEASUREMENTS_MAP));
+                    }
+
+                    MyPrefs.setStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_MAP, prefKey, new Gson().toJson(ZONE_MEASUREMENTS_MAP));
+                    MyPrefs.setStringWithFileName(PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC, prefKey, PRODUCT_MEASUREMENTS_LIST.toString());
+                    MyPrefs.setStringWithFileName(PREF_FILE_ZONE_PRODUCT_MEASUREMENTS, prefKey, PRODUCT_MEASUREMENTS_LIST.toString());
+                    MyPrefs.setStringWithFileName(PREF_FILE_ZONE_PRODUCTS_FOR_SHOW, prefKey, ZONE_PRODUCTS_LIST.toString());
+
+
+                    break;
+                }
+            }
+        }
+
+
+
+
+
+
     }
 
 }

@@ -88,6 +88,7 @@ public class ZoneProductsData {
                             attributeModel.setProjectProductMeasurableAttributeId(MyJsonParser.getStringValue(jObjectMeasurableAttribute, "ProjectProductMeasurableAttributeId", "0"));
                             attributeModel.setAttributeName(MyJsonParser.getStringValue(jObjectMeasurableAttribute, "MeasurableAttributeDescription", ""));
                             attributeModel.setEnableMeasurementPhoto(MyJsonParser.getStringValue(jObjectMeasurableAttribute, "EnableMeasurementPhoto", "0"));
+                            attributeModel.setMeasurementPhotoPath(MyJsonParser.getStringValue(jObjectMeasurableAttribute, "MeasurementPhotoPath", ""));
                             attributeModel.setAttributeDefaultModel(ZONE_ATTRIBUTE_DEFAULTS_LIST);
 
                             ZONE_ATTRIBUTES_LIST.add(attributeModel);

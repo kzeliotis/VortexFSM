@@ -8,6 +8,8 @@ public class ProductMeasurementModel {
     private String defaultValueId = "";
     private String value = "";
     private String ProjectZoneId = "";
+    private String measurementPhotoPath = "";
+    private String measurementPhoto = "";
 
 
     public String getAssignmentId() {
@@ -58,7 +60,21 @@ public class ProductMeasurementModel {
         this.ProjectZoneId = ProjectZoneId;
     }
 
+    public String getMeasurementPhotoPath() {
+        return measurementPhotoPath;
+    }
 
+    public void setMeasurementPhotoPath(String measurementPhotoPath) {
+        this.measurementPhotoPath = measurementPhotoPath;
+    }
+
+    public String getMeasurementPhoto() {
+        return measurementPhoto;
+    }
+
+    public void setMeasurementPhoto(String measurementPhoto) {
+        this.measurementPhoto = measurementPhoto;
+    }
 
 
     // This is sent to server, do not change key names
@@ -70,6 +86,8 @@ public class ProductMeasurementModel {
                 "    \"ZoneProductId\": \"" + getZoneProductId() + "\",\n" +
                 "    \"MeasurableAttributeId\": \"" + getMeasurableAttributeId() + "\",\n" +
                 "    \"MeasurableAttributeDefaultValueId\": \"" + getDefaultValueId() + "\",\n" +
+                "    \"MeasurementPhotoPath\": \"" + getMeasurementPhotoPath() + "\",\n" +
+                "    \"MeasurementPhoto\": \"" + getMeasurementPhoto() + "\",\n" +
                 "    \"Value\": \"" + getValue() + "\",\n" +
                 "    \"ProjectZoneId\": \"" + getProjectZoneId() + "\"\n" +
                 "  }";
