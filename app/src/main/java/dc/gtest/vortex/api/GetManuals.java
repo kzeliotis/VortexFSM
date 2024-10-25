@@ -22,6 +22,7 @@ import static dc.gtest.vortex.support.MyGlobals.MANUALS_LIST;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_manual;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_MANUALS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 
 public class GetManuals extends AsyncTask<String, Void, String > {
 
@@ -41,7 +42,7 @@ public class GetManuals extends AsyncTask<String, Void, String > {
         String responseBody = null;
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl+ "/Vortex.svc/GetManuals";
+        String apiUrl = baseHostUrl+ "/Vortex.svc/GetManuals?UserId=" + PREF_USERID;
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
