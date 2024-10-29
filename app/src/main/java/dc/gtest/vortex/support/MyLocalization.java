@@ -268,6 +268,7 @@ public class MyLocalization {
     public static String localized_collapse_all = "";
     public static String localized_replace = "";
     public static String localized_det_custom_fields = "";
+    public static String localized_create_workorder_on_asset = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -528,6 +529,7 @@ public class MyLocalization {
                 localized_collapse_all = ctx.getString(R.string.collapse_all_gr);
                 localized_replace = ctx.getString(R.string.replace_gr);
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields_gr);
+                localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset_gr);
                 break;
 
             case CONST_AR:
@@ -785,6 +787,7 @@ public class MyLocalization {
                 localized_collapse_all = ctx.getString(R.string.collapse_all_ar);
                 localized_replace = ctx.getString(R.string.replace_ar);
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields_ar);
+                localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset_ar);
                 break;
 
             default:
@@ -1043,6 +1046,7 @@ public class MyLocalization {
                 localized_collapse_all = ctx.getString(R.string.collapse_all);
                 localized_replace = ctx.getString(R.string.replace);
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields);
+                localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset);
                 break;
 
 

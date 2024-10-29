@@ -31,6 +31,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ASSIGNMENT_PRODUCTS;
+import static dc.gtest.vortex.api.MyApi.API_GET_PROJECT_PRODUCT_BY_IDENTITY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
@@ -42,6 +43,7 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ID_SEARCH_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
@@ -62,13 +64,15 @@ public class GetProducts extends AsyncTask<String, Void, String > {
     private final String projectInstallationId;
     private final boolean hideProgress;
     private final boolean selectProductsForInstallation;
+    private final String idValue;
 
-    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId, boolean SelectProductForInstallation) {
+    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId, boolean SelectProductForInstallation, String idValue) {
         this.ctx = ctx;
         this.assignmentId = assignmentId;
         this.projectInstallationId = projectInstallationId;
         this.hideProgress = hideProgress;
         this.selectProductsForInstallation = SelectProductForInstallation;
+        this.idValue = idValue;
     }
 
     @Override
@@ -97,6 +101,10 @@ public class GetProducts extends AsyncTask<String, Void, String > {
             apiUrl += "&ProjectInstallationId=" + projectInstallationId;
         } else if (selectProductsForInstallation){
             apiUrl += "&ProjectInstallationId=-1";
+        }
+
+        if(!idValue.isEmpty()){
+            apiUrl = baseHostUrl + API_GET_PROJECT_PRODUCT_BY_IDENTITY + idValue;
         }
 
         try {
@@ -144,6 +152,8 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                 MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, responseBody);
             } else if (selectProductsForInstallation) {
                 MyPrefs.setStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, assignmentId, responseBody);
+            } else if (idValue.isEmpty()){
+                MyPrefs.setStringWithFileName(PREF_FILE_ID_SEARCH_PRODUCTS_DATA, "0", responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, assignmentId, responseBody);
             }

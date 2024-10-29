@@ -182,6 +182,10 @@ public class MySliderMenu {
                         intent = new Intent(ctx, MapsActivity.class);
                         break;
 
+                    case R.id.nav_scan_code:
+
+                        break;
+
                     case R.id.nav_new_assignment:
                         intent = new Intent(ctx, NewAssignmentActivity.class);
                         break;

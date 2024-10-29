@@ -80,6 +80,7 @@ public class MyPrefs {
     public static final String PREF_FILE_HISTORY_DATA = "pref_file_history_data";
     public static final String PREF_FILE_PRODUCTS_DATA = "pref_file_products_data";
     public static final String PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA = "pref_file_no_installation_products_data";
+    public static final String PREF_FILE_ID_SEARCH_PRODUCTS_DATA = "pref_file_id_search_products_data";
     public static final String PREF_FILE_INSTALLATION_PRODUCTS_DATA = "pref_file_installation_products_data";
     public static final String PREF_FILE_SUBASSIGNMENTS_DATA = "pref_file_products_data";
     public static final String PREF_FILE_INSTALLATION_HISTORY_DATA = "pref_file_installation_history_data";

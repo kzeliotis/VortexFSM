@@ -20,6 +20,11 @@
             android:icon="@drawable/ic_custom_fields_24dp"
             android:title="@string/company_custom_fields" />
 
+        <item
+            android:id="@+id/nav_scan_code"
+            android:icon="@drawable/ic_blur_linear_black_24dp"
+            android:title="@string/scan_code" />
+
     </group>
 
     <group

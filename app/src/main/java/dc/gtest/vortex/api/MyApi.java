@@ -108,6 +108,7 @@ class MyApi {
     static final String API_SET_PRODUCTS_TO_INSTALLATION = "/Vortex.svc/SetProjectProductsToProjectInstallation?ProjectInstallationId=";
     static final String API_GET_AES_KEY = "/Vortex.svc/GetAESKey?username=";
     static final String API_GET_MASTER_PROJECTS = "/Vortex.svc/GetMasterProjectsForNewAssignment?CustomerId=";
+    static final String API_GET_PROJECT_PRODUCT_BY_IDENTITY = "/Vortex.svc/GetProjectProductByIdentity?idValue=";
 
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
