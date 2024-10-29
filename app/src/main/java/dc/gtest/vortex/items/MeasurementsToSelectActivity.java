@@ -51,6 +51,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
@@ -93,6 +94,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
     private String oldProductId;
 
     private String selectMeasurement;
+    private boolean searchSerial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
         changeTextLanguage();
 
         userName = MyPrefs.getString(PREF_USER_NAME, "");
+        searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(activityTitle);
@@ -117,7 +120,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
 
         new MySliderMenu(this).mySliderMenu();
 
-        assignmentId = MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
+        assignmentId = searchSerial ? "-1" : MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
         String newProductName = SELECTED_PRODUCT.getProductDescription();
         ProjectProductId = SELECTED_PRODUCT.getProjectProductId();
         oldProductId = getSharedPreferences("ProjectProductId", MODE_PRIVATE).getString("projectProductId", "");
@@ -127,7 +130,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
         TextView tvTop2 = findViewById(R.id.tvTop2);
         btnBottom = findViewById(R.id.btnBottom);
 
-        if (tvAssignmentId != null) {
+        if (tvAssignmentId != null && !searchSerial) {
             String assignmentIdText = assignmentIdTitle + ": " + assignmentId;
             tvAssignmentId.setText(assignmentIdText);
         }
@@ -245,7 +248,7 @@ public class MeasurementsToSelectActivity extends AppCompatActivity {
             getSupportActionBar().setSubtitle(userNameTitle + ": " + userName);
         }
 
-        if (tvAssignmentId != null) {
+        if (tvAssignmentId != null && !searchSerial) {
             String assignmentIdText = assignmentIdTitle + ": " + assignmentId;
             tvAssignmentId.setText(assignmentIdText);
         }

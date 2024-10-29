@@ -57,11 +57,13 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
     private final List<AttributeModel> allItems;
     private List<AttributeModel> filteredItems;
+    private boolean searchSerial;
 
-    public AttributesRvAdapter(List<AttributeModel> allItems, Context ctx) {
+    public AttributesRvAdapter(List<AttributeModel> allItems, Context ctx, boolean searchSerial) {
         this.allItems = allItems;
         filteredItems = allItems;
         this.ctx = ctx;
+        this.searchSerial = searchSerial;
     }
 
     @NonNull
@@ -88,9 +90,10 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
         holder.mView.setOnClickListener(v -> {
 
-            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+            if (searchSerial || MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
 
                 selectedAttribute = holder.mItem;
+                String _assignmentId = searchSerial ? "0" : SELECTED_ASSIGNMENT.getAssignmentId();
 
                 try {
                     JSONArray jArrayDefaultValues = holder.mItem.getAttributeDefaultValues();
@@ -140,11 +143,11 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                     if (spDialog.getSelectedItemPosition() != 0) {
 
                                         // saving old value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + selectedAttribute.getProjectProductId(),
+                                        MyPrefs.setStringWithFileName(_assignmentId + "_old_" + selectedAttribute.getProjectProductId(),
                                                 selectedAttribute.getValueId(), selectedAttribute.getAttributeValue());
 
                                         // saving new value
-                                        MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + selectedAttribute.getProjectProductId(),
+                                        MyPrefs.setStringWithFileName(_assignmentId + "_new_" + selectedAttribute.getProjectProductId(),
                                                 selectedAttribute.getValueId(), spDialog.getSelectedItem().toString());
 
                                         holder.tvAttributeOldValue.setText(selectedAttribute.getAttributeValue());
@@ -203,11 +206,11 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                 if (attributeValueforScan != null && attributeValueforScan.getText() != null && !attributeValueforScan.getText().toString().trim().isEmpty()) {
 
                                     // saving old value
-                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_old_" + selectedAttribute.getProjectProductId(),
+                                    MyPrefs.setStringWithFileName(_assignmentId + "_old_" + selectedAttribute.getProjectProductId(),
                                             selectedAttribute.getValueId(), selectedAttribute.getAttributeValue());
 
                                     // saving new value
-                                    MyPrefs.setStringWithFileName(SELECTED_ASSIGNMENT.getAssignmentId() + "_new_" + selectedAttribute.getProjectProductId(),
+                                    MyPrefs.setStringWithFileName(_assignmentId + "_new_" + selectedAttribute.getProjectProductId(),
                                             selectedAttribute.getValueId(),attributeValueforScan.getText().toString().trim());
 
                                     holder.tvAttributeOldValue.setText(selectedAttribute.getAttributeValue());

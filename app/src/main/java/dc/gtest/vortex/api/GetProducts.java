@@ -1,8 +1,11 @@
 package dc.gtest.vortex.api;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.activities.AssignmentActionsActivity;
 import dc.gtest.vortex.activities.ProductsActivity;
 import dc.gtest.vortex.adapters.AttributesRvAdapter;
 import dc.gtest.vortex.adapters.ProductTreeRvAdapter;
@@ -36,6 +40,8 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.ATTRIBUTES_LIST;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
+import static dc.gtest.vortex.support.MyGlobals.KEY_REFRESH_INSTALLATIONS;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST_SAVED_STATE;
@@ -152,13 +158,32 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                 MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, responseBody);
             } else if (selectProductsForInstallation) {
                 MyPrefs.setStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, assignmentId, responseBody);
-            } else if (idValue.isEmpty()){
+            } else if (!idValue.isEmpty()){
                 MyPrefs.setStringWithFileName(PREF_FILE_ID_SEARCH_PRODUCTS_DATA, "0", responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, assignmentId, responseBody);
             }
 
         }
+
+
+//        if (!idValue.isEmpty()){ //περίπτωση που έρχεται από scanαρισμα barcode
+//            if (responseBody == null || responseBody.isEmpty() || responseBody.equals("[]")) {
+//                if (mProgressBar != null) {
+//                    mProgressBar.setVisibility(View.GONE);
+//                }
+//                Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.show();
+//            } else {
+//                Intent intent = new Intent(ctx, ProductsActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.putExtra(KEY_ID_SEARCH,  true);
+//                ctx.startActivity(intent);
+//            }
+//            return;
+//
+//        }
 
         RecyclerView rvAssignmentProducts = null;
         if (ctx != null) {
@@ -243,11 +268,6 @@ public class GetProducts extends AsyncTask<String, Void, String > {
             }
         }
 
-        if (!projectInstallationId.equals(0)) {
-
-
-
-        }
 
         RecyclerView rvAttributes = null;
         if (ctx != null){

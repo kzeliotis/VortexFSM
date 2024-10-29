@@ -1,6 +1,13 @@
 package dc.gtest.vortex.activities;
 
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
+import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_SETTINGS;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.codeScanned;
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.core.view.GravityCompat;
 //import androidx.drawerlayout.widget.DrawerLayout;
@@ -11,10 +18,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.api.GetProducts;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MySynchronize;
+import dc.gtest.vortex.support.MyUtils;
 
 @SuppressLint("Registered")
 public class BaseDrawerActivity extends AppCompatActivity {
@@ -62,6 +74,33 @@ public class BaseDrawerActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 49375:
+                IntentResult result = IntentIntegrator.parseActivityResult(49374, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        if(!ScannedCode.isEmpty()){
+//                            if (MyUtils.isNetworkAvailable()) {
+//                                GetProducts getProducts = new GetProducts(this, "", false, "0", false, ScannedCode);
+//                                getProducts.execute();
+//                            }
+                            Intent intent = new Intent(BaseDrawerActivity.this, ProductsActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(KEY_ID_SEARCH, true);
+                            intent.putExtra(KEY_ID_SCANNED_SERIAL,  ScannedCode);
+                            startActivity(intent);
+                        }
+
+                    }
+                }
+                break;
         }
     }
 }

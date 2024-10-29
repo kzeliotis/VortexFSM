@@ -30,6 +30,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ATTRIBUTES_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
@@ -58,6 +59,7 @@ public class AttributesActivity extends BaseDrawerActivity {
     private TextView tvAttrProdInstallationDateTitle;
     private TextView tvAttrProdInstallationDate;
     private Button btnAddNewAttributes;
+    private boolean searchSerial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class AttributesActivity extends BaseDrawerActivity {
         tvAttrProdInstallationDate = findViewById(R.id.tvAttrProdInstallationDate);
         RecyclerView rvAttributes = findViewById(R.id.rvAttributes);
         btnAddNewAttributes = findViewById(R.id.btnAddNewAttributes);
+        searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
 
         for (int i = 0; i < PRODUCTS_LIST.size(); i++) {
             if (PRODUCTS_LIST.get(i).getProjectProductId().equalsIgnoreCase(globalSelectedProductId)) {
@@ -88,15 +91,16 @@ public class AttributesActivity extends BaseDrawerActivity {
 
         Log.e(LOG_TAG, "======================== ATTRIBUTES_LIST:\n" + ATTRIBUTES_LIST.toString());
 
-        attributesRvAdapter = new AttributesRvAdapter(ATTRIBUTES_LIST, AttributesActivity.this);
+        attributesRvAdapter = new AttributesRvAdapter(ATTRIBUTES_LIST, AttributesActivity.this, searchSerial);
         rvAttributes.setAdapter(attributesRvAdapter);
 
         btnAddNewAttributes.setOnClickListener(v -> {
-            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+            if (searchSerial || MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
                 Intent intent = new Intent(AttributesActivity.this, AllAttributesActivity.class);
                 intent.putExtra(KEY_PARENT_ACTIVITY, CONST_PARENT_ATTRIBUTES_ACTIVITY);
                 intent.putExtra(KEY_PRODUCT_DESCRIPTION, SELECTED_PRODUCT.getProductDescription());
                 intent.putExtra(KEY_WAREHOUSE_ID, "0");
+                intent.putExtra(KEY_ID_SEARCH,  searchSerial);
                 startActivity(intent);
             }
         });
@@ -114,7 +118,9 @@ public class AttributesActivity extends BaseDrawerActivity {
         updateUiTexts();
 
         if (MyUtils.isNetworkAvailable()) {
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false);
+            String _assignmentId = searchSerial ? "0" : SELECTED_ASSIGNMENT.getAssignmentId();
+            String idValue = searchSerial ? SELECTED_PRODUCT.getIdentityValue() : "";
+            GetProducts getProducts = new GetProducts(this, _assignmentId, true, "0", false, idValue);
             getProducts.execute();
         }
     }
@@ -132,6 +138,7 @@ public class AttributesActivity extends BaseDrawerActivity {
         }
 
         String assignmentIdText = localized_assignment_id + ": " + SELECTED_ASSIGNMENT.getAssignmentId();
+        if(searchSerial){assignmentIdText = "";}
         tvAssignmentId.setText(assignmentIdText);
 
         tvProductDescription.setText(SELECTED_PRODUCT.getProductDescription());

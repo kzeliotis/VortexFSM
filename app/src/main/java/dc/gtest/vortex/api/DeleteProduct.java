@@ -88,7 +88,7 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
             MyDialogs.showOK(ctx, localized_product_deleted);
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false);
+                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false, "");
                 getProducts.execute();
             }
         } else if (responseBody != null && responseBody.equals("2")) {

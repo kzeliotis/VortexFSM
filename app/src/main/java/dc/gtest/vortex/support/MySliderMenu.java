@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import dc.gtest.vortex.BuildConfig;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.ApiUrlSettingsActivity;
 import dc.gtest.vortex.activities.AssignmentsActivity;
+import dc.gtest.vortex.activities.BaseDrawerActivity;
 import dc.gtest.vortex.activities.CustomFieldsActivity;
 import dc.gtest.vortex.activities.LoginActivity;
 import dc.gtest.vortex.activities.MapsActivity;
@@ -183,6 +185,16 @@ public class MySliderMenu {
                         break;
 
                     case R.id.nav_scan_code:
+
+                        IntentIntegrator integrator = new IntentIntegrator(activity);
+                        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                        integrator.setPrompt("Scan");
+                        integrator.setCameraId(0);
+                        integrator.setBeepEnabled(false);
+                        integrator.setBarcodeImageEnabled(false);
+                        integrator.setOrientationLocked(true);
+                        integrator.setRequestCode(49375);
+                        integrator.initiateScan();
 
                         break;
 

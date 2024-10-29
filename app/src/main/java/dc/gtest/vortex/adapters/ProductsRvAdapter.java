@@ -30,6 +30,7 @@ import dc.gtest.vortex.support.MyCanEdit;
 import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.activities.ProductsActivity.selectedType;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
@@ -50,12 +51,14 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
     private final List<ProductModel> allItems;
     private List<ProductModel> filteredItems;
     private final int projectInstallationId;
+    private final boolean seachSerial;
 
-    public ProductsRvAdapter(List<ProductModel> allItems, Context ctx, int ProjectInstallationId) {
+    public ProductsRvAdapter(List<ProductModel> allItems, Context ctx, int ProjectInstallationId, boolean seachSerial) {
         this.allItems = allItems;
         filteredItems = allItems;
         this.ctx = ctx;
         this.projectInstallationId = ProjectInstallationId;
+        this.seachSerial = seachSerial;
     }
 
     @NonNull
@@ -134,36 +137,41 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
 
                             Intent intent = new Intent(ctx, AttributesActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(KEY_ID_SEARCH,  seachSerial);
                             ctx.startActivity(intent);
                         })
                         .setPositiveButton(localized_measurements, (dialog, which) -> {
                             dialog.dismiss();
                             Intent intent = new Intent(ctx, MeasurementsListActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(KEY_ID_SEARCH,  seachSerial);
                             ctx.startActivity(intent);
                         })
                         .show();
             });
 
-            holder.mView.setOnLongClickListener(v -> {
-                if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
-                    new AlertDialog.Builder(ctx)
-                            .setMessage(localized_to_delete_product)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                dialog.dismiss();
-                                SELECTED_PRODUCT = holder.mItem;
-                                if(CheckMandatoryAttributes()){
-                                    DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                    deleteProduct.execute(holder.mItem.getProjectProductId());
-                                }
+            if(!seachSerial){
+                holder.mView.setOnLongClickListener(v -> {
+                    if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+                        new AlertDialog.Builder(ctx)
+                                .setMessage(localized_to_delete_product)
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    SELECTED_PRODUCT = holder.mItem;
+                                    if(CheckMandatoryAttributes()){
+                                        DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
+                                        deleteProduct.execute(holder.mItem.getProjectProductId());
+                                    }
 
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+                    }
 
-                return true;
-            });
+                    return true;
+                });
+            }
+
         }
 
     }

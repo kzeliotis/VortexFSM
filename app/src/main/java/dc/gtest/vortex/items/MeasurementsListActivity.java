@@ -35,6 +35,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MySwitchLanguage;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_MEASUREMENTS_FOR_SHOW;
@@ -59,6 +60,7 @@ public class MeasurementsListActivity extends AppCompatActivity {
     private String addNewMeasurable;
     private String noMeasurement;
     private String activityTitle;
+    private Boolean searchSerial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class MeasurementsListActivity extends AppCompatActivity {
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.items_list_content, flBaseContainer, true);
+        searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
 
         language = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
         changeTextLanguage();
@@ -89,7 +92,7 @@ public class MeasurementsListActivity extends AppCompatActivity {
 
         assignmentId = MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
 
-        if (tvAssignmentId != null) {
+        if (tvAssignmentId != null && !searchSerial) {
             String assignmentIdText = assignmentIdTitle + ": " + assignmentId;
             tvAssignmentId.setText(assignmentIdText);
         }
@@ -108,9 +111,10 @@ public class MeasurementsListActivity extends AppCompatActivity {
             btnBottom.setText(addNewMeasurable);
 
             btnBottom.setOnClickListener(v -> {
-                if (MyCanEdit.canEdit(assignmentId)) {
+                if (searchSerial || MyCanEdit.canEdit(assignmentId)) {
                     Intent intent = new Intent(MeasurementsListActivity.this, MeasurementsToSelectActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(KEY_ID_SEARCH,  searchSerial);
                     startActivity(intent);
                 }
             });
@@ -160,7 +164,7 @@ public class MeasurementsListActivity extends AppCompatActivity {
             getSupportActionBar().setSubtitle(userNameTitle + ": " + userName);
         }
 
-        if (tvAssignmentId != null) {
+        if (tvAssignmentId != null && !searchSerial) {
             String assignmentIdText = assignmentIdTitle + ": " + assignmentId;
             tvAssignmentId.setText(assignmentIdText);
         }

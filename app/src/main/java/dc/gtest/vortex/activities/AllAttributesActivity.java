@@ -39,6 +39,7 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ALL_PRODUCTS_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ATTRIBUTES_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
@@ -78,6 +79,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
     private String warehouseID;
     private String projectInstallationId = "0";
     private String replaceProjectProductId = "0";
+    private Boolean searchSerial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         TextView tvSelectedProduct = findViewById(R.id.tvSelectedProduct);
         RecyclerView rvAllAttributes = findViewById(R.id.rvAllAttributes);
         btnSendNewAttributes = findViewById(R.id.btnSendNewAttributes);
+        searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
+
 
         savedAttributes = "";
         newProductName = getIntent().getStringExtra(KEY_PRODUCT_DESCRIPTION);
@@ -119,10 +123,11 @@ public class AllAttributesActivity extends BaseDrawerActivity {
             switch (parentActivity) {
                 case CONST_PARENT_ATTRIBUTES_ACTIVITY:
                     if (savedAttributes != null && !savedAttributes.equals("")) {
-
+                        String assignmentId = MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
+                        if(searchSerial){assignmentId = "-1";}
                         String newAttributesJsonString =
                                 "{\n" +
-                                        "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
+                                        "  \"assignmentId\": \"" + assignmentId + "\",\n" +
                                         "  \"oldProductId\": \"" + SELECTED_PRODUCT.getProjectProductId() + "\",\n" +
                                         "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
                                         "  \"ProjectProductId\": \"0\",\n" +

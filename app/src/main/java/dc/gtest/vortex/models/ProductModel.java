@@ -12,6 +12,7 @@ public class ProductModel {
     private String projectProductId = "";
     private String typeDescription = "";
     private String identityValue = "";
+    private String notes = "";
     private String productAttributesString = "";
     private String projectInstallationId = "";
     private boolean isNotSynchronized = false; // not server field. Added to mark not synchronized data in red color
@@ -34,6 +35,7 @@ public class ProductModel {
                         "  \"isNotSynchronized\": \"" + isNotSynchronized + "\",\n" +
                         "  \"isChecked\": " + isChecked + "\",\n" +
                         "  \"ProductAttributesString\": \"" + productAttributesString + "\",\n" +
+                        "  \"notes\": \"" + notes + "\",\n" +
                         "  \"MasterId\": \"" + masterId + "\",\n" +
                         "  \"ProductAttributeValues\": " + productAttributes + "\",\n" +
                         "  \"RemoveFromProjectMandatory\": " + RemoveFromProjectMandatory + "\n" +
@@ -42,6 +44,14 @@ public class ProductModel {
         modelToString = modelToString.replace("}]", "}\n  ]");
 
         return modelToString;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public String getProductDescription() {

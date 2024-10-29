@@ -259,5 +259,7 @@ public class MyGlobals {
     public static final String KEY_VORTEX_TABLE = "key_vortex_table";
     public static final String KEY_ASSIGNMENT_DATE = "key_assignment_date";
     public static final String KEY_SELECT_PRODUCTS_TO_ADD = "key_select_products_to_add";
+    public static final String KEY_ID_SEARCH = "key_id_search";
+    public static final String KEY_ID_SCANNED_SERIAL = "key_id_scanned_serial";
 
 }

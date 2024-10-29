@@ -1375,6 +1375,10 @@
     <string name="det_custom_fields_gr">Παραμετρικά πεδία Ανάθεσης</string>
     <string name="det_custom_fields_ar">Assignment Custom Fields</string>
 
+    <string name="create_workorder">Create Work Order</string>
+    <string name="create_workorder_gr">ΔΗΜΙΟΥΡΓΙΑ ΑΝΑΘΕΣΗΣ</string>
+    <string name="create_workorder_ar">Create Work Order</string>
+
     <string name="create_workorder_on_asset">Create a Work Order on this asset?</string>
     <string name="create_workorder_on_asset_gr">Θέλετε να δημιουργηθεί ανάθεση πάνω στο είδος;</string>
     <string name="create_workorder_on_asset_ar">Create a Work Order on this asset?</string>

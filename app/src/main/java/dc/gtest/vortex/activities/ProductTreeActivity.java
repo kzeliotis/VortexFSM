@@ -346,7 +346,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
 
         if (MyUtils.isNetworkAvailable()) {
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts);
+            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts, "");
             getProducts.execute();
         }
 
