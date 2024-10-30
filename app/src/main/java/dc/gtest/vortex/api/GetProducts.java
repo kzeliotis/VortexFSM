@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -206,6 +207,10 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
+                            if (!idValue.isEmpty()){
+                                Button btnAddNewProduct = ((AppCompatActivity)ctx).findViewById(R.id.btnAddNewProduct);
+                                if(btnAddNewProduct != null) {btnAddNewProduct.setEnabled(false);}
+                            }
                         }
 
                         productsRvAdapter.notifyDataSetChanged();
