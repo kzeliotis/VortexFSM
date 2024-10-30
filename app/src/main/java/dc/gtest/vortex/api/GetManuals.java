@@ -42,7 +42,7 @@ public class GetManuals extends AsyncTask<String, Void, String > {
         String responseBody = null;
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl+ "/Vortex.svc/GetManuals?UserId=" + PREF_USERID;
+        String apiUrl = baseHostUrl+ "/Vortex.svc/GetManuals?UserId=" + MyPrefs.getString(PREF_USERID, "0");
 
         try {
             Bundle bundle = MyApi.get(apiUrl);
