@@ -156,6 +156,7 @@ public class MyPrefs {
     public static final String PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING = "pref_qty_limit_consumable_from_picking";
     public static final String PREF_MANDATORY_CONSUMABLES_FROM_PICKING = "pref_mandatory_consumables_from_picking";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";
+    public static final String PREF_SHOW_DET_CHILDREN = "pref_show_det_children";
     public static final String PREF_SHOW_PAYMENT_FILED = "pref_show_payment_field";
     public static final String PREF_START_TRAVEL_TIME = "start_travel_time";
     public static final String PREF_START_WORK_TIME = "start_work_time";
