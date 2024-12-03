@@ -42,6 +42,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_additional_techni
 import static dc.gtest.vortex.support.MyLocalization.localized_address;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_details;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_business_title;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel_start_travel;
 import static dc.gtest.vortex.support.MyLocalization.localized_contact;
 import static dc.gtest.vortex.support.MyLocalization.localized_contract;
@@ -95,6 +96,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
     private TextView tvPickingList;
     private TextView tvCustomerName;
     private TextView tvCustomerBusiness;
+    private TextView tvCustomerBusinessTitle;
     private TextView tvCustomerVatNumber;
     private TextView tvCustomerRevenue;
     private TextView tvProjectDescription;
@@ -135,6 +137,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         tvPhone = findViewById(R.id.tvPhone);
         tvMobile = findViewById(R.id.tvMobile);
         tvContract = findViewById(R.id.tvContract);
+        tvCustomerBusinessTitle = findViewById(R.id.tvCustomerBusinessTitle);
 
         fabStartTravel = findViewById(R.id.fabStartTravel);
         fabChangeResource = findViewById(R.id.fabChangeResource);
@@ -283,6 +286,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         String additionalTechs = localized_additional_technicians + ": " + SELECTED_ASSIGNMENT.getAdditionalTechnicians();
         String assignmentTime = SELECTED_ASSIGNMENT.getAssignmentTime();
         String contract = localized_contract + ": " + SELECTED_ASSIGNMENT.getContract();
+        String title = localized_business_title + ": " + SELECTED_ASSIGNMENT.getCustomerBusinessTitle();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(localized_assignment_details);
@@ -319,6 +323,7 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         tvAddress.setText(address);
         tvPhone.setText(phone);
         tvMobile.setText(mobile);
+        tvCustomerBusinessTitle.setText(title);
     }
 
     @Override

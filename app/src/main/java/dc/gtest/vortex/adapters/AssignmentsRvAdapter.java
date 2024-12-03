@@ -74,7 +74,10 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
         }
 
         holder.tvProjectDescription.setText(holder.mItem.getProjectDescription());
-        holder.tvCustomerName.setText(holder.mItem.getCustomerName());
+        String customerName = holder.mItem.getCustomerName();
+        String BusinessTitle = holder.mItem.getCustomerBusinessTitle();
+        customerName = customerName + (!BusinessTitle.isEmpty() ? " - " + BusinessTitle : "");
+        holder.tvCustomerName.setText(customerName);
         holder.tvServiceDescription.setText(holder.mItem.getServiceDescription() + "\r\n" + holder.mItem.getProductDescription());
         holder.tvAssignmentTime.setText(holder.mItem.getAssignmentTime());
         holder.tvTimeTo.setText(holder.mItem.getTimeTo());

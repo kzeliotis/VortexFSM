@@ -32,6 +32,7 @@ public class AssignmentModel {
     private String assignmentType = "";
     private String customerName = "";
     private String customerBusiness = "";
+    private String customerBusinessTitle = "";
     private String customerVatNumber = "";
     private String customerRevenue = "";
     private String sorting = "";
@@ -103,6 +104,7 @@ public class AssignmentModel {
                         "\"DateEnd\": \"" + DateEnd + "\",\n" +
 
                         "\"customerBusiness\": \"" + customerBusiness + "\",\n" +
+                        "\"CustomerBusinessTitle\": \"" + customerBusinessTitle + "\",\n" +
                         "\"CustomerVatNumber\": \"" + customerVatNumber + "\",\n" +
                         "\"CustomerRevenue\": \"" + customerRevenue + "\",\n" +
                         "\"sorting\": \"" + sorting + "\",\n" +
@@ -406,6 +408,15 @@ public class AssignmentModel {
     public void setCustomerBusiness(String customerBusiness) {
         this.customerBusiness = customerBusiness;
     }
+
+    public String getCustomerBusinessTitle() {
+        return customerBusinessTitle;
+    }
+
+    public void setCustomerBusinessTitle(String customerBusinessTitle) {
+        this.customerBusinessTitle = customerBusinessTitle;
+    }
+
 
     public String getCustomerVatNumber() {
         return customerVatNumber;

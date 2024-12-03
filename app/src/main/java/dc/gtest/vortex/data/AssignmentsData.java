@@ -151,6 +151,7 @@ public class AssignmentsData {
                     assignmentModel.setAssignmentType(MyJsonParser.getStringValue(oneObject, "AssignmentType", ""));
                     assignmentModel.setCustomerName(MyJsonParser.getStringValue(oneObject, "CustomerName", ""));
                     assignmentModel.setCustomerBusiness(MyJsonParser.getStringValue(oneObject, "CustomerBusiness", ""));
+                    assignmentModel.setCustomerBusinessTitle(MyJsonParser.getStringValue(oneObject, "CustomerBusinessTitle", ""));
                     assignmentModel.setCustomerVatNumber(MyJsonParser.getStringValue(oneObject, "CustomerVatNumber", ""));
                     assignmentModel.setCustomerRevenue(MyJsonParser.getStringValue(oneObject, "CustomerRevenue", ""));
                     assignmentModel.setSorting(MyJsonParser.getStringValue(oneObject, "Sorting", ""));
