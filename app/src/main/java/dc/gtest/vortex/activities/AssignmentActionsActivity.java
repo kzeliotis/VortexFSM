@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.AssignmentAttachmentsRvAdapter;
@@ -83,6 +84,7 @@ import dc.gtest.vortex.api.GetStatuses;
 import dc.gtest.vortex.api.GetZones;
 import dc.gtest.vortex.api.SendCheckIn;
 import dc.gtest.vortex.api.SendCheckOut;
+import dc.gtest.vortex.api.SendDetChildren;
 import dc.gtest.vortex.api.SendMandatoryTasks;
 import dc.gtest.vortex.api.SendProductMeasurements;
 import dc.gtest.vortex.api.SendUsePTOvernight;
@@ -92,6 +94,7 @@ import dc.gtest.vortex.data.ZonesData;
 import dc.gtest.vortex.items.ServicesListActivity;
 import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.CheckInCheckOutModel;
+import dc.gtest.vortex.models.DetChildrenModel;
 import dc.gtest.vortex.models.MandatoryTaskModel;
 import dc.gtest.vortex.models.StatusModel;
 import dc.gtest.vortex.models.UsePTOvernightModel;
@@ -201,6 +204,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING_SENT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
@@ -1455,6 +1459,27 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                         SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                         sendMandatoryTasks.execute(assignmentId, "");
+
+                        if(!SELECTED_ASSIGNMENT.getDetChildren().isEmpty()){
+
+                            for(DetChildrenModel dc : SELECTED_ASSIGNMENT.getDetChildren()){
+                                if(dc.getdetChildCompleted().equals("1")){
+                                    dc.setDetChildrenStatusCode(checkInCheckOutModel.getStatusCode());
+                                    dc.setDetChildrenSolution(checkInCheckOutModel.getSolution());
+                                    dc.setDetChildrenCheckIn(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, ""));
+                                    dc.setDetChildrenCheckOut(checkInCheckOutModel.getCheckOutTime());
+                                }
+                            }
+
+                            String resourceId = SELECTED_ASSIGNMENT.getResourceId();
+                            String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+                            MyPrefs.setStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, assignmentId + "_" + resourceId,
+                                                                                    SELECTED_ASSIGNMENT.getDetChildren().toString());
+
+                            SendDetChildren sendDetChildren = new SendDetChildren(AssignmentActionsActivity.this, assignmentId + "_" + resourceId);
+                            sendDetChildren.execute();
+                        }
+
 
                         boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
                         FirebaseCrashlytics.getInstance().log("SEND_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));

@@ -61,7 +61,13 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
         holder.tvDescription.setText(holder.mItem.getDescription());
 
         if(!holder.mItem.getDetChildStart().isEmpty()){
+            String startTime = "START: " + holder.mItem.getDetChildStart().split(" ")[1];
+            holder.btnDetChildStart.setText(startTime);
+        }
 
+        if(!holder.mItem.getDetChildStop().isEmpty()){
+            String stopTime = "STOP: " + holder.mItem.getDetChildStop().split(" ")[1];
+            holder.btnDetChildStop.setText(stopTime);
         }
 
 
@@ -78,6 +84,7 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
                 holder.mItem.setDetChildStop(MyDateTime.getCurrentTimeWithSeconds());
                 String stop = "STOP: " + new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date());
                 holder.btnDetChildStop.setText(stop);
+                holder.mItem.setDetChildCompleted("1");
             }
         });
 
@@ -107,6 +114,7 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
                             // User clicked Yes, perform the reset
                             holder.mItem.setDetChildStop("");
                             holder.btnDetChildStop.setText("STOP");
+                            holder.mItem.setDetChildCompleted("0");
                         })
                         .setNegativeButton(localized_no, (dialog, which) -> {
                             // User clicked No, do nothing

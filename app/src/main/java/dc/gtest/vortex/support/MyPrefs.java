@@ -30,6 +30,7 @@ public class MyPrefs {
     public static final String PREF_FILE_IMAGE_FOR_SYNC = "pref_file_image_to_be_sync";
     public static final String PREF_FILE_ATTACHMENT_FOR_SYNC = "pref_file_attachment_to_be_sync";
     public static final String PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC = "pref_file_send_report_value_for_sync";
+    public static final String PREF_FILE_DET_CHILDREN_FOR_SYNC = "pref_file_det_children_for_sync";
 
     public static final String PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC = "pref_file_added_consumables_for_sync";
     public static final String PREF_FILE_ADDED_MEASUREMENTS_FOR_SYNC = "pref_file_added_measurements_for_sync";
@@ -40,6 +41,7 @@ public class MyPrefs {
 
     // data for temp show while no Internet
     public static final String PREF_FILE_MANDATORY_TASKS_FOR_SHOW = "pref_file_mandatory_tasks_for_show";
+    public static final String PREF_FILE_DET_CHILDREN_FOR_SHOW = "pref_file_det_children_for_show";
     public static final String PREF_FILE_ZONE_PRODUCTS_FOR_SHOW = "pref_file_zone_products_for_show";
     public static final String PREF_FILE_ZONE_PRODUCTS_DATA_FOR_SHOW = "pref_file_zone_products_data_for_show";
     public static final String PREF_FILE_ZONE_CF_DEFAULT_VALUES_DATA_FOR_SHOW = "pref_file_zone_cf_default_values_data_for_show";

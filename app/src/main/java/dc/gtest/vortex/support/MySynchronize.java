@@ -10,6 +10,7 @@ import dc.gtest.vortex.api.SendAttachment;
 import dc.gtest.vortex.api.SendCheckIn;
 import dc.gtest.vortex.api.SendCheckOut;
 import dc.gtest.vortex.api.SendCustomFields;
+import dc.gtest.vortex.api.SendDetChildren;
 import dc.gtest.vortex.api.SendLogin;
 import dc.gtest.vortex.api.SendNewAssignment;
 import dc.gtest.vortex.api.SendNewCustomer;
@@ -37,6 +38,8 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CUSTOM_FIELDS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
@@ -314,7 +317,13 @@ public class MySynchronize {
             setProductsToInstallation.execute();
         }
 
+        Map<String, ?> detChildren = ctx.getSharedPreferences(PREF_FILE_DET_CHILDREN_FOR_SYNC, MODE_PRIVATE).getAll();
+        for (Map.Entry<String, ?> entry : detChildren.entrySet()) {
+            String prefKey = entry.getKey();
 
+            SendDetChildren sendDetChildren = new SendDetChildren(ctx, prefKey);
+            sendDetChildren.execute();
+        }
 
 
     }

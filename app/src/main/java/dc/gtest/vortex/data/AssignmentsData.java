@@ -33,6 +33,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NOTES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
@@ -226,8 +227,16 @@ public class AssignmentsData {
 
                     assignmentModel.setAttachments(AttachmentsList);
 
-
                     JSONArray jArrayDetChildren = MyJsonParser.getJsonArrayValue(oneObject, "DetChildren");
+
+                    String resourceId = assignmentModel.getResourceId();
+                    String detChildrenData = MyPrefs.getStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SHOW, assignmentid + "_" + resourceId, "");
+
+                    if(!detChildrenData.isEmpty() && !detChildrenData.equals("[]")){
+                        //Getting det children from cache if they are already saved.
+                        jArrayDetChildren = new JSONArray(detChildrenData);
+                    }
+
                     List<DetChildrenModel> detChildrenList = new ArrayList<>();
 
                     for (int _i = 0; _i < jArrayDetChildren.length(); _i++) {
