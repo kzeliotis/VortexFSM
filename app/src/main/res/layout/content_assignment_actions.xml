@@ -332,6 +332,24 @@
             android:drawableRight="@drawable/ic_chevron_right_teal_24dp" />
 
         <Button
+            android:visibility="gone"
+            android:id="@+id/btnDetChildren"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/tasks_per_item"
+            android:textColor="@color/grey_800"
+            android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_1"
+            android:paddingRight="@dimen/dp_1"
+            android:background="@drawable/rounded_button_amber"
+            android:drawableEnd="@drawable/ic_chevron_right_teal_24dp"
+            android:drawableRight="@drawable/ic_chevron_right_teal_24dp" />
+
+
+        <Button
             android:id="@+id/btnDetAttachments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

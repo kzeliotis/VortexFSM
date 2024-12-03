@@ -97,6 +97,13 @@ public class MyDateTime {
         return sdf.format(currentUtcMillis);
     }
 
+    public static String getCurrentTimeWithSeconds() {
+        Calendar date = Calendar.getInstance();
+        long currentUtcMillis = date.getTimeInMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+        return sdf.format(currentUtcMillis);
+    }
+
     public static String getUtc() {
         serverDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return serverDateFormat.format(new Date());

@@ -6,24 +6,36 @@ import org.json.JSONArray;
 
 public class DetChildrenModel {
 
-    private String attributeId = "";
-    private String attributeDescription = "";
-    private String attributeValue = "";
-    private String valueId = "";
+    private String detId = "";
     private String projectProductId = "";
-    private JSONArray attributeDefaultValues = new JSONArray();
+    private String detChildrenId = "";
+    private String resourceId = "";
+    private String detChildStart = "";
+    private String detChildStop = "";
+    private String detChildrenCheckIn = "";
+    private String detChildrenCheckOut = "";
+    private String detChildrenSolution = "";
+    private String detChildCompleted = "";
+    private String detChildrenStatusCode = "";
+    private String description = "";
 
     @NonNull
     @Override
     public String toString() {
         String modelToString =
                 "\n  {\n" +
-                        "  \"AttributeId\": \"" + attributeId + "\",\n" +
-                        "  \"AttributeDescription\": \"" + attributeDescription + "\",\n" +
-                        "  \"Value\": \"" + attributeValue + "\",\n" +
-                        "  \"ValueId\": \"" + valueId + "\",\n" +
+                        "  \"DetChildrenId\": \"" + detChildrenId + "\",\n" +
+                        "  \"DetId\": \"" + detId + "\",\n" +
+                        "  \"ResourceId\": \"" + resourceId + "\",\n" +
+                        "  \"DetChildStart\": \"" + detChildStart + "\",\n" +
+                        "  \"DetChildStop\": \"" + detChildStop + "\",\n" +
+                        "  \"DetChildrenCheckIn\": \"" + detChildrenCheckIn + "\",\n" +
+                        "  \"DetChildrenCheckOut\": \"" + detChildrenCheckOut + "\",\n" +
+                        "  \"DetChildrenSolution\": \"" + detChildrenSolution + "\",\n" +
                         "  \"ProjectProductId\": \"" + projectProductId + "\",\n" +
-                        "  \"AttributeDefaultValues\": " + attributeDefaultValues + "\n" +
+                        "  \"DetChildrenStatusCode\": \"" + detChildrenStatusCode + "\",\n" +
+                        "  \"Description\": \"" + description + "\",\n" +
+                        "  \"DetChildCompleted\": " + detChildCompleted + "\n" +
                         "}";
 
         modelToString = modelToString.replace("}]", "}\n  ]");
@@ -31,39 +43,69 @@ public class DetChildrenModel {
         return modelToString;
     }
 
-    public String getAttributeId() {
-        return attributeId;
+    public String getDetChildrenId() {
+        return detChildrenId;
     }
 
-    public void setAttributeId(String attributeId) {
-        this.attributeId = attributeId;
+    public void setDetChildrenId(String detChildrenId) {
+        this.detChildrenId = detChildrenId;
     }
 
-    public String getValueId() {
-        return valueId;
+    public String getDetId() {
+        return detId;
     }
 
-    public void setValueId(String valueId) {
-        this.valueId = valueId;
+    public void setDetId(String detId) {
+        this.detId = detId;
     }
 
-
-    public String getAttributeDescription() {
-        return attributeDescription;
+    public String getResourceId() {
+        return resourceId;
     }
 
-    public void setAttributeDescription(String attributeDescription) {
-        this.attributeDescription = attributeDescription;
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public String getAttributeValue() {
-        return attributeValue;
+    public String getDetChildStart() {
+        return detChildStart;
     }
 
-    public void setAttributeValue(String attributeValue) {
-        this.attributeValue = attributeValue;
+    public void setDetChildStart(String detChildStart) {
+        this.detChildStart = detChildStart;
     }
 
+    public String getDetChildStop() {
+        return detChildStop;
+    }
+
+    public void setDetChildStop(String detChildStop) {
+        this.detChildStop = detChildStop;
+    }
+
+    public String getDetChildrenCheckIn() {
+        return detChildrenCheckIn;
+    }
+
+    public void setDetChildrenCheckIn(String detChildrenCheckIn) {
+        this.detChildrenCheckIn = detChildrenCheckIn;
+    }
+
+    public String getDetChildrenCheckOut() {
+        return detChildrenCheckOut;
+    }
+
+    public void setDetChildrenCheckOut(String detChildrenCheckOut) {
+        this.detChildrenCheckOut = detChildrenCheckOut;
+    }
+
+    public String getDetChildrenSolution() {
+        return detChildrenSolution;
+    }
+
+    public void setDetChildrenSolution(String detChildrenSolution) {
+        this.detChildrenSolution = detChildrenSolution;
+    }
 
     public String getProjectProductId() {
         return projectProductId;
@@ -73,12 +115,28 @@ public class DetChildrenModel {
         this.projectProductId = projectProductId;
     }
 
-    public JSONArray getAttributeDefaultValues() {
-        return attributeDefaultValues;
+    public String getDetChildrenStatusCode() {
+        return detChildrenStatusCode;
     }
 
-    public void setAttributeDefaultValues(JSONArray attributeDefaultValues) {
-        this.attributeDefaultValues = attributeDefaultValues;
+    public void setDetChildrenStatusCode(String detChildrenStatusCode) {
+        this.detChildrenStatusCode = detChildrenStatusCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getdetChildCompleted() {
+        return detChildCompleted;
+    }
+
+    public void setDetChildCompleted(String detChildCompleted) {
+        this.detChildCompleted = detChildCompleted;
     }
 
 }

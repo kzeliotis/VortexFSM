@@ -21,6 +21,7 @@ import dc.gtest.vortex.activities.LoginActivity;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.models.AttachmentModel;
+import dc.gtest.vortex.models.DetChildrenModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyPrefs;
@@ -223,6 +224,34 @@ public class AssignmentsData {
                     }
 
                     assignmentModel.setAttachments(AttachmentsList);
+
+
+                    JSONArray jArrayDetChildren = MyJsonParser.getJsonArrayValue(oneObject, "DetChildren");
+                    List<DetChildrenModel> detChildrenList = new ArrayList<>();
+
+                    for (int _i = 0; _i < jArrayDetChildren.length(); _i++) {
+                        JSONObject jObjectOneDetChild = jArrayDetChildren.getJSONObject(_i);
+
+                        DetChildrenModel detChildModel = new DetChildrenModel();
+
+                        detChildModel.setDetChildrenId(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildrenId", "0"));
+                        detChildModel.setDetId(MyJsonParser.getStringValue(jObjectOneDetChild, "DetId", "0"));
+                        detChildModel.setResourceId(MyJsonParser.getStringValue(jObjectOneDetChild, "ResourceId", ""));
+                        detChildModel.setProjectProductId(MyJsonParser.getStringValue(jObjectOneDetChild, "ProjectProductId", ""));
+                        detChildModel.setDetChildrenStatusCode(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildrenStatusCode", ""));
+                        detChildModel.setDescription(MyJsonParser.getStringValue(jObjectOneDetChild, "Description", ""));
+                        detChildModel.setDetChildStart(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildStartString", ""));
+                        detChildModel.setDetChildStop(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildStopString", ""));
+                        detChildModel.setDetChildrenCheckIn(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildrenCheckInString", ""));
+                        detChildModel.setDetChildrenCheckOut(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildrenCheckOutString", ""));
+                        detChildModel.setDetChildrenSolution(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildrenSolution", ""));
+                        detChildModel.setDetChildCompleted(MyJsonParser.getStringValue(jObjectOneDetChild, "DetChildCompleted", "0"));
+
+                        detChildrenList.add(detChildModel);
+                    }
+
+                    assignmentModel.setDetChildren(detChildrenList);
+
 
                     ASSIGNMENTS_LIST.add(assignmentModel);
 

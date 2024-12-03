@@ -66,6 +66,7 @@ public class AssignmentModel {
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
     private List<StatusModel> correlatedStatusesList = new ArrayList<>();
+    private List<DetChildrenModel> detChildren = new ArrayList<>();
 
     @NonNull
     @Override
@@ -125,6 +126,7 @@ public class AssignmentModel {
                         "\"MaximumPayment\": \"" + maximumPayment + "\",\n" +
                         "\"MasterProjectId\": \"" + masterProjectId + "\",\n" +
                         "\"CorrelatedStatusesList\": \"" + correlatedStatusesList + "\",\n" +
+                        "\"DetChildren\": \"" + detChildren + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
     }
@@ -578,6 +580,14 @@ public class AssignmentModel {
 
     public void setMasterProjectId(String MasterProjectId) {
         this.masterProjectId = MasterProjectId;
+    }
+
+    public List<DetChildrenModel> getDetChildren() {
+        return detChildren;
+    }
+
+    public void setDetChildren(List<DetChildrenModel> detChildren) {
+        this.detChildren = detChildren;
     }
 
 }

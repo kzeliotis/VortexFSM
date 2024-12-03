@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llMandatoryTasksContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/dp_1"
+    android:background="@color/brown_100"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="@dimen/dp_6"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tvTaskNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swDetChildCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            app:showText="false"
+            android:theme="@style/ColorAccentSwitchStyle"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/llDetChildStartStop"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="@dimen/dp_6">
+
+        <Button
+            android:enabled="false"
+            android:id="@+id/btnDetChildStart"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_6"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/btn_amber_rounded"
+            android:text="START"
+            android:textColor="@color/grey_800"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="@dimen/dp_2"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:enabled="false"
+            android:id="@+id/btnDetChildStop"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_6"
+            android:text="STOP"
+            android:textColor="@color/grey_800"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="@dimen/dp_2"
+            android:background="@drawable/btn_amber_rounded"
+            tools:ignore="RelativeOverlap"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</LinearLayout>

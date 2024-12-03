@@ -1384,6 +1384,15 @@
     <string name="create_workorder_on_asset_ar">Create a Work Order on this asset?</string>
 
 
+    <string name="tasks_per_item">Tasks per Item</string>
+    <string name="tasks_per_item_gr">ΕΡΓΑΣΙΕΣ ΑΝΑ ΕΙΔΟΣ</string>
+    <string name="tasks_per_item_ar">Tasks per Item</string>
+
+    <string name="reset_start_stop_question">Do you want to reset this value?</string>
+    <string name="reset_start_stop_question_gr">Θέλετε να επαναφέρετε την τιμή;</string>
+    <string name="reset_start_stop_question_ar">Do you want to reset this value?</string>
+
+
     <item type="id" name="TAG_ID" />
 
 

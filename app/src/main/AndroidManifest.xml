@@ -346,6 +346,13 @@
             android:label="@string/products"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity
+            android:name="dc.gtest.vortex.activities.DetChildrenActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/tasks_per_item"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
         <service
             android:name="dc.gtest.vortex.services.SendLocationSRV"
             android:foregroundServiceType="location"

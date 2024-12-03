@@ -270,6 +270,8 @@ public class MyLocalization {
     public static String localized_det_custom_fields = "";
     public static String localized_create_workorder_on_asset = "";
     public static String localized_create_workorder = "";
+    public static String localized_reset_start_stop_question = "";
+    public static String localized_tasks_per_item = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -532,6 +534,8 @@ public class MyLocalization {
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields_gr);
                 localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset_gr);
                 localized_create_workorder = ctx.getString(R.string.create_workorder_gr);
+                localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_gr);
+                localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_gr);
                 break;
 
             case CONST_AR:
@@ -791,6 +795,9 @@ public class MyLocalization {
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields_ar);
                 localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset_ar);
                 localized_create_workorder = ctx.getString(R.string.create_workorder_ar);
+                localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_ar);
+                localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_ar);
+
                 break;
 
             default:
@@ -1051,6 +1058,9 @@ public class MyLocalization {
                 localized_det_custom_fields = ctx.getString(R.string.det_custom_fields);
                 localized_create_workorder_on_asset = ctx.getString(R.string.create_workorder_on_asset);
                 localized_create_workorder = ctx.getString(R.string.create_workorder);
+                localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question);
+                localized_tasks_per_item = ctx.getString(R.string.tasks_per_item);
+
                 break;
 
 

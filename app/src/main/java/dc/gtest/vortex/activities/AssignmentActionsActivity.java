@@ -230,6 +230,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PAYMENT_FILED;
@@ -286,6 +287,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private TextView tvSendReport;
     private CheckBox chkSendReportFile;
     private ScrollView scrollView1;
+    private Button btnDetChildren;
 
     private MandatoryTasksRvAdapter mandatoryTasksRvAdapter;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
@@ -378,6 +380,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         tvSendReport = findViewById(R.id.tvSendReport);
         chkSendReportFile = findViewById(R.id.chkSendReport);
         btnCustomFields = findViewById(R.id.btnCustomFields);
+        btnDetChildren = findViewById(R.id.btnDetChildren);
 
         if (MyPrefs.getBoolean(PREF_SCROLLABLE_PROBLEM_DESCRIPTION, false)){
 
@@ -440,6 +443,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             chkSendReportFile.setVisibility(View.VISIBLE);
         }
 
+        if (MyPrefs.getBoolean(PREF_SHOW_DET_CHILDREN, false)) {
+            btnDetChildren.setVisibility(View.VISIBLE);
+        }
+
         if (assignmentId.contains("-")) {
             btnStartWork.setVisibility(View.GONE);
             btnGetCost.setVisibility(View.GONE);
@@ -452,6 +459,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             btnTakePhoto.setVisibility(View.GONE);
             btnAddAttachment.setVisibility(View.GONE);
             btnCustomFields.setVisibility(View.GONE);
+            btnDetChildren.setVisibility(View.GONE);
         }
 
         setupStatusesSpinner();
@@ -627,6 +635,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnPreviewReport.setOnClickListener(this);
         btnCustomFields.setOnClickListener(this);
         btnCustomFields.setOnLongClickListener(this);
+        btnDetChildren.setOnClickListener(this);
 
         tvMandatoryTasksTitle.setOnLongClickListener(this);
         //etCommentsSolution.setOnLongClickListener(this);
@@ -937,6 +946,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case R.id.btnDetAttachments:
                 intent = new Intent(AssignmentActionsActivity.this, AttachmentsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+
+            case R.id.btnDetChildren:
+                intent = new Intent(AssignmentActionsActivity.this, DetChildrenActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
