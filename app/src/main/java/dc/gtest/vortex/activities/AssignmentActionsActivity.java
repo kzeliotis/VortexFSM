@@ -1349,13 +1349,47 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         notes = "";
                     }
 
+                    List<DetChildrenModel> DET_CHILDREN_LIST = new ArrayList<>();
+                    String statusCode = getStatusIdFromSpinner();
+                    String checkOutTime = MyDateTime.getCurrentTime();
+                    if(!SELECTED_ASSIGNMENT.getDetChildren().isEmpty()){
+
+                        for(DetChildrenModel dc : SELECTED_ASSIGNMENT.getDetChildren()){
+                            try{
+                                DetChildrenModel dc_To_add = (DetChildrenModel)dc.clone();
+                                dc_To_add.setDescription(MyUtils.escapeJsonString(dc.getDescription()));
+                                if(dc_To_add.getdetChildCompleted().equals("1")){
+                                    dc_To_add.setDetChildrenStatusCode(statusCode);
+                                    dc_To_add.setDetChildrenSolution(MyUtils.escapeJsonString(solution));
+                                    dc_To_add.setDetChildrenCheckIn(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, ""));
+                                    dc_To_add.setDetChildrenCheckOut(checkOutTime);
+                                    DET_CHILDREN_LIST.add(dc_To_add);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+//                        if(!DET_CHILDREN_LIST.isEmpty()){
+//                            String resourceId = SELECTED_ASSIGNMENT.getResourceId();
+//                            String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+//
+//                            MyPrefs.setStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, assignmentId + "_" + resourceId,
+//                                    SELECTED_ASSIGNMENT.getDetChildren().toString());
+//
+//                            SendDetChildren sendDetChildren = new SendDetChildren(AssignmentActionsActivity.this, assignmentId + "_" + resourceId);
+//                            sendDetChildren.execute();
+//                        }
+                    }
+
+
                     checkInCheckOutModel = new CheckInCheckOutModel();
                     FirebaseCrashlytics.getInstance().log("FillCheckoutModel" + " -UserId: " + MyPrefs.getString(PREF_USERID, "") + " -Url: " + MyPrefs.getString(PREF_BASE_HOST_URL, ""));
                     checkInCheckOutModel.setAssignmentId(assignmentId);
                     checkInCheckOutModel.setStartWorkTime(MyPrefs.getStringWithFileName(assignmentId, PREF_START_WORK_TIME, ""));
                     checkInCheckOutModel.setStartTravelTime(MyPrefs.getStringWithFileName(assignmentId, PREF_START_TRAVEL_TIME, ""));
                     checkInCheckOutModel.setCheckInTime(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, ""));
-                    checkInCheckOutModel.setCheckOutTime(MyDateTime.getCurrentTime());
+                    checkInCheckOutModel.setCheckOutTime(checkOutTime);
                     checkInCheckOutModel.setStartLat(MyPrefs.getStringWithFileName(assignmentId, PREF_START_LAT, ""));
                     checkInCheckOutModel.setStartLng(MyPrefs.getStringWithFileName(assignmentId, PREF_START_LNG, ""));
                     checkInCheckOutModel.setCheckInLat(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_LAT, ""));
@@ -1367,12 +1401,13 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     checkInCheckOutModel.setChargedAmount(chargedAmount.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setPaidAmount(paidAmount.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setStatus(spStatus.getSelectedItem().toString());
-                    checkInCheckOutModel.setStatusCode(getStatusIdFromSpinner());
+                    checkInCheckOutModel.setStatusCode(statusCode);
                     checkInCheckOutModel.setSignatureName(signatureName.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setSignatureEmail(signatureEmail.replace("\n", " ").replace("\r", " "));
                     checkInCheckOutModel.setEncodedSignature(encodedSignature);
                     checkInCheckOutModel.setSendReport(sendreport);
                     checkInCheckOutModel.setUserId(MyPrefs.getString(PREF_USERID, ""));
+                    checkInCheckOutModel.setDetChildren(DET_CHILDREN_LIST);
 
 //                        Log.e(LOG_TAG, "------- checkInCheckOutModel.toString(): \n" + checkInCheckOutModel.toString());
 
@@ -1399,33 +1434,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     // refresh recycler view to enable fields
                     mandatoryTasksRvAdapter.notifyDataSetChanged();
 
-//                    for (int i = 0; i < rvMandatoryTasks.getChildCount(); i++) {
-//                        LinearLayout llMandatoryTasksContent = (LinearLayout) rvMandatoryTasks.getChildAt(i);
-//                        llMandatoryTasksContent.setBackgroundColor(ContextCompat.getColor(AssignmentActionsActivity.this, R.color.grey_300));
-//
-//                        LinearLayout llMandatoryTasksTitleRow = (LinearLayout) llMandatoryTasksContent.getChildAt(0);
-//                        llMandatoryTasksTitleRow.getChildAt(2).setEnabled(false);
-//
-//                        LinearLayout llMandatoryTasksMeasurableRow = (LinearLayout) llMandatoryTasksContent.getChildAt(1);
-//                        llMandatoryTasksMeasurableRow.getChildAt(1).setEnabled(false);
-//                    }
-
                     updateStatusData();
 
                     List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, true);
                     MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
-
-//                    for (int i = 0; i < STATUSES_LIST.size(); i++) {
-//                        if (STATUSES_LIST.get(i).getStatusId().equals(selectedStatusId)) {
-//                            if (STATUSES_LIST.get(i).getIsRollback() == 1) {
-//                                MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
-//                            }
-//                            break;
-//                        }
-//                    }
-
 
                     if(MANDATORY_TASKS_LIST.size() > 0){
                         MyPrefs.setStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId, sendreport);
@@ -1459,26 +1473,6 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                         SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                         sendMandatoryTasks.execute(assignmentId, "");
-
-                        if(!SELECTED_ASSIGNMENT.getDetChildren().isEmpty()){
-
-                            for(DetChildrenModel dc : SELECTED_ASSIGNMENT.getDetChildren()){
-                                if(dc.getdetChildCompleted().equals("1")){
-                                    dc.setDetChildrenStatusCode(checkInCheckOutModel.getStatusCode());
-                                    dc.setDetChildrenSolution(checkInCheckOutModel.getSolution());
-                                    dc.setDetChildrenCheckIn(MyPrefs.getStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, ""));
-                                    dc.setDetChildrenCheckOut(checkInCheckOutModel.getCheckOutTime());
-                                }
-                            }
-
-                            String resourceId = SELECTED_ASSIGNMENT.getResourceId();
-                            String assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
-                            MyPrefs.setStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, assignmentId + "_" + resourceId,
-                                                                                    SELECTED_ASSIGNMENT.getDetChildren().toString());
-
-                            SendDetChildren sendDetChildren = new SendDetChildren(AssignmentActionsActivity.this, assignmentId + "_" + resourceId);
-                            sendDetChildren.execute();
-                        }
 
 
                         boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);

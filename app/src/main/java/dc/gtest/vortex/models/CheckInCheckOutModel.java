@@ -2,6 +2,12 @@ package dc.gtest.vortex.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+
 public class CheckInCheckOutModel {
 
     private String checkInTime = "";
@@ -29,6 +35,9 @@ public class CheckInCheckOutModel {
     private String statusCode = "";
     private String sendReport = "";
     private String userId = "";
+    @Setter
+    @Getter
+    private List<DetChildrenModel> detChildren = new ArrayList<>();
 
 
     @NonNull
@@ -59,6 +68,7 @@ public class CheckInCheckOutModel {
                 "  \"ReturnToBase\": \"" + returnToBase + "\",\n" +
                 "  \"Signature\": \"" + encodedSignature + "\",\n" +
                 "  \"SendReport\": \"" + sendReport + "\",\n" +
+                "  \"DetChildren\": " + detChildren + ",\n" +
                 "  \"Photos\": [" + photos + "]" + "\n" +
                 "}";
 
@@ -245,7 +255,5 @@ public class CheckInCheckOutModel {
     public void setSendReport(String SendReport) {
         this.sendReport = SendReport;
     }
-
-
 
 }

@@ -6,6 +6,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_reset_start_stop_
 import static dc.gtest.vortex.support.MyLocalization.localized_yes;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN_START_STOP;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,9 +26,11 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.api.GetReportPreview;
@@ -34,14 +39,18 @@ import dc.gtest.vortex.models.DetChildrenModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyPrefs;
 
-public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdapter.ViewHolder> {
+public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdapter.ViewHolder> implements Filterable {
 
     private final Context ctx;
-    private final List<DetChildrenModel> mValues;
+    private final List<DetChildrenModel> mAllValues;
+    private List<DetChildrenModel> mFileteredValues;
+    private List<DetChildrenModel> mVisibleValues;
 
     public DetChildrenRvAdapter(List<DetChildrenModel> items, Context ctx) {
         this.ctx = ctx;
-        mValues = items;
+        mAllValues = items;
+        mFileteredValues = items;
+        mVisibleValues = mAllValues.stream().filter(dc -> SELECTED_ASSIGNMENT.getResourceId().equals(dc.getResourceId())).collect(Collectors.toList());
     }
 
     @NonNull
@@ -57,8 +66,16 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
     @Override
     public void onBindViewHolder(@NonNull final DetChildrenRvAdapter.ViewHolder holder, int position) {
 
-        holder.mItem = mValues.get(position);
+        holder.mItem = mFileteredValues.get(position);
         holder.tvDescription.setText(holder.mItem.getDescription());
+
+        if(MyPrefs.getBoolean(PREF_SHOW_DET_CHILDREN_START_STOP, false)){
+            holder.llDetChildStartStop.setVisibility(View.VISIBLE);
+            holder.swDetChildCompleted.setVisibility(View.GONE);
+        }else{
+            holder.llDetChildStartStop.setVisibility(View.GONE);
+            holder.swDetChildCompleted.setVisibility(View.VISIBLE);
+        }
 
         if(!holder.mItem.getDetChildStart().isEmpty()){
             String startTime = "START: " + holder.mItem.getDetChildStart().split(" ")[1];
@@ -152,7 +169,7 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mFileteredValues.size();
     }
 
 
@@ -175,4 +192,49 @@ public class DetChildrenRvAdapter extends RecyclerView.Adapter<DetChildrenRvAdap
             btnDetChildStop = view.findViewById(R.id.btnDetChildStop);
         }
     }
+
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String _filterPattern = constraint.toString().toLowerCase().trim();
+                List<DetChildrenModel> filteredList = new ArrayList<>();
+
+                if(!_filterPattern.contains("@show_all")){
+                    mVisibleValues = mAllValues.stream().filter(dc -> SELECTED_ASSIGNMENT.getResourceId().equals(dc.getResourceId())).collect(Collectors.toList());
+                }else{
+                    _filterPattern = _filterPattern.replace("@show_all", "");
+                    mVisibleValues = mAllValues;
+                }
+
+                final String filterPattern = _filterPattern;
+
+                if (filterPattern.isEmpty()) {  // 0 0
+                    mFileteredValues = mVisibleValues;
+                } else {  // 1 0
+                    for (final DetChildrenModel mWords : mVisibleValues) {
+                        if (mWords.getDescription().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(mWords);
+                        }
+                    }
+
+                    mFileteredValues = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFileteredValues;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+//                filteredItems = (ArrayList<TopicModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
 }

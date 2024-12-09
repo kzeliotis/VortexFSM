@@ -272,6 +272,7 @@ public class MyLocalization {
     public static String localized_create_workorder = "";
     public static String localized_reset_start_stop_question = "";
     public static String localized_tasks_per_item = "";
+    public static String localized_show_hide_all = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -536,6 +537,7 @@ public class MyLocalization {
                 localized_create_workorder = ctx.getString(R.string.create_workorder_gr);
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_gr);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_gr);
+                localized_show_hide_all = ctx.getString(R.string.show_hide_all_gr);
                 break;
 
             case CONST_AR:
@@ -797,6 +799,7 @@ public class MyLocalization {
                 localized_create_workorder = ctx.getString(R.string.create_workorder_ar);
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_ar);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_ar);
+                localized_show_hide_all = ctx.getString(R.string.show_hide_all_ar);
 
                 break;
 
@@ -1060,6 +1063,7 @@ public class MyLocalization {
                 localized_create_workorder = ctx.getString(R.string.create_workorder);
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item);
+                localized_show_hide_all = ctx.getString(R.string.show_hide_all);
 
                 break;
 

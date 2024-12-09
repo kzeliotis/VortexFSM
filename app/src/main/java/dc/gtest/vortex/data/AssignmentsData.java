@@ -25,6 +25,7 @@ import dc.gtest.vortex.models.DetChildrenModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;

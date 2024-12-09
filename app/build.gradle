@@ -47,8 +47,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     namespace 'dc.gtest.vortex'
 }
@@ -80,5 +80,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.microsoft.azure.android:azure-storage-android:2.0.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 
-public class DetChildrenModel {
+public class DetChildrenModel implements Cloneable {
 
     private String detId = "";
     private String projectProductId = "";
@@ -27,10 +27,10 @@ public class DetChildrenModel {
                         "  \"DetChildrenId\": \"" + detChildrenId + "\",\n" +
                         "  \"DetId\": \"" + detId + "\",\n" +
                         "  \"ResourceId\": \"" + resourceId + "\",\n" +
-                        "  \"DetChildStart\": \"" + detChildStart + "\",\n" +
-                        "  \"DetChildStop\": \"" + detChildStop + "\",\n" +
-                        "  \"DetChildrenCheckIn\": \"" + detChildrenCheckIn + "\",\n" +
-                        "  \"DetChildrenCheckOut\": \"" + detChildrenCheckOut + "\",\n" +
+                        "  \"DetChildStartString\": \"" + detChildStart + "\",\n" +
+                        "  \"DetChildStopString\": \"" + detChildStop + "\",\n" +
+                        "  \"DetChildrenCheckInString\": \"" + detChildrenCheckIn + "\",\n" +
+                        "  \"DetChildrenCheckOutString\": \"" + detChildrenCheckOut + "\",\n" +
                         "  \"DetChildrenSolution\": \"" + detChildrenSolution + "\",\n" +
                         "  \"ProjectProductId\": \"" + projectProductId + "\",\n" +
                         "  \"DetChildrenStatusCode\": \"" + detChildrenStatusCode + "\",\n" +
@@ -137,6 +137,10 @@ public class DetChildrenModel {
 
     public void setDetChildCompleted(String detChildCompleted) {
         this.detChildCompleted = detChildCompleted;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 }

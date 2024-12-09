@@ -317,13 +317,13 @@ public class MySynchronize {
             setProductsToInstallation.execute();
         }
 
-        Map<String, ?> detChildren = ctx.getSharedPreferences(PREF_FILE_DET_CHILDREN_FOR_SYNC, MODE_PRIVATE).getAll();
-        for (Map.Entry<String, ?> entry : detChildren.entrySet()) {
-            String prefKey = entry.getKey();
-
-            SendDetChildren sendDetChildren = new SendDetChildren(ctx, prefKey);
-            sendDetChildren.execute();
-        }
+//        Map<String, ?> detChildren = ctx.getSharedPreferences(PREF_FILE_DET_CHILDREN_FOR_SYNC, MODE_PRIVATE).getAll();
+//        for (Map.Entry<String, ?> entry : detChildren.entrySet()) {
+//            String prefKey = entry.getKey();
+//
+//            SendDetChildren sendDetChildren = new SendDetChildren(ctx, prefKey);
+//            sendDetChildren.execute();
+//        }
 
 
     }

@@ -19,7 +19,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.models.ApiResultModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
@@ -92,10 +95,21 @@ public class SendDetChildren extends AsyncTask<String, Void, String > {
         }
 
         if (responseCode == 200) {
-            MyPrefs.removeStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, prefKey);
 
+            Gson gson = new Gson();
+            ApiResultModel apiResult = gson.fromJson(responseBody, ApiResultModel.class);
 
-            Toast.makeText(ctx, localized_data_synchronized, Toast.LENGTH_LONG).show();
+            if(apiResult != null){
+                if(apiResult.getR().getResult().equals("Success")) {
+                    MyPrefs.removeStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, prefKey);
+                    Toast.makeText(ctx, localized_data_synchronized, Toast.LENGTH_LONG).show();
+                } else {
+                    String resultnotes = apiResult.getR().getResultNotes();
+                    Toast.makeText(ctx, localized_failed_to_send_data_saved_for_sync + "\n\n" + resultnotes + "\n\n" + this.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
+                }
+            }else{
+                Toast.makeText(ctx, localized_failed_to_send_data_saved_for_sync + "\n\n" + this.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
+            }
 
 //            if (finishActivity) {
 //                ((Activity)ctx).finish();

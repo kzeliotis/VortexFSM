@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.amrdeveloper.treeview.TreeNode;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -256,6 +257,13 @@ public class MyUtils {
         // TODO: escape other non-printing characters using uXXXX notation
         return escaped;
 
+    }
+
+    public static String escapeStringwithGSon(String value){
+
+        Gson gson = new Gson();
+        value = gson.toJson(value);
+        return value;
     }
 
     //private static final String AES_KEY = "brFsF6KjzXn3cOzlTBB0zo9ktziYr+LziPIrxj1Vu7ttac+bJHZ0vp7KqIeeO11qPv1AsGKN3TdUx0J04KoybnBMqQb5frhUqb4cWzFcbP1gD7yjH8mPzLArD83CDfjXpkco53WA2VsvZ+UY/PrWXOoe4acFWKyoV7SV/Jfkk/oipC+oB4vrq2eML9V525byIRBmkr2dkUPB8O5OG1o0/jYniP5TBI2Yk3sG7Ds2dKCHJ7qjb7Z+TgBJJUTMbu6D7hppo2cBmQA2epPDdeVlEDiJIzH8dnTBsBEoG3TeMFvlkQytt6C2mgJqeu+4e+Do35j00QFYI417w3li1aa8dA==";

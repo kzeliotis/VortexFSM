@@ -1393,7 +1393,9 @@
     <string name="reset_start_stop_question_ar">Do you want to reset this value?</string>
 
     <item type="id" name="TAG_ID" />
-
+    <string name="show_hide_all">Show/Hide all</string>
+    <string name="show_hide_all_gr">ΕΜΦΑΝΙΣΗ/ΑΠΟΚΡΥΨΗ ΟΛΩΝ</string>
+    <string name="show_hide_all_ar">Show/Hide all</string>
 
 
 </resources>
