@@ -24,6 +24,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_installation_zone
 import static dc.gtest.vortex.support.MyLocalization.localized_notes;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PRODUCTS_TREE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_INSTALLATION;
 
@@ -73,6 +74,11 @@ public class InstallationDetailActivity extends BaseDrawerActivity implements Vi
         switch (v.getId()) {
 
             case R.id.btnInstallationProducts:
+                if (MyPrefs.getBoolean(PREF_SHOW_PRODUCTS_TREE, false)){
+                    intent = new Intent(InstallationDetailActivity.this, ProductTreeActivity.class);
+                }else{
+                    intent = new Intent(InstallationDetailActivity.this, ProductsActivity.class);
+                }
                 intent = new Intent(InstallationDetailActivity.this, ProductsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(KEY_PROJECT_INSTALLATION_ID, SELECTED_INSTALLATION.getProjectInstallationId());

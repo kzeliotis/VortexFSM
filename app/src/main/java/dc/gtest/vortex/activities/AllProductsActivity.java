@@ -24,6 +24,7 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
@@ -61,16 +62,21 @@ public class AllProductsActivity extends BaseDrawerActivity {
             replaceProjectProductId = "0";
         }
 
+        String replaceProductComponentId = getIntent().getStringExtra(KEY_PRODUCT_COMPONENT_ID);
+        if (replaceProductComponentId == null){
+            replaceProductComponentId = "0";
+        }
+
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
 
         AllProductsData.generate(WarehouseProducts);
         if (WarehouseProducts) {
             allProductsRvAdapter = new AllProductsRvAdapter(ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
-                    WarehouseProducts, projectInstallationId, replaceProjectProductId);
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId);
         } else {
             allProductsRvAdapter = new AllProductsRvAdapter(ALL_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
-                    WarehouseProducts, projectInstallationId, replaceProjectProductId);
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId);
         }
 
         rvAllProducts.setAdapter(allProductsRvAdapter);

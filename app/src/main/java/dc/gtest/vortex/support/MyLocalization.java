@@ -273,6 +273,9 @@ public class MyLocalization {
     public static String localized_reset_start_stop_question = "";
     public static String localized_tasks_per_item = "";
     public static String localized_show_hide_all = "";
+    public static String localized_add_product_components = "";
+    public static String localized_replace_product_components = "";
+    public static String localized_remove_product_components = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -538,6 +541,9 @@ public class MyLocalization {
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_gr);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_gr);
                 localized_show_hide_all = ctx.getString(R.string.show_hide_all_gr);
+                localized_add_product_components = ctx.getString(R.string.add_Product_component_structure_gr);
+                localized_replace_product_components = ctx.getString(R.string.replace_Product_component_structure_gr);
+                localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_gr);
                 break;
 
             case CONST_AR:
@@ -800,7 +806,9 @@ public class MyLocalization {
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question_ar);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item_ar);
                 localized_show_hide_all = ctx.getString(R.string.show_hide_all_ar);
-
+                localized_add_product_components = ctx.getString(R.string.add_Product_component_structure_ar);
+                localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure_ar);
+                localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_ar);
                 break;
 
             default:
@@ -1064,7 +1072,9 @@ public class MyLocalization {
                 localized_reset_start_stop_question = ctx.getString(R.string.reset_start_stop_question);
                 localized_tasks_per_item = ctx.getString(R.string.tasks_per_item);
                 localized_show_hide_all = ctx.getString(R.string.show_hide_all);
-
+                localized_add_product_components = ctx.getString(R.string.add_Product_component_structure);
+                localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure);
+                localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure);
                 break;
 
 

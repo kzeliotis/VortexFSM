@@ -10,6 +10,7 @@ public class AllProductModel {
     private String BasicValue = "";
     private String AttributeId = "";
     private String AttributeDescription = "";
+    private String masterProductComponentId = "";
     private int typeId = -1;
 
     @Override
@@ -23,6 +24,7 @@ public class AllProductModel {
                         "  \"Stock\": \"" + Stock + "\",\n" +
                         "  \"BasicValue\": \"" + BasicValue + "\",\n" +
                         "  \"AttributeId\": \"" + AttributeId + "\",\n" +
+                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                         "  \"AttributeDescription\": \"" + AttributeDescription + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +
                         "}";
@@ -85,4 +87,11 @@ public class AllProductModel {
     public void setAttributeDescription(String AttributeDescription) { this.AttributeDescription = AttributeDescription; }
 
 
+    public String getMasterProductComponentId() {
+        return masterProductComponentId;
+    }
+
+    public void setMasterProductComponentId(String masterProductComponentId) {
+        this.masterProductComponentId = masterProductComponentId;
+    }
 }

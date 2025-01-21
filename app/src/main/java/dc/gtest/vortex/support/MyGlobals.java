@@ -248,6 +248,8 @@ public class MyGlobals {
     public static final String KEY_WAREHOUSE_ID = "key_warehouse_id";
     public static final String KEY_PRODUCT_ID = "key_product_id";
     public static final String KEY_PROJECT_INSTALLATION_ID = "key_project_installation_id";
+    public static final String KEY_MASTER_PRODUCT_COMPONENT_ID = "key_master_product_component_id";
+    public static final String KEY_PRODUCT_COMPONENT_ID = "key_product_component_id";
     public static final String KEY_REFRESH_ZONES = "key_refresh_zones";
     public static final String KEY_REFRESH_INSTALLATIONS = "key_refresh_installations";
     public static final String KEY_AFTER_LOGIN = "key_after_login";

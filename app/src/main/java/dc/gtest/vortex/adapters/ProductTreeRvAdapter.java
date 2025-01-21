@@ -50,7 +50,9 @@ import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_delete;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_replace;
+import static dc.gtest.vortex.support.MyLocalization.localized_replace_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
@@ -219,15 +221,22 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
                 if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
 
                     String replaceProjectProductId = holder.mItem.getProjectProductId();
+                    String productComponentId = holder.mItem.getProductComponentId();
 
                     new AlertDialog.Builder(ctx)
                             .setNeutralButton(localized_replace, (dialog, which) -> {
                                 dialog.dismiss();
-                                new AlertDialog.Builder(ctx)
-                                        .setMessage(localized_choose_from_warehouse)
-                                        .setPositiveButton(R.string.yes, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId))
-                                        .setNegativeButton(R.string.no, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId))
-                                        .show();
+                                if(productComponentId != null && !productComponentId.equals("0")){
+                                    new AlertDialog.Builder(ctx)
+                                            .setMessage(localized_replace_product_components)
+                                            .setPositiveButton(R.string.yes, (dialog1, which1) -> {replaceItem(replaceProjectProductId, productComponentId);})
+                                            .setNegativeButton(R.string.no, (dialog1, which1) -> {replaceItem(replaceProjectProductId, "0");})
+                                            .show();
+                                } else {
+                                    replaceItem(replaceProjectProductId, "0");
+                                }
+
+
                             })
                             .setPositiveButton(localized_delete, (dialog, which) -> {
                                 dialog.dismiss();
@@ -238,7 +247,15 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
                                             SELECTED_PRODUCT = holder.mItem;
                                             if(CheckMandatoryAttributes()){
                                                 DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                                deleteProduct.execute(holder.mItem.getProjectProductId());
+                                                new AlertDialog.Builder(ctx)
+                                                        .setMessage(localized_remove_product_components)
+                                                        .setPositiveButton(R.string.yes, (dialog3, which3) -> {
+                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
+                                                        })
+                                                        .setNegativeButton(R.string.no, (dialog3, which3) -> {
+                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                                        })
+                                                        .show();
                                             }
                                         })
                                         .setNegativeButton(R.string.cancel, null)
@@ -253,6 +270,15 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
         }
 
     }
+
+    public void replaceItem(String replaceProjectProductId, String productComponentId){
+        new AlertDialog.Builder(ctx)
+                .setMessage(localized_choose_from_warehouse)
+                .setPositiveButton(R.string.yes, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId, productComponentId))
+                .setNegativeButton(R.string.no, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId, productComponentId))
+                .show();
+    }
+
 
     @Override
     public int getItemCount() {

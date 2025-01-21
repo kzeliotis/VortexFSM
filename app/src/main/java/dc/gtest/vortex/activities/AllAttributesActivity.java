@@ -40,7 +40,9 @@ import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ALL_PRODUCTS_ACTIVI
 import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ATTRIBUTES_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
 import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
+import static dc.gtest.vortex.support.MyGlobals.KEY_MASTER_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
@@ -79,7 +81,9 @@ public class AllAttributesActivity extends BaseDrawerActivity {
     private String warehouseID;
     private String projectInstallationId = "0";
     private String replaceProjectProductId = "0";
+    private String replaceProductComponentId = "0";
     private Boolean searchSerial;
+    private String masterProductComponentId = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +104,15 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         parentActivity = getIntent().getStringExtra(KEY_PARENT_ACTIVITY);
         warehouseID = getIntent().getStringExtra(KEY_WAREHOUSE_ID);
         productId = getIntent().getStringExtra(KEY_PRODUCT_ID);
+        masterProductComponentId = getIntent().getStringExtra(KEY_MASTER_PRODUCT_COMPONENT_ID);
         replaceProjectProductId = getIntent().getStringExtra(KEY_REPLACE_PROJECT_PRODUCT_ID);
+        replaceProductComponentId = getIntent().getStringExtra(KEY_PRODUCT_COMPONENT_ID);
+
         if (replaceProjectProductId == null){
             replaceProjectProductId = "0";
+        }
+        if (replaceProductComponentId == null){
+            replaceProductComponentId = "0";
         }
         projectInstallationId = getIntent().getStringExtra(KEY_PROJECT_INSTALLATION_ID);
         if (projectInstallationId == null) {projectInstallationId = "0";}
@@ -161,9 +171,11 @@ public class AllAttributesActivity extends BaseDrawerActivity {
 //                                        "  \"newProductName\": \"" + newProductName + "\",\n" +
                                         "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
                                         "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
+                                        "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
                                         "  \"ProjectProductId\": \"0\",\n" +
                                         "  \"ProductId\": \"" + productId + "\",\n" +
                                         "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
+                                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                                         "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                                         "  \"Attributes\": {\n" +
                                         "    " + savedAttributes + "\n" +

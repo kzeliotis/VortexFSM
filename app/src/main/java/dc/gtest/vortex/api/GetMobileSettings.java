@@ -51,6 +51,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_MANDATORY_TASKS_COMMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PAYMENT_FILED;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PRODUCTS_TREE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
@@ -213,6 +214,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     MyPrefs.setBoolean(PREF_SHOW_DET_CHILDREN_START_STOP, MobileEnableDetChildrenStartStop == 1);
 
+                    int MobileShowProductsTree = MyJsonParser.getIntValue(oneObject, "MobileShowProductsTree", 0);
+
+                    MyPrefs.setBoolean(PREF_SHOW_PRODUCTS_TREE, MobileShowProductsTree == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

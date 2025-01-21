@@ -1397,5 +1397,16 @@
     <string name="show_hide_all_gr">ΕΜΦΑΝΙΣΗ/ΑΠΟΚΡΥΨΗ ΟΛΩΝ</string>
     <string name="show_hide_all_ar">Show/Hide all</string>
 
+    <string name="add_Product_component_structure">This item is part of a product structure. Do you want to include all structure components?</string>
+    <string name="add_Product_component_structure_gr">Αυτο το είδος είναι μέρος μιας δομής προϊόντος. Θέλετε να συμπεριλάβετε όλα τα στοιχεία της δομής;</string>
+    <string name="add_Product_component_structure_ar">This item is part of a product structure. Do you want to include all structure components?</string>
+
+    <string name="replace_Product_component_structure">This item is part of a product structure. Do you want to replace all structure components?</string>
+    <string name="replace_Product_component_structure_gr">Αυτο το είδος είναι μέρος μιας δομής προϊόντος. Θέλετε να αντικαταστήσετε όλα τα στοιχεία της δομής;</string>
+    <string name="replace_Product_component_structure_ar">This item is part of a product structure. Do you want to replace all structure components?</string>
+
+    <string name="remove_Product_component_structure">This item is part of a product structure. Do you want to remove all structure components?</string>
+    <string name="remove_Product_component_structure_gr">Αυτο το είδος είναι μέρος μιας δομής προϊόντος. Θέλετε να αφαιρεθούν όλα τα στοιχεία της δομής;</string>
+    <string name="remove_Product_component_structure_ar">This item is part of a product structure. Do you want to remove all structure components?</string>
 
 </resources>

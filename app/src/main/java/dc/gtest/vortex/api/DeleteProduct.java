@@ -56,6 +56,7 @@ public class DeleteProduct extends AsyncTask<String, Void, String > {
         String responseBody = "";
 
         String projectProductId = params[0];
+        String productComponentId = params.length > 1 ? params[1] : "0";
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String apiUrl = baseHostUrl + API_DELETE_PRODUCT + projectProductId + "&AssignmentId=" + AssignmentId + "&WarehouseId=" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");

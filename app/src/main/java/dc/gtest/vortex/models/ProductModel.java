@@ -5,6 +5,9 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ProductModel {
 
     private String productDescription = "";
@@ -20,6 +23,9 @@ public class ProductModel {
     private String masterId = "";
     private List<AttributeModel> productAttributes = new ArrayList<>();
     private List<MeasurementModel> RemoveFromProjectMandatory = new ArrayList<>();
+    @Getter
+    @Setter
+    private String productComponentId = "";
 
     @NonNull
     @Override
@@ -37,6 +43,7 @@ public class ProductModel {
                         "  \"ProductAttributesString\": \"" + productAttributesString + "\",\n" +
                         "  \"notes\": \"" + notes + "\",\n" +
                         "  \"MasterId\": \"" + masterId + "\",\n" +
+                        "  \"ProductComponentId\": \"" + productComponentId + "\",\n" +
                         "  \"ProductAttributeValues\": " + productAttributes + "\",\n" +
                         "  \"RemoveFromProjectMandatory\": " + RemoveFromProjectMandatory + "\n" +
                         "}";

@@ -238,6 +238,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_GET_ASSIGNMENT_COST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_INSTALLATIONS_BUTTON;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PAYMENT_FILED;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PRODUCTS_TREE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_USE_PT_OVERNIGHT_BUTTONS;
@@ -804,8 +805,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 startActivity(intentInstallations);
                 break;
             case R.id.btnToProducts:
-                //intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
-                intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
+                if (!MyPrefs.getBoolean(PREF_SHOW_PRODUCTS_TREE, false)){
+                    intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
+                }else{
+                    intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
+                }
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
@@ -966,7 +970,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 break;
 
             case R.id.btnToProducts:
-                intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
+                if (MyPrefs.getBoolean(PREF_SHOW_PRODUCTS_TREE, false)){
+                    intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
+                }else{
+                    intent = new Intent(AssignmentActionsActivity.this, ProductsActivity.class);
+                }
                 //intent = new Intent(AssignmentActionsActivity.this, ProductTreeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

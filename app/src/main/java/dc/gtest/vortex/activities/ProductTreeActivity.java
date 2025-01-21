@@ -53,6 +53,8 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.INSTALLATION_ZONES_LIST;
+import static dc.gtest.vortex.support.MyGlobals.KEY_MASTER_PRODUCT_COMPONENT_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_SELECT_PRODUCTS_TO_ADD;
@@ -283,8 +285,8 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
                     new AlertDialog.Builder(this)
                             .setMessage(localized_choose_from_warehouse)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> startAllProductsActivity(true, "0"))
-                            .setNegativeButton(R.string.no, (dialog, which) -> startAllProductsActivity(false, "0"))
+                            .setPositiveButton(R.string.yes, (dialog, which) -> startAllProductsActivity(true, "0", "0"))
+                            .setNegativeButton(R.string.no, (dialog, which) -> startAllProductsActivity(false, "0", "0"))
                             .show();
                 }
             }
@@ -300,13 +302,14 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
     }
 
-    public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId) {
+    public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId, String productComponentId) {
         NEW_ATTRIBUTES_LIST.clear();
         Intent intent = new Intent(ProductTreeActivity.this, AllProductsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(CONST_WAREHOUSE_PRODUCTS, warehouseProducts);
         intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, ReplaceProjectProductId);
         intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+        intent.putExtra(KEY_PRODUCT_COMPONENT_ID, productComponentId);
         startActivity(intent);
     }
 

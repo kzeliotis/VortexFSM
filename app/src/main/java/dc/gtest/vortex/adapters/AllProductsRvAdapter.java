@@ -36,7 +36,9 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_PARENT_ALL_PRODUCTS_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SHOW_PROGRESS_AND_TOAST;
+import static dc.gtest.vortex.support.MyGlobals.KEY_MASTER_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PARENT_ACTIVITY;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
@@ -45,6 +47,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyLocalization.localized_add_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_ask_to_install_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
@@ -61,16 +64,18 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
     private final String projectInstallationId;
 
     private final String replaceProjectProductId;
+    private final String replaceProductComponentId;
 
 
     public AllProductsRvAdapter(List<AllProductModel> items, Context ctx, boolean isForNewAssignment,
                                 boolean warehouseProducts, String projectInstallationId,
-                                String replaceProjectProductId) {
+                                String replaceProjectProductId, String replaceProductComponentId) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         this.warehouseProducts = warehouseProducts;
         this.projectInstallationId = projectInstallationId;
         this.replaceProjectProductId = replaceProjectProductId;
+        this.replaceProductComponentId = replaceProductComponentId;
         mValues = items;
         mFilter = new CustomFilter(AllProductsRvAdapter.this);
     }
@@ -127,94 +132,118 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                 ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
             } else {
 
-                String WarehouseId = "0";
-                String ProjectProductId = holder.mItem.getProjectProductId();
+                final String WarehouseId = warehouseProducts ? MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") : "0";
 
+                String masterProductComponentId = holder.mItem.getMasterProductComponentId();
 
-                if(warehouseProducts){
-                    WarehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
-                }
-
-                if(ProjectProductId.equals("0") || ProjectProductId.isEmpty()){
-
-                    Intent intent = new Intent(ctx, AllAttributesActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(KEY_PARENT_ACTIVITY, CONST_PARENT_ALL_PRODUCTS_ACTIVITY);
-                    intent.putExtra(KEY_PRODUCT_DESCRIPTION, holder.mItem.getProductDescription());
-                    intent.putExtra(KEY_WAREHOUSE_ID, WarehouseId);
-                    intent.putExtra(KEY_PRODUCT_ID, holder.mItem.getProductId());
-                    intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                    intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, replaceProjectProductId);
-                    ctx.startActivity(intent);
-                    ((AppCompatActivity) ctx).finish(); // finish activity to go to ProductsActivity when going back from AllAttributesActivity
-
-                } else {
+                if (!masterProductComponentId.equals("0") && !masterProductComponentId.isEmpty()) {
                     new AlertDialog.Builder(ctx)
-                            .setMessage(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription())
+                            .setMessage(localized_add_product_components)
+                            .setNegativeButton(R.string.no, (dialog, which) -> {
+                                dialog.dismiss();
+                                SendItem(holder, WarehouseId, "0");
+                            })
                             .setPositiveButton(R.string.yes, (dialog, which) -> {
                                 dialog.dismiss();
-                                savedAttributes = "";
-
-                                String newProductJsonString =
-                                        "{\n" +
-                                                "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
-                                                "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
-                                                "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
-                                                "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
-                                                "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
-                                                "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
-                                                "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
-                                                "  \"Attributes\": {\n" +
-                                                "    " + savedAttributes + "\n" +
-                                                "  }\n" +
-                                                "}";
-
-                                String prefKey = UUID.randomUUID().toString();
-                                MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
-
-                                AttributeModel attributeModel = new AttributeModel();
-                                attributeModel.setAttributeId(holder.mItem.getAttributeId());
-                                attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
-                                attributeModel.setAttributeValue(holder.mItem.getBasicValue());
-                                NEW_ATTRIBUTES_LIST.add(attributeModel);
-
-                                ProductModel productModel = new ProductModel();
-                                productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
-                                productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
-                                productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
-                                productModel.setNotSynchronized(true);
-
-                                String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
-
-                                if (productsData.length() > 0) {
-                                    productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
-                                } else {
-                                    productsData = "[" + productModel.toString() + "]";
-                                }
-
-                                MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
-
-                                NEW_ATTRIBUTES_LIST.clear();
-
-                                if (MyUtils.isNetworkAvailable()) {
-                                    SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
-                                    sendNewProduct.execute();
-                                } else {
-                                    Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
-                                }
-
-
-                                ((AppCompatActivity) ctx).finish();
+                                SendItem(holder, WarehouseId, masterProductComponentId);
                             })
-                            .setNegativeButton(R.string.no, null)
                             .show();
-
-
+                } else {
+                    SendItem(holder, WarehouseId, "0");
                 }
 
             }
         });
     }
+
+
+    public void SendItem(ViewHolder holder, String WarehouseId, String masterProductComponentId){
+
+        String ProjectProductId = holder.mItem.getProjectProductId();
+
+        if(ProjectProductId.equals("0") || ProjectProductId.isEmpty()){
+
+            Intent intent = new Intent(ctx, AllAttributesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(KEY_PARENT_ACTIVITY, CONST_PARENT_ALL_PRODUCTS_ACTIVITY);
+            intent.putExtra(KEY_PRODUCT_DESCRIPTION, holder.mItem.getProductDescription());
+            intent.putExtra(KEY_WAREHOUSE_ID, WarehouseId);
+            intent.putExtra(KEY_PRODUCT_ID, holder.mItem.getProductId());
+            intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+            intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, replaceProjectProductId);
+            intent.putExtra(KEY_PRODUCT_COMPONENT_ID, replaceProductComponentId);
+            intent.putExtra(KEY_MASTER_PRODUCT_COMPONENT_ID, masterProductComponentId);
+            ctx.startActivity(intent);
+            ((AppCompatActivity) ctx).finish(); // finish activity to go to ProductsActivity when going back from AllAttributesActivity
+
+        } else {
+            new AlertDialog.Builder(ctx)
+                    .setMessage(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription())
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        dialog.dismiss();
+                        savedAttributes = "";
+
+                        String newProductJsonString =
+                                "{\n" +
+                                        "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
+                                        "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
+                                        "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
+                                        "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
+                                        "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
+                                        "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
+                                        "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
+                                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
+                                        "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
+                                        "  \"Attributes\": {\n" +
+                                        "    " + savedAttributes + "\n" +
+                                        "  }\n" +
+                                        "}";
+
+                        String prefKey = UUID.randomUUID().toString();
+                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
+
+                        AttributeModel attributeModel = new AttributeModel();
+                        attributeModel.setAttributeId(holder.mItem.getAttributeId());
+                        attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+                        attributeModel.setAttributeValue(holder.mItem.getBasicValue());
+                        NEW_ATTRIBUTES_LIST.add(attributeModel);
+
+                        ProductModel productModel = new ProductModel();
+                        productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
+                        productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
+                        productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
+                        productModel.setNotSynchronized(true);
+
+                        String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+
+                        if (productsData.length() > 0) {
+                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
+                        } else {
+                            productsData = "[" + productModel.toString() + "]";
+                        }
+
+                        MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
+
+                        NEW_ATTRIBUTES_LIST.clear();
+
+                        if (MyUtils.isNetworkAvailable()) {
+                            SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
+                            sendNewProduct.execute();
+                        } else {
+                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        ((AppCompatActivity) ctx).finish();
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+
+
+        }
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -295,4 +324,8 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
             this.mAdapter.notifyDataSetChanged();
         }
     }
+
+
+
+
 }
