@@ -247,15 +247,20 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
                                             SELECTED_PRODUCT = holder.mItem;
                                             if(CheckMandatoryAttributes()){
                                                 DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                                new AlertDialog.Builder(ctx)
-                                                        .setMessage(localized_remove_product_components)
-                                                        .setPositiveButton(R.string.yes, (dialog3, which3) -> {
-                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
-                                                        })
-                                                        .setNegativeButton(R.string.no, (dialog3, which3) -> {
-                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
-                                                        })
-                                                        .show();
+                                                if(productComponentId != null && !productComponentId.equals("0")){
+                                                    new AlertDialog.Builder(ctx)
+                                                            .setMessage(localized_remove_product_components)
+                                                            .setPositiveButton(R.string.yes, (dialog3, which3) -> {
+                                                                deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
+                                                            })
+                                                            .setNegativeButton(R.string.no, (dialog3, which3) -> {
+                                                                deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                                            })
+                                                            .show();
+                                                }else{
+                                                    deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                                }
+
                                             }
                                         })
                                         .setNegativeButton(R.string.cancel, null)

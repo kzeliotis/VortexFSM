@@ -38,6 +38,7 @@ import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
@@ -153,6 +154,9 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
             if(!seachSerial){
                 holder.mView.setOnLongClickListener(v -> {
                     if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+
+                        String productComponentId = holder.mItem.getProductComponentId();
+
                         new AlertDialog.Builder(ctx)
                                 .setMessage(localized_to_delete_product)
                                 .setPositiveButton(R.string.yes, (dialog, which) -> {
@@ -160,7 +164,20 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                                     SELECTED_PRODUCT = holder.mItem;
                                     if(CheckMandatoryAttributes()){
                                         DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                        deleteProduct.execute(holder.mItem.getProjectProductId());
+                                        if(productComponentId != null && !productComponentId.equals("0")){
+                                            new AlertDialog.Builder(ctx)
+                                                    .setMessage(localized_remove_product_components)
+                                                    .setPositiveButton(R.string.yes, (dialog3, which3) -> {
+                                                        deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
+                                                    })
+                                                    .setNegativeButton(R.string.no, (dialog3, which3) -> {
+                                                        deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                                    })
+                                                    .show();
+                                            //deleteProduct.execute(holder.mItem.getProjectProductId());
+                                        }else{
+                                            deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                        }
                                     }
 
                                 })
