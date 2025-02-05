@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
@@ -44,6 +48,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
+import static dc.gtest.vortex.support.MyLocalization.localized_quantity;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_service;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
@@ -65,6 +70,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
     private TextView tvAssignmentId;
     private TextView tvTop2;
     private Button btnBottom;
+    private TextView tvQuantity;
 
     private String language;
     private String userName;
@@ -76,6 +82,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
     private String checkServices;
     private String sureToLeave;
     private String suggestedDone;
+    private String quantity_description;
 
     private JSONArray jArrayCheckboxes = new JSONArray();
     private final JSONObject jObjectServices = new JSONObject();
@@ -257,6 +264,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
             checkServices = getString(R.string.check_services_gr);
             sureToLeave = getString(R.string.sure_to_leave_gr);
             suggestedDone = getString(R.string.suggested_done_gr);
+
         } else {
             userNameTitle = getString(R.string.user);
             assignmentIdTitle = getString(R.string.assignment_id);
@@ -267,6 +275,8 @@ public class ServicesToSelectActivity extends AppCompatActivity {
             sureToLeave = getString(R.string.sure_to_leave);
             suggestedDone = getString(R.string.suggested_done);
         }
+
+        quantity_description = localized_quantity;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -353,6 +363,8 @@ public class ServicesToSelectActivity extends AppCompatActivity {
 
             LinearLayout llItemsRvNameChevron = view.findViewById(R.id.llItemsRvNameChevron);
             llItemsRvNameChevron.setBackgroundResource(R.drawable.rounded_layout_purple);
+            LinearLayout llServiceQuanity = view.findViewById(R.id.llServiceQuanity);
+            llServiceQuanity.setVisibility(View.VISIBLE);
 
             return new ViewHolder(view);
         }
@@ -364,6 +376,37 @@ public class ServicesToSelectActivity extends AppCompatActivity {
 
             holder.chkSuggested.setChecked(holder.mItem.isSuggestedChecked);
             holder.chkUsed.setChecked(holder.mItem.isUsedChecked);
+            holder.etServiceQuantity.setText(holder.mItem.quantity);
+
+            holder.etServiceQuantity.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (jArrayCheckboxes.length() > 0) {
+                        for (int i = 0; i < jArrayCheckboxes.length(); i++) {
+                            try {
+                                JSONObject jObject = jArrayCheckboxes.getJSONObject(i);
+
+                                if (jObject.getString("serviceId").equals(holder.mItem.serviceId)) {
+                                    jArrayCheckboxes.getJSONObject(i).put("quantity", holder.etServiceQuantity.getText().toString());
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
 
             holder.chkSuggested.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 holder.mItem.isSuggestedChecked = isChecked;
@@ -405,6 +448,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                             jObject.put("name", holder.mItem.itemName);
                             jObject.put("suggested", holder.chkSuggested.isChecked() ? "1" : "0");
                             jObject.put("used", holder.chkUsed.isChecked() ? "1" : "0");
+                            jObject.put("quantity", holder.etServiceQuantity.getText().toString());
                             jArrayCheckboxes.put(jObject);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -418,6 +462,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                         jObject.put("name", holder.mItem.itemName);
                         jObject.put("suggested", holder.chkSuggested.isChecked() ? "1" : "0");
                         jObject.put("used", holder.chkUsed.isChecked() ? "1" : "0");
+                        jObject.put("quantity", holder.etServiceQuantity.getText().toString());
                         jArrayCheckboxes.put(jObject);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -472,6 +517,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                             jObject.put("name", holder.mItem.itemName);
                             jObject.put("suggested", holder.chkSuggested.isChecked() ? "1" : "0");
                             jObject.put("used", holder.chkUsed.isChecked() ? "1" : "0");
+                            jObject.put("quantity", holder.etServiceQuantity.getText().toString());
                             jArrayCheckboxes.put(jObject);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -485,6 +531,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                         jObject.put("name", holder.mItem.itemName);
                         jObject.put("suggested", holder.chkSuggested.isChecked() ? "1" : "0");
                         jObject.put("used", holder.chkUsed.isChecked() ? "1" : "0");
+                        jObject.put("quantity", holder.etServiceQuantity.getText().toString());
                         jArrayCheckboxes.put(jObject);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -518,6 +565,8 @@ public class ServicesToSelectActivity extends AppCompatActivity {
             public final TextView tvItemName;
             public final CheckBox chkSuggested;
             public final CheckBox chkUsed;
+            public final EditText etServiceQuantity;
+            public final TextView tvQuantity;
             public NewProductsList mItem;
 
             public ViewHolder(View view) {
@@ -526,6 +575,9 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                 tvItemName = view.findViewById(R.id.tvItemName);
                 chkSuggested = view.findViewById(R.id.chkSuggested);
                 chkUsed = view.findViewById(R.id.chkUsed);
+                etServiceQuantity = view.findViewById(R.id.etServiceQuantity);
+                tvQuantity = view.findViewById(R.id.tvQuantity);
+                tvQuantity.setText(quantity_description);
             }
 
             @Override
@@ -583,6 +635,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
         String serviceId = "";
         boolean isSuggestedChecked = false;
         boolean isUsedChecked = false;
+        String quantity = "1";
 
         try {
             itemName = oneObject.getString("ServiceDescription");
@@ -596,7 +649,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked);
+        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked, quantity);
     }
 
     public static class NewProductsList {
@@ -605,12 +658,14 @@ public class ServicesToSelectActivity extends AppCompatActivity {
         public final String serviceId;
         public boolean isSuggestedChecked;
         public boolean isUsedChecked;
+        public final String quantity;
 
-        public NewProductsList(String itemName, String serviceId, boolean isSuggestedChecked, boolean isUsedChecked) {
+        public NewProductsList(String itemName, String serviceId, boolean isSuggestedChecked, boolean isUsedChecked, String quantity) {
             this.itemName = itemName;
             this.serviceId = serviceId;
             this.isSuggestedChecked = isSuggestedChecked;
             this.isUsedChecked = isUsedChecked;
+            this.quantity = quantity;
         }
 
         @Override

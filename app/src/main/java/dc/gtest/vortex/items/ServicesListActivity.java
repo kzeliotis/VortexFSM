@@ -22,9 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ import dc.gtest.vortex.support.MySwitchLanguage;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
+import static dc.gtest.vortex.support.MyLocalization.localized_quantity;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SHOW;
@@ -278,6 +281,8 @@ public class ServicesListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_name_checkboxes, parent, false);
+            LinearLayout llServiceQuanity = view.findViewById(R.id.llServiceQuanity);
+            llServiceQuanity.setVisibility(View.VISIBLE);
             return new ViewHolder(view);
         }
 
@@ -291,6 +296,11 @@ public class ServicesListActivity extends AppCompatActivity {
 
             holder.chkUsed.setChecked(holder.mItem.isUsedChecked.equals("1"));
             holder.chkUsed.setEnabled(false);
+
+            holder.etQuantity.setText(holder.mItem.quantity);
+            holder.etQuantity.setEnabled(false);
+
+            holder.tvQuantity.setText(localized_quantity);
 
             holder.mView.setOnClickListener(v -> {
 
@@ -313,6 +323,8 @@ public class ServicesListActivity extends AppCompatActivity {
             public final CheckBox chkSuggested;
             public final CheckBox chkUsed;
             public NewProductsList mItem;
+            public final TextView tvQuantity;
+            public final EditText etQuantity;
 
             public ViewHolder(View view) {
                 super(view);
@@ -320,6 +332,8 @@ public class ServicesListActivity extends AppCompatActivity {
                 tvItemName = view.findViewById(R.id.tvItemName);
                 chkSuggested = view.findViewById(R.id.chkSuggested);
                 chkUsed = view.findViewById(R.id.chkUsed);
+                tvQuantity = view.findViewById(R.id.tvQuantity);
+                etQuantity = view.findViewById(R.id.etServiceQuantity);
             }
 
             @Override
@@ -377,6 +391,7 @@ public class ServicesListActivity extends AppCompatActivity {
         String serviceId = "";
         String isSuggestedChecked = "";
         String isUsedChecked = "";
+        String quantity = "";
 
         try {
             itemName = oneObject.getString("name");
@@ -402,7 +417,13 @@ public class ServicesListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked);
+        try {
+            quantity = oneObject.getString("quantity");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked, quantity);
     }
 
     public static class NewProductsList {
@@ -411,12 +432,14 @@ public class ServicesListActivity extends AppCompatActivity {
         public final String serviceId;
         public final String isSuggestedChecked;
         public final String isUsedChecked;
+        public final String quantity;
 
-        public NewProductsList(String itemName, String serviceId, String isSuggestedChecked, String isUsedChecked) {
+        public NewProductsList(String itemName, String serviceId, String isSuggestedChecked, String isUsedChecked, String quantity) {
             this.itemName = itemName;
             this.serviceId = serviceId;
             this.isSuggestedChecked = isSuggestedChecked;
             this.isUsedChecked = isUsedChecked;
+            this.quantity = quantity;
         }
 
         @Override
