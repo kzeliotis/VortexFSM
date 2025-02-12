@@ -189,6 +189,7 @@ public class AssignmentsData {
                     boolean lockStatusChange = MyJsonParser.getBooleanValue(oneObject,"LockStatusChange", false);
                     assignmentModel.setLockStatusChange(lockStatusChange ? "1" : "0");
                     assignmentModel.setCorrelatedStatuses(MyJsonParser.getStringValue(oneObject, "CorrelatedStatuses", ""));
+                    assignmentModel.setAssignmentIndicators(MyJsonParser.getStringValue(oneObject, "AssignmentIndicators", ""));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

@@ -83,6 +83,15 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
         holder.tvTimeTo.setText(holder.mItem.getTimeTo());
         holder.tvAddress.setText(holder.mItem.getAddress());
         holder.tvAssignmentsStatus.setText(holder.mItem.getStatusName());
+        String assignmentIndicators = holder.mItem.getAssignmentIndicators();
+        if(!assignmentIndicators.isEmpty())
+        {
+            holder.tvIndicators.setText(assignmentIndicators);
+        }
+        else
+        {
+            holder.tvIndicators.setVisibility(View.GONE);
+        }
 
         if (holder.mItem.getAssignmentId().contains("-")) {
             holder.cvAssignment.setCardBackgroundColor(ContextCompat.getColor(ctx, R.color.pink_50));
@@ -169,6 +178,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
         final TextView tvDistance;
         final TextView tvAssignmentsStatus;
         final TextView tvWarning;
+        final TextView tvIndicators;
         public AssignmentModel mItem;
 
         public ViewHolder(View view) {
@@ -184,6 +194,7 @@ public class AssignmentsRvAdapter extends RecyclerView.Adapter<AssignmentsRvAdap
             tvDistance = view.findViewById(R.id.tvDistance);
             tvAssignmentsStatus = view.findViewById(R.id.tvAssignmentsStatus);
             tvWarning = view.findViewById(R.id.tvWarning);
+            tvIndicators = view.findViewById(R.id.tvIndicators);
         }
     }
 

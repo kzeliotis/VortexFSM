@@ -68,6 +68,7 @@ public class AssignmentModel {
     private List<AttachmentModel> attachments = new ArrayList<>();
     private List<StatusModel> correlatedStatusesList = new ArrayList<>();
     private List<DetChildrenModel> detChildren = new ArrayList<>();
+    private String AssignmentIndicators = "";
 
     @NonNull
     @Override
@@ -124,6 +125,7 @@ public class AssignmentModel {
                         "\"commentsSolution\": \"" + commentsSolution + "\",\n" +
                         "\"LockStatusChange\": \"" + LockStatusChange + "\",\n" +
                         "\"CorrelatedStatuses\": \"" + correlatedStatuses + "\",\n" +
+                        "\"AssignmentIndicators\": \"" + AssignmentIndicators + "\",\n" +
                         "\"MinimumPayment\": \"" + minimumPayment + "\",\n" +
                         "\"MaximumPayment\": \"" + maximumPayment + "\",\n" +
                         "\"MasterProjectId\": \"" + masterProjectId + "\",\n" +
@@ -601,4 +603,11 @@ public class AssignmentModel {
         this.detChildren = detChildren;
     }
 
+    public String getAssignmentIndicators() {
+        return AssignmentIndicators;
+    }
+
+    public void setAssignmentIndicators(String assignmentIndicators) {
+        AssignmentIndicators = assignmentIndicators;
+    }
 }
