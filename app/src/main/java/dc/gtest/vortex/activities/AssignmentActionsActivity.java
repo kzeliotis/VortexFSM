@@ -182,6 +182,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_select_measuremen
 import static dc.gtest.vortex.support.MyLocalization.localized_send_report;
 import static dc.gtest.vortex.support.MyLocalization.localized_services;
 import static dc.gtest.vortex.support.MyLocalization.localized_status;
+import static dc.gtest.vortex.support.MyLocalization.localized_tasks_per_item;
 import static dc.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyLocalization.localized_zones;
@@ -778,6 +779,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         btnPreviewReport.setText(localized_preview_report);
         tvSendReport.setText(localized_send_report);
         btnCustomFields.setText(localized_custom_fields_caps);
+        btnDetChildren.setText(localized_tasks_per_item);
 
     }
 
