@@ -256,7 +256,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
             }
 
-        permGetLocation.myRequestPermission(PERMISSIONS_FINE_LOCATION);
+        if(!(permGetLocation == null)){
+            permGetLocation.myRequestPermission(PERMISSIONS_FINE_LOCATION);
+        }
+
 
     }
 

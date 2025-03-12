@@ -212,6 +212,7 @@ public class MyGlobals {
     public static EditText attributeValueforScan;
     public static AllAttributeModel selectedAllAttribute;
     public static AttributeModel selectedAttribute;
+    public static PermGetLocation permGetLocation;
 
     // static constants, texts, numbers, etc.
     public static final String CONST_EN = "en";

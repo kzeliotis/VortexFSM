@@ -59,6 +59,7 @@ import static dc.gtest.vortex.support.MyGlobals.OTHER_APP_RESULT_CHECK_LOCATION_
 import static dc.gtest.vortex.support.MyGlobals.PERMISSIONS_FINE_LOCATION;
 import static dc.gtest.vortex.support.MyGlobals.STATUSES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.codeScanned;
+import static dc.gtest.vortex.support.MyGlobals.permGetLocation;
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_selected_date;
@@ -66,8 +67,10 @@ import static dc.gtest.vortex.support.MyLocalization.localized_to_exit;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_STATUSES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_STATUSES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+import static dc.gtest.vortex.support.MyPrefs.getBoolean;
 
 public class AssignmentsActivity extends BaseDrawerActivity implements View.OnClickListener {
 
@@ -96,16 +99,23 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
     private boolean doSpinnerItemSelected = true;
     private boolean doSearchTexChanged = true;
 
-    private PermGetLocation permGetLocation;
+    //private PermGetLocation permGetLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        permGetLocation = new PermGetLocation(this);
+        boolean afterLogIn = getIntent().getBooleanExtra(KEY_AFTER_LOGIN, false);
+        boolean startUp = getIntent().getBooleanExtra(KEY_AFTER_START_UP, false);
+
+        if (afterLogIn || startUp) {
+            permGetLocation = new PermGetLocation(this);
+        }
+
+
         //permGetLocation.myRequestPermission(PERMISSIONS_FINE_LOCATION);
 
-        GetMobileSettings getMobileSettings = new GetMobileSettings(this, permGetLocation);
+        GetMobileSettings getMobileSettings = new GetMobileSettings(this, (afterLogIn || startUp) ? permGetLocation : null);
         getMobileSettings.execute();
 
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
@@ -183,8 +193,7 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
         rvAssignments.setAdapter(assignmentsRvAdapter);
 
         if (MyUtils.isNetworkAvailable()) {
-            boolean afterLogIn = getIntent().getBooleanExtra(KEY_AFTER_LOGIN, false);
-            boolean startUp = getIntent().getBooleanExtra(KEY_AFTER_START_UP, false);
+
             boolean downloadAllData = getIntent().getBooleanExtra(KEY_DOWNLOAD_ALL_DATA, true);
             if (startUp) {
                 String password = MyPrefs.getStringWithFileName(PREF_PASSWORD, "1", "");
@@ -221,16 +230,19 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
     protected void onDestroy() {
         super.onDestroy();
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    permGetLocation.stopLocationUpdates();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if(!getBoolean(PREF_KEY_IS_LOGGED_IN, false)){
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        permGetLocation.stopLocationUpdates();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }, 9000L);
+            }, 9000L);
+        }
+
 
 
     }

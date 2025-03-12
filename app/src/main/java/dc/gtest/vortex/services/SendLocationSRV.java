@@ -218,6 +218,10 @@ public class SendLocationSRV extends Service {
         startLocationUpdates();
     }
 
+    public void onDestroy() {
+        super.onDestroy();
+        stopForeground(true); // Remove notification
+    }
 
 
     private void startLocationUpdates() {

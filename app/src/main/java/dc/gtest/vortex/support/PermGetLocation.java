@@ -286,8 +286,9 @@ public class PermGetLocation {
             //Context context = getApplicationContext();
             ASSIGNMENTS_CTX = ctx;
             Intent srv = new Intent(ASSIGNMENTS_CTX, SendLocationSRV.class); // Build the intent for the service
-            srv.setAction("Stop");
-            ASSIGNMENTS_CTX.startForegroundService(srv);
+            //srv.setAction("Stop");
+            //ASSIGNMENTS_CTX.startForegroundService(srv);
+            ASSIGNMENTS_CTX.stopService(srv);
             return;
         }
 
