@@ -14,12 +14,14 @@ import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_SERVICES;
 import static dc.gtest.vortex.api.MyApi.API_GET_SERVICES_FOR_ASSIGNMENT;
+import static dc.gtest.vortex.api.MyApi.API_GET_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_SERVICES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ASSIGNMENT_SERVICES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PICKING_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
 
 public class GetServices extends AsyncTask<String, Void, String > {
@@ -37,13 +39,15 @@ public class GetServices extends AsyncTask<String, Void, String > {
     private final String ProductId;
     private final String CustomerId;
     private final Boolean isForNewAssigment;
+    private final boolean fromPicking;
 
-    public GetServices(String AssignmentId, String ProjectProductId, String ProductId, String CustomerId, Boolean isForNewAssignment, Context ctx) {
+    public GetServices(String AssignmentId, String ProjectProductId, String ProductId, String CustomerId, Boolean isForNewAssignment, Context ctx, Boolean FromPicking) {
         this.AssignmentId = AssignmentId;
         this.ProjectProductId = ProjectProductId;
         this.ProductId = ProductId;
         this.CustomerId = CustomerId;
         this.isForNewAssigment = isForNewAssignment;
+        this.fromPicking = FromPicking;
         this.ctx = ctx;
     }
 
@@ -51,8 +55,10 @@ public class GetServices extends AsyncTask<String, Void, String > {
     protected String doInBackground(String... params) {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        if (isForNewAssigment){
-            apiUrl = baseHostUrl+ API_GET_SERVICES_FOR_ASSIGNMENT + CustomerId + "&ProjectProductId=" + ProjectProductId + "&ProductId=" + ProductId;
+        if (isForNewAssigment) {
+            apiUrl = baseHostUrl + API_GET_SERVICES_FOR_ASSIGNMENT + CustomerId + "&ProjectProductId=" + ProjectProductId + "&ProductId=" + ProductId;
+        }else if(fromPicking){
+            apiUrl = baseHostUrl+ API_GET_SERVICES_FROM_PICKING + AssignmentId;
         }else{
             apiUrl = baseHostUrl+ API_GET_SERVICES + AssignmentId + "&ProjectProductId=" + ProjectProductId + "&ProductId=" + ProductId + "&CustomerId=" + CustomerId;
         }
@@ -81,7 +87,11 @@ public class GetServices extends AsyncTask<String, Void, String > {
         if ( responseBody != null && !responseBody.equals("")) {
 
             if (AssignmentId != "0") {
-                MyPrefs.setStringWithFileName(PREF_FILE_RELATED_SERVICES_FOR_SHOW, AssignmentId, responseBody);
+                if(fromPicking){
+                    MyPrefs.setStringWithFileName(PREF_FILE_PICKING_SERVICES_FOR_SHOW, AssignmentId, responseBody);
+                }else{
+                    MyPrefs.setStringWithFileName(PREF_FILE_RELATED_SERVICES_FOR_SHOW, AssignmentId, responseBody);
+                }
             }else if (isForNewAssigment){
                 MyPrefs.setStringWithFileName(PREF_FILE_NEW_ASSIGNMENT_SERVICES_FOR_SHOW, AssignmentId, responseBody);
                 ServicesData.generate(responseBody, AssignmentId, true);

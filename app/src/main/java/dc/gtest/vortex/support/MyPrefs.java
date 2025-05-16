@@ -74,6 +74,7 @@ public class MyPrefs {
     public static final String PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW = "prf_file_related_warehouse_consumables_for_show";
     public static final String PREF_FILE_PICKING_LIST_FOR_SHOW = "pref_file_picking_list_for_show";
     public static final String PREF_FILE_RELATED_SERVICES_FOR_SHOW = "pref_file_related_services_for_show";
+    public static final String PREF_FILE_PICKING_SERVICES_FOR_SHOW = "pref_file_picking_services_for_show";
     public static final String PREF_FILE_NEW_ASSIGNMENT_SERVICES_FOR_SHOW = "pref_file_new_assignment_services_for_show";
     public static final String PREF_FILE_COMPANY_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_company_custom_fields_data_for_show";
     public static final String PREF_FILE_DET_CUSTOM_FIELDS_DATA_FOR_SHOW = "pref_file_det_custom_fields_data_for_show";
@@ -155,6 +156,7 @@ public class MyPrefs {
     public static final String PREF_ADD_CONSUMABLE_FROM_LIST = "pref_add_consumable_from_list";
     public static final String PREF_ADD_CONSUMABLE_FROM_WAREHOUSE = "pref_add_consumable_from_warehouse";
     public static final String PREF_ADD_CONSUMABLE_FROM_PICKING = "pref_add_consumable_from_picking";
+    public static final String PREF_ADD_SERVICES_FROM_PICKING = "pref_add_services_from_picking";
     public static final String PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING = "pref_qty_limit_consumable_from_picking";
     public static final String PREF_MANDATORY_CONSUMABLES_FROM_PICKING = "pref_mandatory_consumables_from_picking";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";

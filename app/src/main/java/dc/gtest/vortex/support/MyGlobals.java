@@ -230,6 +230,8 @@ public class MyGlobals {
     public static final String CONST_WAREHOUSE_PRODUCTS = "const_warehouse_products";
     public static final String CONST_EDIT_CONSUMABLES = "const_edit_consumables";
     public static final String CONST_SELECT_FROM_PICKING = "const_select_from_picking";
+    public static final String CONST_SELECT_SERVICES_FROM_PICKING = "const_select_services_from_picking";
+
 
     public static final boolean CONST_FINISH_ACTIVITY = true;
     public static final boolean CONST_DO_NOT_FINISH_ACTIVITY = false;

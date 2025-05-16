@@ -69,6 +69,7 @@ public class AssignmentModel {
     private List<StatusModel> correlatedStatusesList = new ArrayList<>();
     private List<DetChildrenModel> detChildren = new ArrayList<>();
     private String AssignmentIndicators = "";
+    private String ServicePickingList = "";
 
     @NonNull
     @Override
@@ -609,5 +610,13 @@ public class AssignmentModel {
 
     public void setAssignmentIndicators(String assignmentIndicators) {
         AssignmentIndicators = assignmentIndicators;
+    }
+
+    public String getServicePickingList() {
+        return ServicePickingList;
+    }
+
+    public void setServicePickingList(String servicePickingList) {
+        ServicePickingList = servicePickingList;
     }
 }

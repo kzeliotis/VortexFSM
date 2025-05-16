@@ -46,13 +46,13 @@ public class ServicesActivity extends BaseDrawerActivity {
         if (isForNewAssignment){
             SERVICES_FOR_NEW_ASSIGNMENT_LIST_FILTERED.clear();
             if (MyUtils.isNetworkAvailable()) {
-                GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this);
+                GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this, false);
                 getServices.execute();
             }
         } else {
             if (SERVICES_LIST_FILTERED.size() == 0){
                 if (MyUtils.isNetworkAvailable()) {
-                    GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this);
+                    GetServices getServices = new GetServices("0", ProjectProductId, ProductId, CustomerId, isForNewAssignment, this, false);
                     getServices.execute();
                 }
             }

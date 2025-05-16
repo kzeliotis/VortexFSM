@@ -316,7 +316,7 @@ public class LoginActivity extends AppCompatActivity {
         GetAllConsumables getAllConsumables = new GetAllConsumables(null, "0", false, false);
         getAllConsumables.execute();
 
-        GetServices getServices = new GetServices("0", "0","0", "0", false, this);
+        GetServices getServices = new GetServices("0", "0","0", "0", false, this, false);
         getServices.execute();
 
         GetUserPartnersResources getUserPartnersResources = new GetUserPartnersResources("0","0");

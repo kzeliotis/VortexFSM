@@ -46,6 +46,7 @@ public class AssignmentsData {
     public static void generate(Context ctx) {
 
         ASSIGNMENTS_LIST.clear();
+        CALENDAR_EVENTS.clear();
 
         String assignmentData = MyPrefs.getString(PREF_DATA_ASSIGNMENTS, "");
 
@@ -190,6 +191,7 @@ public class AssignmentsData {
                     assignmentModel.setLockStatusChange(lockStatusChange ? "1" : "0");
                     assignmentModel.setCorrelatedStatuses(MyJsonParser.getStringValue(oneObject, "CorrelatedStatuses", ""));
                     assignmentModel.setAssignmentIndicators(MyJsonParser.getStringValue(oneObject, "AssignmentIndicators", ""));
+                    assignmentModel.setServicePickingList(MyJsonParser.getStringValue(oneObject, "ServicePickingList", "0"));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

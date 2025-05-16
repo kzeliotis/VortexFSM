@@ -46,8 +46,11 @@ import dc.gtest.vortex.support.MySwitchLanguage;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_SERVICES_FROM_PICKING;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_quantity;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PICKING_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
@@ -64,6 +67,8 @@ public class ServicesListActivity extends AppCompatActivity {
     private TextView tvAssignmentId;
     private TextView tvTop2;
     private Button btnBottom;
+    private Button btnServiceFromPicking;
+
 
     private String language;
     private String userName;
@@ -71,6 +76,7 @@ public class ServicesListActivity extends AppCompatActivity {
     private String assignmentIdTitle;
     private String addNewService;
     private String noService;
+    private String selectFromPicking;
     private String startTravelFirst;
     private String checkInFirst;
     private String noChangesAllowed;
@@ -102,11 +108,18 @@ public class ServicesListActivity extends AppCompatActivity {
         new MySliderMenu(this).mySliderMenu();
 
         assignmentId = MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
+        boolean SrvPicking = SELECTED_ASSIGNMENT.getServicePickingList().equals("1");
 
         String RelatedServices = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_SERVICES_FOR_SHOW, assignmentId, "");
 
         if (RelatedServices.isEmpty() ||  MyUtils.isNetworkAvailable()){
-            GetServices getServices = new GetServices(assignmentId, "0","0", "0", false, this);
+            GetServices getServices = new GetServices(assignmentId, "0","0", "0", false, this, false);
+            getServices.execute();
+        }
+
+        String pickingServices = MyPrefs.getStringWithFileName(PREF_FILE_PICKING_SERVICES_FOR_SHOW, assignmentId, "");
+        if (pickingServices.isEmpty() ||  MyUtils.isNetworkAvailable()){
+            GetServices getServices = new GetServices(assignmentId, "0","0", "0", false, this, true);
             getServices.execute();
         }
 
@@ -122,6 +135,18 @@ public class ServicesListActivity extends AppCompatActivity {
             tvTop2.setGravity(Gravity.END);
             tvTop2.setVisibility(View.VISIBLE);
             tvTop2.setText(suggestedDone);
+        }
+
+        btnServiceFromPicking = findViewById(R.id.btnServiceFromPicking);
+        if (btnServiceFromPicking != null && SrvPicking){
+            btnServiceFromPicking.setVisibility(View.VISIBLE);
+            btnServiceFromPicking.setText(selectFromPicking);
+            btnServiceFromPicking.setOnClickListener(v -> {
+                Intent intent = new Intent(ServicesListActivity.this, ServicesToSelectActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(CONST_SELECT_SERVICES_FROM_PICKING, true);
+                startActivity(intent);
+            });
         }
 
         btnBottom = findViewById(R.id.btnBottom);
@@ -218,6 +243,7 @@ public class ServicesListActivity extends AppCompatActivity {
             noChangesAllowed = getString(R.string.no_changes_allowed_gr);
             activityTitle = getString(R.string.services_gr);
             suggestedDone = getString(R.string.suggested_done_gr);
+            selectFromPicking = getString(R.string.select_from_picking_gr);
         } else {
             userNameTitle = getString(R.string.user);
             assignmentIdTitle = getString(R.string.assignment_id);
@@ -228,6 +254,7 @@ public class ServicesListActivity extends AppCompatActivity {
             noChangesAllowed = getString(R.string.no_changes_allowed);
             activityTitle = getString(R.string.services);
             suggestedDone = getString(R.string.suggested_done);
+            selectFromPicking = getString(R.string.select_from_picking);
         }
     }
 
@@ -392,6 +419,8 @@ public class ServicesListActivity extends AppCompatActivity {
         String isSuggestedChecked = "";
         String isUsedChecked = "";
         String quantity = "";
+        String detPickingId = "0";
+        String pickingtQTY = "";
 
         try {
             itemName = oneObject.getString("name");
@@ -423,7 +452,14 @@ public class ServicesListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked, quantity);
+        try {
+            detPickingId = oneObject.getString("DetPickingId");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return new NewProductsList(itemName, serviceId, isSuggestedChecked, isUsedChecked, quantity, detPickingId, pickingtQTY);
     }
 
     public static class NewProductsList {
@@ -433,13 +469,18 @@ public class ServicesListActivity extends AppCompatActivity {
         public final String isSuggestedChecked;
         public final String isUsedChecked;
         public final String quantity;
+        public final String DetPickingId;
+        public final String PickingQTY;
 
-        public NewProductsList(String itemName, String serviceId, String isSuggestedChecked, String isUsedChecked, String quantity) {
+        public NewProductsList(String itemName, String serviceId, String isSuggestedChecked,
+                               String isUsedChecked, String quantity, String DetPickingId, String PickingQTY) {
             this.itemName = itemName;
             this.serviceId = serviceId;
             this.isSuggestedChecked = isSuggestedChecked;
             this.isUsedChecked = isUsedChecked;
             this.quantity = quantity;
+            this.DetPickingId = DetPickingId;
+            this.PickingQTY = PickingQTY;
         }
 
         @Override
@@ -450,6 +491,9 @@ public class ServicesListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        MyPrefs.setStringWithFileName(PREF_FILE_PICKING_SERVICES_FOR_SHOW, assignmentId, "");
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);

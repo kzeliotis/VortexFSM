@@ -41,18 +41,38 @@
         tools:context=".activities.ProductsActivity"
         tools:listitem="@layout/item_name_chevron"
         android:scrollbars="vertical"
-        android:layout_above="@+id/btnBottom"
+        android:layout_above="@+id/buttonContainer"
         android:layout_below="@+id/tvTop2"/>
 
-    <Button
-        android:visibility="gone"
-        android:id="@+id/btnBottom"
+    <LinearLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_new_product"
-        android:padding="@dimen/dp_10"
-        android:layout_margin="@dimen/dp_10"
-        android:background="@drawable/rounded_button_indigo"
-        android:layout_alignParentBottom="true"/>
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dp_10">
 
+
+        <Button
+            android:id="@+id/btnBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_product"
+            android:padding="@dimen/dp_4"
+            android:layout_margin="@dimen/dp_4"
+            android:background="@drawable/rounded_button_indigo"
+            />
+
+        <Button
+            android:id="@+id/btnServiceFromPicking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_from_picking"
+            android:padding="@dimen/dp_4"
+            android:layout_margin="@dimen/dp_4"
+            android:background="@drawable/rounded_button_indigo"
+            />
+
+
+    </LinearLayout>
 </RelativeLayout>

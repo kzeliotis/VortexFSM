@@ -126,7 +126,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                     customerid = NEW_ASSIGNMENT.getCustomerId();
                 }
                 if (MyUtils.isNetworkAvailable()) {
-                    GetServices getServices = new GetServices("0", "0", holder.mItem.getProductId(), customerid, false, ctx);
+                    GetServices getServices = new GetServices("0", "0", holder.mItem.getProductId(), customerid, false, ctx, false);
                     getServices.execute();
                 }
                 ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment

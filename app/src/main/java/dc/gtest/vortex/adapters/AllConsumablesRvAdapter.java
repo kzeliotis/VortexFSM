@@ -87,13 +87,6 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.tvAddedPickingNotes.setText(localized_notes_with_colon);
             holder.etAddedPickingNotes.setText(holder.mItem.getNotes());
             if(MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
-//                int detPickingId = holder.mItem.getDetPickingId();
-//                double addedStock = 0.0;
-//                for (AddedConsumableModel am : ADDED_CONSUMABLES_LIST) {
-//                    if(detPickingId == am.getDetPickingId()){
-//                        addedStock += Double.parseDouble(am.getUsed().replace(",", "."));
-//                    }
-//                }
                 String stock = holder.mItem.getStock().replace(",", ".");
                 double stock_d = Double.parseDouble(stock);
 //                stock_d -= addedStock;

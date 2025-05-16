@@ -27,6 +27,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_new_update_availa
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_LIST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_WAREHOUSE;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
@@ -217,6 +218,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MobileShowProductsTree = MyJsonParser.getIntValue(oneObject, "MobileShowProductsTree", 0);
 
                     MyPrefs.setBoolean(PREF_SHOW_PRODUCTS_TREE, MobileShowProductsTree == 1);
+
+                    int AddServicesFromPickingMobile = MyJsonParser.getIntValue(oneObject,  "AddServicesFromPickingMobile", 1);
+
+                    MyPrefs.setBoolean(PREF_ADD_SERVICES_FROM_PICKING, AddServicesFromPickingMobile == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");
