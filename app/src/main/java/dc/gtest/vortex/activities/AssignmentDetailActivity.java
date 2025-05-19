@@ -3,6 +3,7 @@ package dc.gtest.vortex.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -182,6 +183,10 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         fabHistory.setOnClickListener(this);
         fabGoToMap.setOnClickListener(this);
         fabSubAssignments.setOnClickListener(this);
+
+        if (!SELECTED_ASSIGNMENT.getContainsGroup().equals("1")){
+            fabSubAssignments.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#BDBDBD")));
+        }
 
         if (assignmentId.contains("-")){
             fabChangeResource.setOnClickListener(null);

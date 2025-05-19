@@ -192,6 +192,7 @@ public class AssignmentsData {
                     assignmentModel.setCorrelatedStatuses(MyJsonParser.getStringValue(oneObject, "CorrelatedStatuses", ""));
                     assignmentModel.setAssignmentIndicators(MyJsonParser.getStringValue(oneObject, "AssignmentIndicators", ""));
                     assignmentModel.setServicePickingList(MyJsonParser.getStringValue(oneObject, "ServicePickingList", "0"));
+                    assignmentModel.setContainsGroup(MyJsonParser.getStringValue(oneObject, "ContainsGroup", "0"));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();

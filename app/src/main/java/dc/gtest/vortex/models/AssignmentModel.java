@@ -70,6 +70,7 @@ public class AssignmentModel {
     private List<DetChildrenModel> detChildren = new ArrayList<>();
     private String AssignmentIndicators = "";
     private String ServicePickingList = "";
+    private String containsGroup = "";
 
     @NonNull
     @Override
@@ -618,5 +619,13 @@ public class AssignmentModel {
 
     public void setServicePickingList(String servicePickingList) {
         ServicePickingList = servicePickingList;
+    }
+
+    public String getContainsGroup() {
+        return containsGroup;
+    }
+
+    public void setContainsGroup(String containsGroup) {
+        this.containsGroup = containsGroup;
     }
 }
