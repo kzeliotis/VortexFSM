@@ -1209,12 +1209,27 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     break;
                 }
 
+                String _charged = chargedAmount.replace("\n", " ").replace("\r", " ").replace(",", ".");
+                if (_charged.isEmpty()) {_charged = "0";}
+                double charged = 0.0;
+                try{
+                    charged = Double.parseDouble(_charged);
+                } catch (Exception e) {
+                    chargedAmount = "0";
+                }
+
                 int mandatoryMinimumPayment = SELECTED_ASSIGNMENT.getCorrelatedStatusesList().get(spStatus.getSelectedItemPosition()).getMandatoryMinimumPayment();
-                Double minimumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMinimumPayment().replace(",", "."));
-                Double maximumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMaximumPayment().replace(",", "."));
+                double minimumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMinimumPayment().replace(",", "."));
+                double maximumPayment = Double.parseDouble(SELECTED_ASSIGNMENT.getMaximumPayment().replace(",", "."));
                 String _paid = paidAmount.replace("\n", " ").replace("\r", " ").replace(",", ".");
-                if (_paid.length() == 0 ) {_paid = "0";}
-                Double paid = Double.parseDouble(_paid);
+                if (_paid.isEmpty()) {_paid = "0";}
+                double paid = 0.0;
+                try{
+                    paid = Double.parseDouble(_paid);
+                } catch (Exception e) {
+                    paidAmount = "0";
+                }
+
                 String msg = "";
                 if(minimumPayment>0 && minimumPayment>paid && mandatoryMinimumPayment>0){
                     areAllRequiredFieldsFilled = false;
