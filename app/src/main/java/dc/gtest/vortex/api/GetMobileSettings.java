@@ -39,9 +39,11 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_ALL_MASTER_PROJECTS;
@@ -222,6 +224,14 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int AddServicesFromPickingMobile = MyJsonParser.getIntValue(oneObject,  "AddServicesFromPickingMobile", 1);
 
                     MyPrefs.setBoolean(PREF_ADD_SERVICES_FROM_PICKING, AddServicesFromPickingMobile == 1);
+
+                    int QtyLimitOnServicesFromPicking = MyJsonParser.getIntValue(oneObject,  "QtyLimitOnServicesFromPicking", 0);
+
+                    MyPrefs.setBoolean(PREF_QTY_LIMIT_SERVICES_FROM_PICKING, QtyLimitOnServicesFromPicking == 1);
+
+                    int MandatoryServicesFromPicking = MyJsonParser.getIntValue(oneObject,  "MandatoryServicesFromPicking", 0);
+
+                    MyPrefs.setBoolean(PREF_MANDATORY_SERVICES_FROM_PICKING, MandatoryServicesFromPicking == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

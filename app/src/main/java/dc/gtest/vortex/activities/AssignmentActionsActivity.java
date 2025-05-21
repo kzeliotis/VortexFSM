@@ -168,6 +168,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_mandatory_tasks;
 import static dc.gtest.vortex.support.MyLocalization.localized_maximum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_minimum_payment;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_added_consumables_from_picking;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_added_services_from_picking_list;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_multiple_checkin_allowed;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
@@ -210,6 +211,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SERVICES_FROM_PICKING_SENT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SIGNATURENAME;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
@@ -230,6 +232,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMEN
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_MEASUREMENTS_FOR_CHECKOUT_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_HIDE_INTERNAL_NOTES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
@@ -1203,9 +1206,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                 if(SELECTED_ASSIGNMENT.getPickingList().length() > 0 &&
                         !MyPrefs.getBooleanWithFileName(PREF_FILE_CONSUMABLES_FROM_PICKING_SENT, assignmentId, false) &&
-                        MyPrefs.getBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, true)){
+                        MyPrefs.getBoolean(PREF_MANDATORY_CONSUMABLES_FROM_PICKING, false)){
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_added_consumables_from_picking);
+                    break;
+                }
+
+                if(SELECTED_ASSIGNMENT.getServicePickingList().equals("1") &&
+                !MyPrefs.getBooleanWithFileName(PREF_FILE_SERVICES_FROM_PICKING_SENT, assignmentId, false) &&
+                MyPrefs.getBoolean(PREF_MANDATORY_SERVICES_FROM_PICKING, false)) {
+                    areAllRequiredFieldsFilled = false;
+                    MyDialogs.showOK(AssignmentActionsActivity.this, localized_no_added_services_from_picking_list);
                     break;
                 }
 

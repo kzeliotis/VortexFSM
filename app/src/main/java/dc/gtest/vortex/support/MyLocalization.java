@@ -276,6 +276,7 @@ public class MyLocalization {
     public static String localized_add_product_components = "";
     public static String localized_replace_product_components = "";
     public static String localized_remove_product_components = "";
+    public static String localized_no_added_services_from_picking_list = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -544,6 +545,7 @@ public class MyLocalization {
                 localized_add_product_components = ctx.getString(R.string.add_Product_component_structure_gr);
                 localized_replace_product_components = ctx.getString(R.string.replace_Product_component_structure_gr);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_gr);
+                localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added_gr);
                 break;
 
             case CONST_AR:
@@ -809,6 +811,7 @@ public class MyLocalization {
                 localized_add_product_components = ctx.getString(R.string.add_Product_component_structure_ar);
                 localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure_ar);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_ar);
+                localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added_ar);
                 break;
 
             default:
@@ -1075,6 +1078,7 @@ public class MyLocalization {
                 localized_add_product_components = ctx.getString(R.string.add_Product_component_structure);
                 localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure);
+                localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added);
                 break;
 
 

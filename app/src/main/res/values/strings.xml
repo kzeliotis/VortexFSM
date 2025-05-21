@@ -1409,4 +1409,7 @@
     <string name="remove_Product_component_structure_gr">Αυτο το είδος είναι μέρος μιας δομής προϊόντος. Θέλετε να αφαιρεθούν όλα τα στοιχεία της δομής;</string>
     <string name="remove_Product_component_structure_ar">This item is part of a product structure. Do you want to remove all structure components?</string>
 
+    <string name="no_services_from_picking_added">No services have been added from the picking list</string>
+    <string name="no_services_from_picking_added_gr">Δεν έχετε προσθέσει υπηρεσίες από το picking list</string>
+    <string name="no_services_from_picking_added_ar">No services have been added from the picking list</string>
 </resources>

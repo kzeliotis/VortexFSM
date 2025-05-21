@@ -59,10 +59,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_c
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PICKING_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_SERVICES_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SERVICES_FROM_PICKING_SENT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
-import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class ServicesToSelectActivity extends AppCompatActivity {
@@ -179,7 +180,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                         jObjectServicesToShow = jObjectServices;
                     }
 
-
+                    if(fromPicking) {MyPrefs.setBooleanWithFileName(PREF_FILE_SERVICES_FROM_PICKING_SENT, assignmentId, true);}
                     MyPrefs.setStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SYNC, assignmentId, jObjectServices.toString());
                     MyPrefs.setStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SHOW, assignmentId, jObjectServicesToShow.toString());
 
@@ -352,7 +353,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                     addItem(createDummyItem(oneObjectProductsData));
                 }
 
-                if (fromPicking && MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
+                if (fromPicking && MyPrefs.getBoolean(PREF_QTY_LIMIT_SERVICES_FROM_PICKING, false)){
                     String addedServices = MyPrefs.getStringWithFileName(PREF_FILE_USED_SERVICES_FOR_SHOW, assignmentId, "");
                     if (!addedServices.equals("")) {
                         for (NewProductsList srv: ITEMS) {
@@ -435,7 +436,7 @@ public class ServicesToSelectActivity extends AppCompatActivity {
                 holder.tvItemName.setText(desc);
             }
 
-            if(fromPicking && MyPrefs.getBoolean(PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING, false)){
+            if(fromPicking && MyPrefs.getBoolean(PREF_QTY_LIMIT_SERVICES_FROM_PICKING, false)){
                 String pickingQTY = holder.mItem.PickingQTY.replace(",", ".");
                 double pickingQTY_d = Double.parseDouble(pickingQTY);
                 if(pickingQTY_d <= 0){

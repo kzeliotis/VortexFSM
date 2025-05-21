@@ -121,6 +121,7 @@ public class MyPrefs {
     public static final String PREF_FILE_HAS_RETURNED_TO_BASE = "pref_file_has_returned_to_base";
     public static final String PREF_FILE_IS_SCANNED = "pref_file_is_scanned";
     public static final String PREF_FILE_CONSUMABLES_FROM_PICKING_SENT = "pref_file_consumables_from_picking_sent";
+    public static final String PREF_FILE_SERVICES_FROM_PICKING_SENT = "pref_file_services_from_picking_sent";
     public static final String PREF_KEY_IS_LOGGED_IN = "pref_key_is_logged_in";
     public static final String PREF_KEY_SELECTED_LANGUAGE = "pref_key_selected_language";
 
@@ -159,6 +160,8 @@ public class MyPrefs {
     public static final String PREF_ADD_SERVICES_FROM_PICKING = "pref_add_services_from_picking";
     public static final String PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING = "pref_qty_limit_consumable_from_picking";
     public static final String PREF_MANDATORY_CONSUMABLES_FROM_PICKING = "pref_mandatory_consumables_from_picking";
+    public static final String PREF_QTY_LIMIT_SERVICES_FROM_PICKING = "pref_qty_limit_services_from_picking";
+    public static final String PREF_MANDATORY_SERVICES_FROM_PICKING = "pref_mandatory_services_from_picking";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";
     public static final String PREF_SHOW_DET_CHILDREN = "pref_show_det_children";
     public static final String PREF_SHOW_DET_CHILDREN_START_STOP = "pref_show_det_children_start_stop";
