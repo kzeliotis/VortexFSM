@@ -67,7 +67,14 @@ public class AddedConsumablesRvAdapter extends RecyclerView.Adapter<AddedConsuma
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mValuesFiltered.get(position);
+
+        try
+        {
+            holder.mItem = mValuesFiltered.get(position);
+        } catch (Exception e) {
+            return;
+        }
+
 
         holder.tvConsumableName.setText(holder.mItem.getName());
         holder.tvSuggested.setText(holder.mItem.getSuggested());
@@ -174,7 +181,7 @@ public class AddedConsumablesRvAdapter extends RecyclerView.Adapter<AddedConsuma
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mValuesFiltered.size();
     }
 
     @Override
