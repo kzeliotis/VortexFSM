@@ -277,6 +277,10 @@ public class MyLocalization {
     public static String localized_replace_product_components = "";
     public static String localized_remove_product_components = "";
     public static String localized_no_added_services_from_picking_list = "";
+    public static String localized_choose_from_technicians_warehouse = "";
+    public static String localized_choose_from_site_warehouse = "";
+    public static String localized_choose_from_product_list = "";
+    public static String localized_choose_product_from = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -546,6 +550,10 @@ public class MyLocalization {
                 localized_replace_product_components = ctx.getString(R.string.replace_Product_component_structure_gr);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_gr);
                 localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added_gr);
+                localized_choose_from_technicians_warehouse = ctx.getString(R.string.choose_from__technicians_warehouse_gr);
+                localized_choose_from_site_warehouse = ctx.getString(R.string.choose_from_site_warehouse_gr);
+                localized_choose_from_product_list = ctx.getString(R.string.choose_from_product_list_gr);
+                localized_choose_product_from = ctx.getString(R.string.choose_product_from_gr);
                 break;
 
             case CONST_AR:
@@ -812,6 +820,10 @@ public class MyLocalization {
                 localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure_ar);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure_ar);
                 localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added_ar);
+                localized_choose_from_technicians_warehouse = ctx.getString(R.string.choose_from__technicians_warehouse_ar);
+                localized_choose_from_site_warehouse = ctx.getString(R.string.choose_from_site_warehouse_ar);
+                localized_choose_from_product_list = ctx.getString(R.string.choose_from_product_list_ar);
+                localized_choose_product_from = ctx.getString(R.string.choose_product_from_ar);
                 break;
 
             default:
@@ -1079,6 +1091,10 @@ public class MyLocalization {
                 localized_replace_product_components= ctx.getString(R.string.replace_Product_component_structure);
                 localized_remove_product_components = ctx.getString(R.string.remove_Product_component_structure);
                 localized_no_added_services_from_picking_list = ctx.getString(R.string.no_services_from_picking_added);
+                localized_choose_from_technicians_warehouse = ctx.getString(R.string.choose_from__technicians_warehouse);
+                localized_choose_from_site_warehouse = ctx.getString(R.string.choose_from_site_warehouse);
+                localized_choose_from_product_list = ctx.getString(R.string.choose_from_product_list);
+                localized_choose_product_from = ctx.getString(R.string.choose_product_from);
                 break;
 
 

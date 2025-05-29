@@ -17,10 +17,11 @@ import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_WAREHOUSE_PRODUCTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_WAREHOUSE_PRODUCTS_FOR_SHOW;
 
 public class AllProductsData {
 
-    public static void generate(boolean warehouseProducts) {
+    public static void generate(boolean warehouseProducts, String _warehouseId) {
 
 
         if (warehouseProducts) {
@@ -28,7 +29,7 @@ public class AllProductsData {
             ALL_WAREHOUSE_PRODUCTS_LIST.clear();
             ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED.clear();
 
-            String allProducts = MyPrefs.getString(PREF_DATA_WAREHOUSE_PRODUCTS, "");
+            String allProducts = MyPrefs.getStringWithFileName(PREF_FILE_WAREHOUSE_PRODUCTS_FOR_SHOW, _warehouseId, ""); //MyPrefs.getString(PREF_DATA_WAREHOUSE_PRODUCTS, "");
 
             if (!allProducts.isEmpty()) {
                 try {

@@ -46,6 +46,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
@@ -84,6 +85,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
     private String replaceProductComponentId = "0";
     private Boolean searchSerial;
     private String masterProductComponentId = "0";
+    private String projectWarehouseId = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
         newProductName = getIntent().getStringExtra(KEY_PRODUCT_DESCRIPTION);
         parentActivity = getIntent().getStringExtra(KEY_PARENT_ACTIVITY);
         warehouseID = getIntent().getStringExtra(KEY_WAREHOUSE_ID);
+        projectWarehouseId = getIntent().getStringExtra(KEY_PROJECT_WAREHOUSE_ID);
         productId = getIntent().getStringExtra(KEY_PRODUCT_ID);
         masterProductComponentId = getIntent().getStringExtra(KEY_MASTER_PRODUCT_COMPONENT_ID);
         replaceProjectProductId = getIntent().getStringExtra(KEY_REPLACE_PROJECT_PRODUCT_ID);
@@ -140,6 +143,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                                         "  \"assignmentId\": \"" + assignmentId + "\",\n" +
                                         "  \"oldProductId\": \"" + SELECTED_PRODUCT.getProjectProductId() + "\",\n" +
                                         "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
+                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
                                         "  \"ProjectProductId\": \"0\",\n" +
                                         "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                                         "  \"Attributes\": {\n" +
@@ -170,6 +174,7 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                                         "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
 //                                        "  \"newProductName\": \"" + newProductName + "\",\n" +
                                         "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
+                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
                                         "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
                                         "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
                                         "  \"ProjectProductId\": \"0\",\n" +

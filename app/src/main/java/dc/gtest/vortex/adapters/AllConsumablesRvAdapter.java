@@ -55,12 +55,15 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
     private final CustomFilter mFilter;
     private final boolean warehouseProducts;
     private final boolean pickingList;
+    private String _projectWarehouseId = "";
 
-    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx, boolean WarehouseProducts, boolean PickingList) {
+    public AllConsumablesRvAdapter(List<AllConsumableModel> items, Context ctx, boolean WarehouseProducts,
+                                   boolean PickingList, String WarehouseId) {
         this.ctx = ctx;
         mValues = items;
         warehouseProducts = WarehouseProducts;
         pickingList = PickingList;
+        _projectWarehouseId = WarehouseId;
         mFilter = new CustomFilter(AllConsumablesRvAdapter.this);
     }
 
@@ -239,10 +242,11 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                                 addedConsumableModel.setProductId(holder.mItem.getProductId());
                                 String warehouseId = "0";
                                 if(warehouseProducts){
-                                    warehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
+                                    warehouseId = (_projectWarehouseId.equals("0") || _projectWarehouseId.isEmpty()) ? MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") : "0";
                                     addedConsumableModel.setStock(holder.mItem.getStock().replace(",", "."));
                                 }
                                 addedConsumableModel.setWarehouseId(warehouseId);
+                                addedConsumableModel.setProjectWarehouseId(_projectWarehouseId);
 
                                 CONSUMABLES_TOADD_LIST.add(addedConsumableModel);
                                 MyPrefs.setStringWithFileName(PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), CONSUMABLES_TOADD_LIST.toString());

@@ -228,6 +228,7 @@ public class MyGlobals {
     public static final String CONST_IS_FOR_NEW_ASSIGNMENT = "const_is_for_new_assignment";
     public static final String CONST_SINGLE_SELECTION = "const_single_selection";
     public static final String CONST_WAREHOUSE_PRODUCTS = "const_warehouse_products";
+    public static final String CONST_SITE_WAREHOUSE_PRODUCTS = "const_site_warehouse_products";
     public static final String CONST_EDIT_CONSUMABLES = "const_edit_consumables";
     public static final String CONST_SELECT_FROM_PICKING = "const_select_from_picking";
     public static final String CONST_SELECT_SERVICES_FROM_PICKING = "const_select_services_from_picking";
@@ -249,6 +250,7 @@ public class MyGlobals {
     public static final String KEY_PROJECT_PRODUCT_ID = "key_project_product_id";
     public static final String KEY_REPLACE_PROJECT_PRODUCT_ID = "key_replace_project_product_id";
     public static final String KEY_WAREHOUSE_ID = "key_warehouse_id";
+    public static final String KEY_PROJECT_WAREHOUSE_ID = "key_project_warehouse_id";
     public static final String KEY_PRODUCT_ID = "key_product_id";
     public static final String KEY_PROJECT_INSTALLATION_ID = "key_project_installation_id";
     public static final String KEY_MASTER_PRODUCT_COMPONENT_ID = "key_master_product_component_id";

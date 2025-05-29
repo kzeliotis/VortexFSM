@@ -47,7 +47,11 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_product_list;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_site_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_technicians_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
 import static dc.gtest.vortex.support.MyLocalization.localized_delete;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
 import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
@@ -277,11 +281,38 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
     }
 
     public void replaceItem(String replaceProjectProductId, String productComponentId){
+
+        List<String> optionsList = new ArrayList<>();
+
+        optionsList.add(localized_choose_from_product_list);
+        optionsList.add(localized_choose_from_technicians_warehouse);
+        if(!SELECTED_ASSIGNMENT.getProjectWarehouseId().equals("0")) {optionsList.add(localized_choose_from_site_warehouse);}
+
+        String[] options = optionsList.toArray(new String[0]);
+
         new AlertDialog.Builder(ctx)
-                .setMessage(localized_choose_from_warehouse)
-                .setPositiveButton(R.string.yes, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId, productComponentId))
-                .setNegativeButton(R.string.no, (dialog2, which2) -> ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId, productComponentId))
+                .setTitle(localized_choose_product_from) // optional title
+                .setItems(options, (dialog, which) -> {
+                    String selectedOption = options[which];
+
+                    if (selectedOption.equals(localized_choose_from_product_list)) {
+                        ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId, productComponentId, "0");
+                    } else if (selectedOption.equals(localized_choose_from_technicians_warehouse)) {
+                        ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId, productComponentId, "0");
+                    } else if (selectedOption.equals(localized_choose_from_site_warehouse)) {
+                        ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId, productComponentId,
+                                SELECTED_ASSIGNMENT.getProjectWarehouseId());
+                    }
+                })
                 .show();
+
+//        new AlertDialog.Builder(ctx)
+//                .setMessage(localized_choose_from_warehouse)
+//                .setPositiveButton(R.string.yes, (dialog2, which2) ->
+//                        ((ProductTreeActivity) ctx).startAllProductsActivity(true, replaceProjectProductId, productComponentId))
+//                .setNegativeButton(R.string.no, (dialog2, which2) ->
+//                        ((ProductTreeActivity) ctx).startAllProductsActivity(false, replaceProjectProductId, productComponentId))
+//                .show();
     }
 
 

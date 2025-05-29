@@ -103,7 +103,7 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
                 getProducts.execute();
 
                 if (MyPrefs.getString(PREF_WAREHOUSEID, "0") != "0") {
-                    GetAllProducts getAllProducts = new GetAllProducts(null, true);
+                    GetAllProducts getAllProducts = new GetAllProducts(null, true, "0"); //TODO: έλεγχος για περιπτώσεις που χρειάζεται το projectWarehouseId
                     getAllProducts.execute();
                 }
 

@@ -33,6 +33,7 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_CONSUMABLES_LIST_F
 import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
 import static dc.gtest.vortex.support.MyGlobals.CONST_FINISH_ACTIVITY;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_FROM_PICKING;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SITE_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PICKING_PRODUCTS_LIST_FILTERED;
@@ -72,6 +73,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
     private Button btnEditConsumables;
 
     private String assignmentId = "";
+    private String _projectWarehouseId = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +89,20 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         btnSendConsumables = findViewById(R.id.btnSendConsumables);
         btnEditConsumables = findViewById(R.id.btnEditConsumables);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
+        String selectedWarehouseId = MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0");
+        boolean siteWarehouseProducts = getIntent().getBooleanExtra(CONST_SITE_WAREHOUSE_PRODUCTS, false);
+        if(siteWarehouseProducts){
+            _projectWarehouseId = SELECTED_ASSIGNMENT.getProjectWarehouseId();
+            selectedWarehouseId = _projectWarehouseId;
+            WarehouseProducts = true;
+        }
         boolean selectFromPicking = getIntent().getBooleanExtra(CONST_SELECT_FROM_PICKING, false);
         if(selectFromPicking){btnEditConsumables.setVisibility(View.GONE);}
 
-        AllConsumablesData.generate(assignmentId, WarehouseProducts, selectFromPicking);
+        AllConsumablesData.generate(assignmentId, WarehouseProducts, selectFromPicking, selectedWarehouseId);
         if(WarehouseProducts) {
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts,
+                    false, _projectWarehouseId);
         } else if (selectFromPicking) {
             List<AllConsumableModel> pickList = new ArrayList<AllConsumableModel>();
             pickList.addAll(PICKING_PRODUCTS_LIST_FILTERED);
@@ -113,9 +123,9 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
                 }
             }
 
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(pickList, this, WarehouseProducts, true);
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(pickList, this, WarehouseProducts, true, _projectWarehouseId);
         }else{
-            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false);
+            allConsumablesRvAdapter = new AllConsumablesRvAdapter(ALL_CONSUMABLES_LIST_FILTERED, this, WarehouseProducts, false, _projectWarehouseId);
         }
         rvAllConsumables.setAdapter(allConsumablesRvAdapter);
 
@@ -128,7 +138,8 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
         }
 
         if (RelatedConsumables.isEmpty() || MyUtils.isNetworkAvailable()) {
-            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts, selectFromPicking);
+            GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts,
+                                            selectFromPicking, siteWarehouseProducts ? _projectWarehouseId : "0");
             getAllConsumables.execute();
         }
 

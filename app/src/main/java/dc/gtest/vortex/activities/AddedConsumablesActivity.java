@@ -28,13 +28,18 @@ import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ADDED_CONSUMABLES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EDIT_CONSUMABLES;
 import static dc.gtest.vortex.support.MyGlobals.CONST_SELECT_FROM_PICKING;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SITE_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_new_consumable_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_product_list;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_site_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_technicians_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables;
 import static dc.gtest.vortex.support.MyLocalization.localized_consumables_to_send;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_from_picking;
@@ -45,6 +50,9 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_WAREHOUSE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddedConsumablesActivity extends BaseDrawerActivity {
 
@@ -100,37 +108,78 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
 
         btnAddNewConsumable.setOnClickListener(v -> {
 
-            if (consumablesFromList && consumablesFromWareHouse){
-                if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+                if (consumablesFromList && !consumablesFromWareHouse){
+                    Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                    startActivity(intent);
+                }else{
+                    List<String> optionsList = new ArrayList<>();
+
+                    if(consumablesFromList) {optionsList.add(localized_choose_from_product_list);}
+                    if(consumablesFromWareHouse) {optionsList.add(localized_choose_from_technicians_warehouse);}
+                    if(consumablesFromWareHouse && !SELECTED_ASSIGNMENT.getProjectWarehouseId().equals("0"))
+                                                {optionsList.add(localized_choose_from_site_warehouse);}
+
+                    String[] options = optionsList.toArray(new String[0]);
+
                     new AlertDialog.Builder(this)
-                            .setMessage(localized_choose_from_warehouse)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                dialog.dismiss();
+                            .setTitle(localized_choose_product_from) // optional title
+                            .setItems(options, (dialog, which) -> {
                                 Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
-                                startActivity(intent);
-                            })
-                            .setNegativeButton(R.string.no, (dialog, which) -> {
-                                dialog.dismiss();
-                                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+
+                                String selectedOption = options[which];
+
+                                if (selectedOption.equals(localized_choose_from_product_list)) {
+                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                                } else if (selectedOption.equals(localized_choose_from_technicians_warehouse)) {
+                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                                } else if (selectedOption.equals(localized_choose_from_site_warehouse)) {
+                                    intent.putExtra(CONST_SITE_WAREHOUSE_PRODUCTS, true);
+                                }
+
                                 startActivity(intent);
                             })
                             .show();
                 }
-            } else if (consumablesFromList && !consumablesFromWareHouse){
-                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
-                startActivity(intent);
-            } else if (!consumablesFromList && consumablesFromWareHouse){
-                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
-                startActivity(intent);
             }
+
+
+
+//            if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
+//                if (consumablesFromList && consumablesFromWareHouse){
+//
+//                    new AlertDialog.Builder(this)
+//                            .setMessage(localized_choose_from_warehouse)
+//                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+//                                dialog.dismiss();
+//                                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+//                                startActivity(intent);
+//                            })
+//                            .setNegativeButton(R.string.no, (dialog, which) -> {
+//                                dialog.dismiss();
+//                                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+//                                startActivity(intent);
+//                            })
+//                            .show();
+//                }
+//            } else if (consumablesFromList && !consumablesFromWareHouse){
+//                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+//                startActivity(intent);
+//            } else if (!consumablesFromList && consumablesFromWareHouse){
+//                Intent intent = new Intent(AddedConsumablesActivity.this, AllConsumablesActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+//                startActivity(intent);
+//            }
 
 
         });

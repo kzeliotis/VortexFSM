@@ -52,6 +52,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SITE_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.INSTALLATION_ZONES_LIST;
@@ -72,7 +73,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_add_new_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_select_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_product_list;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_site_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_technicians_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
 import static dc.gtest.vortex.support.MyLocalization.localized_create_workorder;
 import static dc.gtest.vortex.support.MyLocalization.localized_create_workorder_on_asset;
 import static dc.gtest.vortex.support.MyLocalization.localized_filter_by_type;
@@ -267,25 +272,54 @@ public class ProductsActivity extends BaseDrawerActivity {
 
                         NEW_ATTRIBUTES_LIST.clear();
 
+                        List<String> optionsList = new ArrayList<>();
+
+                        optionsList.add(localized_choose_from_product_list);
+                        optionsList.add(localized_choose_from_technicians_warehouse);
+                        if(!SELECTED_ASSIGNMENT.getProjectWarehouseId().equals("0")) {optionsList.add(localized_choose_from_site_warehouse);}
+
+                        String[] options = optionsList.toArray(new String[0]);
+
                         new AlertDialog.Builder(this)
-                                .setMessage(localized_choose_from_warehouse)
-                                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                    dialog.dismiss();
+                                .setTitle(localized_choose_product_from) // optional title
+                                .setItems(options, (dialog, which) -> {
                                     Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
                                     intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
-                                    startActivity(intent);
-                                })
-                                .setNegativeButton(R.string.no, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
-                                    intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+
+                                    String selectedOption = options[which];
+
+                                    if (selectedOption.equals(localized_choose_from_product_list)) {
+                                        intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+                                    } else if (selectedOption.equals(localized_choose_from_technicians_warehouse)) {
+                                        intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+                                    } else if (selectedOption.equals(localized_choose_from_site_warehouse)) {
+                                        intent.putExtra(CONST_SITE_WAREHOUSE_PRODUCTS, true);
+                                    }
+
                                     startActivity(intent);
                                 })
                                 .show();
+
+//                        new AlertDialog.Builder(this)
+//                                .setMessage(localized_choose_from_warehouse)
+//                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+//                                    dialog.dismiss();
+//                                    Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, true);
+//                                    intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+//                                    startActivity(intent);
+//                                })
+//                                .setNegativeButton(R.string.no, (dialog, which) -> {
+//                                    dialog.dismiss();
+//                                    Intent intent = new Intent(ProductsActivity.this, AllProductsActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                    intent.putExtra(CONST_WAREHOUSE_PRODUCTS, false);
+//                                    intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
+//                                    startActivity(intent);
+//                                })
+//                                .show();
                     }
                 }
             } else {

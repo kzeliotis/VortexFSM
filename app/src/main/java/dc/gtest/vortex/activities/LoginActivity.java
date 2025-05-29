@@ -298,7 +298,7 @@ public class LoginActivity extends AppCompatActivity {
         GetShowZoneProductsButton getShowZoneProductsButton = new GetShowZoneProductsButton();
         getShowZoneProductsButton.execute();
 
-        GetAllProducts getAllProducts = new GetAllProducts(null, false);
+        GetAllProducts getAllProducts = new GetAllProducts(null, false, "0");
         getAllProducts.execute();
 
         GetProductTypes getProductTypes = new GetProductTypes(this);
@@ -313,7 +313,7 @@ public class LoginActivity extends AppCompatActivity {
         GetDefaultTechActions getDefaultTechActions = new GetDefaultTechActions();
         getDefaultTechActions.execute();
 
-        GetAllConsumables getAllConsumables = new GetAllConsumables(null, "0", false, false);
+        GetAllConsumables getAllConsumables = new GetAllConsumables(null, "0", false, false, "");
         getAllConsumables.execute();
 
         GetServices getServices = new GetServices("0", "0","0", "0", false, this, false);

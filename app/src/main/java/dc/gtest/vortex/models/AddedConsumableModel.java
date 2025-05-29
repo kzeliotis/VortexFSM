@@ -12,6 +12,7 @@ public class AddedConsumableModel {
     private String warehouseId = "0";
     private String stock = "0";
     private int detPickingId = 0;
+    private String projectWarehouseId = "0";
 
     @Override
     public String toString() {
@@ -23,6 +24,7 @@ public class AddedConsumableModel {
                         "  \"ProductId\": \"" + ProductId  + "\",\n" +
                         "  \"DetPickingId\": \"" + detPickingId  + "\",\n" +
                         "  \"WarehouseId\": \"" + warehouseId  + "\",\n" +
+                        "  \"projectWarehouseId\": \"" + projectWarehouseId  + "\",\n" +
                         "  \"Stock\": \"" + stock  + "\",\n" +
                         "  \"used\": \"" + used + "\"\n" +
                         "}";
@@ -94,5 +96,13 @@ public class AddedConsumableModel {
 
     public void setStock(String Stock) {
         this.stock = Stock;
+    }
+
+    public String getProjectWarehouseId() {
+        return projectWarehouseId;
+    }
+
+    public void setProjectWarehouseId(String projectWarehouseId) {
+        this.projectWarehouseId = projectWarehouseId;
     }
 }

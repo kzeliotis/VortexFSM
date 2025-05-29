@@ -1412,4 +1412,22 @@
     <string name="no_services_from_picking_added">No services have been added from the picking list</string>
     <string name="no_services_from_picking_added_gr">Δεν έχετε προσθέσει υπηρεσίες από το picking list</string>
     <string name="no_services_from_picking_added_ar">No services have been added from the picking list</string>
+
+
+    <string name="choose_from__technicians_warehouse">Technician\'s warehouse</string>
+    <string name="choose_from__technicians_warehouse_gr">Αποθήκη τεχνικού</string>
+    <string name="choose_from__technicians_warehouse_ar">Technician\'s warehouse</string>
+
+    <string name="choose_from_site_warehouse">Site warehouse</string>
+    <string name="choose_from_site_warehouse_gr">Αποθήκη Σημείου</string>
+    <string name="choose_from_site_warehouse_ar">Site warehouse</string>
+
+    <string name="choose_from_product_list">All products list</string>
+    <string name="choose_from_product_list_gr">Λίστα όλων των ειδών</string>
+    <string name="choose_from_product_list_ar">All products list</string>
+
+    <string name="choose_product_from">Choose product from:</string>
+    <string name="choose_product_from_gr">Επιλογή είδους από:</string>
+    <string name="choose_product_from_ar">Choose product from:</string>
+
 </resources>

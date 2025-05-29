@@ -24,12 +24,12 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RELATED_WAREHOUSE_CONSUM
 
 public class AllConsumablesData {
 
-    public static void generate(String AssignmentId, boolean warehouseProducts, boolean pickingList) {
+    public static void generate(String AssignmentId, boolean warehouseProducts, boolean pickingList, String _warehouseId) {
 
         if(warehouseProducts) {
             ALL_WAREHOUSE_CONSUMABLES_LIST.clear();
             ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.clear();
-            String Consumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0"), "");
+            String Consumables = MyPrefs.getStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, _warehouseId, "");
             //String allConsumables = MyPrefs.getString(PREF_DATA_ALL_CONSUMABLES, "");
             if (Consumables.isEmpty()) {
                 Consumables = MyPrefs.getString(PREF_DATA_ALL_WAREHOUSE_CONSUMABLES, "");

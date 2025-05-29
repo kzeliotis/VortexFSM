@@ -42,6 +42,7 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_DESCRIPTION;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_WAREHOUSE_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
@@ -65,17 +66,20 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
 
     private final String replaceProjectProductId;
     private final String replaceProductComponentId;
+    private final String projectWarehouseId;
 
 
     public AllProductsRvAdapter(List<AllProductModel> items, Context ctx, boolean isForNewAssignment,
                                 boolean warehouseProducts, String projectInstallationId,
-                                String replaceProjectProductId, String replaceProductComponentId) {
+                                String replaceProjectProductId, String replaceProductComponentId,
+                                String ProjectWarehouseId) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         this.warehouseProducts = warehouseProducts;
         this.projectInstallationId = projectInstallationId;
         this.replaceProjectProductId = replaceProjectProductId;
         this.replaceProductComponentId = replaceProductComponentId;
+        this.projectWarehouseId = ProjectWarehouseId;
         mValues = items;
         mFilter = new CustomFilter(AllProductsRvAdapter.this);
     }
@@ -132,7 +136,10 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                 ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
             } else {
 
-                final String WarehouseId = warehouseProducts ? MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") : "0";
+                String w_id = warehouseProducts ? MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") : "0";
+                if (!projectWarehouseId.isEmpty() && !projectWarehouseId.equals("0")) {w_id = "0";}
+
+                final String _WarehouseId = w_id;
 
                 String masterProductComponentId = holder.mItem.getMasterProductComponentId();
 
@@ -141,15 +148,15 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                             .setMessage(localized_add_product_components)
                             .setNegativeButton(R.string.no, (dialog, which) -> {
                                 dialog.dismiss();
-                                SendItem(holder, WarehouseId, "0");
+                                SendItem(holder, _WarehouseId, "0", projectWarehouseId);
                             })
                             .setPositiveButton(R.string.yes, (dialog, which) -> {
                                 dialog.dismiss();
-                                SendItem(holder, WarehouseId, masterProductComponentId);
+                                SendItem(holder, _WarehouseId, masterProductComponentId, projectWarehouseId);
                             })
                             .show();
                 } else {
-                    SendItem(holder, WarehouseId, "0");
+                    SendItem(holder, _WarehouseId, "0", projectWarehouseId);
                 }
 
             }
@@ -157,7 +164,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
     }
 
 
-    public void SendItem(ViewHolder holder, String WarehouseId, String masterProductComponentId){
+    public void SendItem(ViewHolder holder, String WarehouseId, String masterProductComponentId, String projectWarehouseId){
 
         String ProjectProductId = holder.mItem.getProjectProductId();
 
@@ -168,6 +175,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
             intent.putExtra(KEY_PARENT_ACTIVITY, CONST_PARENT_ALL_PRODUCTS_ACTIVITY);
             intent.putExtra(KEY_PRODUCT_DESCRIPTION, holder.mItem.getProductDescription());
             intent.putExtra(KEY_WAREHOUSE_ID, WarehouseId);
+            intent.putExtra(KEY_PROJECT_WAREHOUSE_ID, projectWarehouseId);
             intent.putExtra(KEY_PRODUCT_ID, holder.mItem.getProductId());
             intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
             intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, replaceProjectProductId);
@@ -188,6 +196,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                                         "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
                                         "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
                                         "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
+                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
                                         "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
                                         "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
                                         "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +

@@ -71,6 +71,7 @@ public class AssignmentModel {
     private String AssignmentIndicators = "";
     private String ServicePickingList = "";
     private String containsGroup = "";
+    private String projectWarehouseId = "";
 
     @NonNull
     @Override
@@ -627,5 +628,13 @@ public class AssignmentModel {
 
     public void setContainsGroup(String containsGroup) {
         this.containsGroup = containsGroup;
+    }
+
+    public String getProjectWarehouseId() {
+        return projectWarehouseId;
+    }
+
+    public void setProjectWarehouseId(String projectWarehouseId) {
+        this.projectWarehouseId = projectWarehouseId;
     }
 }

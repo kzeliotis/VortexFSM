@@ -50,6 +50,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
 
+import static dc.gtest.vortex.support.MyGlobals.CONST_SITE_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONSUMABLES_TOADD_LIST;
 import static dc.gtest.vortex.support.MyGlobals.INSTALLATION_ZONES_LIST;
@@ -70,7 +71,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_add_new_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_select_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_product_list;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_site_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_technicians_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
+import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
 import static dc.gtest.vortex.support.MyLocalization.localized_collapse_all;
 import static dc.gtest.vortex.support.MyLocalization.localized_expand_all;
 import static dc.gtest.vortex.support.MyLocalization.localized_filter_by_type;
@@ -283,11 +288,35 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
                 }else{
 
+                    List<String> optionsList = new ArrayList<>();
+
+                    optionsList.add(localized_choose_from_product_list);
+                    optionsList.add(localized_choose_from_technicians_warehouse);
+                    if(!SELECTED_ASSIGNMENT.getProjectWarehouseId().equals("0")) {optionsList.add(localized_choose_from_site_warehouse);}
+
+                    String[] options = optionsList.toArray(new String[0]);
+
                     new AlertDialog.Builder(this)
-                            .setMessage(localized_choose_from_warehouse)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> startAllProductsActivity(true, "0", "0"))
-                            .setNegativeButton(R.string.no, (dialog, which) -> startAllProductsActivity(false, "0", "0"))
+                            .setTitle(localized_choose_product_from) // optional title
+                            .setItems(options, (dialog, which) -> {
+                                                           String selectedOption = options[which];
+
+                                if (selectedOption.equals(localized_choose_from_product_list)) {
+                                    startAllProductsActivity(false, "0", "0", "0");
+                                } else if (selectedOption.equals(localized_choose_from_technicians_warehouse)) {
+                                    startAllProductsActivity(true, "0", "0", "0");
+                                } else if (selectedOption.equals(localized_choose_from_site_warehouse)) {
+                                    startAllProductsActivity(true, "0", "0",
+                                            SELECTED_ASSIGNMENT.getProjectWarehouseId());
+                                }
+                            })
                             .show();
+
+//                    new AlertDialog.Builder(this)
+//                            .setMessage(localized_choose_from_warehouse)
+//                            .setPositiveButton(R.string.yes, (dialog, which) -> startAllProductsActivity(true, "0", "0"))
+//                            .setNegativeButton(R.string.no, (dialog, which) -> startAllProductsActivity(false, "0", "0"))
+//                            .show();
                 }
             }
 
@@ -302,11 +331,13 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
     }
 
-    public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId, String productComponentId) {
+    public void startAllProductsActivity(boolean warehouseProducts, String ReplaceProjectProductId, String productComponentId,
+                                         String ProjectWarehouseId) {
         NEW_ATTRIBUTES_LIST.clear();
         Intent intent = new Intent(ProductTreeActivity.this, AllProductsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(CONST_WAREHOUSE_PRODUCTS, warehouseProducts);
+        intent.putExtra(CONST_SITE_WAREHOUSE_PRODUCTS, !ProjectWarehouseId.equals("0"));
         intent.putExtra(KEY_REPLACE_PROJECT_PRODUCT_ID, ReplaceProjectProductId);
         intent.putExtra(KEY_PROJECT_INSTALLATION_ID, projectInstallationId);
         intent.putExtra(KEY_PRODUCT_COMPONENT_ID, productComponentId);

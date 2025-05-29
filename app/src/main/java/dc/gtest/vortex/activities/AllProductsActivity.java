@@ -23,10 +23,12 @@ import static dc.gtest.vortex.support.MyGlobals.ALL_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.CONST_SITE_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.CONST_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCT_COMPONENT_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_INSTALLATION_ID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_REPLACE_PROJECT_PRODUCT_ID;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
@@ -41,6 +43,7 @@ public class AllProductsActivity extends BaseDrawerActivity {
 
     private TextView tvAssignmentId;
     private String projectInstallationId;
+    private String projectWarehouseId = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,26 +72,33 @@ public class AllProductsActivity extends BaseDrawerActivity {
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         boolean WarehouseProducts = getIntent().getBooleanExtra(CONST_WAREHOUSE_PRODUCTS, false);
+        String selectedWarehouseId = WarehouseProducts ? MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") : "0";
+        boolean siteWarehouse = getIntent().getBooleanExtra(CONST_SITE_WAREHOUSE_PRODUCTS, false);
+        if (siteWarehouse){
+            projectWarehouseId = SELECTED_ASSIGNMENT.getProjectWarehouseId();
+            selectedWarehouseId = projectWarehouseId;
+            WarehouseProducts = true;
+        }
 
-        AllProductsData.generate(WarehouseProducts);
+        AllProductsData.generate(WarehouseProducts, selectedWarehouseId);
         if (WarehouseProducts) {
             allProductsRvAdapter = new AllProductsRvAdapter(ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
-                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId);
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId, projectWarehouseId);
         } else {
             allProductsRvAdapter = new AllProductsRvAdapter(ALL_PRODUCTS_LIST_FILTERED, this, isForNewAssignment,
-                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId);
+                    WarehouseProducts, projectInstallationId, replaceProjectProductId, replaceProductComponentId, projectWarehouseId);
         }
 
         rvAllProducts.setAdapter(allProductsRvAdapter);
 
         if (WarehouseProducts){
             if (ALL_WAREHOUSE_PRODUCTS_LIST.size() == 0 || MyUtils.isNetworkAvailable()) {
-                GetAllProducts getAllProducts = new GetAllProducts(allProductsRvAdapter, true);
+                GetAllProducts getAllProducts = new GetAllProducts(allProductsRvAdapter, true, projectWarehouseId);
                 getAllProducts.execute();
             }
         } else {
             if (ALL_PRODUCTS_LIST.size() == 0) {
-                GetAllProducts getAllProducts = new GetAllProducts(allProductsRvAdapter, false);
+                GetAllProducts getAllProducts = new GetAllProducts(allProductsRvAdapter, false, "0");
                 getAllProducts.execute();
             }
         }

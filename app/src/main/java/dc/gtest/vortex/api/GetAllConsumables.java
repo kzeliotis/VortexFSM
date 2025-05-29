@@ -28,17 +28,20 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
     private final String AssignmentId;
     private final boolean warehouseProducts;
     private final boolean pickingList;
+    private final String projectWarehouseId;
 
     private String apiUrl;
     private int responseCode;
     private String responseMessage;
     private String responseBody;
 
-    public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts, boolean PickingList) {
+    public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts,
+                             boolean PickingList, String ProjectWarehouseId) {
         this.allConsumablesRvAdapter = allConsumablesRvAdapter;
         this.AssignmentId = AssignmentId;
         this.warehouseProducts = warehouseProducts;
         this.pickingList = PickingList;
+        this.projectWarehouseId = ProjectWarehouseId;
     }
 
     @Override
@@ -46,7 +49,12 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         String warehouseID = "0";
-        if(warehouseProducts){warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");}
+        if(warehouseProducts){
+            warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");
+            if(projectWarehouseId.length() > 0 && !projectWarehouseId.equals("0")){
+                warehouseID = projectWarehouseId;
+            }
+        }
         if(pickingList){
             apiUrl = baseHostUrl + API_GET_PICKING_LIST + AssignmentId;
         } else {
@@ -73,15 +81,20 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
 
         if ( responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ALL_CONSUMABLES, responseBody);
+            String warehouseID = "0";
             if(warehouseProducts) {
-                MyPrefs.setStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, MyPrefs.getString(PREF_WAREHOUSEID, "0"), responseBody);
+                warehouseID = MyPrefs.getString(PREF_WAREHOUSEID, "0");
+                if(projectWarehouseId.length() > 0 && !projectWarehouseId.equals("0")){
+                    warehouseID = projectWarehouseId;
+                }
+                MyPrefs.setStringWithFileName(PREF_FILE_RELATED_WAREHOUSE_CONSUMABLES_FOR_SHOW, warehouseID, responseBody);
             } else if (pickingList) {
                 MyPrefs.setStringWithFileName(PREF_FILE_PICKING_LIST_FOR_SHOW, AssignmentId, responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_RELATED_CONSUMABLES_FOR_SHOW, AssignmentId, responseBody);
             }
 
-            AllConsumablesData.generate(AssignmentId, warehouseProducts, pickingList);
+            AllConsumablesData.generate(AssignmentId, warehouseProducts, pickingList, warehouseID);
 
             if (allConsumablesRvAdapter != null) {
                 allConsumablesRvAdapter.notifyDataSetChanged();

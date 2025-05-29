@@ -139,7 +139,7 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
                         GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0", false, "");
                         getProducts.execute();
 
-                        GetAllConsumables getAllConsumables = new GetAllConsumables(null, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true);
+                        GetAllConsumables getAllConsumables = new GetAllConsumables(null, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "");
                         getAllConsumables.execute();
                     }
                 }
