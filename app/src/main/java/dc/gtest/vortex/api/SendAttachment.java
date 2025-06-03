@@ -13,6 +13,7 @@ import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.api.MyApi.API_SET_ASSIGNMENT_ATTACHMENT;
+import static dc.gtest.vortex.api.MyApi.API_SET_VORTEX_ATTACHMENT;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
@@ -20,6 +21,9 @@ import static dc.gtest.vortex.support.MyLocalization.localized_file_uploaded;
 import static dc.gtest.vortex.support.MyLocalization.localized_file_will_be_sent;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class SendAttachment  extends AsyncTask<String, Void, String > {
 
@@ -53,7 +57,7 @@ public class SendAttachment  extends AsyncTask<String, Void, String > {
     protected String doInBackground(String... params) {
         prefKey = params[0];
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl + API_SET_ASSIGNMENT_ATTACHMENT;
+        apiUrl = baseHostUrl + (prefKey.startsWith("-") ? API_SET_VORTEX_ATTACHMENT :API_SET_ASSIGNMENT_ATTACHMENT);
         postBody = MyPrefs.getStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey, "");
 
         try {
@@ -87,13 +91,25 @@ public class SendAttachment  extends AsyncTask<String, Void, String > {
 //            mProgressBar.setVisibility(View.GONE);
 //        }
 
-        if (responseCode == 200 && responseBody.equals("1")) {
-            MyPrefs.removeStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey);
-            MyLogs.writeFile_FullLog("myLogs: PrepareFile", apiUrl, "Removestring from PREF_FILE_ATTACHMENT", responseCode, prefKey, responseBody);
+        if (responseCode == 200) {
 
-            Toast toast = Toast.makeText(ctx, localized_file_uploaded, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            String resultNotes = "";
+            try {
+                JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+                resultNotes = jsonObject.getAsJsonObject("r").get("resultnotes").getAsString();
+            } catch (Exception e) {
+            }
+
+
+            if(responseBody.equals("1") || resultNotes.equals("Success")){
+                MyPrefs.removeStringWithFileName(PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey);
+                MyLogs.writeFile_FullLog("myLogs: PrepareFile", apiUrl, "Removestring from PREF_FILE_ATTACHMENT", responseCode, prefKey, responseBody);
+
+                Toast toast = Toast.makeText(ctx, localized_file_uploaded, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+
         } else {
             MyDialogs.showOK(ctx, localized_file_will_be_sent);
         }

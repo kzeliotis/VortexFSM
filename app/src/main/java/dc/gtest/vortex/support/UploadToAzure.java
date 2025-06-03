@@ -35,6 +35,7 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
         CloudBlockBlob blob1 = null;
         String postBody = "";
         prefKey = arg0[0];
+
         String fileInfo = MyPrefs.getStringWithFileName(MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC, prefKey, "");
 
         if (!fileInfo.contains("CloudFilename")){
@@ -51,7 +52,8 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                 // The container name must be lower case
                 // Append a random UUID to the end of the container name so that
                 // this sample can be run more than once in quick succession.
-                CloudBlobContainer container = blobClient.getContainerReference("detattachments");
+                String containerName = prefKey.startsWith("-") ? "calendarevents" : "detattachments";
+                CloudBlobContainer container = blobClient.getContainerReference(containerName);
 
                 // Create the container if it does not exist
                 container.createIfNotExists();
@@ -77,7 +79,7 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                 String attachmentFileName = filePath.substring(lastIndex + 1);
                 String _file = filePath.substring(lastIndex + 1);
                 String ext = _file.substring(_file.lastIndexOf('.') + 1); //_file.split("\\.");
-                String cloudBlobName = String.format("%s_%s.%s.%s", assignmentId, _file.split("\\.")[0], UUID.randomUUID().toString().substring(0,8).replace("-", ""), ext);
+                String cloudBlobName = String.format("%s_%s.%s.%s", assignmentId.replace("-", ""), _file.split("\\.")[0], UUID.randomUUID().toString().substring(0,8).replace("-", ""), ext);
                 blob1 = container
                         .getBlockBlobReference(cloudBlobName);
 
@@ -88,12 +90,22 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                 String fileURL = fileuri.toURL().toString();
                 // Delete the blobs
                 //blob1.deleteIfExists();
+                String objectType = assignmentId.contains("-") ? "CalendarEvents" : "DetAttachments";
+                String objectTable = assignmentId.contains("-") ? "CalendarEventAttachments" : "DetAttachments";
+                String ObjectIdField = assignmentId.contains("-") ? "CalendarEventId" : "DetId";
+                String ObjectFilenameField = assignmentId.contains("-") ? "FileName" : "Attachment";
 
                 postBody = "{\n" +
-                        "  \"ObjectId\": \"" + assignmentId + "\",\n" +
+                        "  \"ObjectId\": \"" + assignmentId.replace("-", "") + "\",\n" +
                         "  \"Filename\": \"" + attachmentFileName + "\",\n" +
                         "  \"CloudFilename\": \"" + cloudBlobName + "\",\n" +
                         "  \"CloudFileURL\": \"" + fileURL + "\",\n" +
+                        "  \"ObjectType\": \"" + objectType + "\",\n" +
+                        "  \"ObjectTable\": \"" + objectTable + "\",\n" +
+                        "  \"ObjectIdField\": \"" + ObjectIdField + "\",\n" +
+                        "  \"ObjectFilenameField\": \"" + ObjectFilenameField + "\",\n" +
+                        "  \"InsertToDatabase\": true,\n" +
+                        "  \"CompanyId\": 1,\n" +
                         "  \"FileSize\": \"" + filesize + "\"\n" +
                         "}";
 

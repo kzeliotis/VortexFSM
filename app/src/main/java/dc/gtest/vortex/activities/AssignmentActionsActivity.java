@@ -460,13 +460,13 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             btnStartWork.setVisibility(View.GONE);
             btnGetCost.setVisibility(View.GONE);
             btnToProducts.setVisibility(View.GONE);
-            btnDetAttachments.setVisibility(View.GONE);
+            //btnDetAttachments.setVisibility(View.GONE);
             btnToConsumables.setVisibility(View.GONE);
             btnToServices.setVisibility(View.GONE);
             btnZones.setVisibility(View.GONE);
             btnInstallations.setVisibility(View.GONE);
-            btnTakePhoto.setVisibility(View.GONE);
-            btnAddAttachment.setVisibility(View.GONE);
+            //btnTakePhoto.setVisibility(View.GONE);
+            //btnAddAttachment.setVisibility(View.GONE);
             btnCustomFields.setVisibility(View.GONE);
             btnDetChildren.setVisibility(View.GONE);
         }
@@ -1903,10 +1903,20 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         int lastIndex = globalCurrentAttachmentPath.lastIndexOf("/");
         String attachmentFileName = globalCurrentAttachmentPath.substring(lastIndex + 1);
         String prefKey = assignmentId + "_" + attachmentFileName;
+        String objectType = assignmentId.contains("-") ? "CalendarEvents" : "DetAttachments";
+        String objectTable = assignmentId.contains("-") ? "CalendarEventAttachments" : "DetAttachments";
+        String ObjectIdField = assignmentId.contains("-") ? "CalendarEventId" : "DetId";
+        String ObjectFilenameField = assignmentId.contains("-") ? "FileName" : "Attachment";
 
         String postBody = "{\n" +
-                "  \"ObjectId\": \"" + assignmentId + "\",\n" +
+                "  \"ObjectId\": \"" + assignmentId.replace("-", "") + "\",\n" +
                 "  \"Filename\": \"" + attachmentFileName + "\",\n" +
+                "  \"ObjectType\": \"" + objectType + "\",\n" +
+                "  \"ObjectTable\": \"" + objectTable + "\",\n" +
+                "  \"ObjectIdField\": \"" + ObjectIdField + "\",\n" +
+                "  \"ObjectFilenameField\": \"" + ObjectFilenameField + "\",\n" +
+                "  \"InsertToDatabase\": true,\n" +
+                "  \"CompanyId\": 1,\n" +
                 "  \"Attachment64\": \"" + fileBase64String + "\"\n" +
                 "}";
 
