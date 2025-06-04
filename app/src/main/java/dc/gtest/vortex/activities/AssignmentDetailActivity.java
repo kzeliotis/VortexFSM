@@ -184,8 +184,8 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         fabGoToMap.setOnClickListener(this);
         fabSubAssignments.setOnClickListener(this);
 
-        if (!SELECTED_ASSIGNMENT.getContainsGroup().equals("1")){
-            fabSubAssignments.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#BDBDBD")));
+        if (SELECTED_ASSIGNMENT.getContainsGroup().equals("1")){
+            fabSubAssignments.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#81C784")));
         }
 
         if (assignmentId.contains("-")){
