@@ -17,6 +17,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ALL_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_WAREHOUSE_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_WAREHOUSE_PRODUCTS_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
 
 public class GetAllProducts extends AsyncTask<String, Void, String > {
@@ -44,7 +45,7 @@ public class GetAllProducts extends AsyncTask<String, Void, String > {
             String warehouseID = projectWarehouseId.isEmpty() || projectWarehouseId.equals("0") ? MyPrefs.getString(PREF_WAREHOUSEID, "0") : projectWarehouseId;
             apiUrl = baseHostUrl + API_GET_WAREHOUSE_PRODUCTS + warehouseID;
         }else {
-            apiUrl = baseHostUrl + API_GET_ALL_PRODUCTS;
+            apiUrl = baseHostUrl + API_GET_ALL_PRODUCTS + MyPrefs.getString(PREF_USERID, "0");
         }
 
         try {

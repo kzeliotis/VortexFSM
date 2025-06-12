@@ -54,7 +54,7 @@ class MyApi {
     static final String API_GET_STATUSES = "/Vortex.svc/GetStatus";
     static final String API_GET_MOBILE_SETTINGS = "/Vortex.svc/GetMobileSettings?UserId=";
     static final String API_SEARCH_CUSTOMERS = "/Vortex.svc/GetLiveCustomers";
-    static final String API_GET_ALL_PRODUCTS = "/Vortex.svc/GetProducts";
+    static final String API_GET_ALL_PRODUCTS = "/Vortex.svc/GetProducts?userId=";
     static final String API_GET_WAREHOUSE_PRODUCTS = "/Vortex.svc/GetWarehouseProducts?WarehouseId=";
     static final String API_GET_PICKING_LIST = "/Vortex.svc/GetDetPicking?AssignmentId=";
     static final String API_GET_PRODUCT_TYPES = "/Vortex.svc/GetProductTypes";
