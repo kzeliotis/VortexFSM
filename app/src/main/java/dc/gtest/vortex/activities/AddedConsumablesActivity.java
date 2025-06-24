@@ -93,7 +93,7 @@ public class AddedConsumablesActivity extends BaseDrawerActivity {
             ADDED_CONSUMABLES_LIST.clear();
             ADDED_CONSUMABLES_LIST_FILTERED.clear();
             addedConsumablesRvAdapter = new AddedConsumablesRvAdapter(this,ADDED_CONSUMABLES_LIST, ADDED_CONSUMABLES_LIST_FILTERED, edit);
-            if(SELECTED_ASSIGNMENT.getPickingList().length() > 0 && consumablesFromPicking){
+            if(SELECTED_ASSIGNMENT.getProductPickingList().equals("1") && consumablesFromPicking){
                 btnAddFromPicking.setVisibility(View.VISIBLE);
             } else {
                 btnAddFromPicking.setVisibility(View.GONE);

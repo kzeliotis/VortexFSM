@@ -194,6 +194,7 @@ public class AssignmentsData {
                     assignmentModel.setServicePickingList(MyJsonParser.getStringValue(oneObject, "ServicePickingList", "0"));
                     assignmentModel.setContainsGroup(MyJsonParser.getStringValue(oneObject, "ContainsGroup", "0"));
                     assignmentModel.setProjectWarehouseId(MyJsonParser.getStringValue(oneObject, "ProjectWarehouseId", "0"));
+                    assignmentModel.setProductPickingList(MyJsonParser.getStringValue(oneObject, "ProductPickingList", "0"));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();
