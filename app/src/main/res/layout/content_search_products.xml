@@ -31,6 +31,45 @@
         android:background="@drawable/rounded_button_indigo"
         android:layout_alignParentBottom="true"/>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        app:cardBackgroundColor="@color/light_blue_100"
+        app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:id="@+id/llZoneSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvZoneSpinnerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_2"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/zone"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/spZones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_2"
+            android:layout_marginRight="@dimen/dp_2"
+            android:layout_gravity="center_vertical|end" />
+
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchProducts"
         android:layout_width="match_parent"

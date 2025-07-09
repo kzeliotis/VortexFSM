@@ -23,6 +23,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProductsRvAdapter.ViewHolder> implements Filterable {
 
@@ -32,6 +33,7 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
     private List<ProductModel> filteredItems;
 
     private final boolean isForNewAssignment;
+
 
     public SearchProductsRvAdapter(List<ProductModel> allItems, Context ctx, boolean isForNewAssignment) {
         this.allItems = allItems;
@@ -50,7 +52,14 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = filteredItems.get(position);
-        holder.tvItemName.setText(holder.mItem.getProductDescription());
+
+        String productDescription = holder.mItem.getProductDescription();
+        String zoneDescription = holder.mItem.getProjectZoneDescription();
+        if (!zoneDescription.isEmpty()) {
+            productDescription = productDescription + "\n" + localized_zone + ": " + zoneDescription;
+        }
+
+        holder.tvItemName.setText(productDescription);
 
         holder.mView.setOnClickListener(v -> {
             if (isForNewAssignment) {
@@ -104,11 +113,24 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
                     filteredItems = allItems;
                 } else {
                     List<ProductModel> filteredList = new ArrayList<>();
-                    final String filterPattern = constraint.toString().toLowerCase().trim();
+                    String constraintStr = constraint.toString();
+                    boolean isSpinnerFilter = constraintStr.startsWith("SPINNER:");
+                    final String filterPattern = isSpinnerFilter ?
+                            constraintStr.substring(8).toLowerCase().trim() :
+                            constraintStr.toLowerCase().trim();
 
                     for (final ProductModel mWords : allItems) {
-                        if (mWords.toString().toLowerCase().contains(filterPattern)) {
-                            filteredList.add(mWords);
+                        if (isSpinnerFilter) {
+                            // Exact match for spinner
+                            if (mWords.getProjectZoneDescription() != null &&
+                                    mWords.getProjectZoneDescription().toLowerCase().equals(filterPattern)) {
+                                filteredList.add(mWords);
+                            }
+                        } else {
+                            // Contains match for search
+                            if (mWords.toString().toLowerCase().contains(filterPattern)) {
+                                filteredList.add(mWords);
+                            }
                         }
                     }
 

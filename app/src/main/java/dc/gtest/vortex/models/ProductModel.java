@@ -26,6 +26,7 @@ public class ProductModel {
     @Getter
     @Setter
     private String productComponentId = "";
+    private String projectZoneDescription = "";
 
     @NonNull
     @Override
@@ -153,4 +154,11 @@ public class ProductModel {
         isChecked = checked;
     }
 
+    public String getProjectZoneDescription() {
+        return projectZoneDescription;
+    }
+
+    public void setProjectZoneDescription(String projectZoneDescription) {
+        this.projectZoneDescription = projectZoneDescription;
+    }
 }

@@ -188,7 +188,7 @@ public class ProductsActivity extends BaseDrawerActivity {
                         Log.e(LOG_TAG, "---------------------------- selectedType: " + selectedType);
                     }
 
-                    productsRvAdapter.getFilter().filter(searchText);
+                    productsRvAdapter.getFilter().filter(selectedType);
                 } else {
                     doSpinnerItemSelected = true;
                 }
