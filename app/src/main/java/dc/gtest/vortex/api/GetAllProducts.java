@@ -43,7 +43,7 @@ public class GetAllProducts extends AsyncTask<String, Void, String > {
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         if(warehouseProducts) {
             String warehouseID = projectWarehouseId.isEmpty() || projectWarehouseId.equals("0") ? MyPrefs.getString(PREF_WAREHOUSEID, "0") : projectWarehouseId;
-            apiUrl = baseHostUrl + API_GET_WAREHOUSE_PRODUCTS + warehouseID;
+            apiUrl = baseHostUrl + API_GET_WAREHOUSE_PRODUCTS + warehouseID + "&UserId=" + MyPrefs.getString(PREF_USERID, "0");
         }else {
             apiUrl = baseHostUrl + API_GET_ALL_PRODUCTS + MyPrefs.getString(PREF_USERID, "0");
         }
