@@ -280,68 +280,6 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                     .setNegativeButton(R.string.no, null)
                     .show();
 
-//            new AlertDialog.Builder(ctx)
-//                    .setMessage(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription())
-//                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-//                        dialog.dismiss();
-//                        savedAttributes = "";
-//
-//                        String newProductJsonString =
-//                                "{\n" +
-//                                        "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
-//                                        "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
-//                                        "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
-//                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
-//                                        "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
-//                                        "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
-//                                        "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
-//                                        "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
-//                                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
-//                                        "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
-//                                        "  \"Attributes\": {\n" +
-//                                        "    " + savedAttributes + "\n" +
-//                                        "  }\n" +
-//                                        "}";
-//
-//                        String prefKey = UUID.randomUUID().toString();
-//                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
-//
-//                        AttributeModel attributeModel = new AttributeModel();
-//                        attributeModel.setAttributeId(holder.mItem.getAttributeId());
-//                        attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
-//                        attributeModel.setAttributeValue(holder.mItem.getBasicValue());
-//                        NEW_ATTRIBUTES_LIST.add(attributeModel);
-//
-//                        ProductModel productModel = new ProductModel();
-//                        productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
-//                        productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
-//                        productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
-//                        productModel.setNotSynchronized(true);
-//
-//                        String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
-//
-//                        if (productsData.length() > 0) {
-//                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
-//                        } else {
-//                            productsData = "[" + productModel.toString() + "]";
-//                        }
-//
-//                        MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
-//
-//                        NEW_ATTRIBUTES_LIST.clear();
-//
-//                        if (MyUtils.isNetworkAvailable()) {
-//                            SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
-//                            sendNewProduct.execute();
-//                        } else {
-//                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
-//                        }
-//
-//
-//                        ((AppCompatActivity) ctx).finish();
-//                    })
-//                    .setNegativeButton(R.string.no, null)
-//                    .show();
 
 
         }
