@@ -58,6 +58,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_PRODUCTS_TREE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_SEND_REPORT_CHECKBOX;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_START_WORK;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
 
 public class GetMobileSettings extends AsyncTask<String, Void, String > {
@@ -232,6 +233,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MandatoryServicesFromPicking = MyJsonParser.getIntValue(oneObject,  "MandatoryServicesFromPicking", 0);
 
                     MyPrefs.setBoolean(PREF_MANDATORY_SERVICES_FROM_PICKING, MandatoryServicesFromPicking == 1);
+
+                    int MobileWarrantyExtensionOnProductInstallation = MyJsonParser.getIntValue(oneObject, "MobileWarrantyExtensionOnProductInstallation", 0);
+
+                    MyPrefs.setBoolean(PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION, MobileWarrantyExtensionOnProductInstallation == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

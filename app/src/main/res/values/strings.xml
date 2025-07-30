@@ -1430,4 +1430,8 @@
     <string name="choose_product_from_gr">Επιλογή είδους από:</string>
     <string name="choose_product_from_ar">Choose product from:</string>
 
+    <string name="additional_warranty">Warranty extension (months):</string>
+    <string name="additional_warranty_gr">Επιπρόσθετη εγγύηση (μήνες):</string>
+    <string name="additional_warranty_ar">Warranty extension (months):</string>
+
 </resources>

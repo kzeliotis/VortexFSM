@@ -2,14 +2,19 @@ package dc.gtest.vortex.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ import static dc.gtest.vortex.support.MyGlobals.NEW_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyGlobals.attributeValueforScan;
+import static dc.gtest.vortex.support.MyLocalization.localized_ask_to_install_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_please_select_product;
@@ -60,11 +66,13 @@ import static dc.gtest.vortex.support.MyLocalization.localized_select_attribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_set_save_attribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_data_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyLocalization.localized_warranty_extension;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
+import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
 public class AllAttributesActivity extends BaseDrawerActivity {
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
@@ -169,53 +177,93 @@ public class AllAttributesActivity extends BaseDrawerActivity {
 
                         newProductName = newProductName.replace('"', '\"');
 
-                        String newProductJsonString =
-                                "{\n" +
-                                        "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
+                        LayoutInflater inflater = LayoutInflater.from(this);
+                        View dialogView = inflater.inflate(R.layout.item_warranty_extension, null);
+
+                        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+                        EditText warrantyInput = dialogView.findViewById(R.id.warranty_input);
+                        LinearLayout llWarranty = dialogView.findViewById(R.id.warranty_input_layout);
+                        TextView warrantyLabel = dialogView.findViewById(R.id.warranty_input_label);
+                        warrantyLabel.setText(localized_warranty_extension);
+
+                        if(!MyPrefs.getBoolean(PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION, false)){
+                            llWarranty.setVisibility(View.GONE);
+                        }
+
+                        messageTextView.setText(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription());
+
+                        new AlertDialog.Builder(this)
+                                .setView(dialogView)
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    dialog.dismiss();
+
+                                    // Get warranty value from input
+                                    String warrantyText = warrantyInput.getText().toString().trim();
+                                    float warrantyValue = 0.0f;
+
+                                    if (!warrantyText.isEmpty()) {
+                                        try {
+                                            warrantyValue = Float.parseFloat(warrantyText);
+                                        } catch (NumberFormatException e) {
+                                            warrantyValue = 0.0f; // Default value if parsing fails
+                                        }
+                                    }
+
+                                    String newProductJsonString =
+                                            "{\n" +
+                                                    "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
 //                                        "  \"newProductName\": \"" + newProductName + "\",\n" +
-                                        "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
-                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
-                                        "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
-                                        "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
-                                        "  \"ProjectProductId\": \"0\",\n" +
-                                        "  \"ProductId\": \"" + productId + "\",\n" +
-                                        "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
-                                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
-                                        "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
-                                        "  \"Attributes\": {\n" +
-                                        "    " + savedAttributes + "\n" +
-                                        "  }\n" +
-                                        "}";
+                                                    "  \"WarehouseId\": \"" + warehouseID + "\",\n" +
+                                                    "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
+                                                    "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
+                                                    "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
+                                                    "  \"ProjectProductId\": \"0\",\n" +
+                                                    "  \"ProductId\": \"" + productId + "\",\n" +
+                                                    "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
+                                                    "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
+                                                    "  \"WarrantyExtension\": " + warrantyValue + ",\n" +
+                                                    "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
+                                                    "  \"Attributes\": {\n" +
+                                                    "    " + savedAttributes + "\n" +
+                                                    "  }\n" +
+                                                    "}";
 
-                        String prefKey = UUID.randomUUID().toString();
-                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
+                                    String prefKey = UUID.randomUUID().toString();
+                                    MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
 
-                        ProductModel productModel = new ProductModel();
-                        productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
-                        productModel.setProductDescription(newProductName);
-                        productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
-                        productModel.setNotSynchronized(true);
+                                    ProductModel productModel = new ProductModel();
+                                    productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
+                                    productModel.setProductDescription(newProductName);
+                                    productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
+                                    productModel.setNotSynchronized(true);
 
-                        String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+                                    String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
 
-                        if (productsData.length() > 0) {
-                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel + "]";
-                        } else {
-                            productsData = "[" + productModel + "]";
-                        }
+                                    if (productsData.length() > 0) {
+                                        productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel + "]";
+                                    } else {
+                                        productsData = "[" + productModel + "]";
+                                    }
 
-                        MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
+                                    MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
 
-                        Log.e(LOG_TAG, "==================== productsData: " + productsData);
+                                    Log.e(LOG_TAG, "==================== productsData: " + productsData);
 
-                        if (MyUtils.isNetworkAvailable()) {
-                            SendNewProduct sendNewProduct = new SendNewProduct(AllAttributesActivity.this, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
-                            sendNewProduct.execute();
-                        } else {
-                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
-                        }
+                                    if (MyUtils.isNetworkAvailable()) {
+                                        SendNewProduct sendNewProduct = new SendNewProduct(AllAttributesActivity.this, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
+                                        sendNewProduct.execute();
+                                    } else {
+                                        Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                                    }
 
-                        finish();
+                                    finish();
+
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+
+
+
 
                     } else {
                         MyDialogs.showOK(AllAttributesActivity.this, localized_please_select_product);

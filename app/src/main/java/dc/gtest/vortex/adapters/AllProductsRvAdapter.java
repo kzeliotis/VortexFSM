@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,9 +53,11 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_ask_to_install_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
+import static dc.gtest.vortex.support.MyLocalization.localized_warranty_extension;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
 public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdapter.ViewHolder> implements Filterable {
 
@@ -185,11 +189,39 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
             ((AppCompatActivity) ctx).finish(); // finish activity to go to ProductsActivity when going back from AllAttributesActivity
 
         } else {
+
+            LayoutInflater inflater = LayoutInflater.from(ctx);
+            View dialogView = inflater.inflate(R.layout.item_warranty_extension, null);
+
+            TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+            EditText warrantyInput = dialogView.findViewById(R.id.warranty_input);
+            LinearLayout llWarranty = dialogView.findViewById(R.id.warranty_input_layout);
+            TextView warrantyLabel = dialogView.findViewById(R.id.warranty_input_label);
+            warrantyLabel.setText(localized_warranty_extension);
+
+            if(!MyPrefs.getBoolean(PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION, false)){
+                llWarranty.setVisibility(View.GONE);
+            }
+
+            messageTextView.setText(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription());
+
             new AlertDialog.Builder(ctx)
-                    .setMessage(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription())
+                    .setView(dialogView)
                     .setPositiveButton(R.string.yes, (dialog, which) -> {
                         dialog.dismiss();
                         savedAttributes = "";
+
+                        // Get warranty value from input
+                        String warrantyText = warrantyInput.getText().toString().trim();
+                        float warrantyValue = 0.0f;
+
+                        if (!warrantyText.isEmpty()) {
+                            try {
+                                warrantyValue = Float.parseFloat(warrantyText);
+                            } catch (NumberFormatException e) {
+                                warrantyValue = 0.0f; // Default value if parsing fails
+                            }
+                        }
 
                         String newProductJsonString =
                                 "{\n" +
@@ -203,6 +235,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                                         "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
                                         "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                                         "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
+                                        "  \"WarrantyExtension\": " + warrantyValue + ",\n" +
                                         "  \"Attributes\": {\n" +
                                         "    " + savedAttributes + "\n" +
                                         "  }\n" +
@@ -225,7 +258,7 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
 
                         String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
 
-                        if (productsData.length() > 0) {
+                        if (!productsData.isEmpty()) {
                             productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
                         } else {
                             productsData = "[" + productModel.toString() + "]";
@@ -242,11 +275,73 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                             Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
                         }
 
-
                         ((AppCompatActivity) ctx).finish();
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
+
+//            new AlertDialog.Builder(ctx)
+//                    .setMessage(localized_ask_to_install_product + " " + SELECTED_ASSIGNMENT.getProjectDescription())
+//                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+//                        dialog.dismiss();
+//                        savedAttributes = "";
+//
+//                        String newProductJsonString =
+//                                "{\n" +
+//                                        "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
+//                                        "  \"newProductName\": \"" + MyUtils.ToJson(holder.mItem.getProductDescription()) + "\",\n" +
+//                                        "  \"WarehouseId\": \"" + MyPrefs.getString(MyPrefs.PREF_WAREHOUSEID, "0") + "\",\n" +
+//                                        "  \"projectWarehouseId\": \"" + projectWarehouseId + "\",\n" +
+//                                        "  \"ReplaceProjectProductId\": \"" + replaceProjectProductId + "\",\n" +
+//                                        "  \"ReplaceProductComponentId\": \"" + replaceProductComponentId + "\",\n" +
+//                                        "  \"ProjectProductId\": \"" + ProjectProductId + "\",\n" +
+//                                        "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
+//                                        "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
+//                                        "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
+//                                        "  \"Attributes\": {\n" +
+//                                        "    " + savedAttributes + "\n" +
+//                                        "  }\n" +
+//                                        "}";
+//
+//                        String prefKey = UUID.randomUUID().toString();
+//                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
+//
+//                        AttributeModel attributeModel = new AttributeModel();
+//                        attributeModel.setAttributeId(holder.mItem.getAttributeId());
+//                        attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
+//                        attributeModel.setAttributeValue(holder.mItem.getBasicValue());
+//                        NEW_ATTRIBUTES_LIST.add(attributeModel);
+//
+//                        ProductModel productModel = new ProductModel();
+//                        productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
+//                        productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
+//                        productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
+//                        productModel.setNotSynchronized(true);
+//
+//                        String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+//
+//                        if (productsData.length() > 0) {
+//                            productsData = productsData.substring(0, productsData.length() - 1) + "," + productModel.toString() + "]";
+//                        } else {
+//                            productsData = "[" + productModel.toString() + "]";
+//                        }
+//
+//                        MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), productsData);
+//
+//                        NEW_ATTRIBUTES_LIST.clear();
+//
+//                        if (MyUtils.isNetworkAvailable()) {
+//                            SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
+//                            sendNewProduct.execute();
+//                        } else {
+//                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+//                        }
+//
+//
+//                        ((AppCompatActivity) ctx).finish();
+//                    })
+//                    .setNegativeButton(R.string.no, null)
+//                    .show();
 
 
         }
