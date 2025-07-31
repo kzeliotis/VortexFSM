@@ -6,6 +6,7 @@ public class AllAttributeModel {
 
     private String attributeDescription = "";
     private String attributeId = "";
+    private boolean isDateTime = false;
     private JSONArray attributeDefaultValues = new JSONArray();
 
     @Override
@@ -53,5 +54,13 @@ public class AllAttributeModel {
 
     public void setAttributeDefaultValues(JSONArray attributeDefaultValues) {
         this.attributeDefaultValues = attributeDefaultValues;
+    }
+
+    public boolean isDateTime() {
+        return isDateTime;
+    }
+
+    public void setDateTime(boolean dateTime) {
+        isDateTime = dateTime;
     }
 }

@@ -12,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -126,29 +129,26 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                     View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_edit_text, null);
                     final TextView tvDialogEditTextTitle = view.findViewById(R.id.tvDialogEditTextTitle);
                     attributeValueforScan = view.findViewById(R.id.etNewAttributeValue);
+                    final LinearLayout dateTimeContainer = view.findViewById(R.id.llDateTimeContainer);
+                    final DatePicker datePickerAttributeValue = view.findViewById(R.id.dpNewAttributeValue);
+                    final TimePicker timePickerAttributeValue = view.findViewById(R.id.tpNewAttributeValue);
+                    timePickerAttributeValue.setHour(0);
+                    timePickerAttributeValue.setMinute(0);
+                    timePickerAttributeValue.setIs24HourView(true);
 
                     tvDialogEditTextTitle.setText(localized_attribute_value);
 
-//                    new AlertDialog.Builder(ctx)
-//                            .setView(view)
-//                            .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
-//                            .setPositiveButton(localized_save, (dialog, which) -> {
-//                                if (attributevalue_scan != null && attributevalue_scan.getText() != null
-//                                        && !attributevalue_scan.getText().toString().equals("")) {
-//
-//                                    // this is used to send to server
-//                                    savedAttributes = savedAttributes + "\"" + holder.mItem.getAttributeDescription() +
-//                                            "\": \"" + attributevalue_scan.getText().toString() + "\",\n";
-//
-//                                    // this is used to update offline data
-//                                    AttributeModel attributeModel = new AttributeModel();
-//                                    attributeModel.setAttributeId(holder.mItem.getAttributeId());
-//                                    attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
-//                                    attributeModel.setAttributeValue(attributevalue_scan.getText().toString());
-//                                    NEW_ATTRIBUTES_LIST.add(attributeModel);
-//                                }
-//                            })
-//                            .show();
+// Show/hide appropriate input control based on isDateTime
+
+                    boolean isDateTime = selectedAllAttribute.isDateTime();
+
+                    if (isDateTime) {
+                        attributeValueforScan.setVisibility(View.GONE);
+                        dateTimeContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        attributeValueforScan.setVisibility(View.VISIBLE);
+                        dateTimeContainer.setVisibility(View.GONE);
+                    }
 
                     AlertDialog b = new AlertDialog.Builder(ctx).create();
                     b.setView(view);
@@ -156,39 +156,117 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                     b.setButton(AlertDialog.BUTTON_POSITIVE, localized_save, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (attributeValueforScan != null && attributeValueforScan.getText() != null
-                                    && !attributeValueforScan.getText().toString().equals("")) {
+                            String attributeValue = "";
 
+                            if (isDateTime) {
+                                // Get date from DatePicker
+                                int day = datePickerAttributeValue.getDayOfMonth();
+                                int month = datePickerAttributeValue.getMonth() + 1; // Month is 0-based
+                                int year = datePickerAttributeValue.getYear();
+
+                                // Get time from TimePicker
+                                int hour, minute;
+                                hour = timePickerAttributeValue.getHour();
+                                minute = timePickerAttributeValue.getMinute();
+
+                                // Format the date and time as dd/MM/yyyy HH:mm
+                                attributeValue = String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+                            } else {
+                                // Get text from EditText
+                                if (attributeValueforScan != null && attributeValueforScan.getText() != null
+                                        && !attributeValueforScan.getText().toString().equals("")) {
+                                    attributeValue = attributeValueforScan.getText().toString();
+                                }
+                            }
+
+                            if (!attributeValue.isEmpty()) {
                                 // this is used to send to server
                                 savedAttributes = savedAttributes + "\"" + selectedAllAttribute.getAttributeDescription() +
-                                        "\": \"" + attributeValueforScan.getText().toString() + "\",\n";
+                                        "\": \"" + attributeValue + "\",\n";
 
                                 // this is used to update offline data
                                 AttributeModel attributeModel = new AttributeModel();
                                 attributeModel.setAttributeId(selectedAllAttribute.getAttributeId());
                                 attributeModel.setAttributeDescription(selectedAllAttribute.getAttributeDescription());
-                                attributeModel.setAttributeValue(attributeValueforScan.getText().toString());
+                                attributeModel.setAttributeValue(attributeValue);
                                 NEW_ATTRIBUTES_LIST.add(attributeModel);
                             }
                         }
                     });
-                    b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+
+// Only show scan button for non-datetime attributes
+                    if (!isDateTime) {
+                        b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                    }
+
                     b.show();
 
-                    final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
-                    scan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
-                            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                            integrator.setPrompt("Scan");
-                            integrator.setCameraId(0);
-                            integrator.setBeepEnabled(false);
-                            integrator.setBarcodeImageEnabled(false);
-                            integrator.setOrientationLocked(true);
-                            integrator.initiateScan();
-                        }
-                    });
+// Only set up scan functionality for non-datetime attributes
+                    if (!isDateTime) {
+                        final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+                        scan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                                integrator.setPrompt("Scan");
+                                integrator.setCameraId(0);
+                                integrator.setBeepEnabled(false);
+                                integrator.setBarcodeImageEnabled(false);
+                                integrator.setOrientationLocked(true);
+                                integrator.initiateScan();
+                            }
+                        });
+                    }
+
+
+//                    @SuppressLint("InflateParams")
+//                    View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_edit_text, null);
+//                    final TextView tvDialogEditTextTitle = view.findViewById(R.id.tvDialogEditTextTitle);
+//                    attributeValueforScan = view.findViewById(R.id.etNewAttributeValue);
+//
+//                    tvDialogEditTextTitle.setText(localized_attribute_value);
+//
+//
+//                    AlertDialog b = new AlertDialog.Builder(ctx).create();
+//                    b.setView(view);
+//                    b.setButton(AlertDialog.BUTTON_NEGATIVE, localized_cancel, (DialogInterface.OnClickListener)null);
+//                    b.setButton(AlertDialog.BUTTON_POSITIVE, localized_save, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            if (attributeValueforScan != null && attributeValueforScan.getText() != null
+//                                    && !attributeValueforScan.getText().toString().equals("")) {
+//
+//                                // this is used to send to server
+//                                savedAttributes = savedAttributes + "\"" + selectedAllAttribute.getAttributeDescription() +
+//                                        "\": \"" + attributeValueforScan.getText().toString() + "\",\n";
+//
+//                                // this is used to update offline data
+//                                AttributeModel attributeModel = new AttributeModel();
+//                                attributeModel.setAttributeId(selectedAllAttribute.getAttributeId());
+//                                attributeModel.setAttributeDescription(selectedAllAttribute.getAttributeDescription());
+//                                attributeModel.setAttributeValue(attributeValueforScan.getText().toString());
+//                                NEW_ATTRIBUTES_LIST.add(attributeModel);
+//                            }
+//                        }
+//                    });
+//                    b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+//                    b.show();
+//
+//                    final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+//                    scan.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+//                            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+//                            integrator.setPrompt("Scan");
+//                            integrator.setCameraId(0);
+//                            integrator.setBeepEnabled(false);
+//                            integrator.setBarcodeImageEnabled(false);
+//                            integrator.setOrientationLocked(true);
+//                            integrator.initiateScan();
+//                        }
+//                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();

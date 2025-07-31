@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,8 +26,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import dc.gtest.vortex.R;
@@ -39,6 +46,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.attributeValueforScan;
+import static dc.gtest.vortex.support.MyGlobals.selectedAllAttribute;
 import static dc.gtest.vortex.support.MyGlobals.selectedAttribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_attribute_value;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
@@ -180,9 +188,47 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                     } else {
                         @SuppressLint("InflateParams")
                         LinearLayout llNewAttributeValue = (LinearLayout) LayoutInflater.from(ctx).inflate(R.layout.dialog_edit_text, null);
+                        selectedAttribute = holder.mItem;
                         final TextView tvDialogEditTextTitle = llNewAttributeValue.findViewById(R.id.tvDialogEditTextTitle);
-                        //final EditText etNewAttributeValue = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
                         attributeValueforScan = llNewAttributeValue.findViewById(R.id.etNewAttributeValue);
+                        final LinearLayout dateTimeContainer = llNewAttributeValue.findViewById(R.id.llDateTimeContainer);
+                        final DatePicker datePickerAttributeValue = llNewAttributeValue.findViewById(R.id.dpNewAttributeValue);
+                        final TimePicker timePickerAttributeValue = llNewAttributeValue.findViewById(R.id.tpNewAttributeValue);
+                        timePickerAttributeValue.setIs24HourView(true);
+
+                        // Set initial values for date and time pickers
+                        Calendar calendar = Calendar.getInstance();
+                        boolean hasExistingValue = false;
+
+                        // Check if there's a previous value to parse
+                        if (attributeValue != null && !attributeValue.trim().isEmpty()) {
+                            try {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                                Date date = dateFormat.parse(attributeValue.trim());
+                                if (date != null) {
+                                    calendar.setTime(date);
+                                    hasExistingValue = true;
+                                }
+                            } catch (ParseException e) {
+                                // If parsing fails, use default values
+                                hasExistingValue = false;
+                            }
+                        }
+
+                        // Set date picker values
+                        datePickerAttributeValue.updateDate(calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH));
+
+                        if (hasExistingValue) {
+                            // Use existing time
+                            timePickerAttributeValue.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                            timePickerAttributeValue.setMinute(calendar.get(Calendar.MINUTE));
+                        } else {
+                            // Reset time to 00:00 if no previous value
+                            timePickerAttributeValue.setHour(0);
+                            timePickerAttributeValue.setMinute(0);
+                        }
 
                         String dialogEditTextTitle;
 
@@ -192,6 +238,15 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                             dialogEditTextTitle = localized_update_attribute_value;
                         }
 
+                        boolean isDateTime = selectedAttribute.isDateTime();
+
+                        if (isDateTime) {
+                            attributeValueforScan.setVisibility(View.GONE);
+                            dateTimeContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            attributeValueforScan.setVisibility(View.VISIBLE);
+                            dateTimeContainer.setVisibility(View.GONE);
+                        }
 
                         tvDialogEditTextTitle.setText(dialogEditTextTitle);
 
@@ -205,21 +260,44 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
 
                                 if (attributeValueforScan != null && attributeValueforScan.getText() != null && !attributeValueforScan.getText().toString().trim().isEmpty()) {
 
+                                    String attributeValue = "";
+
+                                    if (isDateTime) {
+                                        // Get date from DatePicker
+                                        int day = datePickerAttributeValue.getDayOfMonth();
+                                        int month = datePickerAttributeValue.getMonth() + 1; // Month is 0-based
+                                        int year = datePickerAttributeValue.getYear();
+
+                                        // Get time from TimePicker
+                                        int hour, minute;
+                                        hour = timePickerAttributeValue.getHour();
+                                        minute = timePickerAttributeValue.getMinute();
+
+                                        // Format the date and time as dd/MM/yyyy HH:mm
+                                        attributeValue = String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+                                    } else {
+                                        // Get text from EditText
+                                        if (attributeValueforScan != null && attributeValueforScan.getText() != null
+                                                && !attributeValueforScan.getText().toString().equals("")) {
+                                            attributeValue = attributeValueforScan.getText().toString().trim();
+                                        }
+                                    }
+
                                     // saving old value
                                     MyPrefs.setStringWithFileName(_assignmentId + "_old_" + selectedAttribute.getProjectProductId(),
                                             selectedAttribute.getValueId(), selectedAttribute.getAttributeValue());
 
                                     // saving new value
                                     MyPrefs.setStringWithFileName(_assignmentId + "_new_" + selectedAttribute.getProjectProductId(),
-                                            selectedAttribute.getValueId(),attributeValueforScan.getText().toString().trim());
+                                            selectedAttribute.getValueId(),attributeValue);
 
                                     holder.tvAttributeOldValue.setText(selectedAttribute.getAttributeValue());
 
-                                    holder.tvAttributeValue.setText(attributeValueforScan.getText().toString().trim());
+                                    holder.tvAttributeValue.setText(attributeValue);
 
                                     String prefKey = UUID.randomUUID().toString();
 
-                                    String newValue = attributeValueforScan.getText().toString().trim();
+                                    String newValue = attributeValue;
                                     newValue = escapeUrlCharacters(newValue);
                                     // In old version attribute new value was encoded by URLEncoder. Check if it is need.
                                     String urlSuffix = "ProjectProductId=" + selectedAttribute.getProjectProductId() +
@@ -239,26 +317,29 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                                 }
                             }
                         });
-                        b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                        if (!isDateTime) {
+                            b.setButton(AlertDialog.BUTTON_NEUTRAL, "Scan", (DialogInterface.OnClickListener)null);
+                        }
                         b.show();
 
-                        final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
-                        scan.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
-                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                                integrator.setPrompt("Scan");
-                                integrator.setCameraId(0);
-                                integrator.setBeepEnabled(false);
-                                integrator.setBarcodeImageEnabled(false);
-                                integrator.setOrientationLocked(true);
-                                integrator.initiateScan();
-                            }
-                        });
-
-
+                        if(!isDateTime){
+                            final Button scan = b.getButton(AlertDialog.BUTTON_NEUTRAL);
+                            scan.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+                                    integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                                    integrator.setPrompt("Scan");
+                                    integrator.setCameraId(0);
+                                    integrator.setBeepEnabled(false);
+                                    integrator.setBarcodeImageEnabled(false);
+                                    integrator.setOrientationLocked(true);
+                                    integrator.initiateScan();
+                                }
+                            });
+                        }
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

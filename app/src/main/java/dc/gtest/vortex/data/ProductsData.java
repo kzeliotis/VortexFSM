@@ -87,6 +87,9 @@ public class ProductsData {
                         attributeModel.setAttributeDescription(MyJsonParser.getStringValue(oneObject, "AttributeDescription", ""));
                         attributeModel.setAttributeValue(MyJsonParser.getStringValue(oneObject, "Value", ""));
                         attributeModel.setValueId(MyJsonParser.getStringValue(oneObject,  "ValueId", ""));
+                        int IsDateTime = MyJsonParser.getIntValue(oneObject, "IsDateTime", 0);
+                        attributeModel.setDateTime(IsDateTime == 1);
+
                         attributeModel.setProjectProductId(MyJsonParser.getStringValue(oneObject, "ProjectProductId", ""));
 
                         JSONArray attributeDefaultValues = new JSONArray();

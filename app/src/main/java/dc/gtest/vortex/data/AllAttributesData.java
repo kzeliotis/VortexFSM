@@ -35,6 +35,8 @@ public class AllAttributesData {
 
                     allAttributeModel.setAttributeDescription(MyJsonParser.getStringValue(oneObject, "AttributeDescription", ""));
                     allAttributeModel.setAttributeId(MyJsonParser.getStringValue(oneObject, "AttributeId", ""));
+                    int isDateTime = MyJsonParser.getIntValue(oneObject, "IsDateTime", 0);
+                    allAttributeModel.setDateTime(isDateTime == 1);
                     allAttributeModel.setAttributeDefaultValues(MyJsonParser.getJsonArrayValue(oneObject, "AttributeDefaultValues"));
 
                     ALL_ATTRIBUTES_LIST.add(allAttributeModel);
