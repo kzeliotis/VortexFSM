@@ -258,30 +258,30 @@ public class AttributesRvAdapter extends RecyclerView.Adapter<AttributesRvAdapte
                             public void onClick(DialogInterface dialog, int which) {
                                 MyUtils.hideKeypad(ctx, v);
 
-                                if (attributeValueforScan != null && attributeValueforScan.getText() != null && !attributeValueforScan.getText().toString().trim().isEmpty()) {
+                                String attributeValue = "";
 
-                                    String attributeValue = "";
+                                if (isDateTime) {
+                                    // Get date from DatePicker
+                                    int day = datePickerAttributeValue.getDayOfMonth();
+                                    int month = datePickerAttributeValue.getMonth() + 1; // Month is 0-based
+                                    int year = datePickerAttributeValue.getYear();
 
-                                    if (isDateTime) {
-                                        // Get date from DatePicker
-                                        int day = datePickerAttributeValue.getDayOfMonth();
-                                        int month = datePickerAttributeValue.getMonth() + 1; // Month is 0-based
-                                        int year = datePickerAttributeValue.getYear();
+                                    // Get time from TimePicker
+                                    int hour, minute;
+                                    hour = timePickerAttributeValue.getHour();
+                                    minute = timePickerAttributeValue.getMinute();
 
-                                        // Get time from TimePicker
-                                        int hour, minute;
-                                        hour = timePickerAttributeValue.getHour();
-                                        minute = timePickerAttributeValue.getMinute();
-
-                                        // Format the date and time as dd/MM/yyyy HH:mm
-                                        attributeValue = String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
-                                    } else {
-                                        // Get text from EditText
-                                        if (attributeValueforScan != null && attributeValueforScan.getText() != null
-                                                && !attributeValueforScan.getText().toString().equals("")) {
-                                            attributeValue = attributeValueforScan.getText().toString().trim();
-                                        }
+                                    // Format the date and time as dd/MM/yyyy HH:mm
+                                    attributeValue = String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+                                } else {
+                                    // Get text from EditText
+                                    if (attributeValueforScan != null && attributeValueforScan.getText() != null
+                                            && !attributeValueforScan.getText().toString().equals("")) {
+                                        attributeValue = attributeValueforScan.getText().toString().trim();
                                     }
+                                }
+
+                                if (!attributeValue.isEmpty()) {
 
                                     // saving old value
                                     MyPrefs.setStringWithFileName(_assignmentId + "_old_" + selectedAttribute.getProjectProductId(),
