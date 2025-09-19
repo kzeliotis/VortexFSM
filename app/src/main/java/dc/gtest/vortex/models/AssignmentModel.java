@@ -35,6 +35,7 @@ public class AssignmentModel {
     private String customerBusinessTitle = "";
     private String customerVatNumber = "";
     private String customerRevenue = "";
+    private String customerCode = "";
     private String sorting = "";
     private String statusName = "";
     private String statusId = "";
@@ -645,5 +646,13 @@ public class AssignmentModel {
 
     public void setProductPickingList(String productPickingList) {
         ProductPickingList = productPickingList;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
     }
 }
