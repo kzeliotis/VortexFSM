@@ -1,8 +1,10 @@
 package dc.gtest.vortex.api;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -159,7 +161,7 @@ class MyApi {
         return connection;
     }
 
-    public static Bundle post(String apiUrl, String postBody, boolean isTextHtml) {
+    public static Bundle post(String apiUrl, String postBody, boolean isTextHtml, Context ctx) {
 
         Bundle bundle = new Bundle();
 
@@ -300,13 +302,16 @@ class MyApi {
                 postBody = "Login failed attempt " + MyPrefs.getString(PREF_USER_NAME, "-");
             }
             MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody, 0, e.getMessage(), "");
+            if(ctx != null){
+                new AlertDialog.Builder(ctx).setMessage(e.getMessage()).show();
+            }
             e.printStackTrace();
         }
 
         return bundle;
     }
 
-    public static Bundle get(String apiUrl) {
+    public static Bundle get(String apiUrl, Context ctx) {
 
         Bundle bundle = new Bundle();
 
@@ -408,6 +413,9 @@ class MyApi {
 
 
         } catch (Exception e) {
+            if(ctx != null){
+                new AlertDialog.Builder(ctx).setMessage(e.getMessage()).show();
+            }
             e.printStackTrace();
         }
 

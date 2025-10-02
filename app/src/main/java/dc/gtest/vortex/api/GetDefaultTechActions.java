@@ -34,7 +34,7 @@ public class GetDefaultTechActions  extends AsyncTask<String, Void, String > {
         apiUrl = baseHostUrl + API_GET_TECH_ACTIONS;
 
         try {
-            Bundle bundle = MyApi.get(apiUrl);
+            Bundle bundle = MyApi.get(apiUrl, null);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

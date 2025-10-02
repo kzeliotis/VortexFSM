@@ -78,7 +78,7 @@ public class ToSendServices extends AsyncTask<String, Void, String > {
         String apiUrl = baseHostUrl + "/Vortex.svc/InsertServices";
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

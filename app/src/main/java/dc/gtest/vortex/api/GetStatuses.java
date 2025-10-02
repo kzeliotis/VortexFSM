@@ -60,7 +60,7 @@ public class GetStatuses extends AsyncTask<String, Void, String > {
 
 
         try {
-            Bundle bundle = MyApi.get(apiUrl);
+            Bundle bundle = MyApi.get(apiUrl, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

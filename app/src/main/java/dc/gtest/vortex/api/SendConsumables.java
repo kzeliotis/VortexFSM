@@ -72,7 +72,7 @@ public class SendConsumables extends AsyncTask<String, Void, String > {
         apiUrl = baseHostUrl + API_SEND_CONSUMABLES;
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

@@ -27,7 +27,7 @@ public class ToGetMeasurableAttributes extends AsyncTask<String, Void, String > 
         String apiUrl = baseHostUrl + "/vortex.svc/GetMeasurableAttributes";
 
         try {
-            Bundle bundle = MyApi.get(apiUrl);
+            Bundle bundle = MyApi.get(apiUrl, null);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

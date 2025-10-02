@@ -61,7 +61,7 @@ public class DeleteAttribute extends AsyncTask<String, Void, String > {
         String apiUrl = baseHostUrl + API_DELETE_ATTRIBUTE + projectProductId + "&AttributeId=" + attributeId + "&ValueId=" + ValueId;
 
         try {
-            Bundle bundle = MyApi.get(apiUrl);
+            Bundle bundle = MyApi.get(apiUrl, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

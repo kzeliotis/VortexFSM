@@ -69,7 +69,7 @@ public class SendCheckIn extends AsyncTask<String, Void, String > {
         String postBody = MyPrefs.getStringWithFileName(PREF_FILE_CHECK_IN_DATA_TO_SYNC, assignmentId, "");
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

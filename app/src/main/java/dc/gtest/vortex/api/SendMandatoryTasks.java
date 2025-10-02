@@ -67,7 +67,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
         apiUrl = baseHostUrl + API_SEND_MANDATORY_TASKS;
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

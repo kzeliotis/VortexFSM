@@ -77,7 +77,7 @@ public class ToSendNewMeasurement extends AsyncTask<String, Void, String> {
         String apiUrl = baseHostUrl + "/Vortex.svc/InsertMeasurements";
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, true);
+            Bundle bundle = MyApi.post(apiUrl, postBody, true, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);

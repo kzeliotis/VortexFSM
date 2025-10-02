@@ -72,7 +72,7 @@ public class SendNewCustomer extends AsyncTask<String, Void, String > {
         apiUrl = baseHostUrl + API_SEND_SET_CUSTOMER;
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
