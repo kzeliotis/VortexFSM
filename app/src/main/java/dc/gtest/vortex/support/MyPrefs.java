@@ -151,6 +151,7 @@ public class MyPrefs {
     public static final String PREF_CURRENT_APK_VERSION = "pref_current_apk_version";
     public static final String PREF_LOCATION_REFRESH_INTERVAL = "pref_location_refresh_interval";
     public static final String PREF_API_CONNECTION_TIMEOUT = "pref_api_connection_timeout";
+    public static final String PREF_API_READ_TIMEOUT = "pref_api_read_timeout";
     public static final String PREF_GPS_PRIORITY = "pref_GPS_priority";
     public static final String PREF_PROCESS_ASSIGNMENT_ON_SCAN = "pref_process_assignment_on_scan";
     public static final String PREF_ALLOW_MULTIPLE_CHECK_INS = "pref_allow_multiple_check_ins";

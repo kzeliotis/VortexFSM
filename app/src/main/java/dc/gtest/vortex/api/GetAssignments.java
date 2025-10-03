@@ -2,6 +2,7 @@ package dc.gtest.vortex.api;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
     private final String LOG_TAG = "myLogs: " + this.getClass().getSimpleName();
 
     private int responseCode;
+    private String responseMessage;
 
     @SuppressLint("StaticFieldLeak")
     private final Context ctx;
@@ -76,7 +78,7 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
     @Override
     protected String doInBackground(String... params) {
-        String responseMessage = "";
+        responseMessage = "";
         String responseBody = "";
 
         String userName = MyPrefs.getString(PREF_USER_NAME, "");
@@ -113,7 +115,10 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
             mProgressBar.setVisibility(View.GONE);
         }
 
-        if (responseCode == 200 && responseBody != null ) {
+        if (responseCode == -1){
+            new AlertDialog.Builder(ctx).setMessage(responseMessage).show();
+        }
+        else if (responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ASSIGNMENTS, responseBody);
             AssignmentsData.generate(ctx);
             boolean LoggedIn = MyPrefs.getBoolean(PREF_KEY_IS_LOGGED_IN, false);

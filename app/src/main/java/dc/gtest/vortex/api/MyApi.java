@@ -39,6 +39,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_API_READ_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
@@ -161,7 +162,7 @@ class MyApi {
         return connection;
     }
 
-    public static Bundle post(String apiUrl, String postBody, boolean isTextHtml, Context ctx) {
+    public static Bundle post(String apiUrl, String postBody, boolean isTextHtml, Context ctx) throws Exception {
 
         Bundle bundle = new Bundle();
 
@@ -172,11 +173,15 @@ class MyApi {
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
             conn_timeout *= 1000;
 
+            int read_timeout = MyPrefs.getInt(PREF_API_READ_TIMEOUT, 120);
+            read_timeout *= 1000;
+
+
             URL url = new URL(apiUrl);
 
             if (apiUrl.toUpperCase().contains("HTTPS")){
                 HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection)url.openConnection();
-                httpURLConnection.setReadTimeout(120000);
+                httpURLConnection.setReadTimeout(read_timeout);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("POST");
 
@@ -238,7 +243,7 @@ class MyApi {
                 httpURLConnection.disconnect();
             } else {
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setReadTimeout(120000);
+                httpURLConnection.setReadTimeout(read_timeout);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("POST");
 
@@ -302,16 +307,15 @@ class MyApi {
                 postBody = "Login failed attempt " + MyPrefs.getString(PREF_USER_NAME, "-");
             }
             MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody, 0, e.getMessage(), "");
-            if(ctx != null){
-                new AlertDialog.Builder(ctx).setMessage(e.getMessage()).show();
-            }
             e.printStackTrace();
+
+            //throw new Exception(e.getMessage() + "\n\n" + apiUrl); //to catch the exception on the activity and show alert dialog
         }
 
         return bundle;
     }
 
-    public static Bundle get(String apiUrl, Context ctx) {
+    public static Bundle get(String apiUrl, Context ctx) throws Exception {
 
         Bundle bundle = new Bundle();
 
@@ -322,10 +326,14 @@ class MyApi {
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
             conn_timeout *= 1000;
 
+            int read_timeout = MyPrefs.getInt(PREF_API_READ_TIMEOUT, 120);
+            read_timeout *= 1000;
+
+
             URL url = new URL(apiUrl);
             if(apiUrl.toUpperCase().contains("HTTPS")){
                 HttpsURLConnection httpURLConnection = httpsUrlConnection(url);//(HttpsURLConnection) url.openConnection();
-                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setReadTimeout(read_timeout);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("GET");
                 if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
@@ -370,7 +378,7 @@ class MyApi {
                 httpURLConnection.disconnect();
             } else {
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setReadTimeout(60000);
+                httpURLConnection.setReadTimeout(read_timeout);
                 httpURLConnection.setConnectTimeout(conn_timeout);
                 httpURLConnection.setRequestMethod("GET");
                 if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)){
@@ -413,10 +421,11 @@ class MyApi {
 
 
         } catch (Exception e) {
-            if(ctx != null){
-                new AlertDialog.Builder(ctx).setMessage(e.getMessage()).show();
-            }
+
             e.printStackTrace();
+
+            bundle.putInt(MY_API_RESPONSE_CODE, -1);
+            bundle.putString(MY_API_RESPONSE_MESSAGE, e.getMessage() + "\n\n" + apiUrl);
         }
 
         return bundle;

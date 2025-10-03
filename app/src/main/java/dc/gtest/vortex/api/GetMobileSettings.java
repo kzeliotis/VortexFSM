@@ -31,6 +31,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_API_READ_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
@@ -171,6 +172,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     int MobileApiConnectionTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiConnectionTimeout", 15);
                     MyPrefs.setInt(PREF_API_CONNECTION_TIMEOUT, MobileApiConnectionTimeout);
+
+                    int MobileApiReadTimeout = MyJsonParser.getIntValue(oneObject,  "MobileApiReadTimeout", 120);
+                    MyPrefs.setInt(PREF_API_READ_TIMEOUT, MobileApiReadTimeout);
 
                     int AllowParallelCheckInsFromMobile = MyJsonParser.getIntValue(oneObject,  "AllowParallelCheckInsFromMobile", 1);
                     MyPrefs.setBoolean(PREF_ALLOW_MULTIPLE_CHECK_INS, AllowParallelCheckInsFromMobile == 1);
