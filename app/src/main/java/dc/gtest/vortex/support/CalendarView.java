@@ -166,6 +166,7 @@ public class CalendarView extends LinearLayout {
         // update grid
         grid.setAdapter(new CalendarAdapter(getContext(), cells, events));
 
+        grid.refreshDrawableState();
         // update title
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
         txtDate.setText(sdf.format(currentDate.getTime()));

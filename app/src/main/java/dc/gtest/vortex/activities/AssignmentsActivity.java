@@ -44,6 +44,7 @@ import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySliderMenu;
+import dc.gtest.vortex.support.MySynchronize;
 import dc.gtest.vortex.support.MyUtils;
 import dc.gtest.vortex.support.PermGetLocation;
 
@@ -318,6 +319,21 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
                     spStatusFilter.setSelection(0);
                     return true;
                 }
+            } else if (id == R.id.itemSynchronize){
+                if(calendarView.getVisibility() == View.VISIBLE) {
+                    itemSwitchView.setIcon(R.drawable.ic_date_range_black_24dp);
+                    itemSwitchView.setTitle("Calendar");
+
+                    calendarView.setVisibility(View.GONE);
+                    llSortingButtons.setVisibility(View.VISIBLE);
+                    rvAssignments.setVisibility(View.VISIBLE);
+
+                    assignmentsRvAdapter.getFilter().filter("");
+                    spStatusFilter.setSelection(0);
+                }
+                calendarView.updateCalendar(CALENDAR_EVENTS);
+                //new MySynchronize(this).mySynchronize(true);  Event on BaseDrawerActivity is triggered.
+
             } else if (id == R.id.itemScanner) {
                 //final Activity activity = this;
 

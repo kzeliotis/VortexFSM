@@ -18,6 +18,7 @@ import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.AssignmentsActivity;
 import dc.gtest.vortex.activities.LoginActivity;
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.support.CalendarView;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLogs;
@@ -28,6 +29,7 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
+import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
@@ -42,6 +44,8 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SendLogin extends AsyncTask<String, Void, String > {
 
@@ -167,6 +171,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
                         GetAssignments getAssignments = new GetAssignments(ctx, downloadAllData);
                         getAssignments.execute();
+
 
                     } else {
 
