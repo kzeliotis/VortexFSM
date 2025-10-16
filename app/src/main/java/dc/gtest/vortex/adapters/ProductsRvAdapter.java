@@ -292,7 +292,7 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
         }
 
         if(MeasurementsString.length() > 0){
-            Toast toast = Toast.makeText(ctx, localized_Mandatory_Measurements_Missing + ": " + MeasurementsString , Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(ctx, localized_Mandatory_Measurements_Missing + ": " + MeasurementsString, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
 
