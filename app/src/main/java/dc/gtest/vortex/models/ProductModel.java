@@ -27,6 +27,7 @@ public class ProductModel {
     @Setter
     private String productComponentId = "";
     private String projectZoneDescription = "";
+    private String projectInstallationDescription = "";
 
     @NonNull
     @Override
@@ -160,5 +161,13 @@ public class ProductModel {
 
     public void setProjectZoneDescription(String projectZoneDescription) {
         this.projectZoneDescription = projectZoneDescription;
+    }
+
+    public String getProjectInstallationDescription() {
+        return projectInstallationDescription;
+    }
+
+    public void setProjectInstallationDescription(String projectInstallationDescription) {
+        this.projectInstallationDescription = projectInstallationDescription;
     }
 }

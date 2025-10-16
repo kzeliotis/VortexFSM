@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static dc.gtest.vortex.support.MyLocalization.localized_installation;
 import static dc.gtest.vortex.support.MyLocalization.localized_zone;
 
 public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProductsRvAdapter.ViewHolder> implements Filterable {
@@ -33,13 +35,17 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
     private List<ProductModel> filteredItems;
 
     private final boolean isForNewAssignment;
+    private final Spinner spZones;
+    private final Spinner spInstallations;
 
 
-    public SearchProductsRvAdapter(List<ProductModel> allItems, Context ctx, boolean isForNewAssignment) {
+    public SearchProductsRvAdapter(List<ProductModel> allItems, Context ctx, boolean isForNewAssignment, Spinner spZones, Spinner spInstallations) {
         this.allItems = allItems;
         filteredItems = allItems;
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
+        this.spZones = spZones;
+        this.spInstallations = spInstallations;
     }
 
     @NonNull
@@ -55,8 +61,12 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
 
         String productDescription = holder.mItem.getProductDescription();
         String zoneDescription = holder.mItem.getProjectZoneDescription();
+        String installationDescription = holder.mItem.getProjectInstallationDescription();
         if (!zoneDescription.isEmpty()) {
             productDescription = productDescription + "\n" + localized_zone + ": " + zoneDescription;
+        }
+        if (!installationDescription.isEmpty()) {
+            productDescription += "\n" + localized_installation + ": " + installationDescription;
         }
 
         holder.tvItemName.setText(productDescription);
@@ -109,29 +119,62 @@ public class SearchProductsRvAdapter extends RecyclerView.Adapter<SearchProducts
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
-                if (constraint.length() == 0) {
-                    filteredItems = allItems;
-                } else {
-                    List<ProductModel> filteredList = new ArrayList<>();
-                    String constraintStr = constraint.toString();
-                    boolean isSpinnerFilter = constraintStr.startsWith("SPINNER:");
-                    final String filterPattern = isSpinnerFilter ?
-                            constraintStr.substring(8).toLowerCase().trim() :
-                            constraintStr.toLowerCase().trim();
+                List<ProductModel> filteredList = new ArrayList<>();
+                String constraintStr = constraint.toString();
+                boolean isZoneFilter = constraintStr.startsWith("SPINNER:");
+                boolean isInstallationFilter = constraintStr.startsWith("SPINNER_INSTALLATION:");
+                final String filterPattern = isZoneFilter || isInstallationFilter ? "" : constraintStr.toLowerCase().trim();
 
-                    for (final ProductModel mWords : allItems) {
-                        if (isSpinnerFilter) {
-                            // Exact match for spinner
-                            if (mWords.getProjectZoneDescription() != null &&
-                                    mWords.getProjectZoneDescription().toLowerCase().equals(filterPattern)) {
-                                filteredList.add(mWords);
-                            }
-                        } else {
-                            // Contains match for search
+                List<ProductModel> spinnerFilteredItems = new ArrayList<>(allItems);
+
+                if(spZones.getSelectedItemPosition() > 0){
+                    String zone = spZones.getSelectedItem().toString().toLowerCase();
+                    List<ProductModel> zoneFilteredList = new ArrayList<>();
+                    for (final ProductModel mWords : spinnerFilteredItems) {
+                        if (mWords.getProjectZoneDescription() != null &&
+                                mWords.getProjectZoneDescription().toLowerCase().equals(zone)) {
+                            zoneFilteredList.add(mWords);
+                        }
+                    }
+                    spinnerFilteredItems = zoneFilteredList;
+                }
+
+                if(spInstallations.getSelectedItemPosition() > 0){
+                    String installation = spInstallations.getSelectedItem().toString().toLowerCase();
+                    List<ProductModel> installationFilteredList = new ArrayList<>();
+                    for (final ProductModel mWords : spinnerFilteredItems) {
+                        if (mWords.getProjectInstallationDescription() != null &&
+                                mWords.getProjectInstallationDescription().toLowerCase().equals(installation)) {
+                            installationFilteredList.add(mWords);
+                        }
+                    }
+                    spinnerFilteredItems = installationFilteredList;
+                }
+
+                if (constraint.length() == 0) {
+                    filteredItems = spinnerFilteredItems;
+                } else {
+
+                    for (final ProductModel mWords : spinnerFilteredItems) {
+//                        if (isZoneFilter) {
+//                            // Exact match for spinner
+//                            if (mWords.getProjectZoneDescription() != null &&
+//                                    mWords.getProjectZoneDescription().toLowerCase().equals(filterPattern)) {
+//                                filteredList.add(mWords);
+//                            }
+//                        }
+//                        else if(isInstallationFilter){
+//                            if (mWords.getProjectInstallationDescription() != null &&
+//                                    mWords.getProjectInstallationDescription().toLowerCase().equals(filterPattern)) {
+//                                filteredList.add(mWords);
+//                            }
+//                        }
+//                        else {
+//                            // Contains match for search
                             if (mWords.toString().toLowerCase().contains(filterPattern)) {
                                 filteredList.add(mWords);
                             }
-                        }
+//                        }
                     }
 
                     filteredItems = filteredList;

@@ -58,6 +58,7 @@ public class ProductsData {
                     productModel.setNotes(MyJsonParser.getStringValue(oneObjectProduct, "notes", ""));
                     productModel.setProductComponentId(MyJsonParser.getStringValue(oneObjectProduct, "ProductComponentId", "0"));
                     productModel.setProjectZoneDescription(MyJsonParser.getStringValue(oneObjectProduct, "ProjectZoneDescription", ""));
+                    productModel.setProjectInstallationDescription(MyJsonParser.getStringValue(oneObjectProduct, "ProjectInstallationDescription", ""));
 
                     JSONArray jArrayProductAttributes = new JSONArray();
                     JSONArray jArrayMandatoryAttributes = new JSONArray();

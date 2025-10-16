@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,10 +28,9 @@ import dc.gtest.vortex.support.MySliderMenu;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
-import static dc.gtest.vortex.support.MyGlobals.PRODUCT_TYPES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PROJECT;
 import static dc.gtest.vortex.support.MyGlobals.globalGetHistoryParameter;
-import static dc.gtest.vortex.support.MyLocalization.localized_all_caps;
+import static dc.gtest.vortex.support.MyLocalization.localized_installation;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
 import static dc.gtest.vortex.support.MyLocalization.localized_project_history;
@@ -56,9 +54,13 @@ public class SearchProductsActivity extends BaseDrawerActivity {
     public static String searchText = "";
     private TextView tvZoneSpinnerTitle;
     private Spinner spZones;
-    private boolean doSpinnerItemSelected = true;
+    private TextView tvInstallationSpinnerTitle;
+    private Spinner spInstallation;
+    private boolean doSpinnerItemSelectedZone = true;
+    private boolean doSpinnerItemSelectedInstallation = true;
     private boolean doSearchTexChanged = true;
     public static String selectedZone = "";
+    public static String selectedInstallation = "";
     private SearchView searchView;
 
 
@@ -73,6 +75,8 @@ public class SearchProductsActivity extends BaseDrawerActivity {
         RecyclerView rvSearchProducts = findViewById(R.id.rvSearchProducts);
         spZones = findViewById(R.id.spZones);
         tvZoneSpinnerTitle = findViewById(R.id.tvZoneSpinnerTitle);
+        spInstallation = findViewById(R.id.spInstallation);
+        tvInstallationSpinnerTitle = findViewById(R.id.tvInstallationSpinnerTitle);
 
         tvProject.setText(SELECTED_PROJECT.getProjectDescription());
 
@@ -85,7 +89,7 @@ public class SearchProductsActivity extends BaseDrawerActivity {
         }
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        productsRvAdapter = new SearchProductsRvAdapter(PRODUCTS_LIST, SearchProductsActivity.this, isForNewAssignment);
+        productsRvAdapter = new SearchProductsRvAdapter(PRODUCTS_LIST, SearchProductsActivity.this, isForNewAssignment, spZones, spInstallation);
         rvSearchProducts.setAdapter(productsRvAdapter);
 
         btnBottom = findViewById(R.id.btnBottom);
@@ -107,24 +111,52 @@ public class SearchProductsActivity extends BaseDrawerActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                //έχει αλλάξει η λογική, πλέον το φιλτράρισμα γίνεται μέσα στη getFilter
+                String searchText = searchView.getQuery().toString().toLowerCase();
 
-                if (doSpinnerItemSelected) {
+                if (doSpinnerItemSelectedZone) {
                     if (position == 0) {
-                        selectedZone = "";
+                        selectedZone = searchText;
                     } else {
-                        selectedZone = "SPINNER:" + spZones.getSelectedItem().toString().toLowerCase();
+                        selectedZone = searchText; //spZones.getSelectedItem().toString().toLowerCase();
                     }
 
                     productsRvAdapter.getFilter().filter(selectedZone);
-                } else {
-                    doSpinnerItemSelected = true;
-                }
 
+                } else {
+                    doSpinnerItemSelectedZone = true;
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
+        });
+
+        setAdapterOnSpinnerInstallation(this, spInstallation);
+        spInstallation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String searchText = searchView.getQuery().toString().toLowerCase();
+
+                if (doSpinnerItemSelectedInstallation) {
+                    if (position == 0) {
+                        selectedInstallation = searchText;
+                    } else {
+                        selectedInstallation = searchText; //spInstallation.getSelectedItem().toString().toLowerCase();
+                    }
+
+                    productsRvAdapter.getFilter().filter(selectedInstallation);
+                } else {
+                    doSpinnerItemSelectedInstallation = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
         });
 
         clearFilters();
@@ -185,6 +217,8 @@ public class SearchProductsActivity extends BaseDrawerActivity {
 
         String filterByZone = localized_zone + ":";
         tvZoneSpinnerTitle.setText(filterByZone);
+        String filterByInstallation = localized_installation + ":";
+        tvInstallationSpinnerTitle.setText(filterByInstallation);
 
     }
 
@@ -213,11 +247,36 @@ public class SearchProductsActivity extends BaseDrawerActivity {
         spZones.setAdapter(new MySpinnerAdapter(ctx, zonesArray));
     }
 
+    public static void setAdapterOnSpinnerInstallation(Context ctx, Spinner spInstallations) {
+        Set<String> distinctInstallations = new HashSet<>();
+
+        for (ProductModel product : PRODUCTS_LIST) {
+            String projectInstallation = product.getProjectInstallationDescription();
+            if (projectInstallation != null && !projectInstallation.trim().isEmpty()) {
+                distinctInstallations.add(projectInstallation);
+            }
+        }
+
+        // Convert to sorted list
+        List<String> sortedInstallations = new ArrayList<>(distinctInstallations);
+        Collections.sort(sortedInstallations);
+
+        String[] installationsArray = new String[sortedInstallations.size() + 1];
+        installationsArray[0] = "-";
+
+        for (int i = 0; i < sortedInstallations.size(); i++) {
+            installationsArray[i + 1] = sortedInstallations.get(i);
+        }
+
+        spInstallations.setAdapter(new MySpinnerAdapter(ctx, installationsArray));
+    }
+
     private void clearFilters() {
 
 
         searchText = "";
         selectedZone = "";
+        selectedInstallation = "";
 
         doSearchTexChanged = false;
         if (searchView != null) {
@@ -227,9 +286,15 @@ public class SearchProductsActivity extends BaseDrawerActivity {
         doSearchTexChanged = true;
 
         if (spZones.getSelectedItemPosition() != 0) {
-            doSpinnerItemSelected = false;
+            doSpinnerItemSelectedZone = false;
         }
         spZones.setSelection(0);
+
+        if (spInstallation.getSelectedItemPosition() != 0) {
+            doSpinnerItemSelectedInstallation = false;
+        }
+        spInstallation.setSelection(0);
+
     }
 
 

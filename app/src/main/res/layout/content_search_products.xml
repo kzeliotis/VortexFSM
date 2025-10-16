@@ -39,34 +39,63 @@
         android:layout_marginRight="@dimen/dp_10"
         app:cardBackgroundColor="@color/light_blue_100"
         app:cardCornerRadius="4dp">
-
-    <LinearLayout
-        android:id="@+id/llZoneSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvZoneSpinnerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/zone"
-            android:layout_gravity="center_vertical" />
-
-        <Spinner
-            android:id="@+id/spZones"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_2"
-            android:layout_marginRight="@dimen/dp_2"
-            android:layout_gravity="center_vertical|end" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llZoneSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvZoneSpinnerTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_2"
+                    android:paddingBottom="@dimen/dp_2"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/zone"
+                    android:layout_gravity="center_vertical" />
+                <Spinner
+                    android:id="@+id/spZones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:layout_marginRight="@dimen/dp_2"
+                    android:layout_gravity="center_vertical|end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llInstallationSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvInstallationSpinnerTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_2"
+                    android:paddingBottom="@dimen/dp_2"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/installation"
+                    android:layout_gravity="center_vertical" />
+                <Spinner
+                    android:id="@+id/spInstallation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:layout_marginRight="@dimen/dp_2"
+                    android:layout_gravity="center_vertical|end" />
+            </LinearLayout>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 
