@@ -57,6 +57,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_warranty_extensio
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
 public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdapter.ViewHolder> implements Filterable {
@@ -99,7 +100,13 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.tvAllProductDescription.setText(holder.mItem.getProductDescription());
+
+        String description = holder.mItem.getProductDescription();
+        if(MyPrefs.getBoolean(PREF_SHOW_BARCODES, false) && !holder.mItem.getBarcode().isEmpty()){
+            description = description + "\n\r" + "Barcode: " + holder.mItem.getBarcode();
+        }
+
+        holder.tvAllProductDescription.setText(description);
 
         if(warehouseProducts){
             String Stock = holder.mItem.getStock();
@@ -323,6 +330,11 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
         protected FilterResults performFiltering(CharSequence constraint) {
 
             final FilterResults results = new FilterResults();
+
+            boolean isScannedCode = constraint.toString().startsWith("Barcode Scan:");
+            if(isScannedCode){
+                constraint = constraint.toString().replace("Barcode Scan:", "");
+            }
 
             if (warehouseProducts) {
                 ALL_WAREHOUSE_PRODUCTS_LIST_FILTERED.clear();

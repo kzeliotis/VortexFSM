@@ -47,6 +47,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_suggested_value_w
 import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_colon;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 
 public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumablesRvAdapter.ViewHolder> implements Filterable {
 
@@ -104,14 +105,20 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
             holder.etPickingQty.setText(holder.mItem.getUsed());
         }
 
+        String description = holder.mItem.getConsumableName();
+
+        if(MyPrefs.getBoolean(PREF_SHOW_BARCODES, false) && !holder.mItem.getBarcode().isEmpty()){
+            description = description + "\n\r" + "Barcode: " + holder.mItem.getBarcode();
+        }
+
         if(warehouseProducts || pickingList){
-            String desc = holder.mItem.getConsumableName();
+            String desc = description;
             String stock = holder.mItem.getStock();
             //String stock_s = stock_d.toString().replace(",", ".");
             desc = desc + "\n\r" + "Qty: " + stock;
             holder.tvConsumableName.setText(desc);
         }else{
-            holder.tvConsumableName.setText(holder.mItem.getConsumableName());
+            holder.tvConsumableName.setText(description);
         }
 
         holder.etAddedPickingNotes.addTextChangedListener(new TextWatcher() {
@@ -312,6 +319,12 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             final FilterResults results = new FilterResults();
+
+            boolean isScannedCode = constraint.toString().startsWith("Barcode Scan:");
+            if(isScannedCode){
+                constraint = constraint.toString().replace("Barcode Scan:", "");
+            }
+
             if (warehouseProducts){
                 ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.clear();
 
@@ -320,8 +333,14 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                 } else {
                     final String filterPattern = constraint.toString().toLowerCase().trim();
                     for (final AllConsumableModel mWords : ALL_WAREHOUSE_CONSUMABLES_LIST) {
-                        if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
-                            ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
+                        if(isScannedCode){
+                            if (mWords.getBarcode().toLowerCase().contains(filterPattern)) {
+                                ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
+                            }
+                        } else {
+                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                                ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
+                            }
                         }
                     }
                 }
@@ -336,8 +355,14 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                 } else {
                     final String filterPattern = constraint.toString().toLowerCase().trim();
                     for (final AllConsumableModel mWords : ALL_CONSUMABLES_LIST) {
-                        if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
-                            ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
+                        if(isScannedCode){
+                            if (mWords.getBarcode().toLowerCase().contains(filterPattern)) {
+                                ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
+                            }
+                        } else {
+                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                                ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
+                            }
                         }
                     }
                 }

@@ -48,6 +48,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_SERVICES_FROM_PICKI
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_ALL_MASTER_PROJECTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN_START_STOP;
@@ -241,6 +242,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MobileWarrantyExtensionOnProductInstallation = MyJsonParser.getIntValue(oneObject, "MobileWarrantyExtensionOnProductInstallation", 0);
 
                     MyPrefs.setBoolean(PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION, MobileWarrantyExtensionOnProductInstallation == 1);
+
+                    int MobileShowProductBarcodes = MyJsonParser.getIntValue(oneObject, "MobileShowProductBarcodes", 0);
+
+                    MyPrefs.setBoolean(PREF_SHOW_BARCODES, MobileShowProductBarcodes == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

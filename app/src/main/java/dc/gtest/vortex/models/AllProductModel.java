@@ -11,6 +11,7 @@ public class AllProductModel {
     private String AttributeId = "";
     private String AttributeDescription = "";
     private String masterProductComponentId = "";
+    private String barcode = "";
     private int typeId = -1;
 
     @Override
@@ -24,6 +25,7 @@ public class AllProductModel {
                         "  \"Stock\": \"" + Stock + "\",\n" +
                         "  \"BasicValue\": \"" + BasicValue + "\",\n" +
                         "  \"AttributeId\": \"" + AttributeId + "\",\n" +
+                        "  \"Barcode\": \"" + barcode + "\",\n" +
                         "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                         "  \"AttributeDescription\": \"" + AttributeDescription + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +
@@ -93,5 +95,13 @@ public class AllProductModel {
 
     public void setMasterProductComponentId(String masterProductComponentId) {
         this.masterProductComponentId = masterProductComponentId;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }

@@ -441,6 +441,9 @@ public class ProductsActivity extends BaseDrawerActivity {
                 if (doSearchTexChanged) {
                     searchText = newText;
                     productsRvAdapter.getFilter().filter(newText);
+                    if(newText.isEmpty()){
+                        searchView.setIconified(true);
+                    }
                 } else {
                     doSearchTexChanged = true;
                 }

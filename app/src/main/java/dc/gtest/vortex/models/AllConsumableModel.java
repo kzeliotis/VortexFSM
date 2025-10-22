@@ -9,6 +9,7 @@ public class AllConsumableModel {
     private int typeId = -1;
     private String Stock = "";
     private String used = "";
+    private String barcode = "";
 
     public String getConsumableName() {
         return consumableName;
@@ -74,5 +75,13 @@ public class AllConsumableModel {
         modelToString = modelToString.replace("}]", "}\n  ]");
 
         return modelToString;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }

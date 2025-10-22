@@ -52,6 +52,8 @@ public class AllProductsData {
                         allProductModel.setAttributeId(MyJsonParser.getStringValue(oneObject, "AttributeId", "0"));
                         allProductModel.setAttributeDescription(MyJsonParser.getStringValue(oneObject, "AttributeDescription", ""));
                         allProductModel.setMasterProductComponentId(MyJsonParser.getStringValue(oneObject, "MasterProductComponentId", "0"));
+                        allProductModel.setBarcode(MyJsonParser.getStringValue(oneObject, "Barcode", ""));
+
 
                         ALL_WAREHOUSE_PRODUCTS_LIST.add(allProductModel);
                     }
@@ -87,6 +89,7 @@ public class AllProductsData {
                         allProductModel.setNotes(MyJsonParser.getStringValue(oneObject, "notes", ""));
                         allProductModel.setTypeId(MyJsonParser.getIntValue(oneObject, "TypeId", -1));
                         allProductModel.setMasterProductComponentId(MyJsonParser.getStringValue(oneObject, "MasterProductComponentId", "0"));
+                        allProductModel.setBarcode(MyJsonParser.getStringValue(oneObject, "Barcode", ""));
 
                         ALL_PRODUCTS_LIST.add(allProductModel);
                     }
