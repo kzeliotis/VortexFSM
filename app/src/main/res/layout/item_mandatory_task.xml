@@ -78,6 +78,14 @@
             android:textColorHint="@color/grey_400"
             android:inputType="text|textMultiLine"/>
 
+        <ImageView
+            android:id="@+id/ivScanValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_blur_linear_black_24dp"
+            app:tint="@color/black"
+            android:contentDescription="@string/image" />
+
         <Spinner
             android:id="@+id/spMandatoryTasks"
             android:layout_width="0dp"

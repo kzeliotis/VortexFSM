@@ -46,6 +46,8 @@ import android.widget.TextView;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -1736,6 +1738,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
 
 
+                break;
+
+            case 49374: //scanner result
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() != null) {
+                        String ScannedCode = result.getContents();
+                        MANDATORY_TASKS_LIST.get(globalMandatoryTaskPosition).setMeasurementValue(ScannedCode);
+                        mandatoryTasksRvAdapter.notifyDataSetChanged();
+                    }
+                }
                 break;
 
             case PICKFILE_RESULT_CODE:

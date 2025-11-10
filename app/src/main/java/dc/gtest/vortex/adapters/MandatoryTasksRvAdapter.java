@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.activities.AllConsumablesActivity;
 import dc.gtest.vortex.activities.AssignmentActionsActivity;
 import dc.gtest.vortex.models.MandatoryTaskModel;
 import dc.gtest.vortex.support.MyImages;
@@ -53,6 +54,8 @@ import static dc.gtest.vortex.support.MyLocalization.localized_step_comments;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_MANDATORY_TASKS_COMMENTS;
+
+import com.google.zxing.integration.android.IntentIntegrator;
 
 public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasksRvAdapter.ViewHolder> {
 
@@ -127,12 +130,15 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
                 if(IsDateTime.equals("1")){
                     holder.etMandatoryTasks.setFocusable(false);
                     holder.etMandatoryTasks.setFocusableInTouchMode(false);
+                    holder.ivScanValue.setVisibility(View.GONE);
                 } else {
                     holder.etMandatoryTasks.setFocusable(true);
                     holder.etMandatoryTasks.setFocusableInTouchMode(true);
+                    holder.ivScanValue.setVisibility(View.VISIBLE);
                 }
             } else {
                 holder.etMandatoryTasks.setVisibility(View.GONE);
+                holder.ivScanValue.setVisibility(View.GONE);
                 holder.spMandatoryTasks.setVisibility(View.VISIBLE);
             }
         }
@@ -294,6 +300,18 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
                     .show();
         });
 
+        holder.ivScanValue.setOnClickListener(v -> {
+            globalMandatoryTaskPosition = holder.getBindingAdapterPosition();
+            IntentIntegrator integrator = new IntentIntegrator((Activity) ctx);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt("Scan");
+            integrator.setCameraId(0);
+            integrator.setBeepEnabled(false);
+            integrator.setBarcodeImageEnabled(false);
+            integrator.setOrientationLocked(true);
+            integrator.initiateScan();
+        });
+
         // setup remove image
         holder.ivRemove.setOnClickListener(v -> {
             MyUtils.deleteFile(holder.mItem.getStepPhotoPath());
@@ -445,6 +463,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
         final LinearLayout llMandatoryComments;
         final TextView tvComments;
         final EditText etMandatoryComments;
+        final ImageView ivScanValue;
         MandatoryTaskModel mItem;
 
         public ViewHolder(View view) {
@@ -465,6 +484,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             llMandatoryComments = view.findViewById(R.id.llMandatoryComments);
             tvComments = view.findViewById(R.id.tvComments);
             etMandatoryComments = view.findViewById(R.id.etMandatoryComments);
+            ivScanValue = view.findViewById(R.id.ivScanValue);
         }
     }
 
