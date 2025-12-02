@@ -35,6 +35,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_API_READ_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA_ZONES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_GPS_PRIORITY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEEP_GPS_LOG;
@@ -246,6 +247,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MobileShowProductBarcodes = MyJsonParser.getIntValue(oneObject, "MobileShowProductBarcodes", 0);
 
                     MyPrefs.setBoolean(PREF_SHOW_BARCODES, MobileShowProductBarcodes == 1);
+
+                    int MobileDownloadAllZoneDataOnSync = MyJsonParser.getIntValue(oneObject, "MobileDownloadAllZoneDataOnSync", 0);
+
+                    MyPrefs.setBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, MobileDownloadAllZoneDataOnSync == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

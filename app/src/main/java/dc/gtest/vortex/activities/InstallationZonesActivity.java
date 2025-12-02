@@ -94,7 +94,7 @@ public class InstallationZonesActivity extends BaseDrawerActivity implements Vie
         } else {
             if (MyUtils.isNetworkAvailable()) {
                 if (!projectId.isEmpty()) {
-                    GetZones getZones = new GetZones(this, null, refresh, projectInstallationId);
+                    GetZones getZones = new GetZones(this, null, refresh, projectInstallationId, "");
                     getZones.execute(projectId);
                 } else {
                     Toast.makeText(this, localized_no_internet_try_later_2_lines, Toast.LENGTH_LONG).show();

@@ -25,6 +25,7 @@ import dc.gtest.vortex.activities.AssignmentsActivity;
 import dc.gtest.vortex.adapters.AssignmentsRvAdapter;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.AssignmentsData;
+import dc.gtest.vortex.models.AssignmentModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
@@ -39,6 +40,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_no_assignments;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA_ZONES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IMAGE_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
@@ -146,8 +148,19 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
                         GetAllConsumables getAllConsumables = new GetAllConsumables(null, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "");
                         getAllConsumables.execute();
+
                     }
                 }
+
+
+                if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, true)) {
+                    for (AssignmentModel assignment : ASSIGNMENTS_LIST) {
+                        String projectId = assignment.getProjectId();
+                        GetZones getZones = new GetZones(ctx, null, true, "0", assignment.getAssignmentId());
+                        getZones.execute(projectId);
+                    }
+                }
+
 
                 // get and save history data
                 // create project ids array to avoid multiple calls to the same history API

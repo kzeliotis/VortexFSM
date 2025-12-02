@@ -86,7 +86,7 @@ public class DeleteProjectZone  extends AsyncTask<String, Void, String > {
             MyDialogs.showOK(ctx, localized_zone_deleted);
 
             if (MyUtils.isNetworkAvailable()) {
-                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId);
+                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId, "");
                 getZones.execute("0");
             }
 

@@ -591,19 +591,19 @@ public class ProductsActivity extends BaseDrawerActivity {
         if(pjZones.isEmpty()){
             try{
                 String result = "";
-                GetZones getZones = new GetZones(this, null, false, "0");
+                GetZones getZones = new GetZones(this, null, false, "0", "");
                 result = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        ZonesData.generate(false);
+        ZonesData.generate(false, "", "");
 
         String InstZones = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW,  SELECTED_INSTALLATION.getProjectInstallationId(), "");
         if(InstZones.isEmpty()){
             try{
                 String result = "";
-                GetZones getZones = new GetZones(this, null, false, SELECTED_INSTALLATION.getProjectInstallationId());
+                GetZones getZones = new GetZones(this, null, false, SELECTED_INSTALLATION.getProjectInstallationId(), "");
                 result = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
             } catch (Exception e) {
                 e.printStackTrace();

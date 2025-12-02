@@ -45,14 +45,20 @@ public class GetZones extends AsyncTask<String, Void, String > {
     private String responseBody;
     private final boolean refresh;
     private final String projectInstallationId;
+    private String AssignmentId;
+    private String ProjectId;
 
 
 
-    public GetZones(Context ctx, ZonesRvAdapter zonesRvAdapter, boolean refresh, String ProjectInstallationId) {
+
+
+
+    public GetZones(Context ctx, ZonesRvAdapter zonesRvAdapter, boolean refresh, String ProjectInstallationId, String assignmentId) {
         this.ctx = ctx;
         this.zonesRvAdapter = zonesRvAdapter;
         this.projectInstallationId = ProjectInstallationId;
         this.refresh = refresh;
+        this.AssignmentId = assignmentId;
 
     }
 
@@ -72,10 +78,10 @@ public class GetZones extends AsyncTask<String, Void, String > {
 
     @Override
     protected String doInBackground(String... params) {
-        String projectId = params[0];
+        ProjectId = params[0];
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        apiUrl = baseHostUrl + API_GET_ZONES + projectId;
+        apiUrl = baseHostUrl + API_GET_ZONES + ProjectId;
 
         if(!projectInstallationId.equals("0")){
             apiUrl += "&ProjectInstallationId=" + projectInstallationId;
@@ -108,10 +114,10 @@ public class GetZones extends AsyncTask<String, Void, String > {
             if(projectInstallationId.equals("0")){
                 MyPrefs.setString(PREF_DATA_ZONES_LIST, responseBody);
 
-                String AssignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
-                MyPrefs.setStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, AssignmentId, responseBody);
+                String _AssignmentId = AssignmentId.isEmpty() ? SELECTED_ASSIGNMENT.getAssignmentId() : AssignmentId;
+                MyPrefs.setStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, _AssignmentId, responseBody);
 
-                ZonesData.generate(refresh);
+                ZonesData.generate(refresh, _AssignmentId, ProjectId);
 
                 if (zonesRvAdapter != null) {
                     zonesRvAdapter.notifyDataSetChanged();

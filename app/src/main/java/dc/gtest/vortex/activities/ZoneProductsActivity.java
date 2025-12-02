@@ -234,17 +234,17 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
         String savedChangedZoneProducts = MyPrefs.getStringWithFileName(PREF_FILE_ZONE_PRODUCTS_FOR_SHOW, prefKey, "");
 
         if (!savedChangedZoneProducts.isEmpty()) {
-            ZoneProductsData.generate(savedChangedZoneProducts, zoneId);
+            ZoneProductsData.generate(savedChangedZoneProducts, zoneId, "", "");
             zoneProductsRvAdapter.notifyDataSetChanged();
 
         } else if (!savedZoneProducts.isEmpty()) {
-            ZoneProductsData.generate(savedZoneProducts, zoneId);
+            ZoneProductsData.generate(savedZoneProducts, zoneId, "", "");
             zoneProductsRvAdapter.notifyDataSetChanged();
 
         } else {
             if (MyUtils.isNetworkAvailable()) {
                 if (zoneId != null) {
-                    GetZoneProducts getZoneProducts = new GetZoneProducts(this, zoneProductsRvAdapter);
+                    GetZoneProducts getZoneProducts = new GetZoneProducts(this, zoneProductsRvAdapter, "", "");
                     getZoneProducts.execute(zoneId);
                 }
             } else {

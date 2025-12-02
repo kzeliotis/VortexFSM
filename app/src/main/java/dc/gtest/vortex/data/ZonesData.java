@@ -20,11 +20,11 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_PROJECT_ID;
 
 public class ZonesData {
 
-    public static void generate(boolean refresh) {
+    public static void generate(boolean refresh, String assignmentId, String projectId) {
 
         ZONES_LIST.clear();
         ZONES_LIST_FILTERED.clear();
-        String AssignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+        String AssignmentId = assignmentId.isEmpty() ? SELECTED_ASSIGNMENT.getAssignmentId() : assignmentId;
 
         String zones = MyPrefs.getString(PREF_DATA_ZONES_LIST, "");
 
@@ -65,7 +65,7 @@ public class ZonesData {
                     String prefKey = MyPrefs.getString(PREF_PROJECT_ID, "") + "_" + ZoneId + "_" + AssignmentId;
                     String zoneProducts = MyPrefs.getStringWithFileName(PREF_FILE_ZONE_PRODUCTS_DATA_FOR_SHOW, prefKey, "");
                     if (zoneProducts.isEmpty() || refresh) {
-                        GetZoneProducts getZoneProducts = new GetZoneProducts(null, null);
+                        GetZoneProducts getZoneProducts = new GetZoneProducts(null, null, AssignmentId, projectId);
                         getZoneProducts.execute(ZoneId);
                     }
 

@@ -20,13 +20,14 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_DATA_FOR_S
 
 public class ZoneProductsData {
 
-    public static void generate(String zoneProducts, String zoneId) {
+    public static void generate(String zoneProducts, String zoneId, String assignmentId, String projectId) {
 
         ZONE_PRODUCTS_LIST.clear();
         ZONE_PRODUCTS_LIST_FILTERED.clear();
 
-        String AssignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
-        String prefKey = MyPrefs.getString(PREF_PROJECT_ID, "") + "_" + zoneId + "_" + AssignmentId;
+        String AssignmentId = assignmentId.isEmpty() ? SELECTED_ASSIGNMENT.getAssignmentId() : assignmentId;
+        String ProjectId = projectId.isEmpty() ? MyPrefs.getString(PREF_PROJECT_ID, "") : projectId;
+        String prefKey = ProjectId + "_" + zoneId + "_" + AssignmentId;
 
         if (zoneProducts.isEmpty()) {
             zoneProducts = MyPrefs.getStringWithFileName(PREF_FILE_ZONE_PRODUCTS_DATA_FOR_SHOW, prefKey, "");

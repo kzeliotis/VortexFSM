@@ -114,7 +114,7 @@ public class SendProjectZone extends AsyncTask<String, Void, String > {
             MyPrefs.removeStringWithFileName(PREF_FILE_NEW_INSTALLATION_ZONES_FOR_SYNC, prefKey);
 
             if (MyUtils.isNetworkAvailable()) {
-                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId);
+                GetZones getZones = new GetZones(ctx, null, true, projectInstallationId, "");
                 getZones.execute("0");
             }
 

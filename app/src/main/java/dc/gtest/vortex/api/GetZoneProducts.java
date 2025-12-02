@@ -35,10 +35,16 @@ public class GetZoneProducts extends AsyncTask<String, Void, String > {
     private String responseMessage;
     private String responseBody;
     private String ZoneId;
+    private String AssignmentId;
+    private String ProjectId;
 
-    public GetZoneProducts(Context ctx, ZoneProductsRvAdapter zoneProductsRvAdapter) {
+
+
+    public GetZoneProducts(Context ctx, ZoneProductsRvAdapter zoneProductsRvAdapter, String assignmentId, String projectId) {
         this.ctx = ctx;
         this.zoneProductsRvAdapter = zoneProductsRvAdapter;
+        this.AssignmentId = assignmentId;
+        this.ProjectId = projectId;
     }
 
     @Override
@@ -86,7 +92,7 @@ public class GetZoneProducts extends AsyncTask<String, Void, String > {
 
         if (responseCode == 200 && responseBody != null ) {
 
-            ZoneProductsData.generate(responseBody, ZoneId);
+            ZoneProductsData.generate(responseBody, ZoneId, AssignmentId, ProjectId);
 
             if (zoneProductsRvAdapter != null) {
                 zoneProductsRvAdapter.notifyDataSetChanged();

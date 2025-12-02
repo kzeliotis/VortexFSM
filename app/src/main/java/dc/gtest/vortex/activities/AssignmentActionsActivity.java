@@ -1289,11 +1289,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         if (Zones.isEmpty()) {
                             if (MyUtils.isNetworkAvailable()) {
                                 if (!SELECTED_ASSIGNMENT.getProjectId().isEmpty()) {
-                                    GetZones getZones = new GetZones(this, null, true, "0");
+                                    GetZones getZones = new GetZones(this, null, true, "0", "");
                                     try{
                                         String result_ = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
                                         result_= "";
-                                        ZonesData.generate(true);
+                                        ZonesData.generate(true, "", "");
                                     } catch (Exception e){
                                         e.printStackTrace();
                                     }

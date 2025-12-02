@@ -85,12 +85,12 @@ public class ZonesActivity extends BaseDrawerActivity {
 
 
         if (!Zones.isEmpty() && !refresh) {
-            ZonesData.generate(false);
+            ZonesData.generate(false, "", "");
             zonesRvAdapter.notifyDataSetChanged();
         } else {
             if (MyUtils.isNetworkAvailable()) {
                 if (!projectId.isEmpty()) {
-                    GetZones getZones = new GetZones(this, zonesRvAdapter, refresh, "0");
+                    GetZones getZones = new GetZones(this, zonesRvAdapter, refresh, "0", "");
                     getZones.execute(projectId);
                 } else {
                     Toast.makeText(this, localized_no_internet_try_later_2_lines, Toast.LENGTH_LONG).show();

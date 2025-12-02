@@ -165,6 +165,7 @@ public class MyPrefs {
     public static final String PREF_QTY_LIMIT_SERVICES_FROM_PICKING = "pref_qty_limit_services_from_picking";
     public static final String PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION = "pref_warranty_extension_on_product_installation";
     public static final String PREF_MANDATORY_SERVICES_FROM_PICKING = "pref_mandatory_services_from_picking";
+    public static final String PREF_DOWNLOAD_ALL_DATA_ZONES = "pref_download_all_data_zones";
     public static final String PREF_SHOW_BARCODES = "pref_show_barcodes";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";
     public static final String PREF_SHOW_DET_CHILDREN = "pref_show_det_children";
