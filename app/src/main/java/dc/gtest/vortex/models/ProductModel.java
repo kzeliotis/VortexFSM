@@ -5,9 +5,12 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import dc.gtest.vortex.support.MyUtils;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 public class ProductModel {
 
     private String productDescription = "";
@@ -28,25 +31,27 @@ public class ProductModel {
     private String productComponentId = "";
     private String projectZoneDescription = "";
     private String projectInstallationDescription = "";
+    private String prefKey = "";
 
     @NonNull
     @Override
     public String toString() {
         String modelToString =
                 "\n{\n" +
-                        "  \"ProductDescription\": \"" + productDescription + "\",\n" +
+                        "  \"ProductDescription\": \"" + MyUtils.ToJson(productDescription) + "\",\n" +
                         "  \"InstallationDate\": \"" + installationDate + "\",\n" +
                         "  \"ProjectProductId\": \"" + projectProductId + "\",\n" +
                         "  \"InstallationId\": \"" + projectInstallationId + "\",\n" +
-                        "  \"TypeDescription\": \"" + typeDescription + "\",\n" +
+                        "  \"TypeDescription\": \"" + MyUtils.ToJson(typeDescription) + "\",\n" +
                         "  \"IdentityValue\": \"" + identityValue + "\",\n" +
                         "  \"isNotSynchronized\": \"" + isNotSynchronized + "\",\n" +
-                        "  \"isChecked\": " + isChecked + "\",\n" +
+                        "  \"isChecked\": " + isChecked + ",\n" +
                         "  \"ProductAttributesString\": \"" + productAttributesString + "\",\n" +
                         "  \"notes\": \"" + notes + "\",\n" +
                         "  \"MasterId\": \"" + masterId + "\",\n" +
                         "  \"ProductComponentId\": \"" + productComponentId + "\",\n" +
-                        "  \"ProductAttributeValues\": " + productAttributes + "\",\n" +
+                        "  \"prefKey\": \"" + prefKey + "\",\n" +
+                        "  \"ProductAttributeValues\": " + productAttributes + ",\n" +
                         "  \"RemoveFromProjectMandatory\": " + RemoveFromProjectMandatory + "\n" +
                         "}";
 
@@ -169,5 +174,13 @@ public class ProductModel {
 
     public void setProjectInstallationDescription(String projectInstallationDescription) {
         this.projectInstallationDescription = projectInstallationDescription;
+    }
+
+    public String getPrefKey() {
+        return prefKey;
+    }
+
+    public void setPrefKey(String prefKey) {
+        this.prefKey = prefKey;
     }
 }

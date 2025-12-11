@@ -74,12 +74,6 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
         holder.mItem = filteredItems.get(position);
         holder.tvItemName.setText(holder.mItem.getProductDescription());
 
-        if (holder.mItem.isNotSynchronized()) {
-            holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.red_700));
-        } else {
-            holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.grey_900));
-        }
-
         String attributesString = holder.mItem.getProductAttributesString();
         if (attributesString.length() > 0){
             holder.tvItemDetails.setVisibility(View.VISIBLE);
@@ -87,6 +81,14 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
         } else {
             holder.tvItemDetails.setVisibility(View.GONE);
         }
+
+        if (holder.mItem.isNotSynchronized()) {
+            holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.red_700));
+            return;
+        } else {
+            holder.tvItemName.setTextColor(ContextCompat.getColor(ctx, R.color.grey_900));
+        }
+
 
         if (projectInstallationId > 0) {
             holder.chkSelectToAdd.setVisibility(View.VISIBLE);

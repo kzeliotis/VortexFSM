@@ -22,6 +22,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.AllAttributesRvAdapter;
@@ -30,6 +31,7 @@ import dc.gtest.vortex.api.SendNewAttribute;
 import dc.gtest.vortex.api.SendNewProduct;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.AllAttributesData;
+import dc.gtest.vortex.models.AttributeModel;
 import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyDialogs;
@@ -62,6 +64,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_ask_to_install_pr
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_please_select_product;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_saved_to_send_on_check_out;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_attribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_set_save_attribute;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_data_caps;
@@ -70,7 +73,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_warranty_extensio
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLED_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
@@ -141,9 +148,16 @@ public class AllAttributesActivity extends BaseDrawerActivity {
 
         btnSendNewAttributes.setOnClickListener(v -> {
 
+            if (savedAttributes != null && !savedAttributes.equals("")) {
+                if(savedAttributes.endsWith(",\n")){
+                    savedAttributes = savedAttributes.substring(0, savedAttributes.length() - 2) + "\n";
+                }
+            }
+
             switch (parentActivity) {
                 case CONST_PARENT_ATTRIBUTES_ACTIVITY:
                     if (savedAttributes != null && !savedAttributes.equals("")) {
+
                         String assignmentId = MyPrefs.getString(PREF_ASSIGNMENT_ID, "");
                         if(searchSerial){assignmentId = "-1";}
                         String newAttributesJsonString =
@@ -209,6 +223,8 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                                         }
                                     }
 
+                                    boolean sendOnCheckOut = MyPrefs.getBoolean(PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT, false);
+                                    String prefKey = UUID.randomUUID().toString();
                                     String newProductJsonString =
                                             "{\n" +
                                                     "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
@@ -222,20 +238,41 @@ public class AllAttributesActivity extends BaseDrawerActivity {
                                                     "  \"ProjectInstallationId\": \"" + projectInstallationId + "\",\n" +
                                                     "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                                                     "  \"WarrantyExtension\": " + warrantyValue + ",\n" +
+                                                    "  \"prefKey\": \"" +  prefKey + "\",\n" +
                                                     "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
                                                     "  \"Attributes\": {\n" +
                                                     "    " + savedAttributes + "\n" +
                                                     "  }\n" +
                                                     "}";
 
-                                    String prefKey = UUID.randomUUID().toString();
+
                                     MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
 
                                     ProductModel productModel = new ProductModel();
                                     productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
                                     productModel.setProductDescription(newProductName);
                                     productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
+                                    String attributesString = "";
+                                    attributesString = NEW_ATTRIBUTES_LIST.stream()
+                                            .map(a -> a.getAttributeDescription() + ": " + a.getAttributeValue())
+                                            .collect(Collectors.joining("\n"));
+                                    productModel.setProductAttributesString(attributesString);
+                                    productModel.setMasterId("0");
+                                    productModel.setProjectInstallationId(projectInstallationId);
                                     productModel.setNotSynchronized(true);
+                                    productModel.setPrefKey(prefKey);
+
+                                    if(sendOnCheckOut){
+                                        String savedPrefKeys = MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+                                        savedPrefKeys += savedPrefKeys.isEmpty() ? prefKey : "," + prefKey;
+                                        MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), savedPrefKeys);
+
+                                        MyPrefs.addToListWithFileName(PREF_UNSYNCED_INSTALLED_PRODUCTS, SELECTED_ASSIGNMENT.getAssignmentId(), productModel, ProductModel.class);
+                                        if(!projectInstallationId.isEmpty() && !projectInstallationId.equals("0")){
+                                            MyPrefs.addToListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, projectInstallationId, productModel, ProductModel.class);
+                                        }
+
+                                    }
 
                                     String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
 
@@ -249,12 +286,17 @@ public class AllAttributesActivity extends BaseDrawerActivity {
 
                                     Log.e(LOG_TAG, "==================== productsData: " + productsData);
 
-                                    if (MyUtils.isNetworkAvailable()) {
-                                        SendNewProduct sendNewProduct = new SendNewProduct(AllAttributesActivity.this, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
-                                        sendNewProduct.execute();
-                                    } else {
-                                        Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                                    if(sendOnCheckOut){
+                                        Toast.makeText(MyApplication.getContext(), localized_product_saved_to_send_on_check_out, Toast.LENGTH_LONG).show();
+                                    }else{
+                                        if (MyUtils.isNetworkAvailable()) {
+                                            SendNewProduct sendNewProduct = new SendNewProduct(AllAttributesActivity.this, prefKey, CONST_SHOW_PROGRESS_AND_TOAST,"");
+                                            sendNewProduct.execute();
+                                        } else {
+                                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
+
 
                                     finish();
 

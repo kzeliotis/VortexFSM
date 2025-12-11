@@ -32,6 +32,7 @@ import dc.gtest.vortex.R;
 import dc.gtest.vortex.models.AllAttributeModel;
 import dc.gtest.vortex.models.AttributeModel;
 import dc.gtest.vortex.support.MyJsonParser;
+import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.activities.AllAttributesActivity.savedAttributes;
 import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
@@ -182,7 +183,7 @@ public class AllAttributesRvAdapter extends RecyclerView.Adapter<AllAttributesRv
                             if (!attributeValue.isEmpty()) {
                                 // this is used to send to server
                                 savedAttributes = savedAttributes + "\"" + selectedAllAttribute.getAttributeDescription() +
-                                        "\": \"" + attributeValue + "\",\n";
+                                        "\": \"" + MyUtils.ToJson(attributeValue) + "\",\n";
 
                                 // this is used to update offline data
                                 AttributeModel attributeModel = new AttributeModel();

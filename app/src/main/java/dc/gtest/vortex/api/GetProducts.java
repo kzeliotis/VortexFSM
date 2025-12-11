@@ -147,6 +147,9 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 //            }
 //        }
 
+        String installationId_forData = "";
+        String assignmentId_forData = "";
+
         if (responseCode >= 200 && responseCode < 300 &&
                 responseBody != null &&
                 !responseBody.equals("") &&
@@ -157,40 +160,22 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
             if(!projectInstallationId.equals("0") && !selectProductsForInstallation) {
                 MyPrefs.setStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, responseBody);
+                installationId_forData = projectInstallationId;
             } else if (selectProductsForInstallation) {
                 MyPrefs.setStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, assignmentId, responseBody);
             } else if (!idValue.isEmpty()){
                 MyPrefs.setStringWithFileName(PREF_FILE_ID_SEARCH_PRODUCTS_DATA, "0", responseBody);
             } else {
                 MyPrefs.setStringWithFileName(PREF_FILE_PRODUCTS_DATA, assignmentId, responseBody);
+                assignmentId_forData = assignmentId;
             }
 
         }
-
-
-//        if (!idValue.isEmpty()){ //περίπτωση που έρχεται από scanαρισμα barcode
-//            if (responseBody == null || responseBody.isEmpty() || responseBody.equals("[]")) {
-//                if (mProgressBar != null) {
-//                    mProgressBar.setVisibility(View.GONE);
-//                }
-//                Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
-//                toast.setGravity(Gravity.CENTER, 0, 0);
-//                toast.show();
-//            } else {
-//                Intent intent = new Intent(ctx, ProductsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                intent.putExtra(KEY_ID_SEARCH,  true);
-//                ctx.startActivity(intent);
-//            }
-//            return;
-//
-//        }
 
         RecyclerView rvAssignmentProducts = null;
         if (ctx != null) {
             rvAssignmentProducts = ((AppCompatActivity)ctx).findViewById(R.id.rvAssignmentProducts);
         }
-
 
         if (rvAssignmentProducts != null) {
 
@@ -201,7 +186,8 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
                 if (productsRvAdapter != null) {
                     if (responseBody != null) {
-                        ProductsData.generate(responseBody);
+
+                        ProductsData.generate(responseBody, assignmentId_forData, installationId_forData);
 
                         if (PRODUCTS_LIST.size() == 0) {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
@@ -222,7 +208,7 @@ public class GetProducts extends AsyncTask<String, Void, String > {
 
                 if (productsRvAdapter != null) {
                     if (responseBody != null) {
-                        ProductsData.generate(responseBody);
+                        ProductsData.generate(responseBody, assignmentId_forData, installationId_forData);
 
                         if (PRODUCTS_LIST.size() == 0) {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
@@ -287,7 +273,7 @@ public class GetProducts extends AsyncTask<String, Void, String > {
             if (attributesRvAdapter != null) {
 
                 if (responseBody != null) {
-                    ProductsData.generate(responseBody);
+                    ProductsData.generate(responseBody, assignmentId_forData, installationId_forData);
 
                     for (int i = 0; i < PRODUCTS_LIST.size(); i++) {
                         if (PRODUCTS_LIST.get(i).getProjectProductId().equalsIgnoreCase(globalSelectedProductId)) {

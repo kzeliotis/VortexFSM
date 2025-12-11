@@ -88,6 +88,7 @@ import dc.gtest.vortex.api.SendCheckIn;
 import dc.gtest.vortex.api.SendCheckOut;
 import dc.gtest.vortex.api.SendDetChildren;
 import dc.gtest.vortex.api.SendMandatoryTasks;
+import dc.gtest.vortex.api.SendNewProduct;
 import dc.gtest.vortex.api.SendProductMeasurements;
 import dc.gtest.vortex.api.SendUsePTOvernight;
 import dc.gtest.vortex.api.SendZonesWithNoMeasurement;
@@ -211,6 +212,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SERVICES_FROM_PICKING_SENT;
@@ -238,6 +240,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SERVICES_FROM_PICKI
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SCROLLABLE_PROBLEM_DESCRIPTION;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN;
@@ -1508,6 +1511,13 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         if (!sendCheckOut.isCheckingOut()) {
                             sendCheckOut.execute();
                         }
+
+                        boolean sendOnCheckOut = MyPrefs.getBoolean(PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT, false);
+                        if(sendOnCheckOut){
+                            SendNewProduct sendNewProduct = new SendNewProduct(this, "", CONST_SHOW_PROGRESS_AND_TOAST, assignmentId);
+                            sendNewProduct.execute();
+                        }
+
 
                         SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                         sendMandatoryTasks.execute(assignmentId, "");

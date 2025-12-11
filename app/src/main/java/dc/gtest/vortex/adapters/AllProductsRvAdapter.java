@@ -53,11 +53,16 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_add_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_ask_to_install_product;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_saved_to_send_on_check_out;
 import static dc.gtest.vortex.support.MyLocalization.localized_warranty_extension;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ASSIGNMENT_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLED_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION;
 
 public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdapter.ViewHolder> implements Filterable {
@@ -230,6 +235,8 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                             }
                         }
 
+                        boolean sendOnCheckOut = MyPrefs.getBoolean(PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT, false);
+                        String prefKey = UUID.randomUUID().toString();
                         String newProductJsonString =
                                 "{\n" +
                                         "  \"assignmentId\": \"" + MyPrefs.getString(PREF_ASSIGNMENT_ID, "") + "\",\n" +
@@ -243,12 +250,12 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                                         "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                                         "  \"ProductId\": \"" + holder.mItem.getProductId() + "\",\n" +
                                         "  \"WarrantyExtension\": " + warrantyValue + ",\n" +
+                                        "  \"prefKey\": \"" +  prefKey + "\",\n" +
                                         "  \"Attributes\": {\n" +
                                         "    " + savedAttributes + "\n" +
                                         "  }\n" +
                                         "}";
 
-                        String prefKey = UUID.randomUUID().toString();
                         MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, newProductJsonString);
 
                         AttributeModel attributeModel = new AttributeModel();
@@ -256,12 +263,29 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
                         attributeModel.setAttributeDescription(holder.mItem.getAttributeDescription());
                         attributeModel.setAttributeValue(holder.mItem.getBasicValue());
                         NEW_ATTRIBUTES_LIST.add(attributeModel);
+                        String attributesString = holder.mItem.getAttributeDescription() + ": " + holder.mItem.getBasicValue();
 
                         ProductModel productModel = new ProductModel();
                         productModel.setInstallationDate(MyDateTime.get_MM_dd_yyyy_HH_mm_from_now());
                         productModel.setProductDescription(MyUtils.ToJson(holder.mItem.getProductDescription()));
                         productModel.setProductAttributes(NEW_ATTRIBUTES_LIST);
+                        productModel.setProjectProductId(ProjectProductId);
+                        productModel.setMasterId("0");
+                        productModel.setProjectInstallationId(projectInstallationId);
+                        productModel.setProductAttributesString(attributesString);
                         productModel.setNotSynchronized(true);
+                        productModel.setPrefKey(prefKey);
+
+                        if(sendOnCheckOut){
+                            String savedPrefKeys = MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+                            savedPrefKeys += savedPrefKeys.isEmpty() ? prefKey : "," + prefKey;
+                            MyPrefs.setStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, SELECTED_ASSIGNMENT.getAssignmentId(), savedPrefKeys);
+
+                            MyPrefs.addToListWithFileName(PREF_UNSYNCED_INSTALLED_PRODUCTS, SELECTED_ASSIGNMENT.getAssignmentId(), productModel, ProductModel.class);
+                            if(!projectInstallationId.isEmpty() && !projectInstallationId.equals("0")){
+                                MyPrefs.addToListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, projectInstallationId, productModel, ProductModel.class);
+                            }
+                        }
 
                         String productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
 
@@ -275,11 +299,15 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
 
                         NEW_ATTRIBUTES_LIST.clear();
 
-                        if (MyUtils.isNetworkAvailable()) {
-                            SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST);
-                            sendNewProduct.execute();
-                        } else {
-                            Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                        if(sendOnCheckOut){
+                            Toast.makeText(MyApplication.getContext(), localized_product_saved_to_send_on_check_out, Toast.LENGTH_LONG).show();
+                        }else{
+                            if (MyUtils.isNetworkAvailable()) {
+                                SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_SHOW_PROGRESS_AND_TOAST, "");
+                                sendNewProduct.execute();
+                            } else {
+                                Toast.makeText(MyApplication.getContext(), localized_no_internet_data_saved, Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         ((AppCompatActivity) ctx).finish();

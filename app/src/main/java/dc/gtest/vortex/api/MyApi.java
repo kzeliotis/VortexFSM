@@ -94,6 +94,7 @@ class MyApi {
     static final String API_SEND_NEW_ATTRIBUTE = "/Vortex.svc/InsertNewAttribute";
     static final String API_SEND_UPDATE_ATTRIBUTE_VALUES = "/Vortex.svc/UpdateAttributeValues?";
     static final String API_SEND_NEW_PRODUCT = "/Vortex.svc/InsertNewProduct";
+    static final String API_SEND_NEW_PRODUCT_MULTI = "/Vortex.svc/InsertNewProductMulti";
     static final String API_SEND_CHANGE_RESOURCE = "/Vortex.svc/ChangeResource";
     static final String API_GET_SUB_ASSIGNMENTS = "/Vortex.svc/GetSubAssignments?AssignmentId=";
     static final String API_GET_ASSIGNMENT_COST = "/Vortex.svc/GetAssignmentCost?AssignmentId=";

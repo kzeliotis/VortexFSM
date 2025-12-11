@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.models.ApiResultModel;
+import dc.gtest.vortex.models.ResultOModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 
@@ -104,7 +105,7 @@ public class SendDetChildren extends AsyncTask<String, Void, String > {
                     MyPrefs.removeStringWithFileName(PREF_FILE_DET_CHILDREN_FOR_SYNC, prefKey);
                     Toast.makeText(ctx, localized_data_synchronized, Toast.LENGTH_LONG).show();
                 } else {
-                    String resultnotes = apiResult.getR().getResultNotes();
+                    String resultnotes = apiResult.getR().getResultnotes();
                     Toast.makeText(ctx, localized_failed_to_send_data_saved_for_sync + "\n\n" + resultnotes + "\n\n" + this.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
                 }
             }else{

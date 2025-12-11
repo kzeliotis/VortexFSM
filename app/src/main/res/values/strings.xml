@@ -1434,4 +1434,8 @@
     <string name="additional_warranty_gr">Επιπρόσθετη εγγύηση (μήνες):</string>
     <string name="additional_warranty_ar">Warranty extension (months):</string>
 
+    <string name="product_saved_to_send_on_check_out">Product has been saved to be sent on Check Out</string>
+    <string name="product_saved_to_send_on_check_out_gr">Το προϊόν αποθηκεύθηκε για αποστολή κάτα το Check Out</string>
+    <string name="product_saved_to_send_on_check_out_ar">Product has been saved to be sent on Check Out</string>
+
 </resources>

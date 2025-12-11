@@ -1,8 +1,17 @@
 package dc.gtest.vortex.support;
 
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.models.ProductModel;
 
 import static android.content.Context.MODE_PRIVATE;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class MyPrefs {
 
@@ -15,6 +24,7 @@ public class MyPrefs {
     public static final String PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC = "pref_file_new_assignment_for_sync";
     public static final String PREF_FILE_NEW_CUSTOMER_FOR_SYNC = "pref_file_new_customer_for_sync";
     public static final String PREF_FILE_NEW_PRODUCTS_FOR_SYNC = "pref_file_new_products_for_sync";
+    public static final String PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC = "pref_file_new_products_multi_for_sync";
     public static final String PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC = "pref_file_new_attributes_for_sync";
     public static final String PREF_FILE_NEW_INSTALLATION_ZONES_FOR_SYNC = "pref_file_new_installation_zones_for_sync";
     public static final String PREF_FILE_CUSTOM_FIELDS_FOR_SYNC = "pref_file_custom_fields_for_sync";
@@ -166,6 +176,9 @@ public class MyPrefs {
     public static final String PREF_WARRANTY_EXTENSION_ON_PRODUCT_INSTALLATION = "pref_warranty_extension_on_product_installation";
     public static final String PREF_MANDATORY_SERVICES_FROM_PICKING = "pref_mandatory_services_from_picking";
     public static final String PREF_DOWNLOAD_ALL_DATA_ZONES = "pref_download_all_data_zones";
+    public static final String PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT = "pref_send_installed_products_on_checkout";
+    public static final String PREF_UNSYNCED_INSTALLED_PRODUCTS = "pref_unsynched_installed_products";
+    public static final String PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS = "pref_unsynched_installation_installed_products";
     public static final String PREF_SHOW_BARCODES = "pref_show_barcodes";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";
     public static final String PREF_SHOW_DET_CHILDREN = "pref_show_det_children";
@@ -252,8 +265,6 @@ public class MyPrefs {
         MyApplication.getContext().getSharedPreferences(assignmentId, MODE_PRIVATE).edit().clear().apply();
     }
 
-
-
     public static void setStringWithFileName(String fileName, String key, String value) {
         MyApplication.getContext().getSharedPreferences(fileName, MODE_PRIVATE).edit().putString(key, value).apply();
     }
@@ -273,4 +284,81 @@ public class MyPrefs {
     public static boolean getBooleanWithFileName(String fileName, String key, boolean defaultValue) {
         return MyApplication.getContext().getSharedPreferences(fileName, MODE_PRIVATE).getBoolean(key, defaultValue);
     }
+
+    /**
+     * Save a list of objects to SharedPreferences
+     */
+    public static <T> void saveListWithFileName(String fileName, String key, List<T> list) {
+        String value = listToString(list);
+        MyApplication.getContext().getSharedPreferences(fileName, MODE_PRIVATE).edit().putString(key, value).apply();
+    }
+
+    /**
+     * Load a list of objects from SharedPreferences
+     */
+    public static <T> List<T> loadListWithFileName(String fileName, String key, Class<T> classType) {
+        String json = MyPrefs.getStringWithFileName(fileName, key, "[]");
+        return stringToList(json, classType);
+    }
+
+    /**
+     * Add an item to existing list in SharedPreferences
+     */
+    public static <T> void addToListWithFileName(String fileName, String key, T item, Class<T> classType) {
+        List<T> list = loadListWithFileName(fileName, key, classType);
+        if(classType == ProductModel.class && ((ProductModel) item).getProjectProductId().isEmpty()){
+            long count = list.stream()
+                    .filter(p -> p instanceof ProductModel)
+                    .map(p -> (ProductModel) p)
+                    .filter(product -> product.getProjectProductId() != null
+                            && product.getProjectProductId().startsWith("-"))
+                    .count();
+            ((ProductModel) item).setProjectProductId("-" + String.valueOf(count + 1)); //Δίνω μοναδικό projectproductId σε είδη που είναι προς συγχρονισμό και δεν έχουν, γιατί αλλιώς σκάει η διαδικασία που φτιάχνει το tree list
+        }
+        list.add(item);
+        saveListWithFileName(fileName, key, list);
+    }
+
+    /**
+     * Remove an item from existing list in SharedPreferences
+     */
+//    public static <T> void removeFromListWithFileName(String fileName, String key, T item, Class<T> classType) {
+//        List<T> list = loadListWithFileName(fileName, key, classType);
+//        list.remove(item);
+//        saveListWithFileName(fileName, key, list);
+//    }
+
+    public static <T> void removeFromListWithFileName(String fileName, String key,
+                                                      Predicate<T> condition, Class<T> classType) {
+        List<T> list = loadListWithFileName(fileName, key, classType);
+        list.removeIf(condition);
+        saveListWithFileName(fileName, key, list);
+    }
+
+    /**
+     * Convert List of objects to JSON string
+     */
+    private static final Gson gson = new Gson();
+    public static <T> String listToString(List<T> list) {
+        return gson.toJson(list);
+    }
+
+    /**
+     * Convert JSON string back to List of objects
+     * @param json JSON string
+     * @param classType The class type (e.g., Product.class)
+     */
+    public static <T> List<T> stringToList(String json, Class<T> classType) {
+        // Handle null or empty string
+        if (json == null || json.isEmpty() || json.equals("null")) {
+            return new ArrayList<>();
+        }
+
+        Type listType = TypeToken.getParameterized(ArrayList.class, classType).getType();
+        List<T> result = gson.fromJson(json, listType);
+
+        // Handle null result from Gson
+        return result != null ? result : new ArrayList<>();
+    }
+
 }

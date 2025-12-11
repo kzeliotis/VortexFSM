@@ -16,18 +16,46 @@ import dc.gtest.vortex.models.AttributeModel;
 import dc.gtest.vortex.models.MeasurementModel;
 import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyJsonParser;
+import dc.gtest.vortex.support.MyPrefs;
 
 import static dc.gtest.vortex.support.MyGlobals.ALL_ATTRIBUTES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST;
+import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyLocalization.localized_zone;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLED_PRODUCTS;
 
 public class ProductsData {
 
-    public static void generate(String products) {
+    public static void generate(String products, String assignmentId, String installationId) {
+
+        if(installationId.equals("0")){installationId = "";}
+        if(assignmentId.equals("0")){assignmentId = "";}
 
         if (!products.equals("")) {
+
+            boolean sendOnCheckOut = MyPrefs.getBoolean(PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT, false);
+            if (sendOnCheckOut && (!assignmentId.isEmpty() || !installationId.isEmpty())) {
+                List<ProductModel> pl = new ArrayList<ProductModel>();
+                if(!assignmentId.isEmpty()){
+                    pl = MyPrefs.loadListWithFileName(PREF_UNSYNCED_INSTALLED_PRODUCTS, assignmentId, ProductModel.class);
+                }else if (!installationId.isEmpty()){
+                    pl = MyPrefs.loadListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, installationId, ProductModel.class);
+                }
+
+                for (ProductModel pm : pl) {
+                    if (products.length() > 0 && !products.equals("[]")) {
+                        products = products.substring(0, products.length() - 1) + "," + pm.toString() + "]";
+                    } else {
+                        products = "[" + pm.toString() + "]";
+                    }
+                }
+            }
+
+
             try {
                 JSONArray jArrayProjectProducts = new JSONArray(products);
 

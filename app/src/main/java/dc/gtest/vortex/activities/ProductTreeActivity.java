@@ -358,6 +358,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
         // do this at onResume to refresh view with new added not synchronized data
         String productsData;
         String projectInstallationId = "0";
+        String assignmentId_fordata = "";
         if(IsInstallation && !selectProducts) {
             projectInstallationId = SELECTED_INSTALLATION.getProjectInstallationId();
             productsData = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_PRODUCTS_DATA, projectInstallationId, "");
@@ -365,12 +366,13 @@ public class ProductTreeActivity extends BaseDrawerActivity {
             productsData = MyPrefs.getStringWithFileName(PREF_FILE_NO_INSTALLATION_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
         } else {
             productsData = MyPrefs.getStringWithFileName(PREF_FILE_PRODUCTS_DATA, SELECTED_ASSIGNMENT.getAssignmentId(), "");
+            assignmentId_fordata = SELECTED_ASSIGNMENT.getAssignmentId();
         }
 
 
         Log.e(LOG_TAG, "==================== productsData: " + productsData);
 
-        ProductsData.generate(productsData);
+        ProductsData.generate(productsData, assignmentId_fordata, projectInstallationId);
         if (PRODUCTS_TREE_LIST.size() == 0) {
             Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG).show();
         }

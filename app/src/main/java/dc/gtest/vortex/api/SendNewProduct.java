@@ -11,12 +11,15 @@ import android.widget.Toast;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
+import dc.gtest.vortex.models.ApiResultModel;
+import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.api.MyApi.API_SEND_NEW_PRODUCT;
+import static dc.gtest.vortex.api.MyApi.API_SEND_NEW_PRODUCT_MULTI;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
@@ -26,7 +29,16 @@ import static dc.gtest.vortex.support.MyLocalization.localized_failed_to_send_da
 import static dc.gtest.vortex.support.MyLocalization.localized_no_permission_write;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLED_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SendNewProduct extends AsyncTask<String, Void, String> {
 
@@ -41,13 +53,15 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
     private ProgressBar mProgressBar;
 
     private final String prefKey;
+    private final String assignmentId;
     private final boolean showProgressOrToast;
 
 
-    public SendNewProduct(Context ctx, String prefKey, boolean showProgressOrToast) {
+    public SendNewProduct(Context ctx, String prefKey, boolean showProgressOrToast, String assignmentId) {
         this.ctx = ctx;
         this.prefKey = prefKey;
         this.showProgressOrToast = showProgressOrToast;
+        this.assignmentId = assignmentId;
 
     }
 
@@ -66,13 +80,29 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
         String responseMessage = "";
         String responseBody = null;
 
-        String postBody = MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, "");
-
+        StringBuilder postBody = new StringBuilder();
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
-        String apiUrl = baseHostUrl + API_SEND_NEW_PRODUCT;
+        String apiUrl = "";
+
+        if(!assignmentId.isEmpty()){
+            String prefKeyList = MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, assignmentId, "");
+            if(prefKeyList.isEmpty()){return "";}
+            String[] prefKeys = prefKeyList.split(",");
+            postBody = new StringBuilder("[");
+            for(String p_key: prefKeys) {
+                String p = MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, p_key, "");
+                if (!p.isEmpty()){postBody.append(p).append(",");}
+            }
+            postBody = new StringBuilder(postBody.substring(0, postBody.length() - 1));
+            postBody.append("]");
+            apiUrl = baseHostUrl + API_SEND_NEW_PRODUCT_MULTI;
+        }else{
+            postBody = new StringBuilder(MyPrefs.getStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey, ""));
+            apiUrl = baseHostUrl + API_SEND_NEW_PRODUCT;
+        }
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, true, ctx);
+            Bundle bundle = MyApi.post(apiUrl, postBody.toString(), true, ctx);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
@@ -82,7 +112,7 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody.toString(), responseCode, responseMessage, responseBody);
 
         return responseBody;
     }
@@ -94,15 +124,58 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
             mProgressBar.setVisibility(View.GONE);
         }
 
+        if(responseBody.isEmpty() && !assignmentId.isEmpty()){
+            return;
+        }
+
+        String resultnotes = "";
+
+
+        if(responseBody != null && responseBody.startsWith("{")){
+            Gson gson = new Gson();
+            ApiResultModel apiResult = gson.fromJson(responseBody, ApiResultModel.class);
+            if (apiResult != null){
+                responseBody = apiResult.getR().getResult();
+                resultnotes = apiResult.getR().getResultnotes();
+            }
+        }
+
+        if (resultnotes != null && !resultnotes.isEmpty() && !resultnotes.contains(" ")){
+            List<String> prefKeys = Arrays.asList(resultnotes.split(","));
+            for(String p_key: prefKeys) {
+                MyPrefs.removeStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, p_key);
+            }
+            List<ProductModel> pl = MyPrefs.loadListWithFileName(PREF_UNSYNCED_INSTALLED_PRODUCTS, assignmentId, ProductModel.class);
+            for (ProductModel p : pl){
+                if(prefKeys.contains(p.getPrefKey())){
+                    MyPrefs.removeFromListWithFileName(PREF_UNSYNCED_INSTALLED_PRODUCTS, assignmentId, item -> ((ProductModel) item).getPrefKey().equals(p.getPrefKey()), ProductModel.class);
+                    if(!p.getProjectProductId().isEmpty() && !p.getProjectProductId().equals("0")){
+                        String projectInstallationId = p.getProjectInstallationId();
+                        MyPrefs.removeFromListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, projectInstallationId, item -> ((ProductModel) item).getPrefKey().equals(p.getPrefKey()), ProductModel.class);
+//                        List<ProductModel> iPl = MyPrefs.loadListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, projectInstallationId, ProductModel.class);
+//                        for (ProductModel ip : iPl){
+//                            if(prefKeys.contains(ip.getPrefKey())){
+//                                MyPrefs.removeFromListWithFileName(PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS, projectInstallationId, ip, ProductModel.class);
+//                            }
+//                        }
+                    }
+                }
+            }
+        }
+
         if (responseBody != null && responseBody.equals("1") ) {
 
             MyPrefs.removeStringWithFileName(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, prefKey);
+
+            if(!assignmentId.isEmpty()){
+                MyPrefs.removeStringWithFileName(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, assignmentId);
+            }
 
             if (MyUtils.isNetworkAvailable()) {
                 GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false, "");
                 getProducts.execute();
 
-                if (MyPrefs.getString(PREF_WAREHOUSEID, "0") != "0") {
+                if (!MyPrefs.getString(PREF_WAREHOUSEID, "0").equals("0")) {
                     GetAllProducts getAllProducts = new GetAllProducts(null, true, "0"); //TODO: έλεγχος για περιπτώσεις που χρειάζεται το projectWarehouseId
                     getAllProducts.execute();
                 }

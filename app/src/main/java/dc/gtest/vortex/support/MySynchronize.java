@@ -48,6 +48,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ATTRIBUTES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_CUSTOMER_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_INSTALLATION_ZONES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RETURN_TO_BASE_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_START_TRAVEL_DATA_TO_SYNC;
@@ -58,6 +59,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMEN
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -183,13 +185,25 @@ public class MySynchronize {
             }
         }
 
-        Map<String, ?> newProductDataForSync = ctx.getSharedPreferences(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, MODE_PRIVATE).getAll();
-        for (Map.Entry<String, ?> entry : newProductDataForSync.entrySet()) {
-            String prefKey = entry.getKey();
-
-            SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST);
-            sendNewProduct.execute();
+        if(MyPrefs.getBoolean(PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT, false)){
+            Map<String, ?> newPrefKeyDataForSync = ctx.getSharedPreferences(PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC, MODE_PRIVATE).getAll();
+            for (Map.Entry<String, ?> entry : newPrefKeyDataForSync.entrySet()) {
+                String assignmentId = entry.getKey();
+                SendNewProduct sendNewProduct = new SendNewProduct(ctx, "", CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST, assignmentId);
+                sendNewProduct.execute();
+            }
         }
+        else
+        {
+            Map<String, ?> newProductDataForSync = ctx.getSharedPreferences(PREF_FILE_NEW_PRODUCTS_FOR_SYNC, MODE_PRIVATE).getAll();
+            for (Map.Entry<String, ?> entry : newProductDataForSync.entrySet()) {
+                String prefKey = entry.getKey();
+
+                SendNewProduct sendNewProduct = new SendNewProduct(ctx, prefKey, CONST_DO_NOT_SHOW_PROGRESS_AND_TOAST,"");
+                sendNewProduct.execute();
+            }
+        }
+
 
         Map<String, ?> updatedAttributesDataForSync = ctx.getSharedPreferences(PREF_FILE_UPDATED_ATTRIBUTES_FOR_SYNC, MODE_PRIVATE).getAll();
         for (Map.Entry<String, ?> entry : updatedAttributesDataForSync.entrySet()) {
