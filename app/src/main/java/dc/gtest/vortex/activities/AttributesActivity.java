@@ -120,7 +120,8 @@ public class AttributesActivity extends BaseDrawerActivity {
         if (MyUtils.isNetworkAvailable()) {
             String _assignmentId = searchSerial ? "0" : SELECTED_ASSIGNMENT.getAssignmentId();
             String idValue = searchSerial ? SELECTED_PRODUCT.getIdentityValue() : "";
-            GetProducts getProducts = new GetProducts(this, _assignmentId, true, "0", false, idValue);
+            GetProducts getProducts = new GetProducts(this, _assignmentId, true, "0",
+                    false, idValue, false);
             getProducts.execute();
         }
     }

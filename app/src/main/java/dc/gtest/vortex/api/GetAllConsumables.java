@@ -7,6 +7,7 @@ import dc.gtest.vortex.adapters.AllConsumablesRvAdapter;
 import dc.gtest.vortex.data.AllConsumablesData;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.StartupLoadTracker;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ALL_CONSUMABLES;
 import static dc.gtest.vortex.api.MyApi.API_GET_PICKING_LIST;
@@ -34,14 +35,16 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
     private int responseCode;
     private String responseMessage;
     private String responseBody;
+    private boolean useStartupTracker;
 
     public GetAllConsumables(AllConsumablesRvAdapter allConsumablesRvAdapter, String AssignmentId, boolean warehouseProducts,
-                             boolean PickingList, String ProjectWarehouseId) {
+                             boolean PickingList, String ProjectWarehouseId, boolean useStartupTracker) {
         this.allConsumablesRvAdapter = allConsumablesRvAdapter;
         this.AssignmentId = AssignmentId;
         this.warehouseProducts = warehouseProducts;
         this.pickingList = PickingList;
         this.projectWarehouseId = ProjectWarehouseId;
+        this.useStartupTracker = useStartupTracker;
     }
 
     @Override
@@ -78,6 +81,10 @@ public class GetAllConsumables extends AsyncTask<String, Void, String > {
     @Override
     protected void onPostExecute(String responseBody) {
         MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, "no_body_for_get_request", responseCode, responseMessage, ""); //response body too long
+
+        if (useStartupTracker){
+            StartupLoadTracker.jobDone();
+        }
 
         if ( responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ALL_CONSUMABLES, responseBody);

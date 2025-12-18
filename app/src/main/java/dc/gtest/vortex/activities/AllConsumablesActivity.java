@@ -145,7 +145,7 @@ public class AllConsumablesActivity extends BaseDrawerActivity {
 
         if (RelatedConsumables.isEmpty() || MyUtils.isNetworkAvailable()) {
             GetAllConsumables getAllConsumables = new GetAllConsumables(allConsumablesRvAdapter, assignmentId, WarehouseProducts,
-                                            selectFromPicking, siteWarehouseProducts ? _projectWarehouseId : "0");
+                                            selectFromPicking, siteWarehouseProducts ? _projectWarehouseId : "0", false);
             getAllConsumables.execute();
         }
 

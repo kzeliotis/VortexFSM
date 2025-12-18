@@ -25,8 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.api.PriorityApiExecutors;
+import dc.gtest.vortex.api.PriorityTask;
 import dc.gtest.vortex.api.SendCheckOut;
 import dc.gtest.vortex.api.SendStartTravel;
+import dc.gtest.vortex.api.SendStartTravelExecutor;
 import dc.gtest.vortex.models.CheckInCheckOutModel;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyDialogs;
@@ -466,6 +469,9 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
                 if (MyUtils.isNetworkAvailable() ) {
                     SendStartTravel sendStartTravel = new SendStartTravel(AssignmentDetailActivity.this, assignmentId, CONST_SHOW_PROGRESS_AND_TOAST);
                     sendStartTravel.execute();
+
+                    //new SendStartTravelExecutor(AssignmentDetailActivity.this, assignmentId, CONST_SHOW_PROGRESS_AND_TOAST, PriorityTask.HIGH).execute();
+
                 } else {
                     MyDialogs.showOK(AssignmentDetailActivity.this, localized_no_internet_data_saved);
                 }

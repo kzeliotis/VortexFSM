@@ -21,7 +21,7 @@ public class StatusesData {
             STATUSES_LIST.clear();
         }
 
-        if (!statuses.isEmpty()) {
+        if (statuses != null && !statuses.isEmpty()) {
             try {
                 JSONArray jArrayDataFromApi = new JSONArray(statuses);
 

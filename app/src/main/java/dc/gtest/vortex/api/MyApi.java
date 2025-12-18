@@ -69,6 +69,7 @@ class MyApi {
     static final String API_SET_ASSIGNMENT_ATTACHMENT = "/Vortex.svc/SetAssignmentAttachment";
     static final String API_SET_VORTEX_ATTACHMENT = "/Vortex.svc/SetVortexAttachment";
     static final String API_GET_ZONES = "/Vortex.svc/GetProjectZones?ProjectId=";
+    static final String API_GET_ZONES_FULL = "/Vortex.svc/GetProjectZonesFull";
     static final String API_GET_ZONE_PRODUCTS = "/Vortex.svc/GetZoneProducts?ZoneId=";
     static final String API_SEND_ZONE_PRODUCTS_MEASUREMENTS = "/Vortex.svc/SetProductMeasurements";
     static final String API_SEND_CONSUMABLES = "/Vortex.svc/InsertConsumables";

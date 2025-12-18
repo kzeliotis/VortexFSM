@@ -88,7 +88,8 @@ public class DeleteAttribute extends AsyncTask<String, Void, String > {
             Toast.makeText(ctx, localized_attribute_deleted, Toast.LENGTH_LONG).show();
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false, "");
+                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true,
+                        "0", false, "", false);
                 getProducts.execute();
             }
 

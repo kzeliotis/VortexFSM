@@ -29,7 +29,7 @@ public class ZoneProductsData {
         String ProjectId = projectId.isEmpty() ? MyPrefs.getString(PREF_PROJECT_ID, "") : projectId;
         String prefKey = ProjectId + "_" + zoneId + "_" + AssignmentId;
 
-        if (zoneProducts.isEmpty()) {
+        if (zoneProducts.isEmpty() || zoneProducts.equals("[]")) {
             zoneProducts = MyPrefs.getStringWithFileName(PREF_FILE_ZONE_PRODUCTS_DATA_FOR_SHOW, prefKey, "");
         }
 

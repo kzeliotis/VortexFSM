@@ -467,7 +467,6 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -486,7 +485,8 @@ public class ZoneProductsActivity extends BaseDrawerActivity{
                         })
                         .show();
             } else {
-                finish();
+                super.onBackPressed();
+                //finish();
             }
 
         }

@@ -382,7 +382,8 @@ public class ProductTreeActivity extends BaseDrawerActivity {
 
 
         if (MyUtils.isNetworkAvailable()) {
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts, "");
+            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true,
+                    projectInstallationId, selectProducts, "", false);
             getProducts.execute();
         }
 
@@ -566,7 +567,7 @@ public class ProductTreeActivity extends BaseDrawerActivity {
                 e.printStackTrace();
             }
         }
-        ZonesData.generate(false, "", "");
+        ZonesData.generate(false, "", "", this);
 
         String InstZones = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW,  SELECTED_INSTALLATION.getProjectInstallationId(), "");
         if(InstZones.isEmpty()){

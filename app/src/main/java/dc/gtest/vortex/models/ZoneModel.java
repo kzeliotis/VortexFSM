@@ -1,17 +1,31 @@
 package dc.gtest.vortex.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class ZoneModel {
 
+    @SerializedName("ZoneId")
     private String zoneId = "";
+    @SerializedName("ProjectId")
     private String projectId = "";
+    @SerializedName("ProjectZoneDescription")
     private String zoneName = "";
     private String zoneFullName = "";
+    @SerializedName("ProjectZoneNotes")
     private String zoneNotes = "";
+    @SerializedName("ProjectInstallationId")
     private String projectInstallationId = "";
+    @SerializedName("ProjectZoneCode")
     private String zoneCode = "";
+    @SerializedName("CustomFieldsString")
     private String customFieldsString = "";
+    private String ZoneProducts = "";
+    @SerializedName("CustomFields")
     private List<CustomFieldModel> customFields;
 
     public String getZoneId() {

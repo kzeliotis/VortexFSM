@@ -34,6 +34,7 @@ import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
+import dc.gtest.vortex.support.StartupLoadTracker;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ASSIGNMENT_PRODUCTS;
 import static dc.gtest.vortex.api.MyApi.API_GET_PROJECT_PRODUCT_BY_IDENTITY;
@@ -72,20 +73,23 @@ public class GetProducts extends AsyncTask<String, Void, String > {
     private final boolean hideProgress;
     private final boolean selectProductsForInstallation;
     private final String idValue;
+    private final boolean useStartupTracker;
 
-    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId, boolean SelectProductForInstallation, String idValue) {
+    public GetProducts(Context ctx, String assignmentId, boolean hideProgress, String projectInstallationId,
+                       boolean SelectProductForInstallation, String idValue, boolean useStartupTracker) {
         this.ctx = ctx;
         this.assignmentId = assignmentId;
         this.projectInstallationId = projectInstallationId;
         this.hideProgress = hideProgress;
         this.selectProductsForInstallation = SelectProductForInstallation;
         this.idValue = idValue;
+        this.useStartupTracker = useStartupTracker;
     }
 
     @Override
     protected void onPreExecute() {
 
-        if (ctx != null) {
+        if (ctx != null && !useStartupTracker) {
             mProgressBar = ((Activity) ctx).findViewById(R.id.progressBar);
             if (mProgressBar != null) {
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -133,10 +137,13 @@ public class GetProducts extends AsyncTask<String, Void, String > {
     @Override
     protected void onPostExecute(String responseBody) {
 
-        if (hideProgress && mProgressBar != null) {
+        if (hideProgress && mProgressBar != null && !useStartupTracker) {
             mProgressBar.setVisibility(View.GONE);
-
 //            Log.e(LOG_TAG, "================================== onPostExecute assignmentId: " + assignmentId);
+        }
+
+        if (useStartupTracker){
+            StartupLoadTracker.jobDone();
         }
 
         // for log

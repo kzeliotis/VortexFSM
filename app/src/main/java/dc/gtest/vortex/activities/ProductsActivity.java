@@ -402,7 +402,8 @@ public class ProductsActivity extends BaseDrawerActivity {
         if (MyUtils.isNetworkAvailable()) {
             String _assignmentId = searchSerial ? "0" : SELECTED_ASSIGNMENT.getAssignmentId();
             String idValue = searchSerial ? scannedSerial : "";
-            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId, selectProducts, idValue);
+            GetProducts getProducts = new GetProducts(this, SELECTED_ASSIGNMENT.getAssignmentId(), true, projectInstallationId,
+                                        selectProducts, idValue, false);
             getProducts.execute();
 
         }
@@ -599,7 +600,7 @@ public class ProductsActivity extends BaseDrawerActivity {
                 e.printStackTrace();
             }
         }
-        ZonesData.generate(false, "", "");
+        ZonesData.generate(false, "", "", this);
 
         String InstZones = MyPrefs.getStringWithFileName(PREF_FILE_INSTALLATION_ZONES_DATA_FOR_SHOW,  SELECTED_INSTALLATION.getProjectInstallationId(), "");
         if(InstZones.isEmpty()){

@@ -1296,7 +1296,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                                     try{
                                         String result_ = getZones.execute(SELECTED_ASSIGNMENT.getProjectId()).get();
                                         result_= "";
-                                        ZonesData.generate(true, "", "");
+                                        ZonesData.generate(true, "", "", this);
                                     } catch (Exception e){
                                         e.printStackTrace();
                                     }

@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.activities.AssignmentsActivity;
@@ -26,8 +27,11 @@ import dc.gtest.vortex.adapters.AssignmentsRvAdapter;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.data.AssignmentsData;
 import dc.gtest.vortex.models.AssignmentModel;
+import dc.gtest.vortex.models.AssignmentProjectZonesModel;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
+import dc.gtest.vortex.support.StartupLoadTracker;
+import dc.gtest.vortex.support.UiThread;
 
 import static dc.gtest.vortex.api.MyApi.API_GET_ASSIGNMENTS;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_BODY;
@@ -47,6 +51,8 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static android.content.Context.MODE_PRIVATE;
+
+import com.google.gson.Gson;
 
 public class GetAssignments extends AsyncTask<String, Void, String > {
 
@@ -141,12 +147,47 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
             if (downloadAllData) {
                 // get and save products data
 
+                int totalJobs = 0;
+                // Products + consumables
+                if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)) {
+                    totalJobs += ASSIGNMENTS_LIST.size() * 2;
+                }
+
+                // Zones (single aggregated call)
+                if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, true)) {
+                    totalJobs += 1;
+                }
+
+                // History (skip invalid IDs)
+                if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)) {
+                    for (String assId : AssignmentIds) {
+                        if (!assId.contains("-")) {
+                            totalJobs++;
+                        }
+                    }
+                }
+
+                StartupLoadTracker.start(
+                        totalJobs,
+                        () -> UiThread.run(() -> {
+                            mProgressBar.setVisibility(View.GONE);
+                            Log.e(LOG_TAG, "✅ ALL STARTUP DATA LOADED");
+                        })
+                );
+
+                // Show loader once
+                mProgressBar.setVisibility(View.VISIBLE);
+
+
+
                 if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
                     for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
-                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, "0", false, "");
+                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false,
+                                "0", false, "", true);
                         getProducts.execute();
 
-                        GetAllConsumables getAllConsumables = new GetAllConsumables(null, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "");
+                        GetAllConsumables getAllConsumables = new GetAllConsumables(null,
+                                ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "", true);
                         getAllConsumables.execute();
 
                     }
@@ -154,11 +195,21 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
 
                 if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, true)) {
+                    List<AssignmentProjectZonesModel> apz = new ArrayList<>();
                     for (AssignmentModel assignment : ASSIGNMENTS_LIST) {
                         String projectId = assignment.getProjectId();
-                        GetZones getZones = new GetZones(ctx, null, true, "0", assignment.getAssignmentId());
-                        getZones.execute(projectId);
+                        AssignmentProjectZonesModel az = new AssignmentProjectZonesModel();
+                        az.setAssignmentId(Integer.parseInt(assignment.getAssignmentId()));
+                        az.setProjectId(Integer.parseInt(projectId));
+                        apz.add(az);
+//                        GetZones getZones = new GetZones(ctx, null, true, "0", assignment.getAssignmentId());
+//                        getZones.execute(projectId);
+
                     }
+                    Gson gson = new Gson();
+                    String apz_json = gson.toJson(apz);
+                    new GetZonesExecutor((Activity)ctx, true, PriorityTask.LOW, apz_json, true).execute();
+
                 }
 
 
@@ -167,17 +218,37 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
 
 
                 if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
+
+                    int lastValidIndex = -1;
+                    GetHistoryExecutor.setSemaphore(new Semaphore(3));
+
+                    // Find the LAST valid assignment (not containing "-")
+                    for (int i = 0; i < AssignmentIds.size(); i++) {
+                        if (!AssignmentIds.get(i).contains("-")) {
+                            lastValidIndex = i;
+                        }
+                    }
+
                     for (int i = 0; i < AssignmentIds.size(); i++) {
 
                         boolean hideProgress = false;
 
-                        if (i == AssignmentIds.size() - 1) {
-                            hideProgress = true;
-                        }
+                        hideProgress = (i == lastValidIndex);
+
                         String AssId = AssignmentIds.get(i);
                         if (!AssId.contains("-")) {
-                            GetHistory getHistory = new GetHistory(ctx, AssignmentIds.get(i), hideProgress, false, "0");
-                            getHistory.execute();
+//                            GetHistory getHistory = new GetHistory(ctx, AssignmentIds.get(i), hideProgress, false, "0");
+//                            getHistory.execute();
+
+                            new GetHistoryExecutor(
+                                    (Activity) ctx,          // Activity (or null if background)
+                                    AssignmentIds.get(i),                   // AssignmentId
+                                    hideProgress,            // hideProgress
+                                    false,                   // subAssignments
+                                    "0",                     // projectInstallationId
+                                    PriorityTask.LOW,         // Priority
+                                    true
+                            ).execute();
                         }
 
                     }

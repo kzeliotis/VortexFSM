@@ -172,7 +172,8 @@ public class SendNewProduct extends AsyncTask<String, Void, String> {
             }
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false, "");
+                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true,
+                        "0", false, "", false);
                 getProducts.execute();
 
                 if (!MyPrefs.getString(PREF_WAREHOUSEID, "0").equals("0")) {

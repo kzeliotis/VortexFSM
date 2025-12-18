@@ -117,7 +117,7 @@ public class GetZones extends AsyncTask<String, Void, String > {
                 String _AssignmentId = AssignmentId.isEmpty() ? SELECTED_ASSIGNMENT.getAssignmentId() : AssignmentId;
                 MyPrefs.setStringWithFileName(PREF_FILE_ZONES_DATA_FOR_SHOW, _AssignmentId, responseBody);
 
-                ZonesData.generate(refresh, _AssignmentId, ProjectId);
+                ZonesData.generate(refresh, _AssignmentId, ProjectId, ctx);
 
                 if (zonesRvAdapter != null) {
                     zonesRvAdapter.notifyDataSetChanged();

@@ -98,7 +98,8 @@ public class SendUpdatedAttribute extends AsyncTask<String, Void, String > {
             Toast.makeText(ctx, localized_data_sent_2_rows, Toast.LENGTH_LONG).show();
 
             if (MyUtils.isNetworkAvailable()) {
-                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true, "0", false, "");
+                GetProducts getProducts = new GetProducts(ctx, SELECTED_ASSIGNMENT.getAssignmentId(), true,
+                        "0", false, "", false);
                 getProducts.execute();
             }
         } else if (responseBody != null && responseBody.equals("2")) {

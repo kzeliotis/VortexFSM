@@ -85,7 +85,7 @@ public class ZonesActivity extends BaseDrawerActivity {
 
 
         if (!Zones.isEmpty() && !refresh) {
-            ZonesData.generate(false, "", "");
+            ZonesData.generate(false, "", "", this);
             zonesRvAdapter.notifyDataSetChanged();
         } else {
             if (MyUtils.isNetworkAvailable()) {
