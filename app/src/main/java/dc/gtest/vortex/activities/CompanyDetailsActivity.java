@@ -21,6 +21,7 @@ import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MySliderMenu;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyGlobals.PROJECTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_COMPANY;
 import static dc.gtest.vortex.support.MyLocalization.localized_business_title;
@@ -108,7 +109,8 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
         ProjectsData.generate("");
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        projectsRvAdapter = new ProjectsRvAdapter(PROJECTS_LIST_FILTERED, CompanyDetailsActivity.this, isForNewAssignment);
+        String scannedCodeForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
+        projectsRvAdapter = new ProjectsRvAdapter(PROJECTS_LIST_FILTERED, CompanyDetailsActivity.this, isForNewAssignment, scannedCodeForNewAssignment);
         rvProjects.setAdapter(projectsRvAdapter);
     }
 

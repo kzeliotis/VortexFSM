@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -78,6 +79,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_site_
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_technicians_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_warehouse;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
+import static dc.gtest.vortex.support.MyLocalization.localized_create_serial_question;
 import static dc.gtest.vortex.support.MyLocalization.localized_create_workorder;
 import static dc.gtest.vortex.support.MyLocalization.localized_create_workorder_on_asset;
 import static dc.gtest.vortex.support.MyLocalization.localized_filter_by_type;
@@ -350,12 +352,22 @@ public class ProductsActivity extends BaseDrawerActivity {
                             .setNegativeButton(R.string.no, null)
                             .show();
 
+                }else{
+                    new AlertDialog.Builder(this)
+                            .setMessage(MessageFormat.format(localized_create_serial_question, scannedSerial))
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                dialog.dismiss();
+
+                                Intent intent = new Intent(ProductsActivity.this, NewAssignmentActivity.class);
+                                intent.putExtra(KEY_ID_SCANNED_SERIAL, scannedSerial);
+                                startActivity(intent);
+                                finish();
+
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
                 }
-
             }
-
-
-
         });
 
         PRODUCTS_LIST.clear();

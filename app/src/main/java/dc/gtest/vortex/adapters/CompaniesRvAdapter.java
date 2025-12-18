@@ -26,12 +26,14 @@ public class CompaniesRvAdapter extends RecyclerView.Adapter<CompaniesRvAdapter.
     private final List<CompanyModel> mValues;
     private final CustomFilter mFilter;
     private final boolean isForNewAssignment;
+    private final String scannedCodeForNewAssignment;
 
-    public CompaniesRvAdapter(List<CompanyModel> items, Context ctx, boolean isForNewAssignment) {
+    public CompaniesRvAdapter(List<CompanyModel> items, Context ctx, boolean isForNewAssignment, String serial) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         mValues = items;
         mFilter = new CustomFilter(CompaniesRvAdapter.this);
+        this.scannedCodeForNewAssignment = serial;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class CompaniesRvAdapter extends RecyclerView.Adapter<CompaniesRvAdapter.
             //SELECTED_COMPANY = holder.mItem;
 
             if (MyUtils.isNetworkAvailable()) {
-                new GetCustomers(ctx, isForNewAssignment, holder.mItem.getCompanyId(), "").execute(
+                new GetCustomers(ctx, isForNewAssignment, holder.mItem.getCompanyId(), "", scannedCodeForNewAssignment).execute(
                         "",
                         "",
                         "",

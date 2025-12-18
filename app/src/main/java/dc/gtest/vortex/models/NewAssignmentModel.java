@@ -31,6 +31,7 @@ public class NewAssignmentModel {
     private final String AssignmentSource = "Mobile";
     private String masterProjectId = "";
     private String masterProjectDescription = "";
+    private String serialNumber = "";
     @Override
     public String toString() {
 
@@ -66,6 +67,7 @@ public class NewAssignmentModel {
                 "  \"DetTypeDescription\": \"" + assignmentTypeDescription + "\",\n" +
                 "  \"StatusCode\": \"" + statusCode + "\",\n" +
                 "  \"StatusDescription\": \"" + statusDescription + "\",\n" +
+                "  \"serialNumber\": \"" + serialNumber + "\",\n" +
                 "  \"ERPID\": \"\",\n" +
                 "  \"MasterProjectDescription\": \"" + masterProjectDescription + "\",\n" +
                 "  \"UserId\": \"" + MyPrefs.getString(MyPrefs.PREF_USERID, "0") + "\",\n" +
@@ -279,4 +281,11 @@ public class NewAssignmentModel {
         this.assignmentIndicatorsDescription = AssignmentIndicatorsDescription;
     }
 
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 }

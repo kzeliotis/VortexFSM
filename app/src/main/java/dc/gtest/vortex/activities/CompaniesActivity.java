@@ -16,6 +16,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 
 import static dc.gtest.vortex.support.MyGlobals.COMPANIES_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyLocalization.localized_companies;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
@@ -36,7 +37,8 @@ public class CompaniesActivity extends BaseDrawerActivity {
         RecyclerView rvCompanies = findViewById(R.id.rvCompanies);
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        companiesRvAdapter = new CompaniesRvAdapter(COMPANIES_LIST_FILTERED, CompaniesActivity.this, isForNewAssignment);
+        String scannedCodeForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
+        companiesRvAdapter = new CompaniesRvAdapter(COMPANIES_LIST_FILTERED, CompaniesActivity.this, isForNewAssignment, scannedCodeForNewAssignment);
         rvCompanies.setAdapter(companiesRvAdapter);
     }
 

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import dc.gtest.vortex.support.MyUtils;
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.KEY_ASSIGNMENT_DATE;
 import static dc.gtest.vortex.support.MyGlobals.KEY_CUSTOMERID;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PRODUCTID;
 import static dc.gtest.vortex.support.MyGlobals.KEY_PROJECT_PRODUCT_ID;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
@@ -110,6 +112,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
     private TextInputLayout tilNewAssignmentEndTime;
     private EditText etNewAssignmentEndTime;
 
+    private String scannedCode = "";
 
     private Button btnAddNewAssignment;
 
@@ -180,6 +183,25 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
         NEW_ASSIGNMENT = new NewAssignmentModel();
         UserPartnerResourcesData.generate(MyPrefs.getString(PREF_DATA_USER_PARTNER_RESOURCES, ""));
+
+        scannedCode = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
+
+        if(scannedCode != null && !scannedCode.isEmpty()){
+            tilNewAssignmentProblem.setVisibility(View.GONE);
+            tvNewAssignmentResources.setVisibility(View.GONE);
+            tvNewAssignmentType.setVisibility(View.GONE);
+            tvNewAssignmentStatus.setVisibility(View.GONE);
+            tvNewAssignmentIndicators.setVisibility(View.GONE);
+            tvNewAssignmentMasterProject.setVisibility(View.GONE);
+            tilNewAssignmentProblem.setVisibility(View.GONE);
+            LinearLayout llNewAssignmentStartDateTime = findViewById(R.id.llNewAssignmentStartDateTime);
+            LinearLayout llNewAssignmentEndDateTime = findViewById(R.id.llNewAssignmentEndDateTime);
+            llNewAssignmentStartDateTime.setVisibility(View.GONE);
+            llNewAssignmentEndDateTime.setVisibility(View.GONE);
+            tvNewAssignmentService.setVisibility(View.GONE);
+
+        }
+
 
         showDialogToSelectCustomer();
     }
@@ -326,7 +348,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             case R.id.tvNewAssignmentProject:
                 if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
                     if (MyUtils.isNetworkAvailable()) {
-                        new GetCustomers(NewAssignmentActivity.this, true, NEW_ASSIGNMENT.getCustomerId(), "").execute(
+                        new GetCustomers(NewAssignmentActivity.this, true, NEW_ASSIGNMENT.getCustomerId(), "", scannedCode).execute(
                                 "",
                                 "",
                                 "",
@@ -341,23 +363,29 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             case R.id.tvNewAssignmentProduct:
                 if (!NEW_ASSIGNMENT.getProjectId().isEmpty()){
 
-                    new AlertDialog.Builder(this)
-                            .setMessage(localized_select_product_from_project)
-                            .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                dialog.dismiss();
-                                intent = new Intent(NewAssignmentActivity.this, SearchProductsActivity.class);
-                                intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            })
-                            .setNegativeButton(R.string.no, (dialog, which) -> {
-                                dialog.dismiss();
-                                intent = new Intent(NewAssignmentActivity.this, AllProductsActivity.class);
-                                intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            })
-                            .show();
+                    if(!scannedCode.isEmpty()){
+                        intent = new Intent(NewAssignmentActivity.this, AllProductsActivity.class);
+                        intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                        intent.putExtra(KEY_ID_SCANNED_SERIAL, scannedCode);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }else{
+                        new AlertDialog.Builder(this)
+                                .setMessage(localized_select_product_from_project)
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    intent = new Intent(NewAssignmentActivity.this, SearchProductsActivity.class);
+                                    intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                })
+                                .setNegativeButton(R.string.no, (dialog, which) -> {
+                                    dialog.dismiss();
+
+                                })
+                                .show();
+                    }
+
                 }
                 //intent = new Intent(NewAssignmentActivity.this, AllProductsActivity.class);
 
@@ -597,6 +625,28 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             return;
         }
 
+        if(!scannedCode.isEmpty()){
+            NEW_ASSIGNMENT.setAssignmentSourceProcedure("SCANNED ASSET WORK ORDER");
+            NEW_ASSIGNMENT.setSerialNumber(scannedCode);
+            NEW_ASSIGNMENT.setCurrentTime("");
+            NEW_ASSIGNMENT.setDateStart("");
+            NEW_ASSIGNMENT.setDateEnd("");
+
+            String prefKey = UUID.randomUUID().toString();
+            MyPrefs.setStringWithFileName(PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC, prefKey, NEW_ASSIGNMENT.toString());
+
+            if (MyUtils.isNetworkAvailable()) {
+                SendNewAssignment sendNewAssignment = new SendNewAssignment(NewAssignmentActivity.this, prefKey, true);
+                sendNewAssignment.execute(prefKey);
+            } else {
+                Toast.makeText(NewAssignmentActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return;
+        }
+
+
+
         if (NEW_ASSIGNMENT.getServiceId().isEmpty()) {
             Toast.makeText(this, localized_select_service, Toast.LENGTH_SHORT).show();
             return;
@@ -653,25 +703,36 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
     }
 
     private void showDialogToSelectCustomer() {
-        new AlertDialog.Builder(NewAssignmentActivity.this)
-                .setMessage(localized_choose_customer)
-                .setNeutralButton(localized_new_customer, (dialog, which) -> {
-                    dialog.dismiss();
 
-                    Intent intentNewAssignment = new Intent(NewAssignmentActivity.this, NewCustomerActivity.class);
-                    intentNewAssignment.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
-                    intentNewAssignment.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intentNewAssignment);
-                })
-                .setPositiveButton(localized_existing_customer, (dialog, which) -> {
-                    dialog.dismiss();
+        if(scannedCode.isEmpty()){
+            new AlertDialog.Builder(NewAssignmentActivity.this)
+                    .setMessage(localized_choose_customer)
+                    .setNeutralButton(localized_new_customer, (dialog, which) -> {
+                        dialog.dismiss();
 
-                    Intent intentNewAssignment = new Intent(NewAssignmentActivity.this, SearchCustomersActivity.class);
-                    intentNewAssignment.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
-                    intentNewAssignment.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intentNewAssignment);
-                })
-                .show();
+                        Intent intentNewAssignment = new Intent(NewAssignmentActivity.this, NewCustomerActivity.class);
+                        intentNewAssignment.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                        intentNewAssignment.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentNewAssignment);
+                    })
+                    .setPositiveButton(localized_existing_customer, (dialog, which) -> {
+                        dialog.dismiss();
+
+                        Intent intentNewAssignment = new Intent(NewAssignmentActivity.this, SearchCustomersActivity.class);
+                        intentNewAssignment.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                        intentNewAssignment.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentNewAssignment);
+                    })
+                    .show();
+        }else{
+            Intent intentNewAssignment = new Intent(NewAssignmentActivity.this, SearchCustomersActivity.class);
+            intentNewAssignment.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+            intentNewAssignment.putExtra(KEY_ID_SCANNED_SERIAL, scannedCode);
+            intentNewAssignment.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentNewAssignment);
+        }
+
+
     }
 
     private boolean checkResourcesAvailability() throws ParseException {

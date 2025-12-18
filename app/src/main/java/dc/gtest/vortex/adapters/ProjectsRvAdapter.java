@@ -1,6 +1,8 @@
 package dc.gtest.vortex.adapters;
 
 import android.content.Context;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import dc.gtest.vortex.api.GetCustomers;
 import dc.gtest.vortex.models.ProjectModel;
 import dc.gtest.vortex.support.MyUtils;
 
+import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.PROJECTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PROJECTS_LIST_FILTERED;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_COMPANY;
@@ -30,12 +33,14 @@ public class ProjectsRvAdapter extends RecyclerView.Adapter<ProjectsRvAdapter.Vi
     private final List<ProjectModel> mValues;
     private final CustomFilter mFilter;
     private final boolean isForNewAssignment;
+    private final String scannedCodeForNewAssignment;
 
-    public ProjectsRvAdapter(List<ProjectModel> items, Context ctx, boolean isForNewAssignment) {
+    public ProjectsRvAdapter(List<ProjectModel> items, Context ctx, boolean isForNewAssignment, String serial) {
         this.ctx = ctx;
         this.isForNewAssignment = isForNewAssignment;
         mValues = items;
         mFilter = new CustomFilter(ProjectsRvAdapter.this);
+        this.scannedCodeForNewAssignment = serial;
     }
 
     @Override
@@ -53,34 +58,30 @@ public class ProjectsRvAdapter extends RecyclerView.Adapter<ProjectsRvAdapter.Vi
             //SELECTED_PROJECT = holder.mItem;
 
             Log.e(LOG_TAG, "---------- SELECTED_PROJECT: \n" + SELECTED_PROJECT);
-            SELECTED_PROJECT.clearModel();
-            String CustomerId = SELECTED_COMPANY.getCompanyId();
-            SELECTED_COMPANY.clearModel();
+            if(!scannedCodeForNewAssignment.isEmpty()){
+                NEW_ASSIGNMENT.setProjectId(holder.mItem.getProjectId());
+                NEW_ASSIGNMENT.setProjectDescription(holder.mItem.getProjectDescription());
+                NEW_ASSIGNMENT.setProductId("");        // clear selected product when selecting project
+                NEW_ASSIGNMENT.setProjectProductId("");
+                NEW_ASSIGNMENT.setProductDescription("");
+                ((AppCompatActivity) ctx).finish();
+            } else {
+                SELECTED_PROJECT.clearModel();
+                String CustomerId = SELECTED_COMPANY.getCompanyId();
+                SELECTED_COMPANY.clearModel();
 
 
-            if (MyUtils.isNetworkAvailable()) {
-                new GetCustomers(ctx, isForNewAssignment,CustomerId, holder.mItem.getProjectId()).execute(
-                        "",
-                        "",
-                        "",
-                        "",
-                        ""
-                );
+                if (MyUtils.isNetworkAvailable()) {
+                    new GetCustomers(ctx, isForNewAssignment,CustomerId, holder.mItem.getProjectId(), scannedCodeForNewAssignment).execute(
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                    );
+                }
             }
 
-//            Intent intent = new Intent(ctx, SearchProductsActivity.class);
-//            intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);        Transferred to GetCustomers
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            ctx.startActivity(intent);
-//
-//            if (isForNewAssignment) {
-//                NEW_ASSIGNMENT.setProjectId(holder.mItem.getProjectId());
-//                NEW_ASSIGNMENT.setProjectDescription(holder.mItem.getProjectDescription());
-//                NEW_ASSIGNMENT.setProductId("");        // clear selected product when selecting project
-//                NEW_ASSIGNMENT.setProjectProductId("");
-//                NEW_ASSIGNMENT.setProductDescription("");
-//                ((AppCompatActivity) ctx).finish(); // finish activity to go back to new assignment
-//            }
         });
     }
 

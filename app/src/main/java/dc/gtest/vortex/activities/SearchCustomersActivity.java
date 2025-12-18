@@ -16,6 +16,7 @@ import dc.gtest.vortex.support.MySliderMenu;
 import dc.gtest.vortex.support.MyUtils;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyLocalization.localized_address;
 import static dc.gtest.vortex.support.MyLocalization.localized_name;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_try_later_2_lines;
@@ -63,12 +64,13 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
         btnSearchCustomers = findViewById(R.id.btnSearchCustomers);
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
+        String scannedSerialForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
 
         btnSearchCustomers.setOnClickListener(v -> {
             MyUtils.hideKeypad(SearchCustomersActivity.this, btnSearchCustomers);
 
             if (MyUtils.isNetworkAvailable()) {
-                new GetCustomers(SearchCustomersActivity.this, isForNewAssignment, "", "").execute(
+                new GetCustomers(SearchCustomersActivity.this, isForNewAssignment, "", "", scannedSerialForNewAssignment).execute(
                         etSearchCustomersName.getText().toString(),
                         etSearchCustomersPhone.getText().toString(),
                         etSearchCustomersAddress.getText().toString(),

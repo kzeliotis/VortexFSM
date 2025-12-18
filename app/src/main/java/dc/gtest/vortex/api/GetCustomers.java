@@ -27,6 +27,7 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_CODE;
 import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.COMPANIES_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CONST_IS_FOR_NEW_ASSIGNMENT;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyGlobals.NEW_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_COMPANY;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PROJECT;
@@ -44,6 +45,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
     private final boolean isForNewAssignment;
     private final String CustomerId;
     private final String ProjectId;
+    private final String scannedCodeForNewAssignment;
 
 
     private String apiUrl;
@@ -52,7 +54,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
     private String responseMessage;
     private String responseBody;
 
-    public GetCustomers(Context ctx, boolean isForNewAssignment, String CustomerId, String ProjectId) {
+    public GetCustomers(Context ctx, boolean isForNewAssignment, String CustomerId, String ProjectId, String serial) {
 
         this.ctx = ctx;
 
@@ -60,6 +62,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
         this.isForNewAssignment = isForNewAssignment;
         this.CustomerId = CustomerId;
         this.ProjectId = ProjectId;
+        this.scannedCodeForNewAssignment = serial;
 
     }
 
@@ -127,6 +130,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
             if (COMPANIES_LIST.size() > 0) {
                 Intent intent = new Intent(ctx, CompaniesActivity.class);
                 intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);
+                intent.putExtra(KEY_ID_SCANNED_SERIAL, scannedCodeForNewAssignment);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 ctx.startActivity(intent);
 
@@ -143,6 +147,7 @@ public class GetCustomers extends AsyncTask<String, Void, String > {
                 if (ProjectId == "") {
                     Intent intent = new Intent(ctx, CompanyDetailsActivity.class);
                     intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, isForNewAssignment);
+                    intent.putExtra(KEY_ID_SCANNED_SERIAL, scannedCodeForNewAssignment);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     ctx.startActivity(intent);
 

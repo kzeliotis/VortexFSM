@@ -1438,4 +1438,8 @@
     <string name="product_saved_to_send_on_check_out_gr">Το προϊόν αποθηκεύθηκε για αποστολή κάτα το Check Out</string>
     <string name="product_saved_to_send_on_check_out_ar">Product has been saved to be sent on Check Out</string>
 
+    <string name="create_serial_question">Do you want to create a new item with serial number \'\'{0}\'\'?</string>
+    <string name="create_serial_question_gr">Θέλετε να καταχωρήσετε νέο είδος με τον σεριακό αριθμό \'\'{0}\'\';</string>
+    <string name="create_serial_question_ar">Do you want to create a new item with serial number \'\'{0}\'\'?</string>
+
 </resources>

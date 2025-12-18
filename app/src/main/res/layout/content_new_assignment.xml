@@ -129,6 +129,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/llNewAssignmentStartDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -188,6 +189,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llNewAssignmentEndDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

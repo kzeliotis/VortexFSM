@@ -283,6 +283,7 @@ public class MyLocalization {
     public static String localized_choose_product_from = "";
     public static String localized_warranty_extension = "";
     public static String localized_product_saved_to_send_on_check_out = "";
+    public static String localized_create_serial_question = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -558,6 +559,7 @@ public class MyLocalization {
                 localized_choose_product_from = ctx.getString(R.string.choose_product_from_gr);
                 localized_warranty_extension = ctx.getString(R.string.additional_warranty_gr);
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out_gr);
+                localized_create_serial_question = ctx.getString(R.string.create_serial_question_gr);
                 break;
 
             case CONST_AR:
@@ -830,6 +832,7 @@ public class MyLocalization {
                 localized_choose_product_from = ctx.getString(R.string.choose_product_from_ar);
                 localized_warranty_extension = ctx.getString(R.string.additional_warranty_ar);
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out_ar);
+                localized_create_serial_question = ctx.getString(R.string.create_serial_question_ar);
                 break;
 
             default:
@@ -1103,6 +1106,7 @@ public class MyLocalization {
                 localized_choose_product_from = ctx.getString(R.string.choose_product_from);
                 localized_warranty_extension = ctx.getString(R.string.additional_warranty);
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out);
+                localized_create_serial_question = ctx.getString(R.string.create_serial_question);
                 break;
 
 

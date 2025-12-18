@@ -200,10 +200,11 @@ public class GetProducts extends AsyncTask<String, Void, String > {
                             Toast toast = Toast.makeText(MyApplication.getContext(), localized_no_product, Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                            if (!idValue.isEmpty()){
-                                Button btnAddNewProduct = ((AppCompatActivity)ctx).findViewById(R.id.btnAddNewProduct);
-                                if(btnAddNewProduct != null) {btnAddNewProduct.setEnabled(false);}
-                            }
+// Θα προστεθεί πλέον δυνατότητα να δημιουργηθεί επιτόπου το asset στη περίπτωση που δεν βρεθεί ο σειριακός
+//                            if (!idValue.isEmpty()){
+//                                Button btnAddNewProduct = ((AppCompatActivity)ctx).findViewById(R.id.btnAddNewProduct);
+//                                if(btnAddNewProduct != null) {btnAddNewProduct.setEnabled(false);}
+//                            }
                         }
 
                         productsRvAdapter.notifyDataSetChanged();
