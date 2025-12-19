@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -60,8 +62,57 @@ public class MyUtils {
 
     public static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = ((ConnectivityManager) MyApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE));
+
+//        try{
+//            NetworkQuality q = getNetworkQuality();
+//
+//            if(q == NetworkQuality.NO_NETWORK || q == NetworkQuality.NO_INTERNET || q == NetworkQuality.VERY_WEAK){
+//                return false;
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
         return connectivityManager != null && connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
+
+    public static NetworkQuality getNetworkQuality() {
+
+        Context context = MyApplication.getContext();
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (cm == null) return NetworkQuality.NO_NETWORK;
+
+        Network network = cm.getActiveNetwork();
+        if (network == null) return NetworkQuality.NO_NETWORK;
+
+        NetworkCapabilities caps = cm.getNetworkCapabilities(network);
+        if (caps == null) return NetworkQuality.NO_NETWORK;
+
+        if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+            return NetworkQuality.NO_INTERNET;
+        }
+
+        int down = caps.getLinkDownstreamBandwidthKbps();
+
+        if (down < 150) return NetworkQuality.VERY_WEAK;
+        if (down < 500) return NetworkQuality.WEAK;
+
+        return NetworkQuality.GOOD;
+    }
+
+    public enum NetworkQuality {
+        NO_NETWORK,
+        NO_INTERNET,
+        VERY_WEAK,
+        WEAK,
+        GOOD
+    }
+
 
     public static boolean checkGPSStatus(){
         LocationManager manager = (LocationManager) MyApplication.getContext().getSystemService(Context.LOCATION_SERVICE );
