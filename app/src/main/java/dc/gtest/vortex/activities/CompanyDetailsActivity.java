@@ -110,6 +110,7 @@ public class CompanyDetailsActivity extends BaseDrawerActivity implements View.O
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         String scannedCodeForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
+        scannedCodeForNewAssignment = scannedCodeForNewAssignment == null ? "" : scannedCodeForNewAssignment;
         projectsRvAdapter = new ProjectsRvAdapter(PROJECTS_LIST_FILTERED, CompanyDetailsActivity.this, isForNewAssignment, scannedCodeForNewAssignment);
         rvProjects.setAdapter(projectsRvAdapter);
     }

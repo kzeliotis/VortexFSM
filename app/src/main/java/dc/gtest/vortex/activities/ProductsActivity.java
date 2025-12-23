@@ -145,7 +145,7 @@ public class ProductsActivity extends BaseDrawerActivity {
         selectProducts = getIntent().getBooleanExtra(KEY_SELECT_PRODUCTS_TO_ADD, false);
         searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
         scannedSerial = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
-
+        scannedSerial = scannedSerial == null ? "" : scannedSerial;
         projectInstallationId = getIntent().getStringExtra(KEY_PROJECT_INSTALLATION_ID);
         if (projectInstallationId != null){
             IsInstallation = true;

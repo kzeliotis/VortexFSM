@@ -38,6 +38,7 @@ public class CompaniesActivity extends BaseDrawerActivity {
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
         String scannedCodeForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
+        scannedCodeForNewAssignment = scannedCodeForNewAssignment == null ? "" : scannedCodeForNewAssignment;
         companiesRvAdapter = new CompaniesRvAdapter(COMPANIES_LIST_FILTERED, CompaniesActivity.this, isForNewAssignment, scannedCodeForNewAssignment);
         rvCompanies.setAdapter(companiesRvAdapter);
     }

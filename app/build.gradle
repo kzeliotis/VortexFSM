@@ -10,8 +10,8 @@ android {
         applicationId "dc.gtest.vortex"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 60601
-        versionName "6.06.01"
+        versionCode 60602
+        versionName "6.06.02"
     }
 
     buildTypes {

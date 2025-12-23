@@ -64,8 +64,7 @@ public class SearchCustomersActivity extends BaseDrawerActivity {
         btnSearchCustomers = findViewById(R.id.btnSearchCustomers);
 
         boolean isForNewAssignment = getIntent().getBooleanExtra(CONST_IS_FOR_NEW_ASSIGNMENT, false);
-        String scannedSerialForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
-
+        String scannedSerialForNewAssignment = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL) == null ? "" : getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
         btnSearchCustomers.setOnClickListener(v -> {
             MyUtils.hideKeypad(SearchCustomersActivity.this, btnSearchCustomers);
 

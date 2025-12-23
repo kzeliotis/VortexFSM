@@ -58,7 +58,7 @@ public class ProjectsRvAdapter extends RecyclerView.Adapter<ProjectsRvAdapter.Vi
             //SELECTED_PROJECT = holder.mItem;
 
             Log.e(LOG_TAG, "---------- SELECTED_PROJECT: \n" + SELECTED_PROJECT);
-            if(!scannedCodeForNewAssignment.isEmpty()){
+            if(scannedCodeForNewAssignment != null && !scannedCodeForNewAssignment.isEmpty()){
                 NEW_ASSIGNMENT.setProjectId(holder.mItem.getProjectId());
                 NEW_ASSIGNMENT.setProjectDescription(holder.mItem.getProjectDescription());
                 NEW_ASSIGNMENT.setProductId("");        // clear selected product when selecting project

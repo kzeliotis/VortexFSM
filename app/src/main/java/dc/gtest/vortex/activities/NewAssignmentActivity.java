@@ -185,7 +185,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         UserPartnerResourcesData.generate(MyPrefs.getString(PREF_DATA_USER_PARTNER_RESOURCES, ""));
 
         scannedCode = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
-
+        scannedCode = scannedCode == null ? "" : scannedCode;
         if(scannedCode != null && !scannedCode.isEmpty()){
             tilNewAssignmentProblem.setVisibility(View.GONE);
             tvNewAssignmentResources.setVisibility(View.GONE);

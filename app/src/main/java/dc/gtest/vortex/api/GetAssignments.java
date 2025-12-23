@@ -167,95 +167,99 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
                     }
                 }
 
-                StartupLoadTracker.start(
-                        totalJobs,
-                        () -> UiThread.run(() -> {
-                            mProgressBar.setVisibility(View.GONE);
-                            Log.e(LOG_TAG, "✅ ALL STARTUP DATA LOADED");
-                        })
-                );
+                if(totalJobs > 0){
+                    StartupLoadTracker.start(
+                            totalJobs,
+                            () -> UiThread.run(() -> {
+                                mProgressBar.setVisibility(View.GONE);
+                                Log.e(LOG_TAG, "✅ ALL STARTUP DATA LOADED");
+                            })
+                    );
 
-                // Show loader once
-                mProgressBar.setVisibility(View.VISIBLE);
+                    // Show loader once
+                    mProgressBar.setVisibility(View.VISIBLE);
 
 
 
-                if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
-                    for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
-                        GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false,
-                                "0", false, "", true);
-                        getProducts.execute();
+                    if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
+                        for (int i = 0; i < ASSIGNMENTS_LIST.size(); i++) {
+                            GetProducts getProducts = new GetProducts(ctx, ASSIGNMENTS_LIST.get(i).getAssignmentId(), false,
+                                    "0", false, "", true);
+                            getProducts.execute();
 
-                        GetAllConsumables getAllConsumables = new GetAllConsumables(null,
-                                ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "", true);
-                        getAllConsumables.execute();
+                            GetAllConsumables getAllConsumables = new GetAllConsumables(null,
+                                    ASSIGNMENTS_LIST.get(i).getAssignmentId(), false, true, "", true);
+                            getAllConsumables.execute();
 
+                        }
                     }
-                }
 
 
-                if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, true)) {
-                    List<AssignmentProjectZonesModel> apz = new ArrayList<>();
-                    for (AssignmentModel assignment : ASSIGNMENTS_LIST) {
-                        String projectId = assignment.getProjectId();
-                        AssignmentProjectZonesModel az = new AssignmentProjectZonesModel();
-                        az.setAssignmentId(Integer.parseInt(assignment.getAssignmentId()));
-                        az.setProjectId(Integer.parseInt(projectId));
-                        apz.add(az);
+                    if (MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA_ZONES, true)) {
+                        List<AssignmentProjectZonesModel> apz = new ArrayList<>();
+                        for (AssignmentModel assignment : ASSIGNMENTS_LIST) {
+                            String projectId = assignment.getProjectId();
+                            AssignmentProjectZonesModel az = new AssignmentProjectZonesModel();
+                            az.setAssignmentId(Integer.parseInt(assignment.getAssignmentId()));
+                            az.setProjectId(Integer.parseInt(projectId));
+                            apz.add(az);
 //                        GetZones getZones = new GetZones(ctx, null, true, "0", assignment.getAssignmentId());
 //                        getZones.execute(projectId);
 
-                    }
-                    Gson gson = new Gson();
-                    String apz_json = gson.toJson(apz);
-                    new GetZonesExecutor((Activity)ctx, true, PriorityTask.LOW, apz_json, true).execute();
-
-                }
-
-
-                // get and save history data
-                // create project ids array to avoid multiple calls to the same history API
-
-
-                if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
-
-                    int lastValidIndex = -1;
-                    GetHistoryExecutor.setSemaphore(new Semaphore(3));
-
-                    // Find the LAST valid assignment (not containing "-")
-                    for (int i = 0; i < AssignmentIds.size(); i++) {
-                        if (!AssignmentIds.get(i).contains("-")) {
-                            lastValidIndex = i;
                         }
+                        Gson gson = new Gson();
+                        String apz_json = gson.toJson(apz);
+                        new GetZonesExecutor((Activity)ctx, true, PriorityTask.LOW, apz_json, true).execute();
+
                     }
 
-                    for (int i = 0; i < AssignmentIds.size(); i++) {
 
-                        boolean hideProgress = false;
+                    // get and save history data
+                    // create project ids array to avoid multiple calls to the same history API
 
-                        hideProgress = (i == lastValidIndex);
 
-                        String AssId = AssignmentIds.get(i);
-                        if (!AssId.contains("-")) {
+                    if(MyPrefs.getBoolean(PREF_DOWNLOAD_ALL_DATA, true)){
+
+                        int lastValidIndex = -1;
+                        GetHistoryExecutor.setSemaphore(new Semaphore(3));
+
+                        // Find the LAST valid assignment (not containing "-")
+                        for (int i = 0; i < AssignmentIds.size(); i++) {
+                            if (!AssignmentIds.get(i).contains("-")) {
+                                lastValidIndex = i;
+                            }
+                        }
+
+                        for (int i = 0; i < AssignmentIds.size(); i++) {
+
+                            boolean hideProgress = false;
+
+                            hideProgress = (i == lastValidIndex);
+
+                            String AssId = AssignmentIds.get(i);
+                            if (!AssId.contains("-")) {
 //                            GetHistory getHistory = new GetHistory(ctx, AssignmentIds.get(i), hideProgress, false, "0");
 //                            getHistory.execute();
 
-                            new GetHistoryExecutor(
-                                    (Activity) ctx,          // Activity (or null if background)
-                                    AssignmentIds.get(i),                   // AssignmentId
-                                    hideProgress,            // hideProgress
-                                    false,                   // subAssignments
-                                    "0",                     // projectInstallationId
-                                    PriorityTask.LOW,         // Priority
-                                    true
-                            ).execute();
-                        }
+                                new GetHistoryExecutor(
+                                        (Activity) ctx,          // Activity (or null if background)
+                                        AssignmentIds.get(i),                   // AssignmentId
+                                        hideProgress,            // hideProgress
+                                        false,                   // subAssignments
+                                        "0",                     // projectInstallationId
+                                        PriorityTask.LOW,         // Priority
+                                        true
+                                ).execute();
+                            }
 
+                        }
                     }
+
+
+                    Log.e(LOG_TAG, "================= ASSIGNMENTS_LIST.size(): " + ASSIGNMENTS_LIST.size() + "; projectIds.size(): " + AssignmentIds.size());
                 }
 
 
-                Log.e(LOG_TAG, "================= ASSIGNMENTS_LIST.size(): " + ASSIGNMENTS_LIST.size() + "; projectIds.size(): " + AssignmentIds.size());
             }
         }
 
