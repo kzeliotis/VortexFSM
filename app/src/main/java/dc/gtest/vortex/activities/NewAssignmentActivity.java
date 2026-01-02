@@ -198,7 +198,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             LinearLayout llNewAssignmentEndDateTime = findViewById(R.id.llNewAssignmentEndDateTime);
             llNewAssignmentStartDateTime.setVisibility(View.GONE);
             llNewAssignmentEndDateTime.setVisibility(View.GONE);
-            tvNewAssignmentService.setVisibility(View.GONE);
+            //tvNewAssignmentService.setVisibility(View.GONE);
 
         }
 
