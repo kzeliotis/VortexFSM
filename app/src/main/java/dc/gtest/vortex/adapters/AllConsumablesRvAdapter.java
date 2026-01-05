@@ -228,6 +228,9 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                     etUsedConsumablesValue.setFilters(new InputFilter[]{new MinMaxFilter(0.0, Double.parseDouble(stock))});
                 }
 
+                etUsedConsumablesValue.setText("0");
+                etSuggestedConsumablesValue.setText("0");
+
                 tvConsumableValueTitle.setText(localized_consumable_value);
                 tvSuggestedConsumableTitle.setText(localized_suggested_value_with_colon);
                 tvUsedConsumableTitle.setText(localized_used_value_with_colon);
