@@ -145,6 +145,7 @@ public class MySynchronize {
 
             SendLogin sendLogin = new SendLogin(ctx, true, true);
             sendLogin.execute(username, password);
+            return;
         }
 
         Map<String, ?> startTravelDataForSync = ctx.getSharedPreferences(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, MODE_PRIVATE).getAll();

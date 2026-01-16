@@ -113,9 +113,6 @@ public class AssignmentsActivity extends BaseDrawerActivity implements View.OnCl
             permGetLocation = new PermGetLocation(this);
         }
 
-
-        //permGetLocation.myRequestPermission(PERMISSIONS_FINE_LOCATION);
-
         GetMobileSettings getMobileSettings = new GetMobileSettings(this, (afterLogIn || startUp) ? permGetLocation : null);
         getMobileSettings.execute();
 

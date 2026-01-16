@@ -165,32 +165,30 @@ public class SendLogin extends AsyncTask<String, Void, String > {
                             MyPrefs.setBoolean(PREF_KEY_IS_LOGGED_IN, false);
                         }
 
-                    } else if (reSync) {
+                    } else {
 
                         new MySynchronize(ctx).mySynchronize(false);
 
                         GetAssignments getAssignments = new GetAssignments(ctx, downloadAllData);
                         getAssignments.execute();
 
+                        if (!reSync){
+                            MyPrefs.setBoolean(PREF_KEY_IS_LOGGED_IN, true);
+                            MyPrefs.setString(PREF_USER_NAME, username);
 
-                    } else {
+                            String UserId = MyJsonParser.getStringValue(oneObject, "UserId", "0");
+                            String WarehouseId = MyJsonParser.getStringValue(oneObject, "WarehouseId", "0");
 
-                        MyPrefs.setBoolean(PREF_KEY_IS_LOGGED_IN, true);
-                        MyPrefs.setString(PREF_USER_NAME, username);
+                            MyPrefs.setString(PREF_WAREHOUSEID, WarehouseId);
+                            MyPrefs.setString(PREF_USERID, UserId);
 
-                        String UserId = MyJsonParser.getStringValue(oneObject, "UserId", "0");
-                        String WarehouseId = MyJsonParser.getStringValue(oneObject, "WarehouseId", "0");
-
-                        MyPrefs.setString(PREF_WAREHOUSEID, WarehouseId);
-                        MyPrefs.setString(PREF_USERID, UserId);
-
-                        Intent intent = new Intent(ctx, AssignmentsActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra(KEY_DOWNLOAD_ALL_DATA, true);
-                        intent.putExtra(KEY_AFTER_LOGIN, true);
-                        ctx.startActivity(intent);
-                        ((Activity) ctx).finish();
-
+                            Intent intent = new Intent(ctx, AssignmentsActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(KEY_DOWNLOAD_ALL_DATA, true);
+                            intent.putExtra(KEY_AFTER_LOGIN, true);
+                            ctx.startActivity(intent);
+                            ((Activity) ctx).finish();
+                        }
                     }
 
 
