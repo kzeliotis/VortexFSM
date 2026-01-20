@@ -32,6 +32,11 @@ public class ProductModel {
     private String projectZoneDescription = "";
     private String projectInstallationDescription = "";
     private String prefKey = "";
+    private String CustomerName = "";
+    private String CustomerId = "";
+    private String ProjectDescription = "";
+    private String ProjectId = "";
+
 
     @NonNull
     @Override

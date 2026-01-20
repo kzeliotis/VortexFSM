@@ -181,12 +181,11 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         GetAssignmentTypes getAssignmentTypes = new GetAssignmentTypes();
         getAssignmentTypes.execute();
 
-        NEW_ASSIGNMENT = new NewAssignmentModel();
         UserPartnerResourcesData.generate(MyPrefs.getString(PREF_DATA_USER_PARTNER_RESOURCES, ""));
 
         scannedCode = getIntent().getStringExtra(KEY_ID_SCANNED_SERIAL);
         scannedCode = scannedCode == null ? "" : scannedCode;
-        if(scannedCode != null && !scannedCode.isEmpty()){
+        if((scannedCode != null && !scannedCode.isEmpty()) || NEW_ASSIGNMENT.getAssignmentSourceProcedure().equals("SCANNED ASSET WORK ORDER")){
             tilNewAssignmentProblem.setVisibility(View.GONE);
             tvNewAssignmentResources.setVisibility(View.GONE);
             tvNewAssignmentType.setVisibility(View.GONE);
@@ -200,9 +199,16 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             llNewAssignmentEndDateTime.setVisibility(View.GONE);
             //tvNewAssignmentService.setVisibility(View.GONE);
 
+            if (NEW_ASSIGNMENT.getAssignmentSourceProcedure().equals("SCANNED ASSET WORK ORDER") && scannedCode.isEmpty()){
+                tvNewAssignmentCustomer.setOnClickListener(null);
+                tvNewAssignmentProject.setOnClickListener(null);
+                tvNewAssignmentProduct.setOnClickListener(null);
+                return;
+            }
+
         }
 
-
+        NEW_ASSIGNMENT = new NewAssignmentModel();
         showDialogToSelectCustomer();
     }
 
@@ -625,7 +631,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             return;
         }
 
-        if(!scannedCode.isEmpty()){
+        if(!scannedCode.isEmpty() || NEW_ASSIGNMENT.getAssignmentSourceProcedure().equals("SCANNED ASSET WORK ORDER")){
             NEW_ASSIGNMENT.setAssignmentSourceProcedure("SCANNED ASSET WORK ORDER");
             NEW_ASSIGNMENT.setSerialNumber(scannedCode);
             NEW_ASSIGNMENT.setCurrentTime("");

@@ -264,6 +264,11 @@ public class NewAssignmentModel {
         this.AssignmentSourceProcedure = assignmentSourceProcedure;
     }
 
+    public String getAssignmentSourceProcedure() {
+        return AssignmentSourceProcedure;
+    }
+
+
 
     public String getAssignmentIndicatorIds() {
         return assignmentIndicatorIds;

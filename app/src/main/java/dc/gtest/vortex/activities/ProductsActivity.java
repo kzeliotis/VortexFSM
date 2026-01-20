@@ -101,6 +101,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_DATA_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SELECT_SERVICE_ON_SCANNED_ASSET;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class ProductsActivity extends BaseDrawerActivity {
@@ -338,21 +339,38 @@ public class ProductsActivity extends BaseDrawerActivity {
                                 NEW_ASSIGNMENT.setAssignmentSourceProcedure("SCANNED ASSET WORK ORDER");
                                 NEW_ASSIGNMENT.setProjectProductId(pm.getProjectProductId());
 
-                                String prefKey = UUID.randomUUID().toString();
-                                MyPrefs.setStringWithFileName(PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC, prefKey, NEW_ASSIGNMENT.toString());
+                                if (MyPrefs.getBoolean(PREF_SELECT_SERVICE_ON_SCANNED_ASSET, false)){
 
-                                if (MyUtils.isNetworkAvailable()) {
-                                    SendNewAssignment sendNewAssignment = new SendNewAssignment(ProductsActivity.this, prefKey, true);
-                                    sendNewAssignment.execute(prefKey);
-                                } else {
-                                    Toast.makeText(ProductsActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                                    ProductModel p = PRODUCTS_LIST.get(0);
+
+                                    NEW_ASSIGNMENT.setCustomerName(p.getCustomerName());
+                                    NEW_ASSIGNMENT.setCustomerId(p.getCustomerId());
+                                    NEW_ASSIGNMENT.setProjectDescription(p.getProjectDescription());
+                                    NEW_ASSIGNMENT.setProjectId(p.getProjectId());
+                                    NEW_ASSIGNMENT.setProjectProductId(p.getProjectProductId());
+                                    NEW_ASSIGNMENT.setProductDescription(p.getProductDescription());
+                                    Intent intent = new Intent(ProductsActivity.this, NewAssignmentActivity.class);
+                                    startActivity(intent);
                                     finish();
+
+                                } else {
+                                    String prefKey = UUID.randomUUID().toString();
+                                    MyPrefs.setStringWithFileName(PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC, prefKey, NEW_ASSIGNMENT.toString());
+
+                                    if (MyUtils.isNetworkAvailable()) {
+                                        SendNewAssignment sendNewAssignment = new SendNewAssignment(ProductsActivity.this, prefKey, true);
+                                        sendNewAssignment.execute(prefKey);
+                                    } else {
+                                        Toast.makeText(ProductsActivity.this, localized_no_internet_data_saved, Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
                                 }
+
                             })
                             .setNegativeButton(R.string.no, null)
                             .show();
 
-                }else{
+                }else if (PRODUCTS_LIST.isEmpty()){
                     new AlertDialog.Builder(this)
                             .setMessage(MessageFormat.format(localized_create_serial_question, scannedSerial))
                             .setPositiveButton(R.string.yes, (dialog, which) -> {
