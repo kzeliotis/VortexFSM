@@ -25,6 +25,11 @@
             android:icon="@drawable/ic_blur_linear_black_24dp"
             android:title="@string/scan_code" />
 
+        <item
+            android:id="@+id/nav_search_code"
+            android:icon="@drawable/ic_search_icon"
+            android:title="@string/search_code" />
+
     </group>
 
     <group

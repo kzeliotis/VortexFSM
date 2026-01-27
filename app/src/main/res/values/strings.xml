@@ -1044,6 +1044,10 @@
     <string name="scan_code_gr">Scan Code</string>
     <string name="scan_code_ar">Scan Code</string>
 
+    <string name="search_code">Search Code</string>
+    <string name="search_code_gr">Αναζήτηση Κωδικού</string>
+    <string name="search_code_ar">Search Code</string>
+
     <string name="choose_from_warehouse">Do you want to choose an item from the technician\'s warehouse?</string>
     <string name="choose_from_warehouse_gr">Θέλετε να επιλέξετε είδος από την αποθήκη τεχνικού?</string>
     <string name="choose_from_warehouse_ar">هل تريد اختيار عنصر من المستودع الفني?</string>

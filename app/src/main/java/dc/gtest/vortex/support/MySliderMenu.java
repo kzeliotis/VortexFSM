@@ -1,5 +1,7 @@
 package dc.gtest.vortex.support;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +15,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 //import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +44,7 @@ import dc.gtest.vortex.activities.MapsActivity;
 import dc.gtest.vortex.activities.NewAssignmentActivity;
 import dc.gtest.vortex.activities.NewCustomerActivity;
 import dc.gtest.vortex.activities.PhotoSettingsActivity;
+import dc.gtest.vortex.activities.ProductsActivity;
 import dc.gtest.vortex.activities.SearchCustomersActivity;
 import dc.gtest.vortex.activities.ManualsActivity;
 import dc.gtest.vortex.application.MyApplication;
@@ -46,6 +52,8 @@ import dc.gtest.vortex.application.MyApplication;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
 import static dc.gtest.vortex.support.MyGlobals.CONST_GR;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
+import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
 import static dc.gtest.vortex.support.MyLocalization.localized_clear_cache_warning;
 import static dc.gtest.vortex.support.MyLocalization.localized_company_custom_fields;
@@ -56,6 +64,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_manuals;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_assignment;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_customer;
 import static dc.gtest.vortex.support.MyLocalization.localized_photo_settings;
+import static dc.gtest.vortex.support.MyLocalization.localized_search_code;
 import static dc.gtest.vortex.support.MyLocalization.localized_search_customers;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_email;
 import static dc.gtest.vortex.support.MyLocalization.localized_shared_prefs_exported;
@@ -124,6 +133,8 @@ public class MySliderMenu {
             navigationView.getMenu().findItem(R.id.nav_logout).setTitle(localized_log_out + " - " + userName);
             navigationView.getMenu().findItem(R.id.nav_company_custom_fields).setTitle(localized_company_custom_fields);
             navigationView.getMenu().findItem(R.id.nav_privacy_policy).setTitle("Privacy Policy");
+            navigationView.getMenu().findItem(R.id.nav_search_code).setTitle(localized_search_code);
+
 
             tvVersion.setText(BuildConfig.VERSION_NAME);
 
@@ -196,6 +207,35 @@ public class MySliderMenu {
                         integrator.setRequestCode(49375);
                         integrator.initiateScan();
 
+                        break;
+
+                    case R.id.nav_search_code:
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                        builder.setTitle(localized_search_code);
+
+                        final EditText input = new EditText(ctx);
+                        input.setHint("Serial number");
+                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            String serial = input.getText().toString().trim();
+
+                            if (!serial.isEmpty()) {
+                                Intent _intent = new Intent(ctx, ProductsActivity.class);
+                                _intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                _intent.putExtra(KEY_ID_SEARCH, true);
+                                _intent.putExtra(KEY_ID_SCANNED_SERIAL, serial);
+                                ctx.startActivity(_intent);
+//                            } else {
+//                                Toast.makeText(ctx, "Please enter a serial number", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                        builder.show();
                         break;
 
                     case R.id.nav_new_assignment:
