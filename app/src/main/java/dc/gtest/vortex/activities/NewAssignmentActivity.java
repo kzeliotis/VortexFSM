@@ -57,6 +57,8 @@ import static dc.gtest.vortex.support.MyLocalization.localized_existing_customer
 import static dc.gtest.vortex.support.MyLocalization.localized_master_project;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_assignment;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_customer;
+import static dc.gtest.vortex.support.MyLocalization.localized_no;
+import static dc.gtest.vortex.support.MyLocalization.localized_no_date_confirmation;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_saved;
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_customer;
 import static dc.gtest.vortex.support.MyLocalization.localized_problem;
@@ -83,8 +85,13 @@ import static dc.gtest.vortex.support.MyLocalization.localized_start_date;
 import static dc.gtest.vortex.support.MyLocalization.localized_start_time;
 import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyLocalization.localized_yes;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_USER_PARTNER_RESOURCES;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_ASSIGNMENT_TYPE_ID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_SERVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_ASSIGNMENT_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 public class NewAssignmentActivity extends BaseDrawerActivity implements View.OnClickListener {
@@ -426,9 +433,12 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
 
             case R.id.tvNewAssignmentResources:
 
+                boolean allowOptional = MyPrefs.getBoolean(PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL, false);
+                boolean allowNoDate = MyPrefs.getBoolean(PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE, false);
+
                 String startDateTime = MyDateTime.getServerFormatFormAppDateTime(
                         etNewAssignmentStartDate.getText().toString().trim() + " 00:00");
-                if(startDateTime.isEmpty()) {
+                if(startDateTime.isEmpty() && !(allowOptional && allowNoDate)) {
                     Toast.makeText(this, localized_select_date_for_availability, Toast.LENGTH_SHORT).show();
                 }else{
                     if(!NEW_ASSIGNMENT.getCustomerId().isEmpty()){
@@ -652,33 +662,38 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         }
 
 
+        boolean allowOptional = MyPrefs.getBoolean(PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL, false);
+        int defaultAssignmentTypeId = MyPrefs.getInt(PREF_DEFAULT_ASSIGNMENT_TYPE_ID, 0);
+        int defaultServiceId = MyPrefs.getInt(PREF_DEFAULT_SERVICE_ID, 0);
+        boolean allowNoDate = MyPrefs.getBoolean(PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE, false);
 
-        if (NEW_ASSIGNMENT.getServiceId().isEmpty()) {
+
+        if (NEW_ASSIGNMENT.getServiceId().isEmpty() && !(allowOptional && defaultServiceId > 0)) {
             Toast.makeText(this, localized_select_service, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NEW_ASSIGNMENT.getResourceIds().isEmpty()) {
+        if (NEW_ASSIGNMENT.getResourceIds().isEmpty() && !allowOptional) {
             Toast.makeText(this, localized_select_resources, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NEW_ASSIGNMENT.getAssignmentType().isEmpty()) {
+        if (NEW_ASSIGNMENT.getAssignmentType().isEmpty() && !(allowOptional && defaultAssignmentTypeId > 0)) {
             Toast.makeText(this, localized_select_assignment_type, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NEW_ASSIGNMENT.getProblem().isEmpty()) {
+        if (NEW_ASSIGNMENT.getProblem().isEmpty() && !allowOptional) {
             Toast.makeText(this, localized_describe_problem, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NEW_ASSIGNMENT.getDateStart().isEmpty()) {
+        if (NEW_ASSIGNMENT.getDateStart().isEmpty() && !(allowOptional && allowNoDate)) {
             Toast.makeText(this, localized_set_start_date, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NEW_ASSIGNMENT.getDateEnd().isEmpty()) {
+        if (NEW_ASSIGNMENT.getDateEnd().isEmpty() && !(allowOptional && allowNoDate)) {
             Toast.makeText(this, localized_set_end_date, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -692,6 +707,28 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
         }
 
 
+        if (allowOptional && allowNoDate && (NEW_ASSIGNMENT.getDateStart().isEmpty() || NEW_ASSIGNMENT.getDateEnd().isEmpty())) {
+
+            new AlertDialog.Builder(NewAssignmentActivity.this)
+                    .setMessage(localized_no_date_confirmation)
+                    // e.g. "Start date is empty. Are you sure you want to continue?"
+                    .setPositiveButton(localized_yes, (dialog, which) -> {
+                        proceedToSend();
+                    })
+                    .setNegativeButton(localized_no, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .setCancelable(false)
+                    .show();
+
+        } else {
+            proceedToSend();
+        }
+
+    }
+
+
+    private void proceedToSend(){
         NEW_ASSIGNMENT.setAssignmentSourceProcedure("Assignment Creation");
 
         Log.e(LOG_TAG, "==================== NEW_ASSIGNMENT: \n" + NEW_ASSIGNMENT.toString());
@@ -707,6 +744,7 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
             finish();
         }
     }
+
 
     private void showDialogToSelectCustomer() {
 
@@ -744,6 +782,10 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
     private boolean checkResourcesAvailability() throws ParseException {
 
         String resourceIds = NEW_ASSIGNMENT.getResourceIds();
+        if (resourceIds.trim().isEmpty())
+        {
+            return true;
+        }
         resourceIds = resourceIds.substring(0, resourceIds.length() - 2);
         String[] ResourceList = resourceIds.split(", ");
 

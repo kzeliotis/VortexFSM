@@ -178,6 +178,10 @@ public class MyPrefs {
     public static final String PREF_DOWNLOAD_ALL_DATA_ZONES = "pref_download_all_data_zones";
     public static final String PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT = "pref_send_installed_products_on_checkout";
     public static final String PREF_SELECT_SERVICE_ON_SCANNED_ASSET = "pref_select_service_on_scanned_asset";
+    public static final String PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL = "pref_new_assignment_fields_optional";
+    public static final String PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE = "pref_allow_assignment_without_date";
+    public static final String PREF_DEFAULT_ASSIGNMENT_TYPE_ID = "pref_default_assignment_type_id";
+    public static final String PREF_DEFAULT_SERVICE_ID = "pref_default_service_id";
     public static final String PREF_UNSYNCED_INSTALLED_PRODUCTS = "pref_unsynched_installed_products";
     public static final String PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS = "pref_unsynched_installation_installed_products";
     public static final String PREF_SHOW_BARCODES = "pref_show_barcodes";

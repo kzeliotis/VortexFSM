@@ -285,6 +285,7 @@ public class MyLocalization {
     public static String localized_product_saved_to_send_on_check_out = "";
     public static String localized_create_serial_question = "";
     public static String localized_search_code = "";
+    public static String localized_no_date_confirmation = "";
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -562,6 +563,7 @@ public class MyLocalization {
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out_gr);
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question_gr);
                 localized_search_code = ctx.getString(R.string.search_code_gr);
+                localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation_gr);
                 break;
 
             case CONST_AR:
@@ -836,6 +838,7 @@ public class MyLocalization {
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out_ar);
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question_ar);
                 localized_search_code = ctx.getString(R.string.search_code_ar);
+                localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation_ar);
 
                 break;
 
@@ -1112,6 +1115,7 @@ public class MyLocalization {
                 localized_product_saved_to_send_on_check_out = ctx.getString(R.string.product_saved_to_send_on_check_out);
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question);
                 localized_search_code = ctx.getString(R.string.search_code);
+                localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation);
 
                 break;
 

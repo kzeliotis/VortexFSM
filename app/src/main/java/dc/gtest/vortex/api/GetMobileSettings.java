@@ -28,12 +28,15 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_LIST;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_WAREHOUSE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_SERVICES_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_CONNECTION_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_API_READ_TIMEOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_ASSIGNMENT_TYPE_ID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_SERVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA_ZONES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
@@ -43,6 +46,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
+import static dc.gtest.vortex.support.MyPrefs.PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_SERVICES_FROM_PICKING;
@@ -261,6 +265,23 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MobileSelectServiceOnScannedSerialAssignment = MyJsonParser.getIntValue(oneObject, "MobileSelectServiceOnScannedSerialAssignment", 0);
 
                     MyPrefs.setBoolean(PREF_SELECT_SERVICE_ON_SCANNED_ASSET, MobileSelectServiceOnScannedSerialAssignment == 1);
+
+                    int MobileNewAssignmentFieldsOptional = MyJsonParser.getIntValue(oneObject, "MobileNewAssignmentFieldsOptional", 0);
+
+                    MyPrefs.setBoolean(PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL, MobileNewAssignmentFieldsOptional == 1);
+
+                    int AllowAssignmentsWithoutDateTime = MyJsonParser.getIntValue(oneObject, "AllowAssignmentsWithoutDateTime", 0);
+
+                    MyPrefs.setBoolean(PREF_ALLOW_ASSIGNMENT_WITHOUT_DATE, AllowAssignmentsWithoutDateTime == 1);
+
+                    int DefaultAssignmentType = MyJsonParser.getIntValue(oneObject, "DefaultAssignmentType", 0);
+
+                    MyPrefs.setInt(PREF_DEFAULT_ASSIGNMENT_TYPE_ID, DefaultAssignmentType);
+
+                    int DefaultService = MyJsonParser.getIntValue(oneObject, "DefaultService", 0);
+
+                    MyPrefs.setInt(PREF_DEFAULT_SERVICE_ID, DefaultService);
+
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");
