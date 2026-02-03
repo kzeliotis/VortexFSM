@@ -394,7 +394,10 @@ public class NewAssignmentActivity extends BaseDrawerActivity implements View.On
                                 })
                                 .setNegativeButton(R.string.no, (dialog, which) -> {
                                     dialog.dismiss();
-
+                                    intent = new Intent(NewAssignmentActivity.this, AllProductsActivity.class);
+                                    intent.putExtra(CONST_IS_FOR_NEW_ASSIGNMENT, true);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
                                 })
                                 .show();
                     }
