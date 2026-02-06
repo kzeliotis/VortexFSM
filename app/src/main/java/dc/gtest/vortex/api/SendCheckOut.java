@@ -193,11 +193,18 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
                 }
 
                 if(!(activity instanceof HistoryActivity)){
-                    activity.finishAffinity();
+                    //06/02/2026 Ξαφνικά δεν παίζει σωστά και αντί να επιστρέψει στην assignmentsActivity κλείνει τελείως η εφαρμογή (?)
+//                    activity.finishAffinity();
+//                    Intent intent = new Intent(activity, AssignmentsActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
+//                    ctx.startActivity(intent);
+
                     Intent intent = new Intent(activity, AssignmentsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
-                    ctx.startActivity(intent);
+                    activity.startActivity(intent);
+                    activity.finish();   // NOT finishAffinity
                 }
             }
         } else {
