@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.activities.HistoryActivity;
+import dc.gtest.vortex.activities.SearchAttributesActivity;
 import dc.gtest.vortex.api.DeleteProduct;
 import dc.gtest.vortex.activities.AttributesActivity;
 import dc.gtest.vortex.items.MeasurementsListActivity;
@@ -34,10 +36,12 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.MANDATORY_MEASUREMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static dc.gtest.vortex.support.MyGlobals.globalGetHistoryParameter;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_history;
 import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
@@ -148,6 +152,14 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                             Intent intent = new Intent(ctx, MeasurementsListActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra(KEY_ID_SEARCH,  seachSerial);
+                            ctx.startActivity(intent);
+                        })
+                        .setNegativeButton(localized_product_history, (dialog, which) -> {
+                            dialog.dismiss();
+
+                            globalGetHistoryParameter = "0;" + holder.mItem.getProjectProductId();
+                            Intent intent = new Intent(ctx, HistoryActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             ctx.startActivity(intent);
                         })
                         .show();

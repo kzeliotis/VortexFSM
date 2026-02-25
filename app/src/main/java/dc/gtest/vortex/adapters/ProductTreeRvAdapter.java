@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dc.gtest.vortex.R;
+import dc.gtest.vortex.activities.HistoryActivity;
 import dc.gtest.vortex.activities.ProductTreeActivity;
 import dc.gtest.vortex.api.DeleteProduct;
 import dc.gtest.vortex.activities.AttributesActivity;
@@ -44,6 +45,7 @@ import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST;
 import static dc.gtest.vortex.support.MyGlobals.PRODUCTS_TREE_LIST_SAVED_STATE;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_ASSIGNMENT;
 import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
+import static dc.gtest.vortex.support.MyGlobals.globalGetHistoryParameter;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
@@ -54,6 +56,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_choose_from_wareh
 import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_from;
 import static dc.gtest.vortex.support.MyLocalization.localized_delete;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_history;
 import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_replace;
 import static dc.gtest.vortex.support.MyLocalization.localized_replace_product_components;
@@ -215,6 +218,14 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
                         .setPositiveButton(localized_measurements, (dialog, which) -> {
                             dialog.dismiss();
                             Intent intent = new Intent(ctx, MeasurementsListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            ctx.startActivity(intent);
+                        })
+                        .setNegativeButton(localized_product_history, (dialog, which) -> {
+                            dialog.dismiss();
+
+                            globalGetHistoryParameter = "0;" + holder.mItem.getProjectProductId();
+                            Intent intent = new Intent(ctx, HistoryActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             ctx.startActivity(intent);
                         })
