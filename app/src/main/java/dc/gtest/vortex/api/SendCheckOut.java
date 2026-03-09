@@ -201,7 +201,7 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
 //                    ctx.startActivity(intent);
 
                     Intent intent = new Intent(activity, AssignmentsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra(KEY_DOWNLOAD_ALL_DATA, false);
                     activity.startActivity(intent);
                     activity.finish();   // NOT finishAffinity
