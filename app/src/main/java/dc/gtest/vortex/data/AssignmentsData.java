@@ -31,13 +31,19 @@ import static dc.gtest.vortex.support.MyGlobals.ASSIGNMENTS_LIST;
 import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_available_mobile_slots;
 import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
+import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_TIME;
+import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_IN_TIME_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_CHECK_OUT_TIME_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_IN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_TRAVEL_STARTED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NOTES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_START_TRAVEL_TIME;
 
 public class AssignmentsData {
 
@@ -145,7 +151,8 @@ public class AssignmentsData {
                     assignmentModel.setCabLat(projectLat);
                     assignmentModel.setCabLng(projectLon);
                     assignmentModel.setProjectId(MyJsonParser.getStringValue(oneObject, "ProjectId", ""));
-                    assignmentModel.setAssignmentId(MyJsonParser.getStringValue(oneObject, "AssignmentId", ""));
+                    String assigmentId = MyJsonParser.getStringValue(oneObject, "AssignmentId", "");
+                    assignmentModel.setAssignmentId(assigmentId);
                     assignmentModel.setMasterAssignment(MyJsonParser.getStringValue(oneObject, "MasterAssignment", ""));
                     assignmentModel.setProblem(MyJsonParser.getStringValue(oneObject, "Problem", ""));
                     assignmentModel.setPhone(MyJsonParser.getStringValue(oneObject, "ProjectTel", ""));
@@ -172,6 +179,28 @@ public class AssignmentsData {
                     String assignmentId = assignmentModel.getAssignmentId();
                     if (! MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, false)){
                         MyPrefs.setStringWithFileName(PREF_FILE_NOTES_FOR_SHOW, assignmentId, assignmentModel.getNotes());
+                    }
+
+                    String startTravel = MyJsonParser.getStringValue(oneObject, "StartTravel", "");
+                    String checkIn = MyJsonParser.getStringValue(oneObject, "CheckIn", "");
+                    String checkOut = MyJsonParser.getStringValue(oneObject, "CheckOut", "");
+
+                    if (!startTravel.isEmpty()){
+                        MyPrefs.setStringWithFileName(assignmentId, PREF_START_TRAVEL_TIME, startTravel);
+                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_TRAVEL_STARTED, assignmentId, true);
+                    }
+
+                    if (!checkIn.isEmpty()){
+                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, true);
+                        String chkIn = "CHECK IN" + System.getProperty("line.separator") + checkIn;
+                        MyPrefs.setStringWithFileName(PREF_CHECK_IN_TIME_FOR_SHOW, assignmentId, chkIn);
+                        MyPrefs.setStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, chkIn);
+                    }
+
+                    if (!checkOut.isEmpty()){
+                        MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
+                        String chkOut = "CHECK OUT" + System.getProperty("line.separator") + checkOut;
+                        MyPrefs.setStringWithFileName(PREF_CHECK_OUT_TIME_FOR_SHOW, assignmentId, chkOut);
                     }
 
                     assignmentModel.setChargedAmount(MyJsonParser.getStringValue(oneObject, "Charge", ""));
