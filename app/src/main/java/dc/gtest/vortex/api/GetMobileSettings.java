@@ -37,6 +37,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_ASSIGNMENT_TYPE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEFAULT_SERVICE_ID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DELETE_SIGNATURE_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DOWNLOAD_ALL_DATA_ZONES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ENABLE_LOCATION_SERVICE;
@@ -281,6 +282,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int DefaultService = MyJsonParser.getIntValue(oneObject, "DefaultService", 0);
 
                     MyPrefs.setInt(PREF_DEFAULT_SERVICE_ID, DefaultService);
+
+                    int MobileDeleteCustomerSignature = MyJsonParser.getIntValue(oneObject, "MobileDeleteCustomerSignature", 0);
+
+                    MyPrefs.setBoolean(PREF_DELETE_SIGNATURE_ON_CHECKOUT, MobileDeleteCustomerSignature == 1);
 
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");

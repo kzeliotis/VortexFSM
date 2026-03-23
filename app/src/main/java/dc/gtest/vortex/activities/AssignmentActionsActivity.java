@@ -203,6 +203,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_DEFAULT_TECH_ACTIONS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DELETE_SIGNATURE_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHARGED_AMOUNT_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
@@ -1375,6 +1376,16 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                     bytes = output.toByteArray();
                     encodedSignature = Base64.encodeToString(bytes, Base64.NO_WRAP);
+
+                    if(MyPrefs.getBoolean(PREF_DELETE_SIGNATURE_ON_CHECKOUT, false)){
+                        try{
+                            File file = new File(imagePath);
+                            boolean imgDeleted = file.delete();
+                            if(imgDeleted){imagePath = "";}
+                        } catch (Exception e) {
+
+                        }
+                    }
 
                     try {
                         solution = URLEncoder.encode(solution,"UTF-8");
