@@ -32,6 +32,7 @@ import java.util.Locale;
 import dc.gtest.vortex.R;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DELETE_SIGNATURE_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
 
 public class CaptureSignature extends Activity {
@@ -219,8 +220,12 @@ public class CaptureSignature extends Activity {
                 mBitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
                 mFileOutStream.flush();
                 mFileOutStream.close();
-                String url = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
-                Log.e(LOG_TAG, "url: " + url);
+
+                if(!MyPrefs.getBoolean(PREF_DELETE_SIGNATURE_ON_CHECKOUT, false)){
+                    String url = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
+                    Log.e(LOG_TAG, "url: " + url);
+                }
+
                 //In case you want to delete the file
                 //boolean deleted = myPath.delete();
                 //Log.v("log_tag","deleted: " + myPath.toString() + deleted);
