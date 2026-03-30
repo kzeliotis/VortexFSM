@@ -194,7 +194,7 @@ public class AssignmentsData {
                         MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_IN, assignmentId, true);
                         String chkIn = "CHECK IN" + System.getProperty("line.separator") + checkIn;
                         MyPrefs.setStringWithFileName(PREF_CHECK_IN_TIME_FOR_SHOW, assignmentId, chkIn);
-                        MyPrefs.setStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, chkIn);
+                        MyPrefs.setStringWithFileName(assignmentId, PREF_CHECK_IN_TIME, checkIn);
                     }
 
                     if (!checkOut.isEmpty()){
