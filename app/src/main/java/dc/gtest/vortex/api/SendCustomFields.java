@@ -14,6 +14,7 @@ import android.widget.Toast;
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.support.MyDialogs;
+import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
 
@@ -81,6 +82,8 @@ public class SendCustomFields extends AsyncTask<String, Void, String > {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
 
         return responseBody;
     }
