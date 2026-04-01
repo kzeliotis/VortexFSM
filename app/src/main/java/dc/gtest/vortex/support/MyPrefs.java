@@ -186,6 +186,7 @@ public class MyPrefs {
     public static final String PREF_UNSYNCED_INSTALLED_PRODUCTS = "pref_unsynched_installed_products";
     public static final String PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS = "pref_unsynched_installation_installed_products";
     public static final String PREF_SHOW_BARCODES = "pref_show_barcodes";
+    public static final String PREF_SHOW_AUXCODES = "pref_show_auxcodeson";
     public static final String PREF_ALLOW_CHECKIN_OUT_SUBASSIGNMENTS = "pref_allow_checkin_out_subassignments";
     public static final String PREF_SHOW_DET_CHILDREN = "pref_show_det_children";
     public static final String PREF_SHOW_DET_CHILDREN_START_STOP = "pref_show_det_children_start_stop";

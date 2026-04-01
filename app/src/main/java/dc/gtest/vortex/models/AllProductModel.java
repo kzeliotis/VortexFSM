@@ -12,6 +12,7 @@ public class AllProductModel {
     private String AttributeDescription = "";
     private String masterProductComponentId = "";
     private String barcode = "";
+    private String auxcode = "";
     private int typeId = -1;
 
     @Override
@@ -103,5 +104,13 @@ public class AllProductModel {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getAuxcode() {
+        return auxcode;
+    }
+
+    public void setAuxcode(String auxcode) {
+        this.auxcode = auxcode;
     }
 }

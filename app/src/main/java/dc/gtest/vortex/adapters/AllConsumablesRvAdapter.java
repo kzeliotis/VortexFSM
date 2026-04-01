@@ -47,6 +47,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_suggested_value_w
 import static dc.gtest.vortex.support.MyLocalization.localized_used_value_with_colon;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ADDED_CONSUMABLES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_AUXCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 
 public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumablesRvAdapter.ViewHolder> implements Filterable {
@@ -109,6 +110,10 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
 
         if(MyPrefs.getBoolean(PREF_SHOW_BARCODES, false) && !holder.mItem.getBarcode().isEmpty()){
             description = description + "\n\r" + "Barcode: " + holder.mItem.getBarcode();
+        }
+
+        if(MyPrefs.getBoolean(PREF_SHOW_AUXCODES, false) && !holder.mItem.getAuxcode().isEmpty()){
+            description = description + "\n\r" + "Auxcode: " + holder.mItem.getAuxcode();
         }
 
         if(warehouseProducts || pickingList){

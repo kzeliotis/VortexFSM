@@ -60,6 +60,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_DATA;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_AUXCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLATION_INSTALLED_PRODUCTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_UNSYNCED_INSTALLED_PRODUCTS;
@@ -109,6 +110,10 @@ public class AllProductsRvAdapter extends RecyclerView.Adapter<AllProductsRvAdap
         String description = holder.mItem.getProductDescription();
         if(MyPrefs.getBoolean(PREF_SHOW_BARCODES, false) && !holder.mItem.getBarcode().isEmpty()){
             description = description + "\n\r" + "Barcode: " + holder.mItem.getBarcode();
+        }
+
+        if(MyPrefs.getBoolean(PREF_SHOW_AUXCODES, false) && !holder.mItem.getAuxcode().isEmpty()){
+            description = description + "\n\r" + "Auxcode: " + holder.mItem.getAuxcode();
         }
 
         holder.tvAllProductDescription.setText(description);

@@ -10,6 +10,8 @@ public class AllConsumableModel {
     private String Stock = "";
     private String used = "";
     private String barcode = "";
+    private String auxcode = "";
+
 
     public String getConsumableName() {
         return consumableName;
@@ -83,5 +85,13 @@ public class AllConsumableModel {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getAuxcode() {
+        return auxcode;
+    }
+
+    public void setAuxcode(String auxcode) {
+        this.auxcode = auxcode;
     }
 }

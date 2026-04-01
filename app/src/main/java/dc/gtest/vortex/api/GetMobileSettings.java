@@ -56,6 +56,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_SELECT_SERVICE_ON_SCANNED_ASS
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_ALL_MASTER_PROJECTS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_AUXCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_BARCODES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_CHARGE_FIELD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SHOW_DET_CHILDREN;
@@ -254,6 +255,10 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
                     int MobileShowProductBarcodes = MyJsonParser.getIntValue(oneObject, "MobileShowProductBarcodes", 0);
 
                     MyPrefs.setBoolean(PREF_SHOW_BARCODES, MobileShowProductBarcodes == 1);
+
+                    int MobileShowProductAuxCodes = MyJsonParser.getIntValue(oneObject, "MobileShowProductAuxCodes", 0);
+
+                    MyPrefs.setBoolean(PREF_SHOW_AUXCODES, MobileShowProductAuxCodes == 1);
 
                     int MobileDownloadAllZoneDataOnSync = MyJsonParser.getIntValue(oneObject, "MobileDownloadAllZoneDataOnSync", 0);
 

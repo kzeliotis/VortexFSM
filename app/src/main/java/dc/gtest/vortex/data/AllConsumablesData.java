@@ -51,6 +51,7 @@ public class AllConsumablesData {
                         allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
                         allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", "0"));
                         allConsumableModel.setBarcode(MyJsonParser.getStringValue(oneObject, "Barcode", ""));
+                        allConsumableModel.setAuxcode(MyJsonParser.getStringValue(oneObject,"AuxCode", ""));
 
                         ALL_WAREHOUSE_CONSUMABLES_LIST.add(allConsumableModel);
                     }
@@ -87,6 +88,7 @@ public class AllConsumablesData {
                         allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", "0"));
                         allConsumableModel.setDetPickingId(MyJsonParser.getIntValue(oneObject, "DetPickingId", 0));
                         allConsumableModel.setBarcode(MyJsonParser.getStringValue(oneObject, "Barcode", ""));
+                        allConsumableModel.setAuxcode(MyJsonParser.getStringValue(oneObject, "AuxCode", ""));
 
 
                         PICKING_PRODUCTS_LIST.add(allConsumableModel);
@@ -127,6 +129,7 @@ public class AllConsumablesData {
                         allConsumableModel.setProductId(MyJsonParser.getIntValue(oneObject, "ProductId", 0));
                         allConsumableModel.setStock(MyJsonParser.getStringValue(oneObject, "Stock", ""));
                         allConsumableModel.setBarcode(MyJsonParser.getStringValue(oneObject, "Barcode", ""));
+                        allConsumableModel.setAuxcode(MyJsonParser.getStringValue(oneObject, "AuxCode", ""));
 
                         ALL_CONSUMABLES_LIST.add(allConsumableModel);
                     }
