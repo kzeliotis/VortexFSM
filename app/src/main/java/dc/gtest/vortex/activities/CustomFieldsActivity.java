@@ -159,6 +159,7 @@ public class CustomFieldsActivity extends BaseDrawerActivity implements View.OnC
 
                         for (int i = 0; i < cfList.size(); i++) {
                             cfList.get(i).setAssignmentId(SELECTED_ASSIGNMENT.getAssignmentId());
+                            cfList.get(i).setCustomFieldValue(MyUtils.escapeJsonString(cfList.get(i).getCustomFieldValue()));
                             List<CustomFieldDetailModel> emptyDetails = new ArrayList<>();
                             cfList.get(i).setCustomFieldDetails(emptyDetails);
 //                                for (int d = 0; d < cfList.get(i).getCustomFieldDetails().size(); d++){

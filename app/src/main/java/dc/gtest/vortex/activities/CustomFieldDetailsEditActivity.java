@@ -145,6 +145,13 @@ public class CustomFieldDetailsEditActivity extends BaseDrawerActivity implement
                                 SELECTED_CUSTOM_FIELD_DETAIL.setIsEdited(true);
                                 gamo_details = SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldDetailsString();
                                 SELECTED_CUSTOM_FIELD_DETAIL.setCustomFieldDetailsString("");
+                                for (int d = 0; d < SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().size(); d++) {
+                                    if (SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().get(d).getColumnValue() != null &&
+                                    !SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().get(d).getHasValues()) {
+                                        SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().
+                                                get(d).setColumnValue(MyUtils.escapeJsonString(SELECTED_CUSTOM_FIELD_DETAIL.getCustomFieldsDetailColumns().get(d).getColumnValue()));
+                                    }
+                                }
                                 editedDetails.add(SELECTED_CUSTOM_FIELD_DETAIL);
                                 cfList.get(i).setCustomFieldDetails(editedDetails);
                             }
