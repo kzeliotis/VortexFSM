@@ -67,7 +67,11 @@ public class UploadToAzure extends AsyncTask<String, Void, String> {
                         .setPublicAccess(BlobContainerPublicAccessType.CONTAINER);
 
                 // Set the permissions on the container
-                container.uploadPermissions(containerPermissions);
+                try{
+                    container.uploadPermissions(containerPermissions);
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
 
                 // Upload 3 blobs
                 // Get a reference to a blob in the container
