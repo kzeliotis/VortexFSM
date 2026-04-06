@@ -27,6 +27,7 @@ public class AllProductModel {
                         "  \"BasicValue\": \"" + BasicValue + "\",\n" +
                         "  \"AttributeId\": \"" + AttributeId + "\",\n" +
                         "  \"Barcode\": \"" + barcode + "\",\n" +
+                        "  \"AuxCode\": \"" + auxcode + "\",\n" +
                         "  \"MasterProductComponentId\": \"" + masterProductComponentId + "\",\n" +
                         "  \"AttributeDescription\": \"" + AttributeDescription + "\",\n" +
                         "  \"TypeId\": " + typeId + "\n" +

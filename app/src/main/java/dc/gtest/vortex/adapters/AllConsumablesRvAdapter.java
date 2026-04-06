@@ -346,7 +346,8 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                                 ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
                             }
                         } else {
-                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern) ||
+                                    mWords.getAuxcode().toLowerCase().contains(filterPattern)) {
                                 ALL_WAREHOUSE_CONSUMABLES_LIST_FILTERED.add(mWords);
                             }
                         }
@@ -368,7 +369,8 @@ public class AllConsumablesRvAdapter extends RecyclerView.Adapter<AllConsumables
                                 ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
                             }
                         } else {
-                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern)) {
+                            if (mWords.getConsumableName().toLowerCase().contains(filterPattern)||
+                                    mWords.getAuxcode().toLowerCase().contains(filterPattern)) {
                                 ALL_CONSUMABLES_LIST_FILTERED.add(mWords);
                             }
                         }
