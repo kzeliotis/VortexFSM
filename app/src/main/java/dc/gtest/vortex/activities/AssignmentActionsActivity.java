@@ -204,6 +204,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_DEFAULT_TECH_ACTIONS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DELETE_SIGNATURE_ON_CHECKOUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DISABLE_PRESELECTED_STATUS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHARGED_AMOUNT_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
@@ -1183,7 +1184,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     }
                 }
 
-                if (selectedStatusId.equals("0")) {
+                if (selectedStatusId.equals("0") || selectedStatusId.isEmpty()) {
                     areAllRequiredFieldsFilled = false;
                     MyDialogs.showOK(AssignmentActionsActivity.this, localized_changeStatus);
                 }
@@ -2003,7 +2004,17 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
             statuses.add(STATUSES_LIST.get(i));
         }
 
+        boolean disablePreselection = MyPrefs.getBoolean(PREF_DISABLE_PRESELECTED_STATUS, false);
+
+        if(disablePreselection){
+            StatusModel emptyStatus = new StatusModel();
+            emptyStatus.setStatusId(""); // or "-1" if you prefer
+            emptyStatus.setStatusDescription("-");
+            statuses.add(0, emptyStatus);
+        }
+
         SELECTED_ASSIGNMENT.setCorrelatedStatusesList(statuses);
+
 
         String[] statusesArray = new String[statuses.size()];
 
@@ -2014,13 +2025,16 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         spStatus.setEnabled(false);
         spStatus.setAdapter(new MySpinnerAdapter(this, statusesArray));
 
+        boolean statusSelected = false;
+        boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
         for (int i = 0; i < statuses.size(); i++) {
-            if (MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false)){
+            if (isCheckedOut){
                 if (statuses.get(i).getStatusId().equals(SELECTED_ASSIGNMENT.getStatusId())) {
                     spStatus.setSelection(i);
                 }
             } else {
                 String statusToSelect = "";
+
                 if (SELECTED_ASSIGNMENT.getProposedCheckOutStatus().equals("0")){
                     statusToSelect = SELECTED_ASSIGNMENT.getStatusId();
                 } else {
@@ -2028,10 +2042,15 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 }
                 if (statuses.get(i).getStatusId().equals(statusToSelect)) {
                     spStatus.setSelection(i);
+                    statusSelected = true;
                 }
             }
-
         }
+
+        if(!statusSelected && disablePreselection){
+            spStatus.setSelection(0);
+        }
+
     }
 
     private String getStatusIdFromSpinner(){
