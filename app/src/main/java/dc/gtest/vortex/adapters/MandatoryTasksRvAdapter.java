@@ -154,6 +154,7 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             }
         });
 
+        holder.etMandatoryTasks.setOnClickListener(null);
         // setup filling value
         if(IsDateTime.equals("1")){
             holder.etMandatoryTasks.setOnClickListener(v -> {
@@ -178,8 +179,20 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             });
         }
 
-        holder.etMandatoryTasks.setText(holder.mItem.getMeasurementValue());
-        holder.etMandatoryTasks.addTextChangedListener(new TextWatcher() {
+//        holder.etMandatoryTasks.setText(holder.mItem.getMeasurementValue());
+//        holder.etMandatoryTasks.addTextChangedListener(new TextWatcher() {
+
+
+        if (holder.measurementWatcher != null) {
+            holder.etMandatoryTasks.removeTextChangedListener(holder.measurementWatcher);
+        }
+
+        String measurementValue = holder.mItem.getMeasurementValue();
+        if (!holder.etMandatoryTasks.hasFocus()) {
+            holder.etMandatoryTasks.setText(measurementValue);
+        }
+
+        holder.measurementWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -190,25 +203,40 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
             @Override
             public void afterTextChanged(Editable s) {
             }
-        });
+        };
 
+        holder.etMandatoryTasks.addTextChangedListener(holder.measurementWatcher);
 
         holder.tvComments.setText(localized_step_comments);
-        holder.etMandatoryComments.setText(holder.mItem.getStepComments());
 
-        holder.etMandatoryComments.addTextChangedListener(new TextWatcher() {
+//        holder.etMandatoryComments.setText(holder.mItem.getStepComments());
+//        holder.etMandatoryComments.addTextChangedListener(new TextWatcher() {
+        if (holder.commentsWatcher != null) {
+            holder.etMandatoryComments.removeTextChangedListener(holder.commentsWatcher);
+        }
+
+        String commentsValue = holder.mItem.getStepComments();
+        if (!holder.etMandatoryComments.hasFocus()) {
+            holder.etMandatoryComments.setText(commentsValue);
+        }
+
+        holder.commentsWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().isEmpty()){
+                    return;
+                }
                 holder.mItem.setStepComments(s.toString().replace("\n", " ").replace("\r", " ")) ;
             }
             @Override
             public void afterTextChanged(Editable s) {
             }
-        });
+        };
 
+        holder.etMandatoryComments.addTextChangedListener(holder.commentsWatcher);
 
         // setup spinner
         try {
@@ -361,6 +389,24 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
     }
 
     @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
+
+        holder.etMandatoryTasks.clearFocus();
+        holder.etMandatoryComments.clearFocus();
+
+        if (holder.measurementWatcher != null) {
+            holder.etMandatoryTasks.removeTextChangedListener(holder.measurementWatcher);
+            holder.measurementWatcher = null;
+        }
+
+        if (holder.commentsWatcher != null) {
+            holder.etMandatoryComments.removeTextChangedListener(holder.commentsWatcher);
+            holder.commentsWatcher = null;
+        }
+    }
+
+    @Override
     public int getItemCount() {
         return mValues.size();
     }
@@ -465,6 +511,8 @@ public class MandatoryTasksRvAdapter extends RecyclerView.Adapter<MandatoryTasks
         final EditText etMandatoryComments;
         final ImageView ivScanValue;
         MandatoryTaskModel mItem;
+        TextWatcher measurementWatcher;
+        TextWatcher commentsWatcher;
 
         public ViewHolder(View view) {
             super(view);

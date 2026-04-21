@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 //import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.appcompat.widget.SwitchCompat;
@@ -34,6 +35,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -302,7 +304,7 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private Button btnInstallations;
     private TextView tvSendReport;
     private CheckBox chkSendReportFile;
-    private ScrollView scrollView1;
+    private NestedScrollView scrollView1;
     private Button btnDetChildren;
 
     private MandatoryTasksRvAdapter mandatoryTasksRvAdapter;
@@ -502,6 +504,26 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
         mandatoryTasksRvAdapter = new MandatoryTasksRvAdapter(MANDATORY_TASKS_LIST, AssignmentActionsActivity.this, assignmentId, localized_select_measurement);
         rvMandatoryTasks.setAdapter(mandatoryTasksRvAdapter);
+
+        rvMandatoryTasks.post(() -> {
+            int itemCount = mandatoryTasksRvAdapter.getItemCount();
+
+            int itemHeightPx = (int) (60 * rvMandatoryTasks.getResources().getDisplayMetrics().density);
+            int maxHeightPx = (int) (320 * rvMandatoryTasks.getResources().getDisplayMetrics().density);
+
+            int desiredHeight = itemCount * itemHeightPx;
+
+            ViewGroup.LayoutParams params = rvMandatoryTasks.getLayoutParams();
+
+            if (desiredHeight < maxHeightPx) {
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            } else {
+                params.height = maxHeightPx;
+            }
+
+            rvMandatoryTasks.setLayoutParams(params);
+            rvMandatoryTasks.requestLayout();
+        });
 
         boolean showCharge = MyPrefs.getBoolean(PREF_SHOW_CHARGE_FIELD, true);
         boolean showPayment = MyPrefs.getBoolean(PREF_SHOW_PAYMENT_FILED, true);
