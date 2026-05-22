@@ -124,7 +124,15 @@ public class GetAssignments extends AsyncTask<String, Void, String > {
         }
 
         if (responseCode == -1){
-            new AlertDialog.Builder(ctx).setMessage(responseMessage).show();
+            if (ctx instanceof Activity) {
+                Activity activity = (Activity) ctx;
+
+                if (!activity.isFinishing() && !activity.isDestroyed()) {
+                    new AlertDialog.Builder(activity)
+                            .setMessage(responseMessage)
+                            .show();
+                }
+            }
         }
         else if (responseCode == 200 && responseBody != null ) {
             MyPrefs.setString(PREF_DATA_ASSIGNMENTS, responseBody);

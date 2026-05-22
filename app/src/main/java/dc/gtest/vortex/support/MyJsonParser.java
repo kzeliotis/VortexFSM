@@ -5,16 +5,36 @@ import org.json.JSONObject;
 
 public class MyJsonParser {
 
+//    public static String getStringValue(JSONObject oneObject, String key, String defaultValue) {
+//        try {
+//            if (oneObject.has(key) && !oneObject.getString(key).toLowerCase().replace(" ", "").equals("null")) {
+//                defaultValue = oneObject.getString(key);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return defaultValue;
+//    }
+
     public static String getStringValue(JSONObject oneObject, String key, String defaultValue) {
-        try {
-            if (oneObject.has(key) && !oneObject.getString(key).toLowerCase().replace(" ", "").equals("null")) {
-                defaultValue = oneObject.getString(key);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (oneObject == null || key == null) {
+            return defaultValue;
         }
 
-        return defaultValue;
+        Object value = oneObject.opt(key);
+
+        if (value == null || value == JSONObject.NULL) {
+            return defaultValue;
+        }
+
+        String stringValue = String.valueOf(value);
+
+        if (stringValue.trim().equalsIgnoreCase("null")) {
+            return defaultValue;
+        }
+
+        return stringValue;
     }
 
     public static int getIntValue(JSONObject oneObject, String key, int defaultValue) {

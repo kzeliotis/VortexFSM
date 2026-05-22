@@ -5,12 +5,16 @@ import dc.gtest.vortex.models.ProductModel;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class MyPrefs {
@@ -367,6 +371,54 @@ public class MyPrefs {
 
         // Handle null result from Gson
         return result != null ? result : new ArrayList<>();
+    }
+
+    public static PrefsBatch newBatch() {
+        return new PrefsBatch();
+    }
+
+    public static class PrefsBatch {
+
+        private final Map<String, SharedPreferences.Editor> editors = new HashMap<>();
+
+        private SharedPreferences.Editor editorFor(String fileName) {
+            SharedPreferences.Editor editor = editors.get(fileName);
+
+            if (editor == null) {
+                editor = MyApplication
+                        .getContext()
+                        .getSharedPreferences(fileName, MODE_PRIVATE)
+                        .edit();
+
+                editors.put(fileName, editor);
+            }
+
+            return editor;
+        }
+
+        public void putString(String fileName, String key, String value) {
+            editorFor(fileName).putString(key, value);
+        }
+
+        public void putBoolean(String fileName, String key, boolean value) {
+            editorFor(fileName).putBoolean(key, value);
+        }
+
+        public void remove(String fileName, String key) {
+            editorFor(fileName).remove(key);
+        }
+
+        public void clear(String fileName) {
+            editorFor(fileName).clear();
+        }
+
+        public void apply() {
+            for (SharedPreferences.Editor editor : editors.values()) {
+                editor.apply();
+            }
+
+            editors.clear();
+        }
     }
 
 }
