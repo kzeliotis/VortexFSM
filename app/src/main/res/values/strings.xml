@@ -1024,6 +1024,10 @@
     <string name="product_history_gr">ΙΣΤΟΡΙΚΟ ΠΡΟΪΟΝΤΟΣ</string>
     <string name="product_history_ar">السجل التاريخي للمنتج</string>
 
+    <string name="product_history_lowercase">Product History</string>
+    <string name="product_history_lowercase_gr">Ιστορικό Προϊόντος</string>
+    <string name="product_history_lowercase_ar">السجل التاريخي للمنتج</string>
+
     <string name="change_resource">Change Resource and Date</string>
     <string name="change_resource_gr">Αλλαγή Τεχνικού και ημερομηνίας</string>
     <string name="change_resource_ar">تغيير المورد والتاريخ</string>
@@ -1451,5 +1455,12 @@
     <string name="no_date_assignment_confirmation_gr">Δεν έχετε ορίσει ημερομηνία έναρξης ή λήξης. Θέλετε να συνεχίσετε;</string>
     <string name="no_date_assignment_confirmation_ar">No start or end date selected. Do you want to proceed?</string>
 
+    <string name="assign_product_to_workorder">Assign product to Work Order</string>
+    <string name="assign_product_to_workorder_gr">Ορισμός ως προϊόν ανάθεσης</string>
+    <string name="assign_product_to_workorder_ar">Assign product to Work Order</string>
+
+    <string name="assign_product_to_workorder_question">Do you want to assign product \'\'{0}\'\' to this Work Order?</string>
+    <string name="assign_product_to_workorder_question_gr">Θέλετε να ορίσετε το προϊόν \'\'{0}\'\' ως προϊόν ανάθεσης;</string>
+    <string name="assign_product_to_workorder_question_ar">Do you want to assign product \'\'{0}\'\' to this Work Order?</string>
 
 </resources>

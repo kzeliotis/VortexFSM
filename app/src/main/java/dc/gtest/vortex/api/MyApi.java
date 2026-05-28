@@ -117,6 +117,7 @@ class MyApi {
     static final String API_GET_MASTER_PROJECTS = "/Vortex.svc/GetMasterProjectsForNewAssignment?CustomerId=";
     static final String API_GET_PROJECT_PRODUCT_BY_IDENTITY = "/Vortex.svc/GetProjectProductByIdentity?idValue=";
     static final String API_SEND_DET_CHILDREN = "/Vortex.svc/SetDetChildren";
+    static final String API_SEND_UPDATE_ASSIGNMENT_PRODUCT = "/Vortex.svc/UpdateAssignmentProjectProduct?AssignmentId=";
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;

@@ -286,6 +286,10 @@ public class MyLocalization {
     public static String localized_create_serial_question = "";
     public static String localized_search_code = "";
     public static String localized_no_date_confirmation = "";
+    public static String localized_assign_product_to_workorder = "";
+    public static String localized_assign_product_to_workorder_question = "";
+    public static String localized_product_history_lowercase = "";
+
 
     public static void setupLanguage(Context ctx) {
         String globalLang = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
@@ -564,6 +568,9 @@ public class MyLocalization {
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question_gr);
                 localized_search_code = ctx.getString(R.string.search_code_gr);
                 localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation_gr);
+                localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder_gr);
+                localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question_gr);
+                localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_gr);
                 break;
 
             case CONST_AR:
@@ -839,6 +846,9 @@ public class MyLocalization {
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question_ar);
                 localized_search_code = ctx.getString(R.string.search_code_ar);
                 localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation_ar);
+                localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder_ar);
+                localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question_ar);
+                localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_ar);
 
                 break;
 
@@ -1116,6 +1126,9 @@ public class MyLocalization {
                 localized_create_serial_question = ctx.getString(R.string.create_serial_question);
                 localized_search_code = ctx.getString(R.string.search_code);
                 localized_no_date_confirmation = ctx.getString(R.string.no_date_assignment_confirmation);
+                localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder);
+                localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question);
+                localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase);
 
                 break;
 

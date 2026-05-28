@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.icu.text.MessageFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import dc.gtest.vortex.activities.HistoryActivity;
 import dc.gtest.vortex.activities.SearchAttributesActivity;
 import dc.gtest.vortex.api.DeleteProduct;
 import dc.gtest.vortex.activities.AttributesActivity;
+import dc.gtest.vortex.api.SendUpdateAssignmentProduct;
 import dc.gtest.vortex.items.MeasurementsListActivity;
 import dc.gtest.vortex.models.ProductModel;
 import dc.gtest.vortex.support.MyCanEdit;
@@ -39,12 +42,17 @@ import static dc.gtest.vortex.support.MyGlobals.SELECTED_PRODUCT;
 import static dc.gtest.vortex.support.MyGlobals.globalGetHistoryParameter;
 import static dc.gtest.vortex.support.MyGlobals.globalSelectedProductId;
 import static dc.gtest.vortex.support.MyLocalization.localized_Mandatory_Measurements_Missing;
+import static dc.gtest.vortex.support.MyLocalization.localized_assign_product_to_workorder;
+import static dc.gtest.vortex.support.MyLocalization.localized_assign_product_to_workorder_question;
 import static dc.gtest.vortex.support.MyLocalization.localized_attributes;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
+import static dc.gtest.vortex.support.MyLocalization.localized_no;
 import static dc.gtest.vortex.support.MyLocalization.localized_product_history;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_history_lowercase;
 import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
+import static dc.gtest.vortex.support.MyLocalization.localized_yes;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
 
 public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.ViewHolder> implements Filterable {
@@ -138,29 +146,62 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
 
                 globalSelectedProductId = holder.mItem.getProjectProductId();
 
+                String[] options = {
+                        localized_attributes,
+                        localized_measurements,
+                        localized_product_history_lowercase,
+                        localized_assign_product_to_workorder
+                };
+
                 new AlertDialog.Builder(ctx)
-                        .setNeutralButton(localized_attributes, (dialog, which) -> {
+                        .setItems(options, (dialog, which) -> {
                             dialog.dismiss();
 
-                            Intent intent = new Intent(ctx, AttributesActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(KEY_ID_SEARCH,  seachSerial);
-                            ctx.startActivity(intent);
-                        })
-                        .setPositiveButton(localized_measurements, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(ctx, MeasurementsListActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(KEY_ID_SEARCH,  seachSerial);
-                            ctx.startActivity(intent);
-                        })
-                        .setNegativeButton(localized_product_history, (dialog, which) -> {
-                            dialog.dismiss();
+                            switch (which) {
+                                case 0: {
+                                    Intent intent = new Intent(ctx, AttributesActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    ctx.startActivity(intent);
+                                    break;
+                                }
 
-                            globalGetHistoryParameter = "0;" + holder.mItem.getProjectProductId();
-                            Intent intent = new Intent(ctx, HistoryActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            ctx.startActivity(intent);
+                                case 1: {
+                                    Intent intent = new Intent(ctx, MeasurementsListActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    ctx.startActivity(intent);
+                                    break;
+                                }
+
+                                case 2: {
+                                    globalGetHistoryParameter = "0;" + holder.mItem.getProjectProductId();
+
+                                    Intent intent = new Intent(ctx, HistoryActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    ctx.startActivity(intent);
+                                    break;
+                                }
+
+                                case 3: {
+                                    if(MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())){
+                                        new AlertDialog.Builder(ctx)
+                                                .setMessage(MessageFormat.format(localized_assign_product_to_workorder_question, holder.mItem.getProductDescription()))
+                                                .setPositiveButton(localized_yes, (confirmDialog, confirmWhich) -> {
+                                                    confirmDialog.dismiss();
+
+                                                    SendUpdateAssignmentProduct sendUpdateAssignmentProduct = new SendUpdateAssignmentProduct(ctx,
+                                                            SELECTED_ASSIGNMENT.getAssignmentId(),
+                                                            holder.mItem.getProjectProductId());
+                                                    sendUpdateAssignmentProduct.execute();
+                                                })
+                                                .setNegativeButton(localized_no, (confirmDialog, confirmWhich) -> {
+                                                    confirmDialog.dismiss();
+                                                })
+                                                .show();
+
+                                        break;
+                                    }
+                                }
+                            }
                         })
                         .show();
             });
