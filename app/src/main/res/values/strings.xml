@@ -1463,4 +1463,12 @@
     <string name="assign_product_to_workorder_question_gr">Θέλετε να ορίσετε το προϊόν \'\'{0}\'\' ως προϊόν ανάθεσης;</string>
     <string name="assign_product_to_workorder_question_ar">Do you want to assign product \'\'{0}\'\' to this Work Order?</string>
 
+    <string name="user_has_no_rights_for_action">You don\'t have necessary rights for this action</string>
+    <string name="user_has_no_rights_for_action_gr">Δεν έχετε τα απαραίτητα δικαιώματα για αυτή την ενέργεια</string>
+    <string name="user_has_no_rights_for_action_ar">You don\'t have necessary rights for this action</string>
+
+    <string name="product_already_assigned_to_workorder">The product is already assigned to Work Order</string>
+    <string name="product_already_assigned_to_workorder_gr">Το προϊόν είναι ήδη ορισμένο ως προϊόν ανάθεσης</string>
+    <string name="product_already_assigned_to_workorder_ar">The product is already assigned to Work Order</string>
+
 </resources>

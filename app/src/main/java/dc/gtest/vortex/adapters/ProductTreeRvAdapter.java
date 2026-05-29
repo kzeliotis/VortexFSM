@@ -62,6 +62,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_choose_product_fr
 import static dc.gtest.vortex.support.MyLocalization.localized_delete;
 import static dc.gtest.vortex.support.MyLocalization.localized_measurements;
 import static dc.gtest.vortex.support.MyLocalization.localized_no;
+import static dc.gtest.vortex.support.MyLocalization.localized_product_already_assigned_to_workorder;
 import static dc.gtest.vortex.support.MyLocalization.localized_product_history;
 import static dc.gtest.vortex.support.MyLocalization.localized_product_history_lowercase;
 import static dc.gtest.vortex.support.MyLocalization.localized_remove_product_components;
@@ -69,9 +70,11 @@ import static dc.gtest.vortex.support.MyLocalization.localized_replace;
 import static dc.gtest.vortex.support.MyLocalization.localized_replace_product_components;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_delete_product;
 import static android.content.Context.MODE_PRIVATE;
+import static dc.gtest.vortex.support.MyLocalization.localized_user_has_no_rights_for_action;
 import static dc.gtest.vortex.support.MyLocalization.localized_yes;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PRODUCTS_TO_INSTALLATION_FOR_SHOW;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MODIFY_ASSIGNMENT_PRODUCT;
 
 public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdapter.ViewHolder> implements Filterable {
 
@@ -252,6 +255,20 @@ public class ProductTreeRvAdapter extends RecyclerView.Adapter<ProductTreeRvAdap
                                 }
 
                                 case 3: {
+
+                                    if(!MyPrefs.getBoolean(PREF_MODIFY_ASSIGNMENT_PRODUCT, false)){
+                                        new android.app.AlertDialog.Builder(ctx)
+                                                .setMessage(localized_user_has_no_rights_for_action)
+                                                .show();
+                                        break;
+                                    }
+
+                                    if(holder.mItem.getProjectProductId().equals(SELECTED_ASSIGNMENT.getprojectProductId())){
+                                        new android.app.AlertDialog.Builder(ctx)
+                                                .setMessage(localized_product_already_assigned_to_workorder)
+                                                .show();
+                                        break;
+                                    }
 
                                     if(MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())){
                                         new AlertDialog.Builder(ctx)

@@ -48,6 +48,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_LOCATION_REFRESH_INTERVAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_CONSUMABLES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SERVICES_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_MANDATORY_SIGNATURE;
+import static dc.gtest.vortex.support.MyPrefs.PREF_MODIFY_ASSIGNMENT_PRODUCT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_NEW_ASSIGNMENT_FIELDS_OPTIONAL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PROCESS_ASSIGNMENT_ON_SCAN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_QTY_LIMIT_CONSUMABLE_FROM_PICKING;
@@ -297,6 +298,9 @@ public class GetMobileSettings extends AsyncTask<String, Void, String > {
 
                     MyPrefs.setBoolean(PREF_DISABLE_PRESELECTED_STATUS, MobileDisablePreselectedStatus == 1);
 
+                    int ModifyAssignmentProjectProductOnMobile = MyJsonParser.getIntValue(oneObject, "ModifyAssignmentProjectProductOnMobile", 0);
+
+                    MyPrefs.setBoolean(PREF_MODIFY_ASSIGNMENT_PRODUCT, ModifyAssignmentProjectProductOnMobile == 1);
 
                     String CurrentApkVersion = MyJsonParser.getStringValue(oneObject, "MobileApkVersionNumber", "");
                     String CurrentApkVersionURL = MyJsonParser.getStringValue(oneObject, "MobileApkVersionURL", "");

@@ -289,6 +289,8 @@ public class MyLocalization {
     public static String localized_assign_product_to_workorder = "";
     public static String localized_assign_product_to_workorder_question = "";
     public static String localized_product_history_lowercase = "";
+    public static String localized_user_has_no_rights_for_action = "";
+    public static String localized_product_already_assigned_to_workorder = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -571,6 +573,8 @@ public class MyLocalization {
                 localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder_gr);
                 localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question_gr);
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_gr);
+                localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action_gr);
+                localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder_gr);
                 break;
 
             case CONST_AR:
@@ -849,6 +853,8 @@ public class MyLocalization {
                 localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder_ar);
                 localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question_ar);
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_ar);
+                localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action_ar);
+                localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder_ar);
 
                 break;
 
@@ -1129,7 +1135,8 @@ public class MyLocalization {
                 localized_assign_product_to_workorder = ctx.getString(R.string.assign_product_to_workorder);
                 localized_assign_product_to_workorder_question = ctx.getString(R.string.assign_product_to_workorder_question);
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase);
-
+                localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action);
+                localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder);
                 break;
 
 
