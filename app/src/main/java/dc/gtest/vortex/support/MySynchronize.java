@@ -3,6 +3,8 @@ package dc.gtest.vortex.support;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.Map;
 
@@ -57,6 +59,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USED_SERVICES_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONES_WITH_NO_MEASUREMENTS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ZONE_PRODUCTS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_IS_SYNCING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ONLY_WIFI;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
 import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_INSTALLED_PRODUCTS_ON_CHECKOUT;
@@ -73,27 +76,44 @@ public class MySynchronize {
         this.ctx = ctx;
     }
 
+//    public void mySynchronize(boolean login) {
+//
+//        if (MyPrefs.getBoolean(PREF_IS_SYNCING, false)) {
+//            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//                finishSynchronize(login);
+//            }, 8000);
+//        } else {
+//            finishSynchronize(login);
+//        }
+//    }
+
     public void mySynchronize(boolean login) {
+
+        if (!login && MyPrefs.getBoolean(PREF_IS_SYNCING, false)) {
+            return;
+        }
 
         String result = "Success";
 
         if (MyUtils.isNetworkAvailable()) {
 
-            if (MyPrefs.getBoolean(PREF_ONLY_WIFI, false)) {
-                ConnectivityManager connManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if(!login){
+                if (MyPrefs.getBoolean(PREF_ONLY_WIFI, false)) {
+                    ConnectivityManager connManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                if (connManager != null) {
-                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    if (connManager != null) {
+                        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                    if (mWifi.isConnected()) {
-                        synchronizeSavedImages(ctx);
-                    }  else {
-                        result = "Failed - NoWifi";
+                        if (mWifi.isConnected()) {
+                            synchronizeSavedImages(ctx);
+                        }  else {
+                            result = "Failed - NoWifi";
+                        }
                     }
+                } else {
+                    synchronizeSavedImages(ctx);
+                    synchronizeSavedAttachments(ctx);
                 }
-            } else {
-                synchronizeSavedImages(ctx);
-                synchronizeSavedAttachments(ctx);
             }
 
             synchronizeSavedData(login);
@@ -103,7 +123,8 @@ public class MySynchronize {
             result = "Failed";
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), "", "", 0, "", result);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), "", " login:" + login, 0, "", result);
+
     }
 
     public static void synchronizeSavedImages(Context ctx) {
@@ -147,6 +168,8 @@ public class MySynchronize {
             sendLogin.execute(username, password);
             return;
         }
+
+        MyPrefs.setBoolean(PREF_IS_SYNCING, true);
 
         Map<String, ?> startTravelDataForSync = ctx.getSharedPreferences(PREF_FILE_START_TRAVEL_DATA_TO_SYNC, MODE_PRIVATE).getAll();
         for (Map.Entry<String, ?> entry : startTravelDataForSync.entrySet()) {
@@ -339,6 +362,11 @@ public class MySynchronize {
 //            SendDetChildren sendDetChildren = new SendDetChildren(ctx, prefKey);
 //            sendDetChildren.execute();
 //        }
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            MyPrefs.setBoolean(PREF_IS_SYNCING, false);
+        }, 10000);
+
 
 
     }

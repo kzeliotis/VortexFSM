@@ -135,8 +135,8 @@ public class SendLogin extends AsyncTask<String, Void, String > {
             try {
                 JSONArray jArrayDataFromApi = new JSONArray(responseBody);
 
-                for (int i = 0; i < jArrayDataFromApi.length(); i++) {
-                    JSONObject oneObject = jArrayDataFromApi.getJSONObject(i);
+                if(jArrayDataFromApi.length() > 0) { //for (int i = 0; i < jArrayDataFromApi.length(); i++) {
+                    JSONObject oneObject = jArrayDataFromApi.getJSONObject(0);
 
                     String IsActive = MyJsonParser.getStringValue(oneObject, "IsActive", "");
                     if (IsActive.equals("false")) {

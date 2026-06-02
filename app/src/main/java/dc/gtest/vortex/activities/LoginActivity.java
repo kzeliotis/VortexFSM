@@ -60,6 +60,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_AES_KEY;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEVICE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FIRST_HOST_URL;
+import static dc.gtest.vortex.support.MyPrefs.PREF_IS_SYNCING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
@@ -96,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
 
         String deviceIdText = "Device ID: " + MyPrefs.getDeviceId(PREF_DEVICE_ID, "");
         tvDeviceId.setText(deviceIdText);
+
+        MyPrefs.setBoolean(PREF_IS_SYNCING, false);
 
         etLoginUserLoginEmail.clearFocus();
         etLoginUserPassword.clearFocus();
