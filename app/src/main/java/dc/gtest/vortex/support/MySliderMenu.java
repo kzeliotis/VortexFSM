@@ -3,6 +3,7 @@ package dc.gtest.vortex.support;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,6 +48,7 @@ import dc.gtest.vortex.activities.PhotoSettingsActivity;
 import dc.gtest.vortex.activities.ProductsActivity;
 import dc.gtest.vortex.activities.SearchCustomersActivity;
 import dc.gtest.vortex.activities.ManualsActivity;
+import dc.gtest.vortex.api.SendDiagnostics;
 import dc.gtest.vortex.application.MyApplication;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
@@ -55,17 +57,24 @@ import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
 import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SCANNED_SERIAL;
 import static dc.gtest.vortex.support.MyGlobals.KEY_ID_SEARCH;
 import static dc.gtest.vortex.support.MyGlobals.KEY_VORTEX_TABLE;
+import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_clear_cache_warning;
 import static dc.gtest.vortex.support.MyLocalization.localized_company_custom_fields;
 import static dc.gtest.vortex.support.MyLocalization.localized_company_website;
+import static dc.gtest.vortex.support.MyLocalization.localized_diagnostics_failed;
+import static dc.gtest.vortex.support.MyLocalization.localized_diagnostics_ready;
 import static dc.gtest.vortex.support.MyLocalization.localized_host_server_settings;
 import static dc.gtest.vortex.support.MyLocalization.localized_log_out;
 import static dc.gtest.vortex.support.MyLocalization.localized_manuals;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_assignment;
 import static dc.gtest.vortex.support.MyLocalization.localized_new_customer;
 import static dc.gtest.vortex.support.MyLocalization.localized_photo_settings;
+import static dc.gtest.vortex.support.MyLocalization.localized_preparing_diagnostics;
+import static dc.gtest.vortex.support.MyLocalization.localized_proceed;
 import static dc.gtest.vortex.support.MyLocalization.localized_search_code;
 import static dc.gtest.vortex.support.MyLocalization.localized_search_customers;
+import static dc.gtest.vortex.support.MyLocalization.localized_send_diagnostics;
+import static dc.gtest.vortex.support.MyLocalization.localized_send_diagnostics_accept;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_email;
 import static dc.gtest.vortex.support.MyLocalization.localized_shared_prefs_exported;
 import static dc.gtest.vortex.support.MyLocalization.localized_show_assignments;
@@ -134,6 +143,7 @@ public class MySliderMenu {
             navigationView.getMenu().findItem(R.id.nav_company_custom_fields).setTitle(localized_company_custom_fields);
             navigationView.getMenu().findItem(R.id.nav_privacy_policy).setTitle("Privacy Policy");
             navigationView.getMenu().findItem(R.id.nav_search_code).setTitle(localized_search_code);
+            navigationView.getMenu().findItem(R.id.nav_sendDiagnostics).setTitle(localized_send_diagnostics);
 
 
             tvVersion.setText(BuildConfig.VERSION_NAME);
@@ -301,6 +311,56 @@ public class MySliderMenu {
                         intent = new Intent(ctx, CustomFieldsActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(KEY_VORTEX_TABLE, "Company");
+
+                        break;
+
+                    case R.id.nav_sendDiagnostics:
+                        new AlertDialog.Builder(ctx)
+                                .setTitle(localized_send_diagnostics)
+                                .setMessage(localized_send_diagnostics_accept)
+                                .setPositiveButton(localized_proceed, (dialog, which) -> {
+                                    // Show a progress indicator while working in background
+                                    ProgressDialog progress = new ProgressDialog(ctx);
+                                    progress.setMessage(localized_preparing_diagnostics);
+                                    progress.setCancelable(false);
+                                    progress.show();
+
+                                    new Thread(() -> {
+                                        // Step 1: Export shared prefs (reuse your existing logic)
+                                        File sharedPrefsSource = new File("/data/data/dc.gtest.vortex/shared_prefs");
+                                        File sharedPrefsBackup = new File(ctx.getExternalFilesDir(null) + File.separator + "Shared_Pref_BackUp");
+                                        MyUtils.checkMakeDir(sharedPrefsBackup);
+                                        try {
+                                            copyDirectory(sharedPrefsSource, sharedPrefsBackup);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        // Step 2: Create the zip
+                                        String diagnosticsInfo = DiagnosticsInfo.collect(ctx);
+                                        File zipFile = MyLogs.createDiagnosticsZip(ctx);
+
+                                        // Dismiss progress and notify user
+                                        ((Activity) ctx).runOnUiThread(() -> {
+                                            progress.dismiss();
+                                            if (zipFile != null) {
+                                                Toast.makeText(MyApplication.getContext(),
+                                                        localized_diagnostics_ready,
+                                                        Toast.LENGTH_SHORT).show();
+                                                // Step 3: Upload — coming next
+                                                new SendDiagnostics(ctx,diagnosticsInfo).execute(zipFile);
+                                            } else {
+                                                Toast.makeText(MyApplication.getContext(),
+                                                        localized_diagnostics_failed,
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }).start();
+                                })
+                                .setNegativeButton(localized_cancel, (dialog, which) -> dialog.dismiss())
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .show();
+                        break;
                 }
 
                 if (intent != null) {
@@ -331,6 +391,12 @@ public class MySliderMenu {
         navigationView.getMenu().findItem(R.id.nav_api_url_settings).setTitle(localized_host_server_settings);
         navigationView.getMenu().findItem(R.id.nav_website).setTitle(localized_company_website);
         navigationView.getMenu().findItem(R.id.nav_logout).setTitle(localized_log_out + " - " + userName);
+        navigationView.getMenu().findItem(R.id.nav_company_custom_fields).setTitle(localized_company_custom_fields);
+        navigationView.getMenu().findItem(R.id.nav_privacy_policy).setTitle("Privacy Policy");
+        navigationView.getMenu().findItem(R.id.nav_search_code).setTitle(localized_search_code);
+        navigationView.getMenu().findItem(R.id.nav_sendDiagnostics).setTitle(localized_send_diagnostics);
+
+
 
         closeDrawer();
     }

@@ -11,12 +11,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 //import java.net.HttpURLConnection;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -118,6 +120,8 @@ class MyApi {
     static final String API_GET_PROJECT_PRODUCT_BY_IDENTITY = "/Vortex.svc/GetProjectProductByIdentity?idValue=";
     static final String API_SEND_DET_CHILDREN = "/Vortex.svc/SetDetChildren";
     static final String API_SEND_UPDATE_ASSIGNMENT_PRODUCT = "/Vortex.svc/UpdateAssignmentProjectProduct?AssignmentId=";
+    static final String API_SEND_DIAGNOSTICS = "/Vortex.svc/SendDiagnostics";
+
 
     private static HttpsURLConnection httpsUrlConnection(URL urlDownload) throws Exception {
         HttpsURLConnection connection=null;
@@ -493,5 +497,91 @@ class MyApi {
         return destinationPath;
     }
 
+
+    public static Bundle postFile(String apiUrl, File file, String diagnosticsInfo) throws Exception {
+        Bundle bundle = new Bundle();
+        String boundary = "----VortexBoundary" + System.currentTimeMillis();
+
+        try {
+            int connTimeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15) * 1000;
+            int readTimeout = MyPrefs.getInt(PREF_API_READ_TIMEOUT, 120) * 1000;
+
+            URL url = new URL(apiUrl);
+            HttpsURLConnection connection = httpsUrlConnection(url);
+            connection.setReadTimeout(readTimeout);
+            connection.setConnectTimeout(connTimeout);
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+
+            // Same auth headers as your existing calls
+            if (MyPrefs.getBoolean(PREF_DEV_LOGIN, false)) {
+                connection.setRequestProperty("Authorization", "consult1ng|" + Version);
+            } else {
+                connection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
+            }
+            connection.setRequestProperty("VortexFSM", "f035gbl00033eedfpsycrencewe3225fcvf09");
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+            // Write the multipart body
+            try (OutputStream os = connection.getOutputStream();
+                 PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), true);
+                 FileInputStream fis = new FileInputStream(file)) {
+
+                // Part 1: diagnostics info as plain text field
+                writer.append("--").append(boundary).append("\r\n");
+                writer.append("Content-Disposition: form-data; name=\"diagnostics_info\"").append("\r\n");
+                writer.append("Content-Type: text/plain; charset=UTF-8").append("\r\n");
+                writer.append("\r\n").flush();
+                os.write(diagnosticsInfo.getBytes(StandardCharsets.UTF_8));
+                os.flush();
+                writer.append("\r\n").flush();
+
+                // Part 2: the zip file
+                writer.append("--").append(boundary).append("\r\n");
+                writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"")
+                        .append(file.getName()).append("\"").append("\r\n");
+                writer.append("Content-Type: application/zip").append("\r\n");
+                writer.append("\r\n").flush();
+
+                // File bytes
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    os.write(buffer, 0, bytesRead);
+                }
+                os.flush();
+
+                // Closing boundary
+                writer.append("\r\n").append("--").append(boundary).append("--").append("\r\n").flush();
+            }
+
+            int responseCode = connection.getResponseCode();
+            InputStream inputStream = responseCode >= 400
+                    ? connection.getErrorStream()
+                    : connection.getInputStream();
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+
+            bundle.putInt(MY_API_RESPONSE_CODE, responseCode);
+            bundle.putString(MY_API_RESPONSE_MESSAGE, connection.getResponseMessage());
+            bundle.putString(MY_API_RESPONSE_BODY, byteArrayOutputStream.toString("UTF-8"));
+
+            byteArrayOutputStream.close();
+            inputStream.close();
+            connection.disconnect();
+
+        } catch (Exception e) {
+            MyLogs.showFullLog("myLogs: MyApi", apiUrl, file.getName(), 0, e.getMessage(), "");
+            e.printStackTrace();
+        }
+
+        return bundle;
+    }
 
 }

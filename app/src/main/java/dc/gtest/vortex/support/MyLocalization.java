@@ -291,6 +291,13 @@ public class MyLocalization {
     public static String localized_product_history_lowercase = "";
     public static String localized_user_has_no_rights_for_action = "";
     public static String localized_product_already_assigned_to_workorder = "";
+    public static String localized_send_diagnostics = "";
+    public static String localized_send_diagnostics_accept = "";
+    public static String localized_proceed = "";
+    public static String localized_preparing_diagnostics = "";
+    public static String localized_diagnostics_sent = "";
+    public static String localized_diagnostics_ready = "";
+    public static String localized_diagnostics_failed = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -575,6 +582,13 @@ public class MyLocalization {
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_gr);
                 localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action_gr);
                 localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder_gr);
+                localized_send_diagnostics = ctx.getString(R.string.send_diagnostics_gr);
+                localized_send_diagnostics_accept = ctx.getString(R.string.send_diagnostics_accept_gr);
+                localized_proceed = ctx.getString(R.string.proceed_gr);
+                localized_preparing_diagnostics = ctx.getString(R.string.preparing_diagnostics_gr);
+                localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent_gr);
+                localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed_gr);
+                localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready_gr);
                 break;
 
             case CONST_AR:
@@ -855,6 +869,13 @@ public class MyLocalization {
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase_ar);
                 localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action_ar);
                 localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder_ar);
+                localized_send_diagnostics = ctx.getString(R.string.send_diagnostics_ar);
+                localized_send_diagnostics_accept = ctx.getString(R.string.send_diagnostics_accept_ar);
+                localized_proceed = ctx.getString(R.string.proceed_ar);
+                localized_preparing_diagnostics = ctx.getString(R.string.preparing_diagnostics_ar);
+                localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent_ar);
+                localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed_ar);
+                localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready_ar);
 
                 break;
 
@@ -1137,8 +1158,14 @@ public class MyLocalization {
                 localized_product_history_lowercase = ctx.getString(R.string.product_history_lowercase);
                 localized_user_has_no_rights_for_action = ctx.getString(R.string.user_has_no_rights_for_action);
                 localized_product_already_assigned_to_workorder = ctx.getString(R.string.product_already_assigned_to_workorder);
+                localized_send_diagnostics = ctx.getString(R.string.send_diagnostics);
+                localized_send_diagnostics_accept = ctx.getString(R.string.send_diagnostics_accept);
+                localized_proceed = ctx.getString(R.string.proceed);
+                localized_preparing_diagnostics = ctx.getString(R.string.preparing_diagnostics);
+                localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent);
+                localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed);
+                localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready);
                 break;
-
 
         }
     }

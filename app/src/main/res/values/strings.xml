@@ -1471,4 +1471,32 @@
     <string name="product_already_assigned_to_workorder_gr">Το προϊόν είναι ήδη ορισμένο ως προϊόν ανάθεσης</string>
     <string name="product_already_assigned_to_workorder_ar">The product is already assigned to Work Order</string>
 
+    <string name="send_diagnostics">Send Diagnostics</string>
+    <string name="send_diagnostics_gr">Αποστολή Διαγνωστικών</string>
+    <string name="send_diagnostics_ar">Send Diagnostics</string>
+
+    <string name="send_diagnostics_accept">By proceeding, you agree to share the application logs and settings with our Support team. This information will be used solely to analyze and troubleshoot issues with the application. No personal data beyond app usage logs will be transmitted.</string>
+    <string name="send_diagnostics_accept_gr">Συνεχίζοντας, αποδέχεστε την κοινοποίηση των αρχείων καταγραφής και των ρυθμίσεων της εφαρμογής στην ομάδα υποστήριξής μας. Οι πληροφορίες αυτές θα χρησιμοποιηθούν αποκλειστικά για την ανάλυση και την αντιμετώπιση προβλημάτων της εφαρμογής. Δεν θα αποσταλούν προσωπικά δεδομένα πέραν των αρχείων καταγραφής χρήσης.</string>
+    <string name="send_diagnostics_accept_ar">By proceeding, you agree to share the application logs and settings with our Support team. This information will be used solely to analyze and troubleshoot issues with the application. No personal data beyond app usage logs will be transmitted.</string>
+
+    <string name="proceed">Proceed</string>
+    <string name="proceed_gr">Συνέχεια</string>
+    <string name="proceed_ar">Proceed</string>
+
+    <string name="preparing_diagnostics">Preparing diagnostics…</string>
+    <string name="preparing_diagnostics_gr">Προετοιμασία διαγνωστικών…</string>
+    <string name="preparing_diagnostics_ar">Preparing diagnostics…</string>
+
+    <string name="diagnostics_ready">Diagnostics ready. Sending to support…</string>
+    <string name="diagnostics_ready_gr">Τα διαγνωστικά είναι έτοιμα. Αποστολή στο support…</string>
+    <string name="diagnostics_ready_ar">Diagnostics ready. Sending to support…</string>
+
+    <string name="diagnostics_failed">Failed to prepare diagnostics. Please try again.</string>
+    <string name="diagnostics_failed_gr">Αποτυχία δημιουργίας διαγνωστικών. Παρακαλώ ξαναδοκιμάστε.</string>
+    <string name="diagnostics_failed_ar">Failed to prepare diagnostics. Please try again.</string>
+
+    <string name="diagnostics_sent">Diagnstics sent successfully.</string>
+    <string name="diagnostics_sent_gr">Η αποστολή διαγνωστικών ολοκληρώθηκε με επιτυχία</string>
+    <string name="diagnostics_sent_ar">Diagnstics sent successfully.</string>
+
 </resources>
