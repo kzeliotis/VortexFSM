@@ -65,8 +65,9 @@ public class DiagnosticsInfo {
         sb.append(permissionStatus(ctx, Manifest.permission.CAMERA,               "Camera          "));
         sb.append(permissionStatus(ctx, Manifest.permission.ACCESS_FINE_LOCATION,  "Location Fine   "));
         sb.append(permissionStatus(ctx, Manifest.permission.ACCESS_COARSE_LOCATION,"Location Coarse "));
-        sb.append(permissionStatus(ctx, Manifest.permission.READ_EXTERNAL_STORAGE, "Read Storage    "));
-        sb.append(permissionStatus(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE,"Write Storage   "));
+//        sb.append(permissionStatus(ctx, Manifest.permission.READ_EXTERNAL_STORAGE, "Read Storage    "));
+//        sb.append(permissionStatus(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE,"Write Storage   "));
+        sb.append(storagePermissionStatus(ctx));
         sb.append(permissionStatus(ctx, Manifest.permission.INTERNET,              "Internet        "));
         sb.append(permissionStatus(ctx, Manifest.permission.ACCESS_NETWORK_STATE,  "Network State   "));
         sb.append("\n");
@@ -138,5 +139,29 @@ public class DiagnosticsInfo {
         boolean granted = ContextCompat.checkSelfPermission(ctx, permission)
                 == PackageManager.PERMISSION_GRANTED;
         return label + ": " + (granted ? "GRANTED" : "DENIED") + "\n";
+    }
+
+    private static String storagePermissionStatus(Context ctx) {
+        StringBuilder sb = new StringBuilder();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ — READ_EXTERNAL_STORAGE is replaced by granular media permissions
+            sb.append(permissionStatus(ctx, Manifest.permission.READ_MEDIA_IMAGES, "Read Media Images"));
+            sb.append(permissionStatus(ctx, Manifest.permission.READ_MEDIA_VIDEO,  "Read Media Video "));
+            sb.append(permissionStatus(ctx, Manifest.permission.READ_MEDIA_AUDIO,  "Read Media Audio "));
+            sb.append("Write Storage    : N/A (Scoped Storage - Android 13+)\n");
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10, 11, 12 — WRITE is deprecated, READ still exists but scoped storage applies
+            sb.append(permissionStatus(ctx, Manifest.permission.READ_EXTERNAL_STORAGE, "Read Storage     "));
+            sb.append("Write Storage    : N/A (Scoped Storage - Android 10+)\n");
+
+        } else {
+            // Android 9 and below — both permissions are meaningful
+            sb.append(permissionStatus(ctx, Manifest.permission.READ_EXTERNAL_STORAGE,  "Read Storage     "));
+            sb.append(permissionStatus(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE, "Write Storage    "));
+        }
+
+        return sb.toString();
     }
 }
