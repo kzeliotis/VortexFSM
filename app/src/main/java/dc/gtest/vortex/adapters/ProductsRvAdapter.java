@@ -156,6 +156,13 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                         localized_assign_product_to_workorder
                 };
 
+                if(holder.mItem.isNotSynchronized()){
+                    options = new String[] {
+                            localized_attributes,
+                            localized_measurements
+                    };
+                }
+
                 new AlertDialog.Builder(ctx)
                         .setItems(options, (dialog, which) -> {
                             dialog.dismiss();
@@ -164,6 +171,7 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                                 case 0: {
                                     Intent intent = new Intent(ctx, AttributesActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.putExtra("ItemNotSynchronized", holder.mItem.isNotSynchronized());
                                     ctx.startActivity(intent);
                                     break;
                                 }
@@ -171,6 +179,7 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                                 case 1: {
                                     Intent intent = new Intent(ctx, MeasurementsListActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.putExtra("ItemNotSynchronized", holder.mItem.isNotSynchronized());
                                     ctx.startActivity(intent);
                                     break;
                                 }
@@ -228,34 +237,37 @@ public class ProductsRvAdapter extends RecyclerView.Adapter<ProductsRvAdapter.Vi
                 holder.mView.setOnLongClickListener(v -> {
                     if (MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
 
-                        String productComponentId = holder.mItem.getProductComponentId();
+                        if(!holder.mItem.isNotSynchronized()){
+                            String productComponentId = holder.mItem.getProductComponentId();
 
-                        new AlertDialog.Builder(ctx)
-                                .setMessage(localized_to_delete_product)
-                                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    SELECTED_PRODUCT = holder.mItem;
-                                    if(CheckMandatoryAttributes()){
-                                        DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
-                                        if(productComponentId != null && !productComponentId.equals("0")){
-                                            new AlertDialog.Builder(ctx)
-                                                    .setMessage(localized_remove_product_components)
-                                                    .setPositiveButton(R.string.yes, (dialog3, which3) -> {
-                                                        deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
-                                                    })
-                                                    .setNegativeButton(R.string.no, (dialog3, which3) -> {
-                                                        deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
-                                                    })
-                                                    .show();
-                                            //deleteProduct.execute(holder.mItem.getProjectProductId());
-                                        }else{
-                                            deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                            new AlertDialog.Builder(ctx)
+                                    .setMessage(localized_to_delete_product)
+                                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                        dialog.dismiss();
+                                        SELECTED_PRODUCT = holder.mItem;
+                                        if(CheckMandatoryAttributes()){
+                                            DeleteProduct deleteProduct = new DeleteProduct(ctx, SELECTED_ASSIGNMENT.getAssignmentId());
+                                            if(productComponentId != null && !productComponentId.equals("0")){
+                                                new AlertDialog.Builder(ctx)
+                                                        .setMessage(localized_remove_product_components)
+                                                        .setPositiveButton(R.string.yes, (dialog3, which3) -> {
+                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), productComponentId);
+                                                        })
+                                                        .setNegativeButton(R.string.no, (dialog3, which3) -> {
+                                                            deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                                        })
+                                                        .show();
+                                                //deleteProduct.execute(holder.mItem.getProjectProductId());
+                                            }else{
+                                                deleteProduct.execute(holder.mItem.getProjectProductId(), "0");
+                                            }
                                         }
-                                    }
 
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
+                                    })
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .show();
+                        }
+
                     }
 
                     return true;

@@ -73,6 +73,7 @@ public class MeasurementsListActivity extends AppCompatActivity {
         FrameLayout flBaseContainer = findViewById(R.id.flBaseDrawerLayout);
         getLayoutInflater().inflate(R.layout.items_list_content, flBaseContainer, true);
         searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
+        boolean itemNotSynced = getIntent().getBooleanExtra("ItemNotSynchronized", false);
 
         language = MyPrefs.getString(PREF_KEY_SELECTED_LANGUAGE, CONST_EN);
         changeTextLanguage();
@@ -109,6 +110,10 @@ public class MeasurementsListActivity extends AppCompatActivity {
         if (btnBottom != null) {
             btnBottom.setVisibility(View.VISIBLE);
             btnBottom.setText(addNewMeasurable);
+
+            if(itemNotSynced){
+                btnBottom.setEnabled(false);
+            }
 
             btnBottom.setOnClickListener(v -> {
                 if (searchSerial || MyCanEdit.canEdit(assignmentId)) {

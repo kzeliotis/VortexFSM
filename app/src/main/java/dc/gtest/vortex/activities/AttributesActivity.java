@@ -75,6 +75,7 @@ public class AttributesActivity extends BaseDrawerActivity {
         RecyclerView rvAttributes = findViewById(R.id.rvAttributes);
         btnAddNewAttributes = findViewById(R.id.btnAddNewAttributes);
         searchSerial = getIntent().getBooleanExtra(KEY_ID_SEARCH, false);
+        boolean itemNotSynced = getIntent().getBooleanExtra("ItemNotSynchronized", false);
 
         for (int i = 0; i < PRODUCTS_LIST.size(); i++) {
             if (PRODUCTS_LIST.get(i).getProjectProductId().equalsIgnoreCase(globalSelectedProductId)) {
@@ -93,6 +94,10 @@ public class AttributesActivity extends BaseDrawerActivity {
 
         attributesRvAdapter = new AttributesRvAdapter(ATTRIBUTES_LIST, AttributesActivity.this, searchSerial);
         rvAttributes.setAdapter(attributesRvAdapter);
+
+        if(itemNotSynced){
+            btnAddNewAttributes.setEnabled(false);
+        }
 
         btnAddNewAttributes.setOnClickListener(v -> {
             if (searchSerial || MyCanEdit.canEdit(SELECTED_ASSIGNMENT.getAssignmentId())) {
