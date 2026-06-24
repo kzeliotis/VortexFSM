@@ -7,9 +7,12 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -35,7 +38,6 @@ import dc.gtest.vortex.api.GetManuals;
 import dc.gtest.vortex.api.ToGetMeasurableAttributes;
 import dc.gtest.vortex.api.GetAllProducts;
 import dc.gtest.vortex.api.GetServices;
-import dc.gtest.vortex.api.GetStatuses;
 import dc.gtest.vortex.api.SendLogin;
 import dc.gtest.vortex.application.MyApplication;
 import dc.gtest.vortex.support.MyDialogs;
@@ -43,6 +45,18 @@ import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyPrefs;
 import dc.gtest.vortex.support.MyUtils;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialException;
+
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import static dc.gtest.vortex.support.MyGlobals.CONST_AR;
 import static dc.gtest.vortex.support.MyGlobals.CONST_EN;
@@ -53,6 +67,7 @@ import static dc.gtest.vortex.support.MyGlobals.globalExternalFileDir;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
 import static dc.gtest.vortex.support.MyLocalization.localized_fill_all_fields;
 import static dc.gtest.vortex.support.MyLocalization.localized_fill_host_server;
+import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
 import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_connection;
 import static dc.gtest.vortex.support.MyLocalization.localized_save;
 import static dc.gtest.vortex.support.MyLocalization.localized_to_exit;
@@ -76,6 +91,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
 
     private MenuItem languageMenu;
+
+    private static final String WEB_CLIENT_ID = "825981557451-ct2ag905o8392tgas6t3b17d1ifpf3vf.apps.googleusercontent.com";
+    private CredentialManager credentialManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +207,107 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        credentialManager = CredentialManager.create(this);
+
+        com.google.android.gms.common.SignInButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+
+        for (int i = 0; i < btnGoogleSignIn.getChildCount(); i++) {
+            View v = btnGoogleSignIn.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setText("Sign in with Google");
+                break;
+            }
+        }
+
+        btnGoogleSignIn.setOnClickListener(v -> {
+            if (MyPrefs.getString(PREF_BASE_HOST_URL, "").isEmpty()) {
+                Toast toast = Toast.makeText(LoginActivity.this, localized_fill_host_server, Toast.LENGTH_SHORT);
+                toast.setGravity(TOP, 0, 0);
+                toast.show();
+                return;
+            }
+            if (!MyUtils.isNetworkAvailable()) {
+                Toast.makeText(MyApplication.getContext(), localized_no_internet_connection, Toast.LENGTH_LONG).show();
+                return;
+            }
+            startGoogleSignIn();
+        });
+
+    }
+
+    private void startGoogleSignIn() {
+        GetSignInWithGoogleOption googleIdOption = new GetSignInWithGoogleOption
+                .Builder(WEB_CLIENT_ID)
+                .build();
+
+        GetCredentialRequest request = new GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build();
+
+        credentialManager.getCredentialAsync(
+                this,
+                request,
+                null,
+                Executors.newSingleThreadExecutor(),
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+
+                    @Override
+                    public void onResult(GetCredentialResponse result) {
+                        runOnUiThread(() -> {
+                            try {
+                                handleGoogleCredential(result);
+                            } catch (ExecutionException e) {
+                                throw new RuntimeException(e);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(GetCredentialException e) {
+                        runOnUiThread(() -> {
+                            Log.e("GoogleSignIn", "Credential error: " + e.getMessage());
+                            MyDialogs.showOK(LoginActivity.this, localized_login_failed);
+                        });
+                    }
+                }
+        );
+    }
+
+
+    private void handleGoogleCredential(GetCredentialResponse result) throws ExecutionException, InterruptedException {
+        if (result.getCredential() instanceof CustomCredential) {
+            CustomCredential credential = (CustomCredential) result.getCredential();
+
+            if (GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                    .equals(credential.getType())) {
+
+                GoogleIdTokenCredential googleIdTokenCredential =
+                        GoogleIdTokenCredential.createFrom(credential.getData());
+
+                String idToken     = googleIdTokenCredential.getIdToken();
+                String email       = googleIdTokenCredential.getId();          // email
+                String displayName = googleIdTokenCredential.getDisplayName();
+
+                MyPrefs.setStringWithFileName(PREF_PASSWORD, "1", "");
+
+                SendLogin sendLogin = new SendLogin(LoginActivity.this, false, false);
+                String loginresult = sendLogin.execute(email, "", idToken).get();
+                getGeneralDataFromServer();
+//                // Fire exactly like SendLogin — same AsyncTask pattern your app uses
+//                SendGoogleLogin sendGoogleLogin = new SendGoogleLogin(LoginActivity.this);
+//                sendGoogleLogin.execute(idToken, email, displayName);
+
+            } else {
+                Log.e("GoogleSignIn", "Unexpected credential type: " + credential.getType());
+                MyDialogs.showOK(this, localized_login_failed);
+            }
+        } else {
+            Log.e("GoogleSignIn", "Unexpected credential class");
+            MyDialogs.showOK(this, localized_login_failed);
+        }
     }
 
     @Override

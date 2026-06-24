@@ -62,6 +62,10 @@
     <string name="sign_in_gr">Σύνδεση</string>
     <string name="sign_in_ar">تسجيل الدخول</string>
 
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_google_gr">Σύνδεση με Google</string>
+    <string name="sign_in_with_google_ar">Sign in with Google</string>
+
     <string name="click_to_sign">click to sign</string>
     <string name="click_to_sign_gr">πατήστε για υπογραφή</string>
     <string name="click_to_sign_ar">اضغط لتسجيل الدخول</string>

@@ -61,6 +61,13 @@
             android:textStyle="bold"
             android:background="@drawable/rounded_button_blue" />
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in_with_google"
+            android:layout_marginTop="12dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"

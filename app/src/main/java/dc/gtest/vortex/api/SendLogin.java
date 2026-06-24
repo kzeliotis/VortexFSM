@@ -32,6 +32,7 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
+import static dc.gtest.vortex.support.MyGlobals.userGoogleId;
 import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
 import static dc.gtest.vortex.support.MyLocalization.localized_user_is_inactive;
 import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
@@ -85,6 +86,8 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
         username = params[0];
         password = params[1];
+        String idToken = params.length > 2 ? params[2] : "";
+
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
         apiUrl = baseHostUrl+ "/Vortex.svc/GetUserAuthentication";
@@ -95,11 +98,12 @@ public class SendLogin extends AsyncTask<String, Void, String > {
                 "{\n" +
                         "  \"username\": \"" + username + "\",\n" +
                         "  \"password\": \"" + password + "\",\n" +
+                        "  \"GoogleId\": \"" + userGoogleId + "\",\n" +
+                        "  \"GoogleIdToken\": \"" + idToken + "\",\n" +
                         "  \"Encrypted\": \"" + encrypted + "\"\n" +
                         "}";
 
 
-        //you are paparas
         try {
             Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
 
@@ -178,9 +182,11 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
                             String UserId = MyJsonParser.getStringValue(oneObject, "UserId", "0");
                             String WarehouseId = MyJsonParser.getStringValue(oneObject, "WarehouseId", "0");
+                            String googleId = MyJsonParser.getStringValue(oneObject, "GoogleId", "");
 
                             MyPrefs.setString(PREF_WAREHOUSEID, WarehouseId);
                             MyPrefs.setString(PREF_USERID, UserId);
+                            userGoogleId = googleId;
 
                             Intent intent = new Intent(ctx, AssignmentsActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
