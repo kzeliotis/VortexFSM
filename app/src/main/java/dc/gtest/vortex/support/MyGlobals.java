@@ -200,7 +200,6 @@ public class MyGlobals {
     public static String globalCurrentAttachmentPath;
     public static String globalGetHistoryParameter = "";
     public static String globalExternalFileDir = "";
-    public static String userGoogleId = "";
 
     public static int globalMandatoryTaskPosition = -1;
     public static int globalProductMeasurementPosition = -1;

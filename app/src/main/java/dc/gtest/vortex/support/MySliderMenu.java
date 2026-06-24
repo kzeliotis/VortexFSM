@@ -16,9 +16,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 //import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -110,6 +112,31 @@ public class MySliderMenu {
 
         if (drawer != null) {
             drawer.addDrawerListener(toggle);
+
+            // Add this listener to fix word wrap on first open. It scroll down and them up to initialize all items
+            drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                    if (navigationView == null) return;
+
+                    // Find the internal RecyclerView and scroll to bottom to force all items to render
+                    RecyclerView recyclerView = (RecyclerView) navigationView.getChildAt(0);
+                    if (recyclerView == null) return;
+
+                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+
+                    // Now wait for layout to complete after scroll
+                    recyclerView.post(() -> {
+                        applyLogoutTitleWordWrap(navigationView);
+                        // Scroll back to top
+                        recyclerView.scrollToPosition(0);
+                    });
+
+                    drawer.removeDrawerListener(this);
+                }
+            });
+
         }
 
         try {
@@ -144,7 +171,6 @@ public class MySliderMenu {
             navigationView.getMenu().findItem(R.id.nav_privacy_policy).setTitle("Privacy Policy");
             navigationView.getMenu().findItem(R.id.nav_search_code).setTitle(localized_search_code);
             navigationView.getMenu().findItem(R.id.nav_sendDiagnostics).setTitle(localized_send_diagnostics);
-
 
             tvVersion.setText(BuildConfig.VERSION_NAME);
 
@@ -372,6 +398,27 @@ public class MySliderMenu {
 
                 return true;
             });
+        }
+    }
+
+    private void applyLogoutTitleWordWrap(NavigationView navigationView) {
+        ViewGroup menuView = (ViewGroup) navigationView.getChildAt(0);
+        if (menuView == null) return;
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            View child = menuView.getChildAt(i);
+            if (!(child instanceof ViewGroup)) continue;
+            ViewGroup itemView = (ViewGroup) child;
+            for (int j = 0; j < itemView.getChildCount(); j++) {
+                View subChild = itemView.getChildAt(j);
+                if (subChild instanceof TextView tv) {
+                    String title = tv.getText().toString();
+                    if (title.startsWith(localized_log_out) && title.contains("@")) {
+                        tv.setMaxLines(3);
+                        tv.setEllipsize(null);
+                        return;
+                    }
+                }
+            }
         }
     }
 

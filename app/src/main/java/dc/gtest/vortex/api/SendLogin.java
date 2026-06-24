@@ -32,7 +32,6 @@ import static dc.gtest.vortex.api.MyApi.MY_API_RESPONSE_MESSAGE;
 import static dc.gtest.vortex.support.MyGlobals.CALENDAR_EVENTS;
 import static dc.gtest.vortex.support.MyGlobals.KEY_AFTER_LOGIN;
 import static dc.gtest.vortex.support.MyGlobals.KEY_DOWNLOAD_ALL_DATA;
-import static dc.gtest.vortex.support.MyGlobals.userGoogleId;
 import static dc.gtest.vortex.support.MyLocalization.localized_login_failed;
 import static dc.gtest.vortex.support.MyLocalization.localized_user_is_inactive;
 import static dc.gtest.vortex.support.MyLocalization.localized_wrong_credentials;
@@ -42,6 +41,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DEV_LOGIN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USERID;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USER_GOOGLE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 
 import static dc.gtest.vortex.support.MyPrefs.PREF_WAREHOUSEID;
@@ -98,7 +98,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
                 "{\n" +
                         "  \"username\": \"" + username + "\",\n" +
                         "  \"password\": \"" + password + "\",\n" +
-                        "  \"GoogleId\": \"" + userGoogleId + "\",\n" +
+                        "  \"GoogleId\": \"" + MyPrefs.getString(PREF_USER_GOOGLE_ID, "") + "\",\n" +
                         "  \"GoogleIdToken\": \"" + idToken + "\",\n" +
                         "  \"Encrypted\": \"" + encrypted + "\"\n" +
                         "}";
@@ -186,7 +186,7 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
                             MyPrefs.setString(PREF_WAREHOUSEID, WarehouseId);
                             MyPrefs.setString(PREF_USERID, UserId);
-                            userGoogleId = googleId;
+                            MyPrefs.setString(PREF_USER_GOOGLE_ID,googleId);
 
                             Intent intent = new Intent(ctx, AssignmentsActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

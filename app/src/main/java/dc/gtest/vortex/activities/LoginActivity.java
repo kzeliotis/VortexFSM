@@ -79,6 +79,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_IS_SYNCING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_IS_LOGGED_IN;
 import static dc.gtest.vortex.support.MyPrefs.PREF_KEY_SELECTED_LANGUAGE;
 import static dc.gtest.vortex.support.MyPrefs.PREF_PASSWORD;
+import static dc.gtest.vortex.support.MyPrefs.PREF_USER_GOOGLE_ID;
 import static dc.gtest.vortex.support.MyPrefs.PREF_USER_NAME;
 import static android.view.Gravity.TOP;
 
@@ -149,6 +150,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(v -> {
             mLoginButton.requestFocusFromTouch();
             MyUtils.hideKeypad(etLoginUserPassword);
+
+            MyPrefs.setString(PREF_USER_GOOGLE_ID,"");
 
             if (MyPrefs.getString(PREF_BASE_HOST_URL, "").isEmpty()) {
                 //MyPrefs.setString(PREF_BASE_HOST_URL, "https://vortex.techtiqbms.com:9856");
