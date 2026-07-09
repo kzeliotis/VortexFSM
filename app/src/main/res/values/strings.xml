@@ -1503,4 +1503,12 @@
     <string name="diagnostics_sent_gr">Η αποστολή διαγνωστικών ολοκληρώθηκε με επιτυχία</string>
     <string name="diagnostics_sent_ar">Diagnstics sent successfully.</string>
 
+    <string name="site">Site</string>
+    <string name="site_gr">Σημειου</string>
+    <string name="site_ar">Site</string>
+
+    <string name="workorder">Work Order</string>
+    <string name="workorder_gr">Αναθεσης</string>
+    <string name="workorder_ar">Work Order</string>
+
 </resources>

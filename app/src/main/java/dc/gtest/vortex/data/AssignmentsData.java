@@ -339,6 +339,26 @@ public class AssignmentsData {
 
                     assignmentModel.setAttachments(AttachmentsList);
 
+
+                    JSONArray jArrayPjAttachments = MyJsonParser.getJsonArrayValue(oneObject, "ProjectAttachments");
+                    List<AttachmentModel> PjAttachmentsList = new ArrayList<>();
+                    for (int a = 0; a < jArrayPjAttachments.length(); a++){
+                        JSONObject jObjectOnePjAttachment = jArrayPjAttachments.getJSONObject(a);
+
+                        AttachmentModel attachmentModel = new AttachmentModel();
+
+                        attachmentModel.setObjectId(MyJsonParser.getStringValue(jObjectOnePjAttachment, "ObjectId", "0"));
+                        attachmentModel.setObjectType(MyJsonParser.getStringValue(jObjectOnePjAttachment, "ObjectType", ""));
+                        attachmentModel.setFilename(MyJsonParser.getStringValue(jObjectOnePjAttachment, "Filename", ""));
+                        attachmentModel.setCloudFileURL(MyJsonParser.getStringValue(jObjectOnePjAttachment, "CloudFileURL", ""));
+                        attachmentModel.setAttachmentId(MyJsonParser.getStringValue(jObjectOnePjAttachment, "AttachmentId", "0"));
+                        attachmentModel.setBlobAttachmentId(MyJsonParser.getStringValue(jObjectOnePjAttachment, "BlobAttachmentId", "0"));
+
+                        PjAttachmentsList.add(attachmentModel);
+                    }
+
+                    assignmentModel.setProjectAttachments(PjAttachmentsList);
+
                     JSONArray jArrayDetChildren = MyJsonParser.getJsonArrayValue(oneObject, "DetChildren");
 
                     String resourceId = assignmentModel.getResourceId();

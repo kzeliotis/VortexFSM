@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
@@ -213,15 +214,16 @@ public class LoginActivity extends AppCompatActivity {
 
         credentialManager = CredentialManager.create(this);
 
-        com.google.android.gms.common.SignInButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        //com.google.android.gms.common.SignInButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        AppCompatButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
 
-        for (int i = 0; i < btnGoogleSignIn.getChildCount(); i++) {
-            View v = btnGoogleSignIn.getChildAt(i);
-            if (v instanceof TextView) {
-                ((TextView) v).setText("Sign in with Google");
-                break;
-            }
-        }
+//        for (int i = 0; i < btnGoogleSignIn.getChildCount(); i++) {
+//            View v = btnGoogleSignIn.getChildAt(i);
+//            if (v instanceof TextView) {
+//                ((TextView) v).setText("Sign in with Google");
+//                break;
+//            }
+//        }
 
         btnGoogleSignIn.setOnClickListener(v -> {
             if (MyPrefs.getString(PREF_BASE_HOST_URL, "").isEmpty()) {

@@ -67,6 +67,7 @@ public class AssignmentModel {
     private String masterProjectId = "";
     private JSONArray mandatoryTasks = new JSONArray();
     private List<AttachmentModel> attachments = new ArrayList<>();
+    private List<AttachmentModel> projectAttachments = new ArrayList<>();
     private List<StatusModel> correlatedStatusesList = new ArrayList<>();
     private List<DetChildrenModel> detChildren = new ArrayList<>();
     private String AssignmentIndicators = "";
@@ -136,6 +137,7 @@ public class AssignmentModel {
                         "\"MasterProjectId\": \"" + masterProjectId + "\",\n" +
                         "\"CorrelatedStatusesList\": \"" + correlatedStatusesList + "\",\n" +
                         "\"DetChildren\": \"" + detChildren + "\",\n" +
+                        "\"ProjectAttachments\": \"" + projectAttachments + "\",\n" +
                         "\"Attachments\": " + attachments + "\n"
                 ;
     }
@@ -654,5 +656,13 @@ public class AssignmentModel {
 
     public void setCustomerCode(String customerCode) {
         this.customerCode = customerCode;
+    }
+
+    public List<AttachmentModel> getProjectAttachments() {
+        return projectAttachments;
+    }
+
+    public void setProjectAttachments(List<AttachmentModel> projectAttachments) {
+        this.projectAttachments = projectAttachments;
     }
 }

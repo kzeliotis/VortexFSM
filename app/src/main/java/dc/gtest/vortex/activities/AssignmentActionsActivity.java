@@ -41,7 +41,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,7 +60,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -74,7 +72,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import dc.gtest.vortex.R;
 import dc.gtest.vortex.adapters.AssignmentAttachmentsRvAdapter;
@@ -88,7 +86,6 @@ import dc.gtest.vortex.api.GetStatuses;
 import dc.gtest.vortex.api.GetZones;
 import dc.gtest.vortex.api.SendCheckIn;
 import dc.gtest.vortex.api.SendCheckOut;
-import dc.gtest.vortex.api.SendDetChildren;
 import dc.gtest.vortex.api.SendMandatoryTasks;
 import dc.gtest.vortex.api.SendNewProduct;
 import dc.gtest.vortex.api.SendProductMeasurements;
@@ -152,6 +149,7 @@ import static dc.gtest.vortex.support.MyGlobals.globalMandatoryTaskPosition;
 import static dc.gtest.vortex.support.MyGlobals.singleAssignmentResult;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignmentActions;
 import static dc.gtest.vortex.support.MyLocalization.localized_assignment_id;
+import static dc.gtest.vortex.support.MyLocalization.localized_attachments;
 import static dc.gtest.vortex.support.MyLocalization.localized_attachments_caps;
 import static dc.gtest.vortex.support.MyLocalization.localized_calculate_cost;
 import static dc.gtest.vortex.support.MyLocalization.localized_cancel;
@@ -178,7 +176,6 @@ import static dc.gtest.vortex.support.MyLocalization.localized_no_internet_data_
 import static dc.gtest.vortex.support.MyLocalization.localized_no_multiple_checkin_allowed;
 import static dc.gtest.vortex.support.MyLocalization.localized_overnight;
 import static dc.gtest.vortex.support.MyLocalization.localized_paid;
-import static dc.gtest.vortex.support.MyLocalization.localized_phone;
 import static dc.gtest.vortex.support.MyLocalization.localized_preview_report;
 import static dc.gtest.vortex.support.MyLocalization.localized_problem;
 import static dc.gtest.vortex.support.MyLocalization.localized_products;
@@ -187,12 +184,13 @@ import static dc.gtest.vortex.support.MyLocalization.localized_select_action;
 import static dc.gtest.vortex.support.MyLocalization.localized_select_measurement;
 import static dc.gtest.vortex.support.MyLocalization.localized_send_report;
 import static dc.gtest.vortex.support.MyLocalization.localized_services;
+import static dc.gtest.vortex.support.MyLocalization.localized_site;
 import static dc.gtest.vortex.support.MyLocalization.localized_status;
 import static dc.gtest.vortex.support.MyLocalization.localized_tasks_per_item;
 import static dc.gtest.vortex.support.MyLocalization.localized_use_pt;
 import static dc.gtest.vortex.support.MyLocalization.localized_user;
+import static dc.gtest.vortex.support.MyLocalization.localized_workorder;
 import static dc.gtest.vortex.support.MyLocalization.localized_zones;
-import static dc.gtest.vortex.support.MyPrefs.PREF_ADD_CONSUMABLE_FROM_PICKING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_ALLOW_MULTIPLE_CHECK_INS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_AZURE_CONNECTION_STRING;
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
@@ -213,10 +211,8 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_IN_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_COMMENTS_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CONSUMABLES_FROM_PICKING_SENT;
-import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_DET_CHILDREN_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_INSTALLATION_WARNING_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_SCANNED;
-import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NEW_PRODUCTS_MULTI_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SELECTED_STATUS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_SERVICES_FROM_PICKING_SENT;
@@ -988,8 +984,26 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
             case R.id.btnDetAttachments:
                 intent = new Intent(AssignmentActionsActivity.this, AttachmentsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                if (!SELECTED_ASSIGNMENT.getProjectAttachments().isEmpty()) {
+                    new AlertDialog.Builder(AssignmentActionsActivity.this)
+                            .setTitle(localized_attachments)
+                            .setPositiveButton(localized_site, (dialog, which) -> {
+                                intent.putExtra("IsProjectAttachments", true);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            })
+                            .setNegativeButton(localized_workorder, (dialog, which) -> {
+                                intent.putExtra("IsProjectAttachments", false);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            })
+                            .setNeutralButton(localized_cancel, null)
+                            .show();
+                } else {
+                    intent.putExtra("IsProjectAttachments", false);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
                 break;
 
             case R.id.btnDetChildren:

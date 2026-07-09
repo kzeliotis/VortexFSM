@@ -298,6 +298,8 @@ public class MyLocalization {
     public static String localized_diagnostics_sent = "";
     public static String localized_diagnostics_ready = "";
     public static String localized_diagnostics_failed = "";
+    public static String localized_site = "";
+    public static String localized_workorder = "";
 
 
     public static void setupLanguage(Context ctx) {
@@ -589,6 +591,8 @@ public class MyLocalization {
                 localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent_gr);
                 localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed_gr);
                 localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready_gr);
+                localized_site = ctx.getString(R.string.site_gr);
+                localized_workorder = ctx.getString(R.string.workorder_gr);
                 break;
 
             case CONST_AR:
@@ -876,6 +880,8 @@ public class MyLocalization {
                 localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent_ar);
                 localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed_ar);
                 localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready_ar);
+                localized_site = ctx.getString(R.string.site_ar);
+                localized_workorder = ctx.getString(R.string.workorder_ar);
 
                 break;
 
@@ -1165,6 +1171,8 @@ public class MyLocalization {
                 localized_diagnostics_sent = ctx.getString(R.string.diagnostics_sent);
                 localized_diagnostics_failed = ctx.getString(R.string.diagnostics_failed);
                 localized_diagnostics_ready = ctx.getString(R.string.diagnostics_ready);
+                localized_site = ctx.getString(R.string.site);
+                localized_workorder = ctx.getString(R.string.workorder);
                 break;
 
         }
