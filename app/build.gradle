@@ -10,14 +10,14 @@ android {
         applicationId "dc.gtest.vortex"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 60705
-        versionName "6.07.05"
+        versionCode 60801
+        versionName "6.08.01"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -44,6 +44,10 @@ android {
             //outputFileName = "vortex_${variant.name}_${variant.versionName}.apk"
             outputFileName = "vortex_${variant.versionName}.apk"
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     compileOptions {
