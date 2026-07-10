@@ -206,7 +206,7 @@ class MyApi {
                     httpURLConnection.setRequestProperty("Content-type","application/json; charset=UTF-8");
                 }
                 httpURLConnection.setRequestProperty("VortexFSM","f035gbl00033eedfpsycrencewe3225fcvf09");
-                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey") || apiUrl.contains("GetGoogleAuthentication")){
+                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey") || apiUrl.contains("GetUserGoogleId")){
                     httpURLConnection.setRequestProperty("UserName", "GetUserAuthentication");
                 }
 
@@ -350,7 +350,7 @@ class MyApi {
                     httpURLConnection.setRequestProperty("Authorization", MyPrefs.getDeviceId(PREF_DEVICE_ID, "") + "|" + Version);
                 }
                 httpURLConnection.setRequestProperty("VortexFSM","f035gbl00033eedfpsycrencewe3225fcvf09");
-                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey") || apiUrl.contains("GetGoogleAuthentication")){
+                if (apiUrl.contains("GetUserAuthentication") || apiUrl.contains("GetAESKey") || apiUrl.contains("GetUserGoogleId")){
                     httpURLConnection.setRequestProperty("UserName", "GetUserAuthentication");
                 }
                 httpURLConnection.setDoInput(true);

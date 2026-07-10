@@ -86,7 +86,11 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
         username = params[0];
         password = params[1];
-        String idToken = params.length > 2 ? params[2] : "";
+
+        if(!password.isEmpty()){
+            MyPrefs.setString(PREF_USER_GOOGLE_ID, "");
+        }
+        //String googleId = params.length > 2 ? params[2] : "";
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
         //String apiUrl = baseHostUrl+ "/Vortex.svc/AuthenticateUserWithWarehouseId" + "?username=" + username + "&password=" + password;
@@ -99,7 +103,6 @@ public class SendLogin extends AsyncTask<String, Void, String > {
                         "  \"username\": \"" + username + "\",\n" +
                         "  \"password\": \"" + password + "\",\n" +
                         "  \"GoogleId\": \"" + MyPrefs.getString(PREF_USER_GOOGLE_ID, "") + "\",\n" +
-                        "  \"GoogleIdToken\": \"" + idToken + "\",\n" +
                         "  \"Encrypted\": \"" + encrypted + "\"\n" +
                         "}";
 
@@ -182,11 +185,11 @@ public class SendLogin extends AsyncTask<String, Void, String > {
 
                             String UserId = MyJsonParser.getStringValue(oneObject, "UserId", "0");
                             String WarehouseId = MyJsonParser.getStringValue(oneObject, "WarehouseId", "0");
-                            String googleId = MyJsonParser.getStringValue(oneObject, "GoogleId", "");
+                            //String googleId = MyJsonParser.getStringValue(oneObject, "GoogleId", "");
 
                             MyPrefs.setString(PREF_WAREHOUSEID, WarehouseId);
                             MyPrefs.setString(PREF_USERID, UserId);
-                            MyPrefs.setString(PREF_USER_GOOGLE_ID,googleId);
+                            //MyPrefs.setString(PREF_USER_GOOGLE_ID,googleId);
 
                             Intent intent = new Intent(ctx, AssignmentsActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

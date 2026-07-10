@@ -2,7 +2,9 @@ package dc.gtest.vortex.activities;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +36,7 @@ import dc.gtest.vortex.api.GetAllConsumables;
 import dc.gtest.vortex.api.GetShowUsePtOvernightButtons;
 import dc.gtest.vortex.api.GetShowZoneProductsButton;
 import dc.gtest.vortex.api.GetCoordsSendingInterval;
+import dc.gtest.vortex.api.GetUserGoogleId;
 import dc.gtest.vortex.api.GetUserPartnersResources;
 import dc.gtest.vortex.api.GetManuals;
 import dc.gtest.vortex.api.ToGetMeasurableAttributes;
@@ -56,6 +59,7 @@ import androidx.credentials.exceptions.GetCredentialException;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 
+import java.security.MessageDigest;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
@@ -217,13 +221,6 @@ public class LoginActivity extends AppCompatActivity {
         //com.google.android.gms.common.SignInButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
         AppCompatButton btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
 
-//        for (int i = 0; i < btnGoogleSignIn.getChildCount(); i++) {
-//            View v = btnGoogleSignIn.getChildAt(i);
-//            if (v instanceof TextView) {
-//                ((TextView) v).setText("Sign in with Google");
-//                break;
-//            }
-//        }
 
         btnGoogleSignIn.setOnClickListener(v -> {
             if (MyPrefs.getString(PREF_BASE_HOST_URL, "").isEmpty()) {
@@ -240,6 +237,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     private void startGoogleSignIn() {
         GetSignInWithGoogleOption googleIdOption = new GetSignInWithGoogleOption
@@ -274,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(GetCredentialException e) {
                         runOnUiThread(() -> {
                             Log.e("GoogleSignIn", "Credential error: " + e.getMessage());
-                            MyDialogs.showOK(LoginActivity.this, localized_login_failed);
+                            MyDialogs.showOK(LoginActivity.this, localized_login_failed + "\n\r" + e.getMessage());
                         });
                     }
                 }
@@ -298,12 +297,24 @@ public class LoginActivity extends AppCompatActivity {
 
                 MyPrefs.setStringWithFileName(PREF_PASSWORD, "1", "");
 
+                // Step 1: Get GoogleId from central WCF
+                GetUserGoogleId getUserGoogleId = new GetUserGoogleId(LoginActivity.this);
+                String googleId = getUserGoogleId.execute(idToken).get();
+
+                if (googleId == null || googleId.isEmpty()) {
+                    MyDialogs.showOK(this, localized_login_failed);
+                    return;
+                }
+
+                if (googleId.length() > 30){ // probable error
+                    MyDialogs.showOK(this, googleId);
+                    return;
+                }
+
+                MyPrefs.setString(PREF_USER_GOOGLE_ID, googleId);
                 SendLogin sendLogin = new SendLogin(LoginActivity.this, false, false);
-                String loginresult = sendLogin.execute(email, "", idToken).get();
+                String loginResult = sendLogin.execute(email, "").get();
                 getGeneralDataFromServer();
-//                // Fire exactly like SendLogin — same AsyncTask pattern your app uses
-//                SendGoogleLogin sendGoogleLogin = new SendGoogleLogin(LoginActivity.this);
-//                sendGoogleLogin.execute(idToken, email, displayName);
 
             } else {
                 Log.e("GoogleSignIn", "Unexpected credential type: " + credential.getType());

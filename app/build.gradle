@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+def localProps = new Properties()
+localProps.load(new FileInputStream(rootProject.file("local.properties")))
+
+
 android {
     compileSdkVersion 34
 
@@ -14,8 +18,27 @@ android {
         versionName "6.08.01"
     }
 
-    buildTypes {
+    signingConfigs {
+        debug {
+            storeFile     file(localProps['KEYSTORE_PATH'])
+            storePassword localProps['KEYSTORE_PASSWORD']
+            keyAlias      localProps['KEY_ALIAS']
+            keyPassword   localProps['KEY_PASSWORD']
+        }
         release {
+            storeFile     file(localProps['KEYSTORE_PATH'])
+            storePassword localProps['KEYSTORE_PASSWORD']
+            keyAlias      localProps['KEY_ALIAS']
+            keyPassword   localProps['KEY_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
