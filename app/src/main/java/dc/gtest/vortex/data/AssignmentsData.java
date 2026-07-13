@@ -117,16 +117,16 @@ public class AssignmentsData {
 
                     part = SystemClock.elapsedRealtime();
 
-                    assignmentModel.setProjectDescription(oneObject.optString("ProjectDescription", ""));
-                    assignmentModel.setProductDescription(oneObject.optString("ProductDescription", ""));
-                    assignmentModel.setServiceDescription(oneObject.optString("ServiceDescription", ""));
+                    assignmentModel.setProjectDescription(MyJsonParser.getStringValue(oneObject, "ProjectDescription", ""));
+                    assignmentModel.setProductDescription(MyJsonParser.getStringValue(oneObject, "ProductDescription", ""));
+                    assignmentModel.setServiceDescription(MyJsonParser.getStringValue(oneObject, "ServiceDescription", ""));
 
 
                     Log.e("AssignmentsPerf", "basic fields: " + (SystemClock.elapsedRealtime() - part) + " ms");
 
                     part = SystemClock.elapsedRealtime();
 
-                    String assignmentStartDateString = oneObject.optString("DateStart", "");
+                    String assignmentStartDateString = MyJsonParser.getStringValue(oneObject, "DateStart", "");
                     assignmentModel.setStartDateTime(MyDateTime.getServerDateFromAssignmentDate(assignmentStartDateString));
                     assignmentModel.setStartDate(MyDateTime.getAppDateFromAssignmentDate(assignmentStartDateString));
 
@@ -136,8 +136,8 @@ public class AssignmentsData {
                     String timeTo = "";
 
                     try {
-                        String dateStart = oneObject.optString("DateStart", "");
-                        String dateEnd = oneObject.optString("DateEnd", "");
+                        String dateStart = MyJsonParser.getStringValue(oneObject, "DateStart", "");
+                        String dateEnd = MyJsonParser.getStringValue(oneObject, "DateEnd", "");
                         assignmentModel.setDateStart(dateStart);
                         assignmentModel.setDateEnd(dateEnd);
 
@@ -168,14 +168,14 @@ public class AssignmentsData {
 
                     assignmentModel.setAssignmentTime(assignmentTime);
                     assignmentModel.setTimeTo(timeTo);
-                    assignmentModel.setContact(oneObject.optString("ProjectContact", ""));
+                    assignmentModel.setContact(MyJsonParser.getStringValue(oneObject, "ProjectContact", ""));
 
                     assignmentModel.setAddress(
-                            oneObject.optString("ProjectAddress", "") + ", " +
-                            oneObject.optString("ProjectCity", ""));
+                            MyJsonParser.getStringValue(oneObject, "ProjectAddress", "") + ", " +
+                            MyJsonParser.getStringValue(oneObject, "ProjectCity", ""));
 
-                    String projectLat = oneObject.optString("ProjectLat", "");
-                    String projectLon = oneObject.optString("ProjectLon", "");
+                    String projectLat = MyJsonParser.getStringValue(oneObject, "ProjectLat", "");
+                    String projectLon = MyJsonParser.getStringValue(oneObject, "ProjectLon", "");
                     assignmentModel.setProjectLat(projectLat);
                     assignmentModel.setProjectLon(projectLon);
 
@@ -219,31 +219,31 @@ public class AssignmentsData {
                     assignmentModel.setDistance(distance);
                     assignmentModel.setCabLat(projectLat);
                     assignmentModel.setCabLng(projectLon);
-                    assignmentModel.setProjectId(oneObject.optString("ProjectId", ""));
-                    String assigmentId = oneObject.optString("AssignmentId", "");
+                    assignmentModel.setProjectId(MyJsonParser.getStringValue(oneObject, "ProjectId", ""));
+                    String assigmentId = MyJsonParser.getStringValue(oneObject, "AssignmentId", "");
                     assignmentModel.setAssignmentId(assigmentId);
-                    assignmentModel.setMasterAssignment(oneObject.optString("MasterAssignment", ""));
-                    assignmentModel.setProblem(oneObject.optString("Problem", ""));
-                    assignmentModel.setPhone(oneObject.optString("ProjectTel", ""));
-                    assignmentModel.setMobile(oneObject.optString("ProjectMobile", ""));
+                    assignmentModel.setMasterAssignment(MyJsonParser.getStringValue(oneObject, "MasterAssignment", ""));
+                    assignmentModel.setProblem(MyJsonParser.getStringValue(oneObject, "Problem", ""));
+                    assignmentModel.setPhone(MyJsonParser.getStringValue(oneObject, "ProjectTel", ""));
+                    assignmentModel.setMobile(MyJsonParser.getStringValue(oneObject, "ProjectMobile", ""));
 //                    assignmentModel.setProducts(oneObject.optString("ProjectProducts", ""));               // moved to a separate API
-                    assignmentModel.setAssignmentType(oneObject.optString("AssignmentType", ""));
-                    assignmentModel.setCustomerName(oneObject.optString("CustomerName", ""));
-                    assignmentModel.setCustomerBusiness(oneObject.optString("CustomerBusiness", ""));
-                    assignmentModel.setCustomerBusinessTitle(oneObject.optString("CustomerBusinessTitle", ""));
-                    assignmentModel.setCustomerVatNumber(oneObject.optString("CustomerVatNumber", ""));
-                    assignmentModel.setCustomerRevenue(oneObject.optString("CustomerRevenue", ""));
-                    assignmentModel.setSorting(oneObject.optString("Sorting", ""));
-                    assignmentModel.setStatusName(oneObject.optString("Status", "").toUpperCase());
-                    assignmentModel.setStatusId(oneObject.optString("StatusId", ""));
-                    assignmentModel.setStatusColor(oneObject.optString("StatusColor", ""));
-                    assignmentModel.setCustomFields(oneObject.optString("CustomFieldsString", ""));
-                    assignmentModel.setPickingList(oneObject.optString("PickingList", ""));
-                    assignmentModel.setCommentsSolution(oneObject.optString("Solution", ""));
-                    assignmentModel.setNotes(oneObject.optString("Notes", ""));
-                    assignmentModel.setProjectAddress(oneObject.optString("ProjectAddress", ""));
-                    assignmentModel.setProjectCity(oneObject.optString("ProjectCity", ""));
-                    assignmentModel.setprojectProductId(MyJsonParser.getStringValue(oneObject,"ProjectProductId", "0"));
+                    assignmentModel.setAssignmentType(MyJsonParser.getStringValue(oneObject, "AssignmentType", ""));
+                    assignmentModel.setCustomerName(MyJsonParser.getStringValue(oneObject, "CustomerName", ""));
+                    assignmentModel.setCustomerBusiness(MyJsonParser.getStringValue(oneObject, "CustomerBusiness", ""));
+                    assignmentModel.setCustomerBusinessTitle(MyJsonParser.getStringValue(oneObject, "CustomerBusinessTitle", ""));
+                    assignmentModel.setCustomerVatNumber(MyJsonParser.getStringValue(oneObject, "CustomerVatNumber", ""));
+                    assignmentModel.setCustomerRevenue(MyJsonParser.getStringValue(oneObject, "CustomerRevenue", ""));
+                    assignmentModel.setSorting(MyJsonParser.getStringValue(oneObject, "Sorting", ""));
+                    assignmentModel.setStatusName(MyJsonParser.getStringValue(oneObject, "Status", "").toUpperCase());
+                    assignmentModel.setStatusId(MyJsonParser.getStringValue(oneObject, "StatusId", ""));
+                    assignmentModel.setStatusColor(MyJsonParser.getStringValue(oneObject, "StatusColor", ""));
+                    assignmentModel.setCustomFields(MyJsonParser.getStringValue(oneObject, "CustomFieldsString", ""));
+                    assignmentModel.setPickingList(MyJsonParser.getStringValue(oneObject, "PickingList", ""));
+                    assignmentModel.setCommentsSolution(MyJsonParser.getStringValue(oneObject, "Solution", ""));
+                    assignmentModel.setNotes(MyJsonParser.getStringValue(oneObject, "Notes", ""));
+                    assignmentModel.setProjectAddress(MyJsonParser.getStringValue(oneObject, "ProjectAddress", ""));
+                    assignmentModel.setProjectCity(MyJsonParser.getStringValue(oneObject, "ProjectCity", ""));
+                    assignmentModel.setprojectProductId(MyJsonParser.getStringValue(oneObject, "ProjectProductId", "0"));
 
                     String assignmentId = assignmentModel.getAssignmentId();
 
@@ -255,9 +255,9 @@ public class AssignmentsData {
 
                     Log.e("AssignmentsPerf", "prefs access: " + (SystemClock.elapsedRealtime() - part) + " ms");
 
-                    String startTravel = oneObject.optString("StartTravel", "");
-                    String checkIn = oneObject.optString("CheckIn", "");
-                    String checkOut = oneObject.optString("CheckOut", "");
+                    String startTravel = MyJsonParser.getStringValue(oneObject, "StartTravel", "");
+                    String checkIn = MyJsonParser.getStringValue(oneObject, "CheckIn", "");
+                    String checkOut = MyJsonParser.getStringValue(oneObject, "CheckOut", "");
 
                     if (!startTravel.isEmpty()){
                         prefsBatch.putString(assignmentId, PREF_START_TRAVEL_TIME, startTravel);
@@ -277,28 +277,28 @@ public class AssignmentsData {
                         prefsBatch.putString(PREF_CHECK_OUT_TIME_FOR_SHOW, assignmentId, chkOut);
                     }
 
-                    assignmentModel.setChargedAmount(oneObject.optString("Charge", ""));
-                    assignmentModel.setPaidAmount(oneObject.optString("Payment", ""));
+                    assignmentModel.setChargedAmount(MyJsonParser.getStringValue(oneObject, "Charge", ""));
+                    assignmentModel.setPaidAmount(MyJsonParser.getStringValue(oneObject, "Payment", ""));
                     assignmentModel.setMandatoryTasks(MyJsonParser.getJsonArrayValue(oneObject, "ServiceSteps"));
-                    assignmentModel.setSignatureName(oneObject.optString("SignatureName", "")) ;
-                    assignmentModel.setProposedCheckOutStatus(oneObject.optString("ProposedCheckOutStatus", "0"));
-                    assignmentModel.setInstallationWarning(oneObject.optString("InstallationWarning", ""));
-                    assignmentModel.setMandatoryZoneMeasurementsService(oneObject.optString("MandatoryZoneMeasurementsService", "0"));
-                    assignmentModel.setResourceId(oneObject.optString("ResourceId", ""));
-                    assignmentModel.setAdditionalTechnicians(oneObject.optString("AdditionalTechnicians", ""));
-                    assignmentModel.setContract(oneObject.optString("Contract", ""));
-                    assignmentModel.setProjectInstallationDescription(oneObject.optString("ProjectInstallationDescription", ""));
-                    assignmentModel.setMinimumPayment(oneObject.optString("MinimumPayment", "0"));
-                    assignmentModel.setMaximumPayment(oneObject.optString("MaximumPayment", "0"));
-                    boolean lockStatusChange = MyJsonParser.getBooleanValue(oneObject,"LockStatusChange", false);
+                    assignmentModel.setSignatureName(MyJsonParser.getStringValue(oneObject, "SignatureName", ""));
+                    assignmentModel.setProposedCheckOutStatus(MyJsonParser.getStringValue(oneObject, "ProposedCheckOutStatus", "0"));
+                    assignmentModel.setInstallationWarning(MyJsonParser.getStringValue(oneObject, "InstallationWarning", ""));
+                    assignmentModel.setMandatoryZoneMeasurementsService(MyJsonParser.getStringValue(oneObject, "MandatoryZoneMeasurementsService", "0"));
+                    assignmentModel.setResourceId(MyJsonParser.getStringValue(oneObject, "ResourceId", ""));
+                    assignmentModel.setAdditionalTechnicians(MyJsonParser.getStringValue(oneObject, "AdditionalTechnicians", ""));
+                    assignmentModel.setContract(MyJsonParser.getStringValue(oneObject, "Contract", ""));
+                    assignmentModel.setProjectInstallationDescription(MyJsonParser.getStringValue(oneObject, "ProjectInstallationDescription", ""));
+                    assignmentModel.setMinimumPayment(MyJsonParser.getStringValue(oneObject, "MinimumPayment", "0"));
+                    assignmentModel.setMaximumPayment(MyJsonParser.getStringValue(oneObject, "MaximumPayment", "0"));
+                    boolean lockStatusChange = MyJsonParser.getBooleanValue(oneObject, "LockStatusChange", false);
                     assignmentModel.setLockStatusChange(lockStatusChange ? "1" : "0");
-                    assignmentModel.setCorrelatedStatuses(oneObject.optString("CorrelatedStatuses", ""));
-                    assignmentModel.setAssignmentIndicators(oneObject.optString("AssignmentIndicators", ""));
-                    assignmentModel.setServicePickingList(oneObject.optString("ServicePickingList", "0"));
-                    assignmentModel.setContainsGroup(oneObject.optString("ContainsGroup", "0"));
-                    assignmentModel.setProjectWarehouseId(oneObject.optString("ProjectWarehouseId", "0"));
-                    assignmentModel.setProductPickingList(oneObject.optString("ProductPickingList", "0"));
-                    assignmentModel.setCustomerCode(oneObject.optString("CustomerCode", ""));
+                    assignmentModel.setCorrelatedStatuses(MyJsonParser.getStringValue(oneObject, "CorrelatedStatuses", ""));
+                    assignmentModel.setAssignmentIndicators(MyJsonParser.getStringValue(oneObject, "AssignmentIndicators", ""));
+                    assignmentModel.setServicePickingList(MyJsonParser.getStringValue(oneObject, "ServicePickingList", "0"));
+                    assignmentModel.setContainsGroup(MyJsonParser.getStringValue(oneObject, "ContainsGroup", "0"));
+                    assignmentModel.setProjectWarehouseId(MyJsonParser.getStringValue(oneObject, "ProjectWarehouseId", "0"));
+                    assignmentModel.setProductPickingList(MyJsonParser.getStringValue(oneObject, "ProductPickingList", "0"));
+                    assignmentModel.setCustomerCode(MyJsonParser.getStringValue(oneObject, "CustomerCode", ""));
 
                     String assignmentid = assignmentModel.getAssignmentId();
                     String Problem = assignmentModel.getProblem();
