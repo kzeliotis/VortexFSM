@@ -19,8 +19,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 //import java.net.HttpURLConnection;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
@@ -176,6 +180,8 @@ class MyApi {
 
         postBody = postBody.replace("\\", "\\\\");
 
+        final int MAX_RETRIES = 3;
+        for (int attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
 
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
@@ -310,15 +316,25 @@ class MyApi {
             }
 
 
+            break;
         } catch (Exception e) {
+            String postBody_log = postBody;
             if (apiUrl.contains("GetUserAuthentication")) {
-                postBody = "Login failed attempt " + MyPrefs.getString(PREF_USER_NAME, "-");
+                postBody_log = "Login failed attempt " + MyPrefs.getString(PREF_USER_NAME, "-");
             }
-            MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody, 0, e.getMessage(), "");
-            e.printStackTrace();
+            boolean willRetry = isRetryableException(e) && attempt < MAX_RETRIES;
+            if (willRetry) {
+                MyLogs.showFullLog("myLogs: MyApi", apiUrl, postBody_log, 0,
+                        "Attempt " + (attempt + 1) + " failed, retrying: " + e.getMessage(), "");
+                try { Thread.sleep(1500L * (attempt + 1)); } catch (InterruptedException ignored) {}
+            } else {
 
-            //throw new Exception(e.getMessage() + "\n\n" + apiUrl); //to catch the exception on the activity and show alert dialog
+                MyLogs.showFullLog("myLogs: " + "MyApi", apiUrl, postBody_log, 0, e.getMessage(), "");
+                e.printStackTrace();
+                break;
+            }
         }
+        } // end retry loop
 
         return bundle;
     }
@@ -329,6 +345,8 @@ class MyApi {
 
         //apiUrl = escapeUrlCharacters(apiUrl);
 
+        final int MAX_RETRIES = 2;
+        for (int attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
 
             int  conn_timeout = MyPrefs.getInt(PREF_API_CONNECTION_TIMEOUT, 15);
@@ -428,13 +446,21 @@ class MyApi {
             }
 
 
+            break;
         } catch (Exception e) {
-
-            e.printStackTrace();
-
-            bundle.putInt(MY_API_RESPONSE_CODE, -1);
-            bundle.putString(MY_API_RESPONSE_MESSAGE, e.getMessage() + "\n\n" + apiUrl);
+            boolean willRetry = isRetryableException(e) && attempt < MAX_RETRIES;
+            if (willRetry) {
+                MyLogs.showFullLog("myLogs: MyApi", apiUrl, "", 0,
+                        "Attempt " + (attempt + 1) + " failed, retrying: " + e.getMessage(), "");
+                try { Thread.sleep(1500L * (attempt + 1)); } catch (InterruptedException ignored) {}
+            } else {
+                e.printStackTrace();
+                bundle.putInt(MY_API_RESPONSE_CODE, -1);
+                bundle.putString(MY_API_RESPONSE_MESSAGE, e.getMessage() + "\n\n" + apiUrl);
+                break;
+            }
         }
+        } // end retry loop
 
         return bundle;
     }
@@ -498,6 +524,14 @@ class MyApi {
         return destinationPath;
     }
 
+
+    private static boolean isRetryableException(Exception e) {
+        if (e instanceof ConnectException) return false;    // server actively refused — don't retry
+        if (e instanceof SocketException) return true;      // RST, connection abort, broken pipe
+        if (e instanceof SocketTimeoutException) return false; // timeout already exhausted the configured window
+        if (e instanceof UnknownHostException) return true;  // transient DNS failure
+        return false;
+    }
 
     public static Bundle postFile(String apiUrl, File file, String diagnosticsInfo) throws Exception {
         Bundle bundle = new Bundle();

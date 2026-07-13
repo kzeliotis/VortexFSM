@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 60705,
-      "versionName": "6.07.05",
-      "outputFile": "vortex_6.07.05.apk"
+      "versionCode": 60801,
+      "versionName": "6.08.01",
+      "outputFile": "vortex_6.08.01.apk"
     }
   ],
   "elementType": "File",
@@ -22,14 +22,14 @@
       "minApi": 28,
       "maxApi": 30,
       "baselineProfiles": [
-        "baselineProfiles/1/vortex_6.07.05.dm"
+        "baselineProfiles/1/vortex_6.08.01.dm"
       ]
     },
     {
       "minApi": 31,
       "maxApi": 2147483647,
       "baselineProfiles": [
-        "baselineProfiles/0/vortex_6.07.05.dm"
+        "baselineProfiles/0/vortex_6.08.01.dm"
       ]
     }
   ],
