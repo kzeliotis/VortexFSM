@@ -111,7 +111,7 @@ public class MyPrefs {
     public static final String PREF_DATA_ALL_CONSUMABLES = "pref_data_all_consumables";
     public static final String PREF_DATA_ALL_WAREHOUSE_CONSUMABLES = "pref_data_all_warehouse_consumables";
     public static final String PREF_DATA_STATUSES = "pref_data_statuses";
-    public static final String PREF_DATA_ALL_STATUSES = "pref_data_statuses";
+    public static final String PREF_DATA_ALL_STATUSES = "pref_data_all_statuses";
     public static final String PREF_DATA_ZONES_LIST = "pref_data_zones_list";
     public static final String PREF_DATA_INSTALLATION_ZONES_LIST = "pref_data_installation_zones_list";
     //public static final String PREF_DATA_INSTALLATION_CUSTOM_FIELDS_LIST = "pref_data_installation_custom_fields_list";

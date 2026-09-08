@@ -122,6 +122,13 @@ public class AssignmentDetailActivity extends BaseDrawerActivity implements OnMa
         getLayoutInflater().inflate(R.layout.content_assignment_details, flBaseContainer, true);
 
         assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+        if (assignmentId == null || assignmentId.isEmpty()) {
+            // Το SELECTED_ASSIGNMENT ειναι static/in-memory και μπορει να εχει μηδενιστει
+            // αν το Android σκοτωσε τη διεργασια οσο το activity ηταν στο background.
+            // Το PREF_ASSIGNMENT_ID ειναι durable (SharedPreferences) και ηδη χρησιμοποιειται
+            // ετσι απο αλλα activities (HistoryActivity, AllConsumablesActivity, κλπ).
+            assignmentId = MyPrefs.getString(MyPrefs.PREF_ASSIGNMENT_ID, "");
+        }
 
         tvAssignmentId = findViewById(R.id.tvAssignmentId);
         tvAssignmentTime = findViewById(R.id.tvAssignmentTime);

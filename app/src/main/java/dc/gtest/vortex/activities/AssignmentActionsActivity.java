@@ -92,6 +92,7 @@ import dc.gtest.vortex.api.SendProductMeasurements;
 import dc.gtest.vortex.api.SendUsePTOvernight;
 import dc.gtest.vortex.api.SendZonesWithNoMeasurement;
 import dc.gtest.vortex.data.MandatoryTasksData;
+import dc.gtest.vortex.data.StatusesData;
 import dc.gtest.vortex.data.ZonesData;
 import dc.gtest.vortex.items.ServicesListActivity;
 import dc.gtest.vortex.models.AssignmentModel;
@@ -203,6 +204,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LAT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_CURRENT_LNG;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_ASSIGNMENTS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_DEFAULT_TECH_ACTIONS;
+import static dc.gtest.vortex.support.MyPrefs.PREF_DATA_STATUSES;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DELETE_SIGNATURE_ON_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_DISABLE_PRESELECTED_STATUS;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_ATTACHMENT_FOR_SYNC;
@@ -329,6 +331,14 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         getLayoutInflater().inflate(R.layout.content_assignment_actions, flBaseContainer, true);
 
         assignmentId = SELECTED_ASSIGNMENT.getAssignmentId();
+        if (assignmentId == null || assignmentId.isEmpty()) {
+            // Το SELECTED_ASSIGNMENT ειναι static/in-memory και μπορει να εχει μηδενιστει
+            // αν το Android σκοτωσε τη διεργασια οσο το activity ηταν στο background
+            // (π.χ. οσο ηταν ανοιχτο το Gallery/Camera picker). Το PREF_ASSIGNMENT_ID ειναι
+            // durable (SharedPreferences) και ηδη χρησιμοποιειται ετσι απο αλλα activities
+            // (HistoryActivity, AllConsumablesActivity, AllAttributesActivity, κλπ).
+            assignmentId = MyPrefs.getString(MyPrefs.PREF_ASSIGNMENT_ID, "");
+        }
 
         hideInternalNotes = MyPrefs.getBoolean(PREF_HIDE_INTERNAL_NOTES, false);
 
@@ -2014,15 +2024,24 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
     private void setupStatusesSpinner() {
 
         if (STATUSES_LIST.isEmpty()) {
-            if (MyUtils.isNetworkAvailable()) {
-                GetStatuses getStatuses = new GetStatuses(this);
-                //getStatuses.execute("0");
-                try{
-                    String r = getStatuses.execute("0", "Refresh").get();
-                    r = r;
-                } catch (Exception ex){
-                    ex.printStackTrace();
+            String cachedStatuses = MyPrefs.getString(PREF_DATA_STATUSES, "");
+
+            if (cachedStatuses.isEmpty() || MyUtils.isNetworkAvailable()) {
+                if (MyUtils.isNetworkAvailable()) {
+                    GetStatuses getStatuses = new GetStatuses(this);
+                    //getStatuses.execute("0");
+                    try{
+                        String r = getStatuses.execute("0", "Refresh").get();
+                        r = r;
+                    } catch (Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
+            } else {
+                // Offline, χωρις διαθεσιμο STATUSES_LIST σε αυτο το process: rehydrate απο το
+                // τοπικα αποθηκευμενο JSON (PREF_DATA_STATUSES), οπως ηδη κανει το
+                // AssignmentsActivity.setupStatusesSpinner() για το ALL_STATUSES_LIST.
+                StatusesData.generate(cachedStatuses, false);
             }
         }
 
