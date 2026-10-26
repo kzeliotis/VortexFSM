@@ -51,6 +51,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -228,6 +229,7 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_TRAVEL_STARTED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_WORK_STARTED;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SYNC;
+import static dc.gtest.vortex.support.MyPrefs.PREF_SEND_STEPS_WITH_CHECKOUT;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_NOTES_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_PAID_AMOUNT_FOR_SHOW;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_USE_PT_OVERNIGHT_FOR_SYNC;
@@ -1535,12 +1537,31 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
 
                     updateStatusData();
 
+                    // steps inside the checkout request (UpdateAssignment), not as a separate InsertMandatorySteps
+                    boolean sendStepsWithCheckOut = MyPrefs.getBoolean(PREF_SEND_STEPS_WITH_CHECKOUT, false) && MANDATORY_TASKS_LIST.size() > 0;
+
                     List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, true);
-                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
+                    if (sendStepsWithCheckOut) {
+                        String stepsBody = MandatoryTasksData.buildRequestBody(assignmentId, "", sendreport,
+                                MandatoryTasksData.normalizeHasMeasurement(mtasks.toString()));
+                        try {
+                            new JSONObject(stepsBody);
+                        } catch (JSONException e) {
+                            // invalid JSON: the steps go separately after the checkout (the old path), not lost inside it
+                            MyLogs.appendFile_FullLog(LOG_TAG, "AssignmentId " + assignmentId + ": steps JSON invalid, sent separately after the checkout. " + e.getMessage() + "\n" + stepsBody, "MandatoryTasksQueue");
+                            sendStepsWithCheckOut = false;
+                        }
+                        if (sendStepsWithCheckOut) {
+                            checkInCheckOutModel.setMandatoryTasks(stepsBody);
+                        }
+                    }
+                    if (!sendStepsWithCheckOut) {
+                        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
+                    }
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
 
-                    if(MANDATORY_TASKS_LIST.size() > 0){
+                    if(MANDATORY_TASKS_LIST.size() > 0 && !sendStepsWithCheckOut){
                         MyPrefs.setStringWithFileName(PREF_FILE_SEND_REPORT_VALUE_FOR_SYNC, assignmentId, sendreport);
                     }
 
@@ -1577,8 +1598,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         }
 
 
-                        SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
-                        sendMandatoryTasks.execute(assignmentId, "");
+                        if (!sendStepsWithCheckOut) {
+                            SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
+                            sendMandatoryTasks.execute(assignmentId, "");
+                        }
 
 
                         boolean sendZoneMeasurements = MyPrefs.getBoolean(PREF_SEND_ZONE_MEASUREMENTS_ON_CHECK_OUT,  false);
@@ -2133,12 +2156,18 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         // escape invalid json characters
         try {
             for (MandatoryTaskModel mt : mtasks){
+                String measurementValue = mt.getMeasurementValue() == null ? "" : mt.getMeasurementValue();
+                String stepComments = mt.getStepComments() == null ? "" : mt.getStepComments();
                 if(delete){
                     mt.setStepDescription(MyUtils.ToJson(mt.getStepDescription()));
                     mt.setMeasurableAttribute(MyUtils.ToJson(mt.getMeasurableAttribute()));
+                    mt.setMeasurementValue(MyUtils.ToJson(measurementValue));
+                    mt.setStepComments(MyUtils.ToJson(stepComments));
                 }else{
                     mt.setStepDescription(MyUtils.escapeJsonString(mt.getStepDescription()));
                     mt.setMeasurableAttribute(MyUtils.escapeJsonString(mt.getMeasurableAttribute()));
+                    mt.setMeasurementValue(MyUtils.escapeJsonString(measurementValue));
+                    mt.setStepComments(MyUtils.escapeJsonString(stepComments));
                 }
 
                 JSONArray defaultV = mt.getServiceStepDefaultValues();

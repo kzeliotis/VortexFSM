@@ -37,6 +37,7 @@ import static dc.gtest.vortex.support.MyLocalization.localized_successfully_retu
 import static dc.gtest.vortex.support.MyPrefs.PREF_BASE_HOST_URL;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_CHECK_OUT_DATA_TO_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_IS_CHECKED_OUT;
+import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SYNC;
 import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_RETURN_TO_BASE_DATA_TO_SYNC;
 
 public class SendCheckOut extends AsyncTask<String, Void, String > {
@@ -55,6 +56,8 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
 
 
     private int responseCode;
+    private String responseMessage = "";
+    private String error = "";
 
     private boolean isCheckingOut = false;
 
@@ -80,7 +83,6 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
 
     @Override
     protected String doInBackground(String... params) {
-        String responseMessage = "";
         String responseBody = "";
         String apiUrl;
 
@@ -109,6 +111,7 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
 
         } catch (Exception e) {
             e.printStackTrace();
+            error = e.toString();
         }
 
         MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
@@ -144,6 +147,12 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
                 MyPrefs.removeStringWithFileName(PREF_FILE_RETURN_TO_BASE_DATA_TO_SYNC, assignmentId);
             } else {
                 MyPrefs.removeStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId);
+
+                // steps that waited for the checkout (SendMandatoryTasks does not send them before it)
+                if (!MyPrefs.getStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, "").isEmpty()) {
+                    SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(ctx);
+                    sendMandatoryTasks.execute(assignmentId, "");
+                }
             }
 
 
@@ -208,6 +217,12 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
                 }
             }
         } else {
+            // in LOGS, so it is included in Send Diagnostics
+            MyLogs.appendFile_FullLog("myLogs: " + this.getClass().getSimpleName(),
+                    "AssignmentId " + assignmentId + (returnToBase ? " (return to base)" : "") + " failed, responseCode: " + responseCode +
+                            ", responseMessage: " + responseMessage + ", responseBody: " + responseBody + (error.isEmpty() ? "" : ", error: " + error),
+                    "CheckOutFailures");
+
             if (showProgressAndToast) {
                 MyDialogs.showOK(ctx, localized_error_synchronizing+ "\n\n" + this.getClass().getSimpleName());
             }

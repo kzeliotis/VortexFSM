@@ -2,6 +2,8 @@ package dc.gtest.vortex.models;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class CheckInCheckOutModel {
     private String statusCode = "";
     private String sendReport = "";
     private String userId = "";
+    private String mandatoryTasks = "";
     @Setter
     @Getter
     private List<DetChildrenModel> detChildren = new ArrayList<>();
@@ -73,6 +76,19 @@ public class CheckInCheckOutModel {
                 "}";
 
         checkInCheckOutModel = checkInCheckOutModel.replace("}]", "}\n  ]");
+
+        // added after the replace above, which would otherwise put raw new lines inside the quoted string.
+        // the server expects a string that contains the JSON of the steps (RequestDataMandatoryTasks)
+        if (!mandatoryTasks.isEmpty()) {
+            String detChildrenLine = "  \"DetChildren\": ";
+            int i = checkInCheckOutModel.indexOf(detChildrenLine);
+            if (i >= 0) {
+                checkInCheckOutModel = checkInCheckOutModel.substring(0, i) +
+                        "  \"MandatoryTasks\": " + JSONObject.quote(mandatoryTasks) + ",\n" +
+                        checkInCheckOutModel.substring(i);
+            }
+        }
+
         return checkInCheckOutModel;
     }
 
@@ -254,6 +270,10 @@ public class CheckInCheckOutModel {
 
     public void setSendReport(String SendReport) {
         this.sendReport = SendReport;
+    }
+
+    public void setMandatoryTasks(String mandatoryTasks) {
+        this.mandatoryTasks = mandatoryTasks;
     }
 
 }

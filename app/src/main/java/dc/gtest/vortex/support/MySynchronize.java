@@ -265,6 +265,11 @@ public class MySynchronize {
         for (Map.Entry<String, ?> entry : mandatoryTaskForSync.entrySet()) {
             String prefKey = entry.getKey();
 
+            // not before the checkout: SendCheckOut sends them when it succeeds
+            if (!MyPrefs.getStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, prefKey, "").isEmpty()) {
+                continue;
+            }
+
             SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(ctx);
             sendMandatoryTasks.execute(prefKey, "");
         }
