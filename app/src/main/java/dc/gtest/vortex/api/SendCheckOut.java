@@ -102,8 +102,15 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
         }
 
 
+        // A checkout with the steps (CheckInCheckOutModel.toString) has its backslashes doubled already, except inside
+        // MandatoryTasks, which is valid JSON (org.json) and must reach the server as it is. Older queued checkouts and
+        // checkouts without steps get the doubling here, as before. Solution and Notes are URL-encoded, so the key
+        // "MandatoryTasks" with its quotes can only be the steps field.
+        boolean doubleBackslashes = !postBody.contains("\"MandatoryTasks\"");
+        String sentBody = MyApi.bodyAsSent(postBody, doubleBackslashes);
+
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx, doubleBackslashes);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
@@ -114,7 +121,7 @@ public class SendCheckOut extends AsyncTask<String, Void, String > {
             error = e.toString();
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, sentBody, responseCode, responseMessage, responseBody);
 
         return responseBody;
     }

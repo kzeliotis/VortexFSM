@@ -175,10 +175,15 @@ class MyApi {
     }
 
     public static Bundle post(String apiUrl, String postBody, boolean isTextHtml, Context ctx) throws Exception {
+        return post(apiUrl, postBody, isTextHtml, ctx, true);
+    }
+
+    // doubleBackslashes = false for a body that is already valid JSON (built with org.json)
+    public static Bundle post(String apiUrl, String postBody, boolean isTextHtml, Context ctx, boolean doubleBackslashes) throws Exception {
 
         Bundle bundle = new Bundle();
 
-        postBody = postBody.replace("\\", "\\\\");
+        postBody = bodyAsSent(postBody, doubleBackslashes);
 
         final int MAX_RETRIES = 3;
         for (int attempt = 0; attempt <= MAX_RETRIES; attempt++) {
@@ -531,6 +536,11 @@ class MyApi {
         if (e instanceof SocketTimeoutException) return false; // timeout already exhausted the configured window
         if (e instanceof UnknownHostException) return true;  // transient DNS failure
         return false;
+    }
+
+    // the body as post() writes it, also for the logs
+    public static String bodyAsSent(String postBody, boolean doubleBackslashes) {
+        return doubleBackslashes ? postBody.replace("\\", "\\\\") : postBody;
     }
 
     public static Bundle postFile(String apiUrl, File file, String diagnosticsInfo) throws Exception {

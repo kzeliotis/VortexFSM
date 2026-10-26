@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -41,6 +44,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
 
     private String apiUrl;
     private String postBody;
+    private String sentBody;
     private int responseCode;
     private String responseMessage;
     private String responseBody;
@@ -86,7 +90,17 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
 
         String mandatoryTasks = MyPrefs.getStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, "");
 
-        postBody = MandatoryTasksData.buildRequestBody(assignmentId, NoEmail, sendReport, mandatoryTasks);
+        // queued by this version or an older one: read as JSON, the body is built with org.json and is sent without doubling
+        // the backslashes. Text that is not valid JSON goes in the body as it is, with the doubling, as before.
+        boolean doubleBackslashes;
+        try {
+            postBody = MandatoryTasksData.buildRequestBody(assignmentId, NoEmail, sendReport, new JSONArray(mandatoryTasks));
+            doubleBackslashes = false;
+        } catch (JSONException e) {
+            postBody = MandatoryTasksData.buildRawRequestBody(assignmentId, NoEmail, sendReport, mandatoryTasks);
+            doubleBackslashes = true;
+        }
+        sentBody = MyApi.bodyAsSent(postBody, doubleBackslashes);
 
         String baseHostUrl = MyPrefs.getString(PREF_BASE_HOST_URL, "");
 
@@ -94,7 +108,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
         apiUrl = baseHostUrl + API_SEND_MANDATORY_TASKS;
 
         try {
-            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx);
+            Bundle bundle = MyApi.post(apiUrl, postBody, false, ctx, doubleBackslashes);
 
             responseCode = bundle.getInt(MY_API_RESPONSE_CODE);
             responseMessage = bundle.getString(MY_API_RESPONSE_MESSAGE);
@@ -104,7 +118,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+        MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, sentBody, responseCode, responseMessage, responseBody);
 
         return responseBody;
     }
@@ -117,7 +131,7 @@ public class SendMandatoryTasks extends AsyncTask<String, Void, String> {
         }
 
         try {
-            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, postBody, responseCode, responseMessage, responseBody);
+            MyLogs.showFullLog("myLogs: " + this.getClass().getSimpleName(), apiUrl, sentBody, responseCode, responseMessage, responseBody);
 
             if (responseBody != null && responseBody.equals("1") ) {
                 MyPrefs.removeStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId);

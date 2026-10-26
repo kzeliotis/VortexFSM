@@ -34,19 +34,14 @@ public class MandatoryTasksData {
         return body.toString();
     }
 
-    // Steps queued in PREF_FILE_MANDATORY_TASKS_FOR_SYNC: by this version (MandatoryTaskModel.toJSONArray) or by an older one (text
-    // concatenation), sent as they are. Text that does not parse goes in the body unchanged, as before.
-    public static String buildRequestBody(String assignmentId, String noEmail, String sendReport, String savedMandatoryTasks) {
-        try {
-            return buildRequestBody(assignmentId, noEmail, sendReport, new JSONArray(savedMandatoryTasks));
-        } catch (JSONException e) {
-            return "{\n" +
-                    "  \"AssignmentId\": " + JSONObject.quote(assignmentId) + ",\n" +
-                    "  \"NoEmail\": " + JSONObject.quote(noEmail) + ",\n" +
-                    "  \"SendReport\": " + JSONObject.quote(sendReport) + ",\n" +
-                    "  \"ServiceSteps\": " + savedMandatoryTasks + "\n" +
-                    "}";
-        }
+    // Steps queued by an older version as text that is not valid JSON: in the body as they are, as before (MyApi doubles the backslashes).
+    public static String buildRawRequestBody(String assignmentId, String noEmail, String sendReport, String savedMandatoryTasks) {
+        return "{\n" +
+                "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
+                "  \"NoEmail\": \"" + noEmail + "\",\n" +
+                "  \"SendReport\": \"" + sendReport + "\",\n" +
+                "  \"ServiceSteps\": " + savedMandatoryTasks + "\n" +
+                "}";
     }
 
     public static void generate() {

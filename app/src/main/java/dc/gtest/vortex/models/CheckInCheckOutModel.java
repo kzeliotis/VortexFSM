@@ -80,6 +80,9 @@ public class CheckInCheckOutModel {
         // added after the replace above, which would otherwise put raw new lines inside the quoted string.
         // the server expects a string that contains the JSON of the steps (RequestDataMandatoryTasks)
         if (!mandatoryTasks.isEmpty()) {
+            // MyApi.post does not double the backslashes of this body (SendCheckOut), so the fields above get it here,
+            // as MyApi would do; MandatoryTasks is valid JSON and goes as it is.
+            checkInCheckOutModel = checkInCheckOutModel.replace("\\", "\\\\");
             String detChildrenLine = "  \"DetChildren\": ";
             int i = checkInCheckOutModel.indexOf(detChildrenLine);
             if (i >= 0) {
