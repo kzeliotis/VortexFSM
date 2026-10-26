@@ -107,7 +107,6 @@ import dc.gtest.vortex.support.CaptureSignature;
 import dc.gtest.vortex.support.MyDateTime;
 import dc.gtest.vortex.support.MyDialogs;
 import dc.gtest.vortex.support.MyImages;
-import dc.gtest.vortex.support.MyJsonParser;
 import dc.gtest.vortex.support.MyLocalization;
 import dc.gtest.vortex.support.MyLogs;
 import dc.gtest.vortex.support.MyPrefs;
@@ -749,9 +748,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         MyPrefs.setStringWithFileName(PREF_FILE_CHARGED_AMOUNT_FOR_SHOW, assignmentId, etChargedAmount.getText().toString().trim());
         MyPrefs.setStringWithFileName(PREF_FILE_PAID_AMOUNT_FOR_SHOW, assignmentId, etPaidAmount.getText().toString().trim());
 
-        List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, false);
-
-        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SHOW, assignmentId, mtasks.toString());
+        try {
+            MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SHOW, assignmentId, MandatoryTaskModel.toJSONArray(MANDATORY_TASKS_LIST, false).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         MyPrefs.setStringWithFileName(PREF_FILE_SIGNATURENAME, assignmentId, tvSignatureName.getText().toString().trim());
         if(resetStatus){
             MyPrefs.setStringWithFileName(PREF_FILE_SELECTED_STATUS, assignmentId, "");
@@ -860,9 +861,12 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                 boolean isCheckedOut = MyPrefs.getBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, false);
                 if(isCheckedOut){
 
-                    List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST,true);
-
-                    MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
+                    try {
+                        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MandatoryTaskModel.toJSONArray(MANDATORY_TASKS_LIST, false).toString());
+                    } catch (JSONException e) {
+                        MyLogs.appendFile_FullLog(LOG_TAG, "AssignmentId " + assignmentId + ": steps not resent, JSON failed. " + e.getMessage(), "MandatoryTasksQueue");
+                        break;
+                    }
 
                     SendMandatoryTasks sendMandatoryTasks = new SendMandatoryTasks(AssignmentActionsActivity.this);
                     sendMandatoryTasks.execute(assignmentId, "true");
@@ -1540,11 +1544,10 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                     // steps inside the checkout request (UpdateAssignment), not as a separate InsertMandatorySteps
                     boolean sendStepsWithCheckOut = MyPrefs.getBoolean(PREF_SEND_STEPS_WITH_CHECKOUT, false) && MANDATORY_TASKS_LIST.size() > 0;
 
-                    List<MandatoryTaskModel> mtasks = getMandatoryListEscaped(MANDATORY_TASKS_LIST, true);
                     if (sendStepsWithCheckOut) {
-                        String stepsBody = MandatoryTasksData.buildRequestBody(assignmentId, "", sendreport,
-                                MandatoryTasksData.normalizeHasMeasurement(mtasks.toString()));
+                        String stepsBody = "";
                         try {
+                            stepsBody = MandatoryTasksData.buildRequestBody(assignmentId, "", sendreport, MANDATORY_TASKS_LIST, true);
                             new JSONObject(stepsBody);
                         } catch (JSONException e) {
                             // invalid JSON: the steps go separately after the checkout (the old path), not lost inside it
@@ -1556,7 +1559,11 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
                         }
                     }
                     if (!sendStepsWithCheckOut) {
-                        MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, mtasks.toString());
+                        try {
+                            MyPrefs.setStringWithFileName(PREF_FILE_MANDATORY_TASKS_FOR_SYNC, assignmentId, MandatoryTaskModel.toJSONArray(MANDATORY_TASKS_LIST, false).toString());
+                        } catch (JSONException e) {
+                            MyLogs.appendFile_FullLog(LOG_TAG, "AssignmentId " + assignmentId + ": steps not queued, JSON failed. " + e.getMessage(), "MandatoryTasksQueue");
+                        }
                     }
                     MyPrefs.setStringWithFileName(PREF_FILE_CHECK_OUT_DATA_TO_SYNC, assignmentId, checkInCheckOutModel.toString());
                     MyPrefs.setBooleanWithFileName(PREF_FILE_IS_CHECKED_OUT, assignmentId, true);
@@ -2140,60 +2147,6 @@ public class AssignmentActionsActivity extends BaseDrawerActivity implements Vie
         }
 
         return "-1";
-    }
-
-    public List<MandatoryTaskModel> getMandatoryListEscaped(List<MandatoryTaskModel> mandatoryTasks, boolean delete){
-
-        List<MandatoryTaskModel> mtasks = new ArrayList<>();
-        for (MandatoryTaskModel item : mandatoryTasks) {
-            try {
-                mtasks.add((MandatoryTaskModel) item.clone());
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // escape invalid json characters
-        try {
-            for (MandatoryTaskModel mt : mtasks){
-                String measurementValue = mt.getMeasurementValue() == null ? "" : mt.getMeasurementValue();
-                String stepComments = mt.getStepComments() == null ? "" : mt.getStepComments();
-                if(delete){
-                    mt.setStepDescription(MyUtils.ToJson(mt.getStepDescription()));
-                    mt.setMeasurableAttribute(MyUtils.ToJson(mt.getMeasurableAttribute()));
-                    mt.setMeasurementValue(MyUtils.ToJson(measurementValue));
-                    mt.setStepComments(MyUtils.ToJson(stepComments));
-                }else{
-                    mt.setStepDescription(MyUtils.escapeJsonString(mt.getStepDescription()));
-                    mt.setMeasurableAttribute(MyUtils.escapeJsonString(mt.getMeasurableAttribute()));
-                    mt.setMeasurementValue(MyUtils.escapeJsonString(measurementValue));
-                    mt.setStepComments(MyUtils.escapeJsonString(stepComments));
-                }
-
-                JSONArray defaultV = mt.getServiceStepDefaultValues();
-                JSONArray newDefV = new JSONArray();
-                for (int dv = 0; dv < defaultV.length(); dv++){
-                    JSONObject dvObj = defaultV.getJSONObject(dv);
-                    if(delete){
-                        dvObj.put("MeasurableAttributeDefaultValue", MyUtils.ToJson(MyJsonParser.getStringValue(dvObj, "MeasurableAttributeDefaultValue", "")));
-                        dvObj.put("MeasureableAttribute", MyUtils.ToJson(MyJsonParser.getStringValue(dvObj, "MeasureableAttribute", "")));
-                    }else{
-                        dvObj.put("MeasurableAttributeDefaultValue", MyUtils.escapeJsonString(MyJsonParser.getStringValue(dvObj, "MeasurableAttributeDefaultValue", "")));
-                        dvObj.put("MeasureableAttribute", MyUtils.escapeJsonString(MyJsonParser.getStringValue(dvObj, "MeasureableAttribute", "")));
-                    }
-
-                    newDefV.put(dvObj);
-                }
-                mt.setServiceStepDefaultValues(newDefV);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-            mtasks.clear();
-            mtasks.addAll(mandatoryTasks);
-        }
-
-        return mtasks;
-
     }
 
     private void updateStatusData() {

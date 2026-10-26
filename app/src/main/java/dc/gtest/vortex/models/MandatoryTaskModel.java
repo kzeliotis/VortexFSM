@@ -1,6 +1,10 @@
 package dc.gtest.vortex.models;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class MandatoryTaskModel implements Cloneable {
 
@@ -53,6 +57,47 @@ public class MandatoryTaskModel implements Cloneable {
         modelToString = modelToString.replace("}]", "}\n  ]");
 
         return modelToString;
+    }
+
+    // Same keys as toString(), with raw values: org.json does the escaping, so ", \ and new lines reach the server as typed.
+    // normalizeHasMeasurement: with the checkout the server deserializes the steps with Newtonsoft, where HasMeasurement is bool.
+    public JSONObject toJSONObject(boolean normalizeHasMeasurement) throws JSONException {
+        String hasMeasurementValue = nonNull(hasMeasurement);
+        if (normalizeHasMeasurement) {
+            String value = hasMeasurementValue.trim();
+            hasMeasurementValue = String.valueOf(value.equals("1") || value.equalsIgnoreCase("true"));
+        }
+
+        JSONObject obj = new JSONObject();
+        obj.put("StepSequence", nonNull(stepSequence));
+        obj.put("StepDescription", nonNull(stepDescription));
+        obj.put("MeasurementValue", nonNull(measurementValue));
+        obj.put("MeasureableAttribute", nonNull(measurableAttribute));
+        obj.put("HasMeasurement", hasMeasurementValue);
+        obj.put("IsDateTime", nonNull(isDateTime));
+        obj.put("IsOptional", nonNull(isOptional));
+        obj.put("RequiresPhoto", nonNull(requiresPhoto));
+        obj.put("StepPhotoPath", nonNull(stepPhotoPath));
+        obj.put("ProductId", nonNull(ProductId));
+        obj.put("Comments", nonNull(Comments));
+        obj.put("SetToProject", nonNull(SetToProject));
+        obj.put("StepId", nonNull(stepId));
+        obj.put("StepImage", nonNull(stepPhoto));
+        // a copy, so the JSONArray of this model is not shared (clone() is shallow)
+        obj.put("ServiceStepDefaultValues", serviceStepDefaultValues == null ? new JSONArray() : new JSONArray(serviceStepDefaultValues.toString()));
+        return obj;
+    }
+
+    public static JSONArray toJSONArray(List<MandatoryTaskModel> mandatoryTasks, boolean normalizeHasMeasurement) throws JSONException {
+        JSONArray array = new JSONArray();
+        for (MandatoryTaskModel mt : mandatoryTasks) {
+            array.put(mt.toJSONObject(normalizeHasMeasurement));
+        }
+        return array;
+    }
+
+    private static String nonNull(String value) {
+        return value == null ? "" : value;
     }
 
     public String getStepSequence() {

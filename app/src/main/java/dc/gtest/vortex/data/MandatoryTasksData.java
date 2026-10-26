@@ -1,11 +1,11 @@
 package dc.gtest.vortex.data;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import dc.gtest.vortex.models.MandatoryTaskModel;
 import dc.gtest.vortex.support.MyJsonParser;
@@ -19,28 +19,35 @@ import static dc.gtest.vortex.support.MyPrefs.PREF_FILE_MANDATORY_TASKS_FOR_SHOW
 public class MandatoryTasksData {
 
     // Body of InsertMandatorySteps (RequestDataMandatoryTasks). Also sent as a string inside the checkout (AssignmentData.MandatoryTasks).
-    public static String buildRequestBody(String assignmentId, String noEmail, String sendReport, String mandatoryTasks) {
-        return "{\n" +
-                "  \"AssignmentId\": \"" + assignmentId + "\",\n" +
-                "  \"NoEmail\": \"" + noEmail + "\",\n" +
-                "  \"SendReport\": \"" + sendReport + "\",\n" +
-                "  \"ServiceSteps\": " + mandatoryTasks + "\n" +
-                "}";
+    // normalizeHasMeasurement = true only inside the checkout (see MandatoryTaskModel.toJSONObject).
+    public static String buildRequestBody(String assignmentId, String noEmail, String sendReport,
+                                          List<MandatoryTaskModel> mandatoryTasks, boolean normalizeHasMeasurement) throws JSONException {
+        return buildRequestBody(assignmentId, noEmail, sendReport, MandatoryTaskModel.toJSONArray(mandatoryTasks, normalizeHasMeasurement));
     }
 
-    // With the checkout the server deserializes the steps with Newtonsoft, where HasMeasurement is bool: "0"/"1"/"" would fail.
-    public static String normalizeHasMeasurement(String mandatoryTasks) {
-        Matcher m = Pattern.compile("\"HasMeasurement\": \"([^\"]*)\"").matcher(mandatoryTasks);
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            String value = m.group(1).trim();
-            boolean hasMeasurement = value.equals("1") || value.equalsIgnoreCase("true");
-            m.appendReplacement(sb, "\"HasMeasurement\": \"" + hasMeasurement + "\"");
+    public static String buildRequestBody(String assignmentId, String noEmail, String sendReport, JSONArray serviceSteps) throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("AssignmentId", assignmentId);
+        body.put("NoEmail", noEmail);
+        body.put("SendReport", sendReport);
+        body.put("ServiceSteps", serviceSteps);
+        return body.toString();
+    }
+
+    // Steps queued in PREF_FILE_MANDATORY_TASKS_FOR_SYNC: by this version (MandatoryTaskModel.toJSONArray) or by an older one (text
+    // concatenation), sent as they are. Text that does not parse goes in the body unchanged, as before.
+    public static String buildRequestBody(String assignmentId, String noEmail, String sendReport, String savedMandatoryTasks) {
+        try {
+            return buildRequestBody(assignmentId, noEmail, sendReport, new JSONArray(savedMandatoryTasks));
+        } catch (JSONException e) {
+            return "{\n" +
+                    "  \"AssignmentId\": " + JSONObject.quote(assignmentId) + ",\n" +
+                    "  \"NoEmail\": " + JSONObject.quote(noEmail) + ",\n" +
+                    "  \"SendReport\": " + JSONObject.quote(sendReport) + ",\n" +
+                    "  \"ServiceSteps\": " + savedMandatoryTasks + "\n" +
+                    "}";
         }
-        m.appendTail(sb);
-        return sb.toString();
     }
-
 
     public static void generate() {
 
